@@ -25,6 +25,7 @@ export default defineComponent({
   },
   created() {
     this.getEmployees();
+    EmployeeService.postMethod();
   }
 });
 </script>

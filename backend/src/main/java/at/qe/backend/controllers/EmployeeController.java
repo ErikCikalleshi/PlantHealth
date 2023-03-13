@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:5173")
 public class EmployeeController {
-
-
     @GetMapping("/test")
     public String fetchEmployees(){
         return "Hello World";
