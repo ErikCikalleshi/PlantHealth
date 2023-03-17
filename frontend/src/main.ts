@@ -2,13 +2,42 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App.vue'
-import router from './router'
+// import router from './router'
 
 import './assets/main.css'
 
-const app = createApp(App)
+// Vuetify
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
+//OhVueIcons
+import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { FaUserCircle } from "oh-vue-icons/icons";
+
+addIcons(FaUserCircle);
+
+const themeConfigs = {
+    dark: false,
+    colors: {
+        primary: '#449A8B'
+    }
+}
+const vuetify = createVuetify({
+    components,
+    directives,
+    theme: {
+        defaultTheme: 'themeConfigs',
+        themes: {
+            themeConfigs,
+        }
+    }
+})
+const app = createApp(App);
+app.component("oh-icon", OhVueIcon);
 
 app.use(createPinia())
-app.use(router)
+// app.use(router)
 
-app.mount('#app')
+app.use(vuetify).mount('#app')
