@@ -18,6 +18,9 @@ public class MeasurementDTO {
 
     }
 
+    /**
+     * @param measurement Create a new MeasurementDTO from a Measurement without exposing too much data
+     */
     public MeasurementDTO(Measurement measurement) {
         this.greenhouseID = measurement.getSensor().getGreenhouse().getId();
         this.accesspointUUID = measurement.getSensor().getGreenhouse().getAccesspoint().getUuid();

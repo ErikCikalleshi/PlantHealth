@@ -49,6 +49,11 @@
                         <skip>true</skip>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>com.github.eirslett</groupId>
+                    <artifactId>frontend-maven-plugin</artifactId>
+                    <version>1.10.3</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
