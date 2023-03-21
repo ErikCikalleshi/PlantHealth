@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 @Getter
@@ -22,6 +23,17 @@ public class Sensor implements Serializable {
     private double limitUpper;
     private double limitLower;
     private int limitThresholdMinutes;
+
+    @ManyToOne(optional = false)
+    private Userx createUser;
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate = new Date();
+    @ManyToOne(optional = true)
+    private Userx updateUser;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updateDate;
+
     @ManyToOne
     @JoinColumn(name = "greenhouse_uuid", nullable = false)
     @JsonBackReference // exclude greenhouse from serialization

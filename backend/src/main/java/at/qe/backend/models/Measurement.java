@@ -1,7 +1,5 @@
 package at.qe.backend.models;
 
-import at.qe.backend.models.Sensor;
-import at.qe.backend.models.SensorType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,12 +19,11 @@ public class Measurement implements Serializable {
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate = new Date();
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date measurementDate;
     @ManyToOne
     @JsonBackReference // exclude sensor from serialization
     private Sensor sensor;
-
-//    public void setSensor(Sensor sensor){
-//        this.sensor=sensor;
-//    }
-
 }

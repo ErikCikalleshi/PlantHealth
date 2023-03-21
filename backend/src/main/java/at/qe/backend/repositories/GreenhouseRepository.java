@@ -4,5 +4,5 @@ import at.qe.backend.models.Greenhouse;
 
 public interface GreenhouseRepository extends AbstractRepository<Greenhouse, String> {
 
-    Greenhouse findFirstByUuid(int uuid);
+    Greenhouse findFirstByIdAndAccesspoint_Uuid(long id,long accesspoint_uuid);
 }

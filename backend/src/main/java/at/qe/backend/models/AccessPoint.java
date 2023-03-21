@@ -1,6 +1,10 @@
 package at.qe.backend.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -8,6 +12,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "access_point")
+@Getter
+@Setter
 public class AccessPoint implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -25,7 +31,8 @@ public class AccessPoint implements Serializable {
     private Userx updateUser;
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
-
+    @Column(nullable = false)
+    private int transmissionIntervalSeconds;
     @OneToMany(mappedBy = "accesspoint", orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Greenhouse> greenhouses;
 }
