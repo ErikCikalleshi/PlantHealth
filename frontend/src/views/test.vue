@@ -2,7 +2,7 @@
   <div>test <oh-icon name="fa-user-circle" scale="1"></oh-icon></div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "test-l"
 }
