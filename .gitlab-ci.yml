@@ -14,6 +14,7 @@ unit-test-job:   # This job runs in the test stage.
   extends: .before_script_template
   stage: test
   script:
+    - cd ./backend
     - echo "Running unit tests..."
     - mvn test
   allow_failure: true
