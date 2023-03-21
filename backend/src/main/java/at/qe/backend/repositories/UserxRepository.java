@@ -1,10 +1,9 @@
 package at.qe.backend.repositories;
 
-import java.util.Collection;
 import java.util.List;
 
 import at.qe.backend.models.Userx;
-import at.qe.backend.models.UserxRole;
+import at.qe.backend.models.UserRole;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -24,5 +23,5 @@ public interface UserxRepository extends AbstractRepository<Userx, String> {
     List<Userx> findByWholeNameConcat(@Param("wholeName") String wholeName);
 
     @Query("SELECT u FROM Userx u WHERE :role MEMBER OF u.roles")
-    List<Userx> findByRole(@Param("role") UserxRole role);
+    List<Userx> findByRole(@Param("role") UserRole role);
 }

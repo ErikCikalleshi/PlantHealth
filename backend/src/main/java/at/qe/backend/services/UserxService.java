@@ -1,7 +1,7 @@
 package at.qe.backend.services;
 
 import at.qe.backend.models.Userx;
-import at.qe.backend.models.UserxRole;
+import at.qe.backend.models.UserRole;
 import at.qe.backend.repositories.UserxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -61,7 +61,7 @@ public class UserxService {
         if (user.isNew()) {
             user.setCreateDate(new Date());
             user.setCreateUser(getAuthenticatedUser());
-            user.setRoles(Set.of(UserxRole.USER));
+            user.setRoles(Set.of(UserRole.USER));
         } else {
             user.setUpdateDate(new Date());
             user.setUpdateUser(getAuthenticatedUser());

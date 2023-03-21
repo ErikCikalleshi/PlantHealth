@@ -10,34 +10,33 @@ import java.util.Set;
 
 @Entity
 public class Userx implements Persistable<String>, Serializable, Comparable<Userx> {
-
     private static final long serialVersionUID = 1L;
-
     @Id
     @Column(length = 100)
     private String username;
-
     @ManyToOne(optional = false)
     private Userx createUser;
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
+    private Date createDate=new Date();
     @ManyToOne(optional = true)
     private Userx updateUser;
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
-
     private String password;
     private String firstName;
     private String lastName;
     private String email;
     private String phone;
     boolean enabled;
-
-    @ElementCollection(targetClass = UserxRole.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "Userx_UserxRole")
+    @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "Userx_UserRole")
     @Enumerated(EnumType.STRING)
-    private Set<UserxRole> roles;
+    private Set<UserRole> roles;
+
+    @ManyToMany(mappedBy = "gardeners")
+    private Set<Greenhouse> greenhouses;
+
 
     public String getUsername() {
         return username;
@@ -97,11 +96,11 @@ public class Userx implements Persistable<String>, Serializable, Comparable<User
         this.enabled = enabled;
     }
 
-    public Set<UserxRole> getRoles() {
+    public Set<UserRole> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<UserxRole> roles) {
+    public void setRoles(Set<UserRole> roles) {
         this.roles = roles;
     }
 
