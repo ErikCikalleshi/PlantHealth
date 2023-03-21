@@ -1,6 +1,6 @@
 package at.qe.backend.web;
 
-import at.qe.backend.models.UserxRole;
+import at.qe.backend.models.UserRole;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,9 +19,9 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-    private static final String ADMIN = UserxRole.ADMIN.name();
-    private static final String GARDENER = UserxRole.GARDENER.name();
-    private static final String USER = UserxRole.USER.name();
+    private static final String ADMIN = UserRole.ADMIN.name();
+    private static final String GARDENER = UserRole.GARDENER.name();
+    private static final String USER = UserRole.USER.name();
 
     @Autowired
     DataSource dataSource;
@@ -37,8 +37,7 @@ public class WebSecurityConfig {
         try {
             http.csrf().disable();
             http.headers().frameOptions().disable(); // needed for H2 console
-
-            http
+            http.cors().and()
                     .authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/**").authenticated()).httpBasic()
                     .and()
                     .authorizeHttpRequests(authorize -> authorize
@@ -63,19 +62,13 @@ public class WebSecurityConfig {
                     .logout()
                     .logoutSuccessUrl("/login.xhtml")
                     .deleteCookies("JSESSIONID");
-
-
             http.exceptionHandling().accessDeniedPage("/error/access_denied.xhtml");
             // http.sessionManagement().invalidSessionUrl("/error/invalid_session.xhtml");
             return http.build();
         } catch (Exception ex) {
             throw new BeanCreationException("Wrong spring security configuration", ex);
         }
-
-
         // :TODO: user failureUrl(/login.xhtml?error) and make sure that a corresponding message is displayed
-
-
     }
 
     @Autowired
@@ -85,7 +78,7 @@ public class WebSecurityConfig {
                 jdbcAuthentication()
                 .passwordEncoder(passwordEncoder())
                 .usersByUsernameQuery("select username, password, enabled from userx where username=?")
-                .authoritiesByUsernameQuery("select userx_username, roles from userx_userx_role where userx_username=?")
+                .authoritiesByUsernameQuery("select userx_username, roles from userx_user_role where userx_username=?")
                 .dataSource(dataSource);
     }
 

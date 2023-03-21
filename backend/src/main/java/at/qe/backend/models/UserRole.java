@@ -1,6 +1,6 @@
 package at.qe.backend.models;
 
-public enum UserxRole {
+public enum UserRole {
     ADMIN,
     GARDENER,
     USER,
