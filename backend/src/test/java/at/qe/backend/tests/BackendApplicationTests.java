@@ -1,4 +1,4 @@
-package at.qe.backend;
+package at.qe.backend.tests;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * This service is responsible for providing the correct settings to the access points
+ */
 @Service
 public class SettingService {
     @Autowired
@@ -28,6 +31,11 @@ public class SettingService {
     @Autowired
     private AccessPointRepository accessPointRepository;
 
+    /**
+     * @param accessPointId The UUID of the requesting AccessPoint
+     * @return a new {@link AccessPointSettingDTO} Object containing the most recent configuration for the corresponding AP
+     * @throws AccessPointNotFoundException if no AccessPoint with a given UUID could be found.
+     */
     public AccessPointSettingDTO getSetting(long accessPointId) throws AccessPointNotFoundException {
         AccessPoint accessPoint = accessPointRepository.findFirstByUuid(accessPointId);
         if (accessPoint==null){
