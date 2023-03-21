@@ -4,7 +4,6 @@ stages:          # List of stages for jobs, and their order of execution
   - build
   - test
   - sonarCheck
-  - deploy
 
 .before_script_template:
   before_script:
