@@ -1,25 +1,43 @@
 package at.qe.backend.api.services;
 
-import at.qe.backend.api.model.Measurement;
+import at.qe.backend.api.exceptions.GreenhouseNotRegisteredException;
+import at.qe.backend.api.exceptions.SensorNotFoundException;
+import at.qe.backend.api.model.RawMeasurement;
+import at.qe.backend.models.Greenhouse;
+import at.qe.backend.models.Measurement;
+import at.qe.backend.models.Sensor;
+import at.qe.backend.repositories.GreenhouseRepository;
+import at.qe.backend.repositories.MeasurementRepository;
+import at.qe.backend.repositories.SensorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class MeasurementService {
-    private static final AtomicLong ID_COUNTER = new AtomicLong(1);
     private static final ConcurrentHashMap<Long, Measurement> measurements = new ConcurrentHashMap<>();
+    @Autowired
+    private SensorRepository sensorRepository;
+    @Autowired
+    private GreenhouseRepository greenhouseRepository;
+    @Autowired
+    private MeasurementRepository measurementRepository;
 
-    public Measurement addMeasurement(Measurement measurement) {
+    public Measurement addMeasurement(RawMeasurement rawMeasurement) throws GreenhouseNotRegisteredException, SensorNotFoundException {
+        Greenhouse greenhouse = greenhouseRepository.findFirstByUuid(rawMeasurement.getGreenhouseID());
+        if (greenhouse == null) {
+            throw new GreenhouseNotRegisteredException();
+        }
+        Sensor sensor = sensorRepository.findFirstByGreenhouseAndSensorType(greenhouse, rawMeasurement.getSensorType());
+        if (sensor == null) {
+            throw new SensorNotFoundException();
+        }
         Measurement newMeasurement = new Measurement();
-        newMeasurement.setId(ID_COUNTER.getAndIncrement());
-        newMeasurement.setPlantID(measurement.getPlantID());
-        newMeasurement.setUnit(measurement.getUnit());
-        newMeasurement.setValue(measurement.getValue());
-        newMeasurement.setType(measurement.getType());
-
-        measurements.put(newMeasurement.getId(), newMeasurement);
+        newMeasurement.setValue(rawMeasurement.getValue());
+        newMeasurement.setSensor(sensor);
+        newMeasurement = measurementRepository.save(newMeasurement);
+        sensor.addMeasurement(newMeasurement);
         return newMeasurement;
     }
 }
