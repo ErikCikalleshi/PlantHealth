@@ -75,4 +75,24 @@ public class RestInterfaceTests {
                 );
     }
 
+
+    @Test
+    public void GetSetting() {
+        given().auth().basic("admin", "passwd").
+                contentType(ContentType.JSON).
+                when().
+                get(BaseURI + "/api/setting/1").
+                then().
+                statusCode(HttpStatus.SC_OK);
+    }
+    @Test
+    public void GetSettingInvalidAP() {
+        given().auth().basic("admin", "passwd").
+                contentType(ContentType.JSON).
+                when().
+                get(BaseURI + "/api/setting/151688").
+                then().
+                statusCode(HttpStatus.SC_NOT_FOUND);
+    }
+
 }
