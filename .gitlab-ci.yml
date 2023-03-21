@@ -39,6 +39,7 @@ build site:
   image: node:6
   stage: build
   script:
+    - cd ./frontend
     - npm install --progress=false
     - npm run build
   artifacts:
