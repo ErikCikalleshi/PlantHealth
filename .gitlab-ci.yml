@@ -36,7 +36,7 @@ sonarqube-check:
   allow_failure: true
 
 build site:
-  image: node:6
+  image: node:16.17.1
   stage: build
   script:
     - cd ./frontend
