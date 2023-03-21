@@ -1,0 +1,34 @@
+image: alpine:3.17
+
+stages:          # List of stages for jobs, and their order of execution
+  - test
+  - sonarCheck
+
+.before_script_template:
+  before_script:
+    - apk add --update maven
+
+unit-test-job:   # This job runs in the test stage.
+  extends: .before_script_template
+  stage: test    
+  script:
+    - echo "Running unit tests..."
+    - mvn test
+  allow_failure: true
+
+sonarqube-check:
+  extends: .before_script_template
+  stage: sonarCheck
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/code/.sonar"
+    GIT_DEPTH: "0"
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+     - .sonar/cache
+  script:
+    - echo "Installing node.js..."
+    - apk add --update nodejs
+    - echo Running sonar analysis for ${SONAR_PROJECT_KEY}
+    - mvn -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.projectName="${CI_PROJECT_NAME} ${GITLAB_USER_NAME}" --fail-at-end verify sonar:sonar
+  allow_failure: true
