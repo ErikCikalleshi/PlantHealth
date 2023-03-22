@@ -14,6 +14,7 @@ stages: # List of stages for jobs, and their order of execution
   # - build
   - testDatabaseService
   - test
+  - testDatabaseService
   # - sonarCheck
 
 .before_script_template:
