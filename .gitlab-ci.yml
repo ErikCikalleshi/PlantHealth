@@ -12,7 +12,7 @@ variables:
   
 stages: # List of stages for jobs, and their order of execution
   # - build
-  # - unit-tests 
+  - unit-tests 
   - testDatabaseService
   # - sonarCheck
 
@@ -27,20 +27,18 @@ testDatabaseService:
     - apt-get update && apt-get install -y git curl libmcrypt-dev default-mysql-client
     - mysql --version
     - sleep 2 
-    - echo "SELECT * FROM INFORMATION_SCHEMA.COLUMNS;" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
     - echo "DROP DATABASE IF EXISTS ${MYSQL_DATABASE};" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
-    - echo "SHOW tables;" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
     - echo "Database host is '${MYSQL_HOST}'"
 
 
-# unit-test-job: # This job runs in the test stage.
-#   extends: .before_script_template
-#   stage: unit-tests 
-#   script:
-#     - cd ./backend
-#     - echo "Running unit tests..."
-#     - mvn test
-#   allow_failure: true
+unit-test-job: # This job runs in the test stage.
+  extends: .before_script_template
+  stage: unit-tests 
+  script:
+    - cd ./backend
+    - echo "Running unit tests..."
+    - mvn test
+  allow_failure: true
 
 # sonarqube-check:
 #   extends: .before_script_template
