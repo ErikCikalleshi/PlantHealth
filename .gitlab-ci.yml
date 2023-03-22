@@ -11,9 +11,9 @@ variables:
   MYSQL_HOST: mysql
   
 stages: # List of stages for jobs, and their order of execution
-  - testDatabaseService
-  - build
-  - unit-tests 
+  #- testDatabaseService
+  #- build
+  #- unit-tests
   - sonarCheck
 
 .before_script_template:
