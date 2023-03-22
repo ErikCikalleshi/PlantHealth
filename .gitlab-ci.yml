@@ -12,8 +12,8 @@ variables:
   
 stages: # List of stages for jobs, and their order of execution
   # - build
-  - unit-tests 
-  - testDatabaseService
+    - testDatabaseService
+    - unit-tests 
   # - sonarCheck
 
 .before_script_template:
