@@ -1,4 +1,4 @@
-package at.qe.backend.web;
+package at.qe.backend.configs;
 
 import at.qe.backend.models.UserRole;
 import org.springframework.beans.factory.BeanCreationException;
@@ -47,6 +47,8 @@ public class WebSecurityConfig {
                             .requestMatchers(antMatcher("/h2-console/**")).permitAll()
                             .requestMatchers("/jakarta.faces.resource/**").permitAll()
                             .requestMatchers("/error/**").permitAll()
+                            .requestMatchers("/login/**").permitAll()
+                            .requestMatchers("/user/**").permitAll()
                             .requestMatchers("/admin/**").hasAnyAuthority(ADMIN)
                             .requestMatchers("/secured/**").hasAnyAuthority(ADMIN, GARDENER, USER)
                             .requestMatchers("/omnifaces.push/**").hasAnyAuthority(ADMIN, GARDENER, USER)
@@ -56,7 +58,7 @@ public class WebSecurityConfig {
                     .permitAll()
                     .failureUrl("/error/access_denied.xhtml")
                     .defaultSuccessUrl("/secured/welcome.xhtml")
-                    .loginProcessingUrl("/login")
+                    .loginProcessingUrl("/login2") // in order to not intercept with PostMapping '/login'
                     .successForwardUrl("/secured/welcome.xhtml")
                     .and()
                     .logout()
