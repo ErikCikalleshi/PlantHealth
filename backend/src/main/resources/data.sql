@@ -20,4 +20,3 @@ INSERT INTO sensor(limit_lower, limit_upper, limit_threshold_minutes, sensor_typ
 INSERT INTO sensor(limit_lower, limit_upper, limit_threshold_minutes, sensor_type, greenhouse_uuid, create_user_username, create_date) VALUES (50, 80, 60, 'HUMIDITY_DIRT', 1, 'admin', NOW());
 INSERT INTO sensor(limit_lower, limit_upper, limit_threshold_minutes, sensor_type, greenhouse_uuid, create_user_username, create_date) VALUES (50, 80, 60, 'AIR_PRESSURE', 1, 'admin', NOW());
 INSERT INTO sensor(limit_lower, limit_upper, limit_threshold_minutes, sensor_type, greenhouse_uuid, create_user_username, create_date) VALUES (50, 80, 60, 'AIR_QUALITY', 1, 'admin', NOW());
-
