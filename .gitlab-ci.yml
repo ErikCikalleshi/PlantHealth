@@ -5,16 +5,16 @@ services:
 
 variables:
   MYSQL_DATABASE: "db_planthealth"
-  MYSQL_ROOT_PASSWORD: "passwd"
+  MYSQL_ROOT_PASSWORD: "root"
   MYSQL_USER: "springuser"
   MYSQL_PASSWORD: "passwd"
   MYSQL_HOST: mysql
   
 stages: # List of stages for jobs, and their order of execution
-  # - build
   - testDatabaseService
-  - test
-  # - sonarCheck
+  - build
+  - unit-tests 
+  - sonarCheck
 
 .before_script_template:
   before_script:
@@ -23,53 +23,51 @@ stages: # List of stages for jobs, and their order of execution
 testDatabaseService:
   image: python:latest
   stage: testDatabaseService
-  services:
-    - mysql:latest
   script:
     - apt-get update && apt-get install -y git curl libmcrypt-dev default-mysql-client
     - mysql --version
-    - sleep 20
-    - echo "SHOW tables;" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
+    - sleep 2 
+    - echo "DROP DATABASE IF EXISTS ${MYSQL_DATABASE};" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
     - echo "Database host is '${MYSQL_HOST}'"
 
 
 unit-test-job: # This job runs in the test stage.
   extends: .before_script_template
-  stage: test
+  stage: unit-tests 
   script:
     - cd ./backend
     - echo "Running unit tests..."
     - mvn test
   allow_failure: true
 
-# sonarqube-check:
-#   extends: .before_script_template
-#   stage: sonarCheck
-#   variables:
-#     SONAR_USER_HOME: "${CI_PROJECT_DIR}/code/.sonar"
-#     GIT_DEPTH: "0"
-#   cache:
-#     key: "${CI_JOB_NAME}"
-#     paths:
-#       - .sonar/cache
-#   script:
-#     - echo "Installing node.js..."
-#     - apk add --update nodejs
-#     - echo Running sonar analysis for ${SONAR_PROJECT_KEY}
-#     # add to sonarqube frontend project (dir ./frontend)
-#     - mvn -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.projectName="${CI_PROJECT_NAME} ${GITLAB_USER_NAME}" -Dsonar.sources=src --fail-at-end verify sonar:sonar
-#   allow_failure: true
+sonarqube-check:
+  extends: .before_script_template
+  stage: sonarCheck
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/code/.sonar"
+    GIT_DEPTH: "0"
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+    - echo "Installing node.js..."
+    - apk add --update nodejs
+    - echo Running sonar analysis for ${SONAR_PROJECT_KEY}
+    # add to sonarqube frontend project (dir ./frontend)
+    - mvn -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.projectName="${CI_PROJECT_NAME} ${GITLAB_USER_NAME}" -Dsonar.sources=src --fail-at-end verify sonar:sonar
+  allow_failure: true
 
-# build site:
-#   image: node:16.17.1
-#   stage: build
-#   script:
-#     - cd ./frontend
-#     - npm install --progress=false
-#     - npm run build
-#   artifacts:
-#     expire_in: 1 week
-#     paths:
-#       - dist
+build site:
+  image: node:16.17.1
+  stage: build
+  script:
+    - cd ./frontend
+    - npm install --progress=false
+    - npm run build
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist
 
 
