@@ -55,7 +55,7 @@ sonarqube-check:
     - apk add --update nodejs
     - echo Running sonar analysis for ${SONAR_PROJECT_KEY}
     # add to sonarqube frontend project (dir ./frontend)
-    - mvn -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.projectName="${CI_PROJECT_NAME} ${GITLAB_USER_NAME}" -Dsonar.sources=src --fail-at-end verify sonar:sonar
+    - mvn -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.projectName="${CI_PROJECT_NAME} ${GITLAB_USER_NAME}" --fail-at-end verify sonar:sonar
   allow_failure: true
 
 build site:
