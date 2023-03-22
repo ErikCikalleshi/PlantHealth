@@ -1,14 +1,14 @@
 image: alpine:3.17
 
 services:
-  - mysql:8
+  - mysql:latest
 
-# variables:
-#   MYSQL_DATABASE: "db_planthealth"
-#   MYSQL_ROOT_PASSWORD: ""
-#   MYSQL_USER: "springuser"
-#   MYSQL_PASSWORD: "passwd"
-#   MYSQL_HOST: mysql
+variables:
+  MYSQL_DATABASE: "db_planthealth"
+  MYSQL_ROOT_PASSWORD: "passwd"
+  MYSQL_USER: "springuser"
+  MYSQL_PASSWORD: "passwd"
+  MYSQL_HOST: mysql
   
 stages: # List of stages for jobs, and their order of execution
   - build
