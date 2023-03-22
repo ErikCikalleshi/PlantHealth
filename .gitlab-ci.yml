@@ -28,7 +28,7 @@ testDatabaseService:
     - mysql --version
     - sleep 2 
     - echo "SELECT * FROM INFORMATION_SCHEMA.COLUMNS;" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
-    - echo "CREATE DATABASE 'db_planthealth';" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
+    - echo "CREATE DATABASE ${MYSQL_DATABASE};" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
     - echo "SHOW tables;" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
     - echo "Database host is '${MYSQL_HOST}'"
 
