@@ -27,10 +27,10 @@ testDatabaseService:
     - apt-get update && apt-get install -y git curl libmcrypt-dev default-mysql-client
     - mysql --version
     - sleep 2 
-    # - echo "DROP DATABASE IF EXISTS ${MYSQL_DATABASE};" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
-    - echo "CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"    
-    - echo "create table userx (username varchar(100) not null, create_date datetime(6) not null, email varchar(255), enabled bit not null, first_name varchar(255), last_name varchar(255), password varchar(255), phone varchar(255), update_date datetime(6), create_user_username varchar(100) not null, update_user_username varchar(100), primary key (username));" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
-    - echo "INSERT INTO userx(username, create_date, create_user_username, email, enabled, first_name, last_name, password, phone) VALUES ('admin', NOW(), 'admin', 'admin@planthealth.at', TRUE, 'Administrator', '','$2a$12$WTHPMXqdUKBZ7b6p7LZZ0.a2JknpnJbAkeGvBJ62.5T1czPebq6cW','');" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"    
+    - echo "DROP DATABASE IF EXISTS ${MYSQL_DATABASE};" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
+    # - echo "CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"    
+    # - echo "create table userx (username varchar(100) not null, create_date datetime(6) not null, email varchar(255), enabled bit not null, first_name varchar(255), last_name varchar(255), password varchar(255), phone varchar(255), update_date datetime(6), create_user_username varchar(100) not null, update_user_username varchar(100), primary key (username));" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
+    # - echo "INSERT INTO userx(username, create_date, create_user_username, email, enabled, first_name, last_name, password, phone) VALUES ('admin', NOW(), 'admin', 'admin@planthealth.at', TRUE, 'Administrator', '','$2a$12$WTHPMXqdUKBZ7b6p7LZZ0.a2JknpnJbAkeGvBJ62.5T1czPebq6cW','');" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"    
 
     - echo "Database host is '${MYSQL_HOST}'"
 
