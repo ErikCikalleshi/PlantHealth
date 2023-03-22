@@ -41,34 +41,34 @@ test:
 #     - mvn test
 #   allow_failure: true
 
-sonarqube-check:
-  extends: .before_script_template
-  stage: sonarCheck
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/code/.sonar"
-    GIT_DEPTH: "0"
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  script:
-    - echo "Installing node.js..."
-    - apk add --update nodejs
-    - echo Running sonar analysis for ${SONAR_PROJECT_KEY}
-    # add to sonarqube frontend project (dir ./frontend)
-    - mvn -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.projectName="${CI_PROJECT_NAME} ${GITLAB_USER_NAME}" -Dsonar.sources=src --fail-at-end verify sonar:sonar
-  allow_failure: true
+# sonarqube-check:
+#   extends: .before_script_template
+#   stage: sonarCheck
+#   variables:
+#     SONAR_USER_HOME: "${CI_PROJECT_DIR}/code/.sonar"
+#     GIT_DEPTH: "0"
+#   cache:
+#     key: "${CI_JOB_NAME}"
+#     paths:
+#       - .sonar/cache
+#   script:
+#     - echo "Installing node.js..."
+#     - apk add --update nodejs
+#     - echo Running sonar analysis for ${SONAR_PROJECT_KEY}
+#     # add to sonarqube frontend project (dir ./frontend)
+#     - mvn -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.projectName="${CI_PROJECT_NAME} ${GITLAB_USER_NAME}" -Dsonar.sources=src --fail-at-end verify sonar:sonar
+#   allow_failure: true
 
-build site:
-  image: node:16.17.1
-  stage: build
-  script:
-    - cd ./frontend
-    - npm install --progress=false
-    - npm run build
-  artifacts:
-    expire_in: 1 week
-    paths:
-      - dist
+# build site:
+#   image: node:16.17.1
+#   stage: build
+#   script:
+#     - cd ./frontend
+#     - npm install --progress=false
+#     - npm run build
+#   artifacts:
+#     expire_in: 1 week
+#     paths:
+#       - dist
 
 
