@@ -3,7 +3,7 @@ INSERT INTO  userx_user_role (userx_username, roles) VALUES ('admin', 'ADMIN');
 INSERT INTO  userx_user_role (userx_username, roles) VALUES ('admin', 'GARDENER');
 INSERT INTO  userx_user_role (userx_username, roles) VALUES ('admin', 'USER');
 
-INSERT INTO Userx(username,create_date, create_user_username, email, enabled, first_name, last_name, password, phone) VALUES ('gardener1', NOW(),'admin', 'gärtner.gustav@planthealth.at', TRUE, 'Gärtner', 'Gustav','$2a$12$WTHPMXqdUKBZ7b6p7LZZ0.a2JknpnJbAkeGvBJ62.5T1czPebq6cW','');
+INSERT INTO userx(username,create_date, create_user_username, email, enabled, first_name, last_name, password, phone) VALUES ('gardener1', NOW(),'admin', 'gärtner.gustav@planthealth.at', TRUE, 'Gärtner', 'Gustav','$2a$12$WTHPMXqdUKBZ7b6p7LZZ0.a2JknpnJbAkeGvBJ62.5T1czPebq6cW','');
 INSERT INTO  userx_user_role (userx_username, roles) VALUES ('gardener1', 'GARDENER');
 INSERT INTO  userx_user_role (userx_username, roles) VALUES ('gardener1', 'USER');
 
