@@ -1,27 +1,36 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import { OhVueIcon } from "oh-vue-icons";
+import {tryLogin} from "@/services";
 
 export default defineComponent({
   name: "LoginView",
+  data() {
+    return {
+      username: "",
+      password: "",
+    }
+  },
   components: {
     // eslint-disable-next-line vue/no-unused-components
     OhVueIcon
   },
   methods: {
-    routerTest() {
+    async login() {
+      if (!await tryLogin(this.username, this.password)) {
+        return;
+      }
       this.$router.push('/');
     }
-  }
-})
+  },
+});
 </script>
 
 <template>
   <v-app>
-    <div class="login-view">
+    <div class="login-view" @keydown.enter="login">
       <div class="h-[100vh] w-[100vw] grid items-center">
         <div>
-
           <img alt="Plant Health LOGO" src="@/assets/logo.svg" class="pb-[42px] mx-auto"/>
           <div class="w-[467px] p-[25px] bg-white rounded-xl mx-auto">
             <div class="flex flex-row justify-between pt-[6px] pb-[12px]">
@@ -34,26 +43,26 @@ export default defineComponent({
             </div>
             <p class="font-primary font-[300] opacity-50 tracking-tighter text-[15px] leading-[15px]">In order to access the dashboard you will have to sign in.</p>
             <p class="pt-[32px] pb-[7px] font-primary font-normal text-[16px] leading-[14.8px] tracking-tighter">Username</p>
-            <v-text-field
-                color="primary"
-                hide-details
-                type="text"
-                placeholder="Please enter your username"
-                append-inner-icon="mdi-account"
+            <v-text-field v-model="username"
+                          color="primary"
+                          hide-details
+                          type="text"
+                          placeholder="Please enter your username"
+                          append-inner-icon="mdi-account"
             ></v-text-field>
             <p class="pt-[22px] pb-[7px] font-primary font-normal text-[16px] leading-[14.8px] tracking-tighter">Password</p>
-            <v-text-field
-                color="primary"
-                hide-details
-                type="password"
-                placeholder="Please enter your password"
-                append-inner-icon="mdi-key"
+            <v-text-field v-model="password"
+                          color="primary"
+                          hide-details
+                          type="password"
+                          placeholder="Please enter your password"
+                          append-inner-icon="mdi-key"
             ></v-text-field>
             <div class="pt-[15px] flex justify-center">
               <button class="h-[47px] password-info font-primary text-primary hover:underline text-[16px] leading-[19.2px]">Forgot your password?</button>
             </div>
             <div class="pt-[12px]">
-              <v-btn @click="routerTest()" class="w-[417px] h-[47px] font-primary text-white text-[16px] leading-[19.2px] bg-primary">
+              <v-btn @click="login()" class="w-[417px] h-[47px] font-primary text-white text-[16px] leading-[19.2px] bg-primary">
                 Sign In
               </v-btn>
             </div>
