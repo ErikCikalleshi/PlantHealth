@@ -28,9 +28,8 @@ testDatabaseService:
   script:
     - apt-get update && apt-get install -y git curl libmcrypt-dev default-mysql-client
     - mysql --version
-    - sleep 20
-    - echo "mysql -u root -p'$MYSQL_ROOT_PASSWORD' -h '${MYSQL_HOST}'' '${MYSQL_DATABASE}'"
-    - echo "SELECT 'XD';" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
+    - sleep 2 
+    - echo "SELECT * FROM INFORMATION_SCHEMA.COLUMNS;" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
     - echo "SHOW tables;" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
     - echo "Database host is '${MYSQL_HOST}'"
 
