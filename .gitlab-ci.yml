@@ -23,8 +23,6 @@ stages: # List of stages for jobs, and their order of execution
 testDatabaseService:
   image: python:latest
   stage: testDatabaseService
-  services:
-    - mysql:latest
   script:
     - apt-get update && apt-get install -y git curl libmcrypt-dev default-mysql-client
     - mysql --version
