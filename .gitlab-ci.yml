@@ -12,8 +12,7 @@ variables:
   
 stages: # List of stages for jobs, and their order of execution
   # - build
-  - testDatabaseService
-  - test
+  - unit-tests 
   - testDatabaseService
   # - sonarCheck
 
@@ -36,7 +35,7 @@ testDatabaseService:
 
 unit-test-job: # This job runs in the test stage.
   extends: .before_script_template
-  stage: test
+  stage: unit-tests 
   script:
     - cd ./backend
     - echo "Running unit tests..."
