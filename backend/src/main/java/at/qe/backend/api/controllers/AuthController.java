@@ -33,7 +33,7 @@ public class AuthController {
         var cookie = new Cookie("refreshToken", loginService.getRefreshToken().getToken());
         cookie.setMaxAge(3600);
         cookie.setHttpOnly(true);
-        cookie.setPath("/login");
+        cookie.setPath("/");
         response.addCookie(cookie);
         return new LoginResponse(loginService.getAccessToken().getToken());
     }
@@ -43,5 +43,11 @@ public class AuthController {
     public UserResponse userInfo(HttpServletRequest request) {
         var user = (Userx) request.getAttribute("user");
         return new UserResponse(user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail());
+    }
+
+    record RefreshResponse(String token) {}
+    @PostMapping("/refresh")
+    public RefreshResponse refreshToken(@CookieValue("refreshToken") String refreshToken) {
+        return new RefreshResponse(authService.refreshAccessToken(refreshToken).getAccessToken().getToken());
     }
 }

@@ -21,4 +21,11 @@ public class LoginService {
                 JwtToken.of(username, 1440L, refreshSecret)
         );
     }
+
+    public static LoginService of(String username, String accessSecret, JwtToken refreshToken) {
+        return new LoginService(
+                JwtToken.of(username, 1L, accessSecret),
+                refreshToken
+        );
+    }
 }

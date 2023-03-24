@@ -1,5 +1,7 @@
 package at.qe.backend.api.services;
 
+import at.qe.backend.api.exceptions.InvalidTokenError;
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
@@ -11,8 +13,8 @@ import java.util.Base64;
 import java.util.Date;
 
 /**
-* Class to generate JWT Tokens
-* */
+ * Class to generate JWT Tokens
+ * */
 @Getter
 public class JwtToken {
     private final String token;
@@ -30,6 +32,19 @@ public class JwtToken {
                 .setExpiration(Date.from(issueDate.plus(validityInMinutes, ChronoUnit.MINUTES)))
                 .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encode(secretKey.getBytes(StandardCharsets.UTF_8)))
                 .compact());
+    }
+
+    public static String from(String token, String secret)  {
+        return Jwts.parserBuilder()
+                .setSigningKey(Base64.getEncoder().encode(secret.getBytes(StandardCharsets.UTF_8)))
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("username", String.class);
+    }
+
+    public static JwtToken of(String token) {
+        return new JwtToken(token);
     }
 
 }

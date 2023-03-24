@@ -4,6 +4,7 @@ import at.qe.backend.api.exceptions.InvalidTokenError;
 import at.qe.backend.models.Userx;
 import at.qe.backend.repositories.UserxRepository;
 import io.jsonwebtoken.Jwts;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -62,5 +63,10 @@ public class AuthService {
         } catch (Exception ex) {
             throw new InvalidTokenError();
         }
+    }
+
+    public LoginService refreshAccessToken(String refreshToken) {
+        var username = JwtToken.from(refreshToken, refreshSecret);
+        return LoginService.of(username, accessSecret, JwtToken.of(refreshToken));
     }
 }
