@@ -12,7 +12,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public WebMvcConfig(AuthInterceptor authorizationInterceptor) {
         this.authorizationInterceptor = authorizationInterceptor;
     }
-
+    /**
+     * Adds a custom interceptor for '/user' endpoint
+     * */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authorizationInterceptor).addPathPatterns("/user");

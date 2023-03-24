@@ -51,7 +51,7 @@ public class AuthService {
      * @return user as Userx
      * @throws InvalidTokenError if the token expired/wrong signing key...
      */
-    public Userx getUserFromToken(String token) throws InvalidTokenError {
+    public Userx getUserFromToken(String token) {
         try {
             var claims = Jwts.parserBuilder()
                     .setSigningKey(Base64.getEncoder().encode(accessSecret.getBytes(StandardCharsets.UTF_8)))
@@ -64,7 +64,9 @@ public class AuthService {
             throw new InvalidTokenError();
         }
     }
-
+    /**
+     * Method will take the refreshToken and validate it, if it's valid, it will generate a new access token for the user
+     * */
     public LoginService refreshAccessToken(String refreshToken) {
         var username = JwtToken.from(refreshToken, refreshSecret);
         return LoginService.of(username, accessSecret, JwtToken.of(refreshToken));

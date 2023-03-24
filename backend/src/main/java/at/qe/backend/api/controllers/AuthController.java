@@ -18,6 +18,7 @@ public class AuthController {
     private AuthService authService;
     /**
      * records are DTOs (Data Transfer Object) used to return only the fields we want back to the client
+     * used for example to not send the password when a user logs in
     * */
     record LoginRequest(String username, String password){}
     record LoginResponse(String token){}
@@ -39,6 +40,9 @@ public class AuthController {
     }
 
     record UserResponse(String username, String firstName, String lastName, String email){}
+    /**
+     * Endpoint '/user' getting all user related data from attribute 'user' that was set in the interceptor
+     * */
     @GetMapping("/user")
     public UserResponse userInfo(HttpServletRequest request) {
         var user = (Userx) request.getAttribute("user");
@@ -46,6 +50,10 @@ public class AuthController {
     }
 
     record RefreshResponse(String token) {}
+    /**
+     * Endpoint '/refresh' that will take the JWT refresh token from your Cookies and validate it
+     * If it's a valid token signed with our secret key, it will respond with a new access token for the user
+     * */
     @PostMapping("/refresh")
     public RefreshResponse refreshToken(@CookieValue("refreshToken") String refreshToken) {
         return new RefreshResponse(authService.refreshAccessToken(refreshToken).getAccessToken().getToken());

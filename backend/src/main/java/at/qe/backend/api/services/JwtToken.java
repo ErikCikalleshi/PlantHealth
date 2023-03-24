@@ -23,6 +23,9 @@ public class JwtToken {
         this.token = token;
     }
 
+    /**
+     *  Creates a JwtToken, adding the username as a claim.
+     * */
     public static JwtToken of(String username, Long validityInMinutes, String secretKey) {
         var issueDate = Instant.now();
         return new
@@ -34,6 +37,9 @@ public class JwtToken {
                 .compact());
     }
 
+    /**
+     * Takes in a token and the appropriate secret key and after being able to parse it, it will return the username of the holder
+     */
     public static String from(String token, String secret)  {
         return Jwts.parserBuilder()
                 .setSigningKey(Base64.getEncoder().encode(secret.getBytes(StandardCharsets.UTF_8)))
