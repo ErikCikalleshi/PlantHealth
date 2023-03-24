@@ -48,6 +48,7 @@ public class WebSecurityConfig {
                             .requestMatchers("/jakarta.faces.resource/**").permitAll()
                             .requestMatchers("/error/**").permitAll()
                             .requestMatchers("/login/**").permitAll()
+                            .requestMatchers("/logout-user/**").permitAll()
                             .requestMatchers("/user/**").permitAll()
                             .requestMatchers("/refresh/**").permitAll()
                             .requestMatchers("/admin/**").hasAnyAuthority(ADMIN)
