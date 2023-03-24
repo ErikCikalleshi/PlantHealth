@@ -17,13 +17,13 @@ export default defineComponent({
         <div class="logo">
           <img alt="Plant Health Gardening LOGO" src="@/assets/logo.svg"/>
         </div>
-        <div class="pt-[5px] flex navigation">
+       <div class="pt-[5px] flex navigation">
       <p class="pl-[254px]">Home</p>
       <p>About</p>
       <p>Services</p>
       <p>Prices</p>
       <p class="pr-[258.75px]">Contact</p>
-      </div>
+       </div>
         <div class=" user-icon pt-[1.5px] pr-[244.75px]"> <oh-icon class="fill-white" name="hi-solid-user" scale="1.5"></oh-icon>
         </div>
       </div>

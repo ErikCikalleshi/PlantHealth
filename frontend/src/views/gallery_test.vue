@@ -26,6 +26,7 @@ export default defineComponent({
       <div class="font-primary text-black text-[30px]">
       <p class="text-center">
         random glasshouse</p>
+        <p class="text-center">|</p>
       <img alt="Random Logo" src="src/assets/image4.png"/>
       </div>
     </main-container>

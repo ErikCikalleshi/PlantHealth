@@ -10,28 +10,68 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="footer-view">
+    <div class="footer-view display-flex h-[30vh] w-[100vw]">
       <div class="wrapper">
-        <img alt="Plant Health Gardening LOGO" src="@/assets/logo.svg"/>
+
+        <div class="logo">
+          <img alt="Plant Health Gardening LOGO" src="@/assets/logo.svg"/>
+        </div>
+      <div class="flex navigation">
+        <div class="justify-evenly">
+        <p class="text-white font-primary text-[20px]">Documentation:</p>
+        <div class="stack text-white font-primary">
+          <p>- All categories</p>
+          <p>- Product information portal</p>
+          <p>- Datasheets</p>
+        </div>
+        </div>
+
+        <div class="justify-evenly">
+          <p class="text-white font-primary text-[20px]">Company:</p>
+          <div class="stack text-white font-primary font-weight-light">
+            <p>- Terms of Services</p>
+            <p>- Privacy Policy</p>
+            <p>- GDPR Protection</p>
+            <p>- Cookies Policy</p>
+          </div>
+        </div>
+
+        <div class="justify-evenly">
+          <p class="text-white font-primary text-[20px]">Services:</p>
+          <div class="stack text-white font-primary font-weight-light">
+            <p>- Products</p>
+            <p>- Software</p>
+            <p>- Hardware</p>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
 </template>
 
 <style scoped>
-.footer-view,h1 {
-  display:flex;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 20vh;
+.footer-view {
   background-color: #040A0F;
-  background-size: 1920px 323px;
+}
+
+.logo {
+  flex: 1;
+}
+
+.navigation {
+  flex:3;
+  justify-content: space-evenly
+}
+.stack {
+  display: flex;
+  flex-direction: column;
 }
 
 .wrapper {
   width: 80%;
-  margin: 0 auto;
+  margin: 7vh auto;
+  align-items: center;
+  display: flex;
 }
 html { overflow-y: auto !important; }
 
