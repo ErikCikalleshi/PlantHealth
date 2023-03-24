@@ -19,6 +19,7 @@ export default defineComponent({
   <v-app>
     <header-component/>
     <main-container negative>
+      <img alt="glasshouse" src="@/assets/house.png"/>
       <br>
       <br><br><br><br><br><br><br><br><br>
       <br><br><br><br><br><br><br><br><br>
@@ -26,6 +27,7 @@ export default defineComponent({
       <p class="text-center">
         random glasshouse</p>
         <p class="text-center">|</p>
+        <img alt="glasshouse" src="@/assets/house.png"/>
       </div>
     </main-container>
     <footer-component/>
