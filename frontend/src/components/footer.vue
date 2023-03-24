@@ -12,7 +12,6 @@ export default defineComponent({
 <template>
     <div class="footer-view display-flex h-[30vh] w-[100vw]">
       <div class="wrapper">
-
         <div class="logo">
           <img alt="Plant Health Gardening LOGO" src="@/assets/logo.svg"/>
         </div>
@@ -25,7 +24,6 @@ export default defineComponent({
           <p>- Datasheets</p>
         </div>
         </div>
-
         <div class="justify-evenly">
           <p class="text-white font-primary text-[20px]">Company:</p>
           <div class="stack text-white font-primary font-weight-light">
@@ -35,7 +33,6 @@ export default defineComponent({
             <p>- Cookies Policy</p>
           </div>
         </div>
-
         <div class="justify-evenly">
           <p class="text-white font-primary text-[20px]">Services:</p>
           <div class="stack text-white font-primary font-weight-light">
