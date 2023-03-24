@@ -58,4 +58,19 @@ public class AuthController {
     public RefreshResponse refreshToken(@CookieValue("refreshToken") String refreshToken) {
         return new RefreshResponse(authService.refreshAccessToken(refreshToken).getAccessToken().getToken());
     }
+
+    record LogoutResponse(String response) {}
+    /**
+     * Endpoint '/logout' that will remove the refresh token (JWT token) saved in Cookies
+     * */
+    @PostMapping("/logout-user")
+    public LogoutResponse logout(HttpServletResponse response) {
+        System.out.println("logout endpoint called");
+        var cookie = new Cookie("refreshToken", null);
+        cookie.setMaxAge(0);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        return new LogoutResponse("You've been logged out successfully.");
+    }
 }
