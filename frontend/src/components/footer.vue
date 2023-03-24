@@ -10,7 +10,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="footer-view pb-[0px]">
+    <div class="footer-view">
       <div class="wrapper">
         <img alt="Plant Health Gardening LOGO" src="@/assets/logo.svg"/>
       </div>
