@@ -21,7 +21,7 @@ public class AuthController {
      * used for example to not send the password when a user logs in
     * */
     record LoginRequest(String username, String password){}
-    record LoginResponse(String token){}
+    record LoginResponse(String accessToken, String refreshToken){}
 
     /**
      * Handle requests at '/login' and after the validations were done and the tokens were created,
@@ -31,12 +31,12 @@ public class AuthController {
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         var loginService = authService.login(loginRequest.username(), loginRequest.password());
-        var cookie = new Cookie("refreshToken", loginService.getRefreshToken().getToken());
-        cookie.setMaxAge(3600);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        return new LoginResponse(loginService.getAccessToken().getToken());
+//        var cookie = new Cookie("refreshToken", loginService.getRefreshToken().getToken());
+//        cookie.setMaxAge(3600);
+//        cookie.setHttpOnly(true);
+//        cookie.setPath("/");
+//        response.addCookie(cookie);
+        return new LoginResponse(loginService.getAccessToken().getToken(), loginService.getRefreshToken().getToken());
     }
 
     record UserResponse(String username, String firstName, String lastName, String email){}
@@ -50,22 +50,25 @@ public class AuthController {
     }
 
     record RefreshResponse(String token) {}
+    record RefreshRequest(String token) {}
     /**
      * Endpoint '/refresh' that will take the JWT refresh token from your Cookies and validate it
      * If it's a valid token signed with our secret key, it will respond with a new access token for the user
      * */
     @PostMapping("/refresh")
-    public RefreshResponse refreshToken(@CookieValue("refreshToken") String refreshToken) {
-        return new RefreshResponse(authService.refreshAccessToken(refreshToken).getAccessToken().getToken());
+    public RefreshResponse refreshToken(@RequestBody RefreshRequest refreshToken) {
+        System.out.println("REFRESH TOKEN: " + refreshToken.token);
+        return new RefreshResponse(authService.refreshAccessToken(refreshToken.token).getAccessToken().getToken());
     }
 
     record LogoutResponse(String response) {}
     /**
-     * Endpoint '/logout' that will remove the refresh token (JWT token) saved in Cookies
+     * Endpoint '/logout-user' that will remove the refresh token (JWT token) saved in Cookies
+     * Not using '/logout' as endpoint, since there is already something from Spring Security that has this endpoint
+     * TODO: figure out what Spring Security does with '/logout' endpoint
      * */
     @PostMapping("/logout-user")
     public LogoutResponse logout(HttpServletResponse response) {
-        System.out.println("logout endpoint called");
         var cookie = new Cookie("refreshToken", null);
         cookie.setMaxAge(0);
         cookie.setHttpOnly(true);
