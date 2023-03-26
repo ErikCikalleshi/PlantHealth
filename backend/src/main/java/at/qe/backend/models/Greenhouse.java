@@ -12,17 +12,19 @@ import java.util.Set;
  * Entity representing Greenhouses/Plants
  * Each Greenhouse can hold one plant, so it should be named accordingly
  * A Greenhouse CAN have at most one owner, but it can also have none
+ * The {@link Greenhouse#uuid} is unique globally, while the {@link Greenhouse#id} is only unique within greenhouses of a given access point
  */
 @Entity
 @Getter
 @Setter
-
-
-
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "accesspoint_uuid"})})
 public class Greenhouse implements Serializable {
+    //TODO PK should consist of uuid of greenhouse AND AP
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private long uuid;
+    @Column(nullable = false)
+    private long id;
     private String name;
     private String location;
     private String description;
@@ -40,7 +42,9 @@ public class Greenhouse implements Serializable {
     @ManyToOne(optional = true)
     private Userx owner;
 
+
     @ManyToOne
+    @JoinColumn(nullable = false)
     private AccessPoint accesspoint;
     @OneToMany(mappedBy = "greenhouse", orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Sensor> sensors;

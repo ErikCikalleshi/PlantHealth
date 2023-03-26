@@ -1,22 +1,44 @@
 image: alpine:3.17
 
+services:
+  - mysql:latest
+
+variables:
+  MYSQL_DATABASE: "db_planthealth"
+  MYSQL_ROOT_PASSWORD: "root"
+  MYSQL_USER: "springuser"
+  MYSQL_PASSWORD: "passwd"
+  MYSQL_HOST: mysql
+  
 stages: # List of stages for jobs, and their order of execution
+  - testDatabaseService
   - build
-  - test
+  - unit-tests
   - sonarCheck
 
 .before_script_template:
   before_script:
     - apk add --update maven
 
+testDatabaseService:
+ image: python:latest
+ stage: testDatabaseService
+ script:
+   - apt-get update && apt-get install -y git curl libmcrypt-dev default-mysql-client
+   - mysql --version
+   - sleep 2
+   - echo "DROP DATABASE IF EXISTS ${MYSQL_DATABASE};" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
+   - echo "Database host is '${MYSQL_HOST}'"
+
+
 unit-test-job: # This job runs in the test stage.
-  extends: .before_script_template
-  stage: test
-  script:
-    - cd ./backend
-    - echo "Running unit tests..."
-    - mvn test
-  allow_failure: true
+ extends: .before_script_template
+ stage: unit-tests
+ script:
+   - cd ./backend
+   - echo "Running unit tests..."
+   - mvn test
+ allow_failure: true
 
 sonarqube-check:
   extends: .before_script_template
@@ -33,17 +55,19 @@ sonarqube-check:
     - apk add --update nodejs
     - echo Running sonar analysis for ${SONAR_PROJECT_KEY}
     # add to sonarqube frontend project (dir ./frontend)
-    - mvn -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.projectName="${CI_PROJECT_NAME} ${GITLAB_USER_NAME}" -Dsonar.sources=src --fail-at-end verify sonar:sonar
+    - mvn -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.projectName="${CI_PROJECT_NAME} ${GITLAB_USER_NAME}" --fail-at-end verify sonar:sonar
   allow_failure: true
 
 build site:
-  image: node:16.17.1
-  stage: build
-  script:
-    - cd ./frontend
-    - npm install --progress=false
-    - npm run build
-  artifacts:
-    expire_in: 1 week
-    paths:
-      - dist
+ image: node:16.17.1
+ stage: build
+ script:
+   - cd ./frontend
+   - npm install --progress=false
+   - npm run build
+ artifacts:
+   expire_in: 1 week
+   paths:
+     - dist
+
+
