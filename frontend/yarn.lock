@@ -2239,6 +2239,11 @@
   optionalDependencies:
     "fsevents" "~2.3.2"
 
+"vue-cookies@^1.8.3":
+  "integrity" "sha512-VBRsyRMVdahBgFfh389TMHPmDdr4URDJNMk4FKSCfuNITs7+jitBDhwyL4RJd3WUsfOYNNjPAkfbehyH9AFuoA=="
+  "resolved" "https://registry.npmjs.org/vue-cookies/-/vue-cookies-1.8.3.tgz"
+  "version" "1.8.3"
+
 "vue-demi@*":
   "integrity" "sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A=="
   "resolved" "https://registry.npmjs.org/vue-demi/-/vue-demi-0.13.11.tgz"
