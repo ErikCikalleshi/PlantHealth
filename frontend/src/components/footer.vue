@@ -10,28 +10,28 @@ export default defineComponent({
 
 <template>
   <div class="footer-view display-flex h-[30vh] w-[100vw]">
-    <div class="wrapper flex">
+    <div class="wrapper space-x-40 flex">
       <div class="logo h-full flex-1">
         <img alt="Plant Health Gardening LOGO" src="@/assets/logo.svg"/>
       </div>
-      <div class="text-white flex-1 ml-60">
-        <p class="font-primary text-[20px]">Documentation:</p>
-        <p class="font-light text-[16px]">- All categories</p>
-        <p class="font-light text-[16px]">- Product information portal</p>
-        <p class="font-light text-[16px]">- Datasheets</p>
+      <div class="text-white flex-1">
+        <p class="font-secondary text-[20px] mb-3">Documentation:</p>
+        <p class="font-secondary text-[16px]">- All categories</p>
+        <p class="font-secondary text-[16px]">- Product information portal</p>
+        <p class="font-secondary text-[16px]">- Datasheets</p>
       </div>
       <div class="text-white flex-1">
-        <p class="font-primary text-[20px]">Company:</p>
-        <p class="font-light text-[16px]">- Terms of Services</p>
-        <p class="font-light text-[16px]">- Privacy Policy</p>
-        <p class="font-light text-[16px]">- GDPR Protection</p>
-        <p class="font-light text-[16px]">- Cookies Policy</p>
+        <p class="font-secondary text-[20px] mb-3">Company:</p>
+        <p class="font-secondary text-[16px]">- Terms of Services</p>
+        <p class="font-secondary text-[16px]">- Privacy Policy</p>
+        <p class="font-secondary text-[16px]">- GDPR Protection</p>
+        <p class="font-secondary text-[16px]">- Cookies Policy</p>
       </div>
       <div class="text-white flex-1">
-        <p class="font-primary text-[20px]">Services:</p>
-        <p class="font-light text-[16px]">- Products</p>
-        <p class="font-light text-[16px]">- Software</p>
-        <p class="font-light text-[16px]">- Hardware</p>
+        <p class="font-secondary text-[20px] mb-3">Services:</p>
+        <p class="font-secondary text-[16px]">- Products</p>
+        <p class="font-secondary text-[16px]">- Software</p>
+        <p class="font-secondary text-[16px]">- Hardware</p>
       </div>
     </div>
   </div>
