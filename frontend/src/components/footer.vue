@@ -34,6 +34,9 @@ export default defineComponent({
         <p class="font-secondary text-[16px]">- Hardware</p>
       </div>
     </div>
+    <div>
+      <p class="text-center font-secondary text-[16px] text-white opacity-60">Copyright 2022. PlantHealth. All rights reserved.</p>
+    </div>
   </div>
 </template>
 
