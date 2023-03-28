@@ -13,7 +13,7 @@ variables:
 stages: # List of stages for jobs, and their order of execution
   - testDatabaseService
   - build
-  - unit-tests 
+  - unit-tests
   - sonarCheck
 
 .before_script_template:
@@ -21,24 +21,24 @@ stages: # List of stages for jobs, and their order of execution
     - apk add --update maven
 
 testDatabaseService:
-  image: python:latest
-  stage: testDatabaseService
-  script:
-    - apt-get update && apt-get install -y git curl libmcrypt-dev default-mysql-client
-    - mysql --version
-    - sleep 2 
-    - echo "DROP DATABASE IF EXISTS ${MYSQL_DATABASE};" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
-    - echo "Database host is '${MYSQL_HOST}'"
+ image: python:latest
+ stage: testDatabaseService
+ script:
+   - apt-get update && apt-get install -y git curl libmcrypt-dev default-mysql-client
+   - mysql --version
+   - sleep 2
+   - echo "DROP DATABASE IF EXISTS ${MYSQL_DATABASE};" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
+   - echo "Database host is '${MYSQL_HOST}'"
 
 
 unit-test-job: # This job runs in the test stage.
-  extends: .before_script_template
-  stage: unit-tests 
-  script:
-    - cd ./backend
-    - echo "Running unit tests..."
-    - mvn test
-  allow_failure: true
+ extends: .before_script_template
+ stage: unit-tests
+ script:
+   - cd ./backend
+   - echo "Running unit tests..."
+   - mvn test
+ allow_failure: true
 
 sonarqube-check:
   extends: .before_script_template
@@ -59,15 +59,15 @@ sonarqube-check:
   allow_failure: true
 
 build site:
-  image: node:16.17.1
-  stage: build
-  script:
-    - cd ./frontend
-    - npm install --progress=false
-    - npm run build
-  artifacts:
-    expire_in: 1 week
-    paths:
-      - dist
+ image: node:16.17.1
+ stage: build
+ script:
+   - cd ./frontend
+   - npm install --progress=false
+   - npm run build
+ artifacts:
+   expire_in: 1 week
+   paths:
+     - dist
 
 
