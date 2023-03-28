@@ -7,6 +7,15 @@ import footerComponent from "@/components/footer.vue";
 import mainContainer from "@/components/main_container.vue";
 import PageHeading from "@/components/PageHeading.vue";
 
+interface User {
+  id: number;
+  firstname: string;
+  lastname: string;
+  created: string;
+  username: string;
+  email: string;
+  roles: string[];
+}
 
 export default defineComponent({
   name: "AdminManageUsers",
@@ -18,7 +27,7 @@ export default defineComponent({
   },
   data() {
     return {
-      users: [],
+      users: [] as User[],
       useStore: useStore(),
     }
   },
@@ -26,7 +35,6 @@ export default defineComponent({
     getAllUsers() {
       AdminUserService.getAllUsers().then((response) => {
         this.users = response.data;
-        console.log(response.data);
       })
     }
   },

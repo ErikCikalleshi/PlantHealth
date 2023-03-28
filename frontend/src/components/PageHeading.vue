@@ -4,7 +4,7 @@
   </h1>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   props: {
     size: {
