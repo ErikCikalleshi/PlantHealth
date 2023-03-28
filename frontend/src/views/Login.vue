@@ -83,7 +83,7 @@ export default defineComponent({
 
 <style>
 .login-view {
-  background-image: url("@/assets/login/background.svg");
+  background-image: url("@/assets/login/background.png");
   background-size: cover;
 }
 html { overflow-y: auto !important; }
