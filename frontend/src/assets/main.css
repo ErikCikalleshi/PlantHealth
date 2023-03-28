@@ -9,3 +9,11 @@
     font-weight: normal;
     font-style: normal;
 }
+
+@font-face {
+    font-family: 'Stolzl-Light';
+    src: url('../assets/webfonts/Stolzl-Light.woff2') format('woff2'),
+    url('../assets/webfonts/Stolzl-Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}

@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { router } from "@/router";
 import App from './App.vue'
-// import router from './router'
+import VueCookies from "vue-cookies";
 
 import './assets/main.css'
 
@@ -14,9 +14,10 @@ import * as directives from 'vuetify/directives'
 
 //OhVueIcons
 import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { FaUserCircle } from "oh-vue-icons/icons";
+import { FaUserCircle, HiSolidUser } from "oh-vue-icons/icons";
 
-addIcons(FaUserCircle);
+
+addIcons(FaUserCircle, HiSolidUser);
 
 const themeConfigs = {
     dark: false,
@@ -38,5 +39,6 @@ const app = createApp(App);
 app.component("oh-icon", OhVueIcon);
 
 app.use(createPinia())
+app.use(VueCookies)
 app.use(router)
 app.use(vuetify).mount('#app')

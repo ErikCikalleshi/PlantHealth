@@ -1,4 +1,4 @@
-package at.qe.backend.web;
+package at.qe.backend.configs;
 
 import at.qe.backend.models.UserRole;
 import org.springframework.beans.factory.BeanCreationException;
@@ -37,17 +37,18 @@ public class WebSecurityConfig {
         try {
             http.csrf().disable();
             http.headers().frameOptions().disable(); // needed for H2 console
-            http.cors().and()
-                    .authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/**").authenticated()).httpBasic()
+            http.authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/**").authenticated()).httpBasic()
                     .and()
                     .authorizeHttpRequests(authorize -> authorize
                             .requestMatchers("/").permitAll()
-                            //.requestMatchers("/api/**").permitAll()
-                            .requestMatchers("/**.jsf").permitAll()
-                            .requestMatchers(antMatcher("/h2-console/**")).permitAll()
+                            .requestMatchers("/api/**").permitAll()
                             .requestMatchers("/jakarta.faces.resource/**").permitAll()
                             .requestMatchers("/error/**").permitAll()
-                            .requestMatchers("/admin/**").hasAnyAuthority(ADMIN)
+                            .requestMatchers("/login/**").permitAll()
+                            .requestMatchers("/logout-user/**").permitAll()
+                            .requestMatchers("/user/**").permitAll()
+                            .requestMatchers("/refresh/**").permitAll()
+                            .requestMatchers("/admin/**").permitAll()
                             .requestMatchers("/secured/**").hasAnyAuthority(ADMIN, GARDENER, USER)
                             .requestMatchers("/omnifaces.push/**").hasAnyAuthority(ADMIN, GARDENER, USER)
                             .anyRequest().authenticated())
@@ -56,11 +57,11 @@ public class WebSecurityConfig {
                     .permitAll()
                     .failureUrl("/error/access_denied.xhtml")
                     .defaultSuccessUrl("/secured/welcome.xhtml")
-                    .loginProcessingUrl("/login")
+                    .loginProcessingUrl("/login2") // in order to not intercept with PostMapping '/login'
                     .successForwardUrl("/secured/welcome.xhtml")
                     .and()
                     .logout()
-                    .logoutSuccessUrl("/login.xhtml")
+                    .logoutSuccessUrl("/#/login")
                     .deleteCookies("JSESSIONID");
             http.exceptionHandling().accessDeniedPage("/error/access_denied.xhtml");
             // http.sessionManagement().invalidSessionUrl("/error/invalid_session.xhtml");
