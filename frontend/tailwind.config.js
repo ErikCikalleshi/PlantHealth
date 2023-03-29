@@ -9,10 +9,12 @@ module.exports = {
     extend: {
       colors: {
         'primary': '#449A8B',
+        'plant-health-red': '#9A0606',
       },
       fontFamily: {
         'primary': ['Stolzl'],
         'secondary': ['Stolzl-Light'],
+        'roboto':['Roboto'],
       },
     },
   },

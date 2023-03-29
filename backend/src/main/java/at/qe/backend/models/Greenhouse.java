@@ -39,7 +39,8 @@ public class Greenhouse implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
-    @ManyToOne(optional = true)
+    @ManyToOne
+    @JoinColumn(name="owner_username", nullable=false)
     private Userx owner;
 
 
@@ -48,10 +49,4 @@ public class Greenhouse implements Serializable {
     private AccessPoint accesspoint;
     @OneToMany(mappedBy = "greenhouse", orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Sensor> sensors;
-
-    @ManyToMany
-    @JoinTable(name = "greenhouse_gardener",
-            joinColumns = @JoinColumn(name = "greenhouse_uuid"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<Userx> gardeners;
 }
