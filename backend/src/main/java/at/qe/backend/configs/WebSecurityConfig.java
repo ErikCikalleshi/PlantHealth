@@ -37,7 +37,7 @@ public class WebSecurityConfig {
         try {
             http.csrf().disable();
             http.headers().frameOptions().disable(); // needed for H2 console
-            http.authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/**").authenticated()).httpBasic()
+            http.cors().and().authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/**").authenticated()).httpBasic()
                     .and()
                     .authorizeHttpRequests(authorize -> authorize
                             .requestMatchers("/").permitAll()
