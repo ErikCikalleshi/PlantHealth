@@ -3,4 +3,3 @@ out/
 node_modules/
 node/
 backend/src/main/resources/public/index.html
-venv/
