@@ -1,7 +1,6 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import AdminUserService from "@/services/admin/AdminUserService";
-import {useStore} from "@/stores/user/user";
 import headerComponent from "@/components/header.vue";
 import footerComponent from "@/components/footer.vue";
 import mainContainer from "@/components/main_container.vue";
@@ -28,7 +27,6 @@ export default defineComponent({
   data() {
     return {
       users: [] as User[],
-      useStore: useStore(),
     }
   },
   methods: {
@@ -80,7 +78,7 @@ export default defineComponent({
                   </div>
                 </div>
                 <div class="flex justify-center gap-4">
-                  <button class="bg-primary rounded-lg px-3" py-1>Edit User</button>
+                  <button class="bg-primary rounded-lg px-3">Edit User</button>
                   <button class="bg-plant-health-red text-white rounded-lg px-3 py-1">Delete User</button>
                 </div>
               </article>
