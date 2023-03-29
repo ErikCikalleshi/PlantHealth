@@ -13,10 +13,12 @@ def get_config(ip: str, port: str, admin: str, password: str):
 
     data = response.json()
     with open("config/config.json", "w") as f:
-        json.dump(data, f)
+        # save as pretty
+        json.dump(data, f, indent=4)
     return response.status_code
 
 
 # for debug purposes only
 if __name__ == "__main__":
-    get_config("10.0.0.62", "9001", "admin", "passwd")
+    # NOTE: put your own IP address
+    get_config("10.0.0.62", "9000", "admin", "passwd")
