@@ -38,7 +38,7 @@ public class Userx implements Persistable<String>, Serializable, Comparable<User
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
 
-    @ManyToMany(mappedBy = "gardeners")
+    @OneToMany(mappedBy = "owner")
     private Set<Greenhouse> greenhouses;
 
     @Override
