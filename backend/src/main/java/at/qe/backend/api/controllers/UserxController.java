@@ -1,13 +1,12 @@
 package at.qe.backend.api.controllers;
 
 
+import at.qe.backend.api.exceptions.UserNotDeleted;
 import at.qe.backend.models.UserRole;
 import at.qe.backend.models.Userx;
 import at.qe.backend.services.UserxService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,11 +27,18 @@ public class UserxController {
     //TODO add security check to this api
     @GetMapping("/admin/get-all-users")
     private Collection<UserDisplay> getAllUsers() {
-        System.out.println("GOT HERE");
         Collection<UserDisplay> userDisplays= new ArrayList<>();
         for (Userx user:userxService.getAllUsers()) {
             userDisplays.add(new UserDisplay(user.getUsername(),user.getFirstName(), user.getLastName(), new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(user.getCreateDate()), user.getRoles(),user.getEmail()));
         }
         return userDisplays;
     }
+
+    @PostMapping("/admin/delete-user/{username}")
+    private void deleteUserByUsername(@PathVariable String username) throws UserNotDeleted {
+        if(!userxService.deleteUser(userxService.loadUser(username))){
+            throw new UserNotDeleted();
+        }
+    }
+
 }

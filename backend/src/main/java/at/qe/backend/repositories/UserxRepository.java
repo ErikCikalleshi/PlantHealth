@@ -19,6 +19,8 @@ public interface UserxRepository extends AbstractRepository<Userx, String> {
 
     List<Userx> findByUsernameContaining(String username);
 
+    Integer countUserxByRolesContaining(UserRole role);
+
     @Query("SELECT u FROM Userx u WHERE CONCAT(u.firstName, ' ', u.lastName) = :wholeName")
     List<Userx> findByWholeNameConcat(@Param("wholeName") String wholeName);
 

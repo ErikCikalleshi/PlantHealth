@@ -5,6 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,15 +26,16 @@ public class AccessPoint implements Serializable {
     private String name;
     private String location;
     private String description;
-    @ManyToOne(optional = false)
-    private Userx createUser;
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createDate = new Date();
-    @ManyToOne(optional = true)
-    private Userx updateUser;
-    @Temporal(TemporalType.TIMESTAMP)
+
+    @CreatedBy
+    private String createUserUsername;
+    @CreatedDate
+    private Date createDate;
+    @LastModifiedBy
+    private String updateUserUsername;
+    @LastModifiedDate
     private Date updateDate;
+
     @Column(nullable = false)
     private int transmissionIntervalSeconds;
     @OneToMany(mappedBy = "accesspoint", orphanRemoval = true, fetch = FetchType.EAGER)

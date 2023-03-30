@@ -3,8 +3,10 @@ import axios from "axios";
 
 class AdminUserService{
     getAllUsers(){
-        console.log(API_BASE_URL+'admin/get-all-users');
         return axios.get(API_BASE_URL+'admin/get-all-users');
+    }
+    deleteUser(username: String){
+        return axios.post(API_BASE_URL+'admin/delete-user/'+username);
     }
 }
 export default new AdminUserService();

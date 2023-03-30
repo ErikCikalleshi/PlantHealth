@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -24,14 +28,13 @@ public class Sensor implements Serializable {
     private double limitLower;
     private int limitThresholdMinutes;
 
-    @ManyToOne(optional = false)
-    private Userx createUser;
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createDate = new Date();
-    @ManyToOne(optional = true)
-    private Userx updateUser;
-    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedBy
+    private String createUserUsername;
+    @CreatedDate
+    private Date createDate;
+    @LastModifiedBy
+    private String updateUserUsername;
+    @LastModifiedDate
     private Date updateDate;
 
     @ManyToOne
