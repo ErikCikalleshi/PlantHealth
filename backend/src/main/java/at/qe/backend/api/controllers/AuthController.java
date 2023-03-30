@@ -1,12 +1,18 @@
 package at.qe.backend.api.controllers;
 
+import at.qe.backend.api.model.UserDTO;
 import at.qe.backend.api.services.AuthService;
 import at.qe.backend.models.Userx;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.SimpleDateFormat;
 
 /**
 * Controller to handle login requests
@@ -14,8 +20,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
 public class AuthController {
+
     @Autowired
     private AuthService authService;
+
     /**
      * records are DTOs (Data Transfer Object) used to return only the fields we want back to the client
      * used for example to not send the password when a user logs in
@@ -31,11 +39,6 @@ public class AuthController {
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         var loginService = authService.login(loginRequest.username(), loginRequest.password());
-//        var cookie = new Cookie("refreshToken", loginService.getRefreshToken().getToken());
-//        cookie.setMaxAge(3600);
-//        cookie.setHttpOnly(true);
-//        cookie.setPath("/");
-//        response.addCookie(cookie);
         return new LoginResponse(loginService.getAccessToken().getToken(), loginService.getRefreshToken().getToken());
     }
 
@@ -44,9 +47,14 @@ public class AuthController {
      * Endpoint '/user' getting all user related data from attribute 'user' that was set in the interceptor
      * */
     @GetMapping("/user")
-    public UserResponse userInfo(HttpServletRequest request) {
+    public UserDTO userInfo(HttpServletRequest request) {
         var user = (Userx) request.getAttribute("user");
-        return new UserResponse(user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail());
+        return new UserDTO(user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
+                new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(user.getCreateDate()),
+                user.getRoles(),
+                user.getEmail());
     }
 
     record RefreshResponse(String token) {}

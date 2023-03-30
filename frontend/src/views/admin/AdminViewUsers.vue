@@ -6,20 +6,11 @@ import footerComponent from "@/components/footer.vue";
 import mainContainer from "@/components/main_container.vue";
 import PageHeading from "@/components/PageHeading.vue";
 import Modal from "@/components/Modal.vue";
-
-
-interface User {
-    id: number;
-    firstname: string;
-    lastname: string;
-    created: string;
-    username: string;
-    email: string;
-    roles: string[];
-}
+import type IUser from "@/interfaces/user/IUser";
+import {useStore as tokenStore} from "@/stores/token/token";
 
 export default defineComponent({
-    name: "AdminManageUsers",
+    name: "adminManageUsers",
     components: {
         headerComponent,
         footerComponent,
@@ -29,34 +20,34 @@ export default defineComponent({
     },
     data() {
         return {
-            users: [] as User[],
+            users: [] as IUser[],
             deleteUserModalVisible: false,
-            userToDelete: null as unknown as User,
+            userToDelete: null as unknown as IUser,
+            tokenStore: tokenStore(),
         }
-        const colorVariants ={
-            USER : 'border-role-user',
+        const colorVariants = {
+            USER: 'border-role-user',
             GARDENER: 'border-role-gardener',
             ADMIN: 'border-role-admin',
         }
     },
     methods: {
         getAllUsers() {
-            AdminUserService.getAllUsers().then((response) => {
+            AdminUserService.getAllUsers(this.tokenStore.accessToken).then((response) => {
                 this.users = response.data;
             })
         },
-        confirmDeleteUser(user: User) {
+        confirmDeleteUser(user: IUser) {
             this.deleteUserModalVisible = true;
             this.userToDelete = user;
         },
-        deleteUser(user: User) {
-            AdminUserService.deleteUser(user.username).then(() => {
+        deleteUser(user: IUser) {
+            AdminUserService.deleteUser(this.tokenStore.accessToken, user.username).then(() => {
                 this.users.splice(this.users.indexOf(user), 1);
             })
             this.deleteUserModalVisible = false;
         },
         getColorByRole(role: String) {
-            console.log(role)
             switch (role) {
                 case "GARDENER":
                     return "role-gardener"
@@ -66,9 +57,6 @@ export default defineComponent({
                     return "role-user"
             }
         },
-        getTextColorByRole(role: String) {
-            return "text-" + this.getColorByRole(role);
-        }
     },
     created() {
         this.getAllUsers()
@@ -96,7 +84,6 @@ export default defineComponent({
                                             {{ user.firstname }} {{ user.lastname }}
                                         </h3>
                                         <p class="text-center text-xs pb-3">{{ user.created }}</p>
-
                                     </header>
 
                                 </div>
@@ -111,12 +98,13 @@ export default defineComponent({
                                 <div class="flex flex-col">
                                     <div class="flex flex-wrap  my-3 justify-center">
                                         <div v-for="role in user.roles">
-                                            <p class="my-1 border-2 text-sm rounded-lg mx-1 px-1" :class="'border-'+getColorByRole(role) + ' text-' +getColorByRole(role)">
+                                            <p class="my-1 border-2 text-sm rounded-lg mx-1 px-1"
+                                               :class="'border-'+getColorByRole(role) + ' text-' +getColorByRole(role)">
                                                 {{ role }}</p>
                                         </div>
                                     </div>
                                     <div class="flex justify-center gap-4 h-full">
-                                        <button class="bg-primary rounded-lg px-3">Edit User</button>
+                                        <button class="bg-primary rounded-lg px-3" @click="$router.push({name:'admin-edit-user', params:{username: user.username}})">Edit User</button>
                                         <button @click="confirmDeleteUser(user)"
                                                 class="bg-plant-health-red text-white rounded-lg px-3 py-1">Delete User
                                         </button>

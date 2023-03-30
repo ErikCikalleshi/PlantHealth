@@ -30,7 +30,7 @@ export default defineComponent({
         <p>Prices</p>
         <p class="">Contact</p>
         <div class="pl-40 flex align-center">
-          <div>{{store.firstName}}</div>
+          <div>{{store.firstname}}</div>
           <oh-icon class="fill-white ml-4" name="hi-solid-user" scale="1.5"></oh-icon>
         </div>
       </div>
