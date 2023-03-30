@@ -22,12 +22,13 @@ public class MeasurementDTO {
      * @param measurement Create a new MeasurementDTO from a Measurement without exposing too much data
      */
     public MeasurementDTO(Measurement measurement) {
-        this.greenhouseID = measurement.getSensor().getGreenhouse().getId();
+        this.greenhouseID = measurement.getSensor().getGreenhouse().getIdInCluster();
         this.accesspointUUID = measurement.getSensor().getGreenhouse().getAccesspoint().getUuid();
         this.value = measurement.getValue();
         this.sensorType = measurement.getSensor().getSensorType();
         this.measurementId = measurement.getId();
         this.date = measurement.getMeasurementDate();
+        this.LimitExceededBy=measurement.getLimitExceededBy();
     }
 
     private long measurementId;
@@ -37,4 +38,6 @@ public class MeasurementDTO {
     private SensorType sensorType;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date date;
+
+    private double LimitExceededBy;
 }

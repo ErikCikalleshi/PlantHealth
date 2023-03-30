@@ -1,4 +1,4 @@
-package at.qe.backend.tests;
+package at.qe.backend.tests.api;
 
 import at.qe.backend.api.model.MeasurementDTO;
 import at.qe.backend.models.SensorType;
@@ -16,8 +16,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class RestInterfaceTests {
-
+public class MeasurementsTests {
     @LocalServerPort
     private int port;
     private String BaseURI;
@@ -32,7 +31,7 @@ public class RestInterfaceTests {
     public void GreenhouseNotFound() {
         MeasurementDTO measurement = new MeasurementDTO();
         measurement.setGreenhouseID(1);
-        measurement.setAccesspointUUID(1);
+        measurement.setAccesspointUUID(2);
         measurement.setValue(23.0);
         measurement.setSensorType(SensorType.TEMPERATURE);
         measurement.setDate(new Date());
@@ -48,6 +47,49 @@ public class RestInterfaceTests {
                         "message", is("The greenhouse with the given ID does not exists")
                 );
     }
+
+    @Test
+    public void GreenhouseNotPublished() {
+        MeasurementDTO measurement = new MeasurementDTO();
+        measurement.setGreenhouseID(1);
+        measurement.setAccesspointUUID(1);
+        measurement.setValue(23.0);
+        measurement.setSensorType(SensorType.TEMPERATURE);
+        measurement.setDate(new Date());
+
+        given().auth().basic("admin", "passwd").
+                contentType(ContentType.JSON).
+                body(measurement).
+                when().
+                post(BaseURI + "/api/measurements").
+                then().
+                statusCode(HttpStatus.SC_FORBIDDEN).
+                body(
+                        "message", is("The greenhouse is not published")
+                );
+    }
+
+    @Test
+    public void AccessPointNotPublished() {
+        MeasurementDTO measurement = new MeasurementDTO();
+        measurement.setGreenhouseID(1);
+        measurement.setAccesspointUUID(1);
+        measurement.setValue(23.0);
+        measurement.setSensorType(SensorType.TEMPERATURE);
+        measurement.setDate(new Date());
+
+        given().auth().basic("admin", "passwd").
+                contentType(ContentType.JSON).
+                body(measurement).
+                when().
+                post(BaseURI + "/api/measurements").
+                then().
+                statusCode(HttpStatus.SC_FORBIDDEN).
+                body(
+                        "message", is("The greenhouse is not published")
+                );
+    }
+
 
     @Test
     public void SubmitMeasurement() {
@@ -73,26 +115,6 @@ public class RestInterfaceTests {
                         "sensorType", is(measurement.getSensorType().name()),
                         "date", notNullValue()
                 );
-    }
-
-
-    @Test
-    public void GetSetting() {
-        given().auth().basic("admin", "passwd").
-                contentType(ContentType.JSON).
-                when().
-                get(BaseURI + "/api/setting/1").
-                then().
-                statusCode(HttpStatus.SC_OK);
-    }
-    @Test
-    public void GetSettingInvalidAP() {
-        given().auth().basic("admin", "passwd").
-                contentType(ContentType.JSON).
-                when().
-                get(BaseURI + "/api/setting/151688").
-                then().
-                statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
 }

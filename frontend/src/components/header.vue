@@ -1,9 +1,15 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {OhVueIcon} from "oh-vue-icons";
+import {useStore} from "@/stores/user/user";
 
 export default defineComponent({
   name: "HeaderView",
+  data() {
+    return {
+      store: useStore(),
+    }
+  },
   components: {
     // eslint-disable-next-line vue/no-unused-components
     OhVueIcon
@@ -23,8 +29,9 @@ export default defineComponent({
         <p>Services</p>
         <p>Prices</p>
         <p class="">Contact</p>
-        <div class="pl-40 flex ">
-          <oh-icon class="fill-white" name="hi-solid-user" scale="1.5"></oh-icon>
+        <div class="pl-40 flex align-center">
+          <div>{{store.firstName}}</div>
+          <oh-icon class="fill-white ml-4" name="hi-solid-user" scale="1.5"></oh-icon>
         </div>
       </div>
 

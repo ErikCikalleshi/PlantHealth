@@ -1,5 +1,7 @@
 package at.qe.backend.api.services;
 
+import at.qe.backend.api.exceptions.AccessPointNotPublishedException;
+import at.qe.backend.api.exceptions.GreenhouseNotPublishedException;
 import at.qe.backend.api.exceptions.GreenhouseNotRegisteredException;
 import at.qe.backend.api.exceptions.SensorNotFoundException;
 import at.qe.backend.api.model.MeasurementDTO;
@@ -9,9 +11,11 @@ import at.qe.backend.models.Sensor;
 import at.qe.backend.repositories.GreenhouseRepository;
 import at.qe.backend.repositories.MeasurementRepository;
 import at.qe.backend.repositories.SensorRepository;
+import jakarta.transaction.NotSupportedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -33,15 +37,24 @@ public class MeasurementService {
      * @throws GreenhouseNotRegisteredException The greenhouse hasn't been added to the database yet and therefore is not valid
      * @throws SensorNotFoundException The greenhouse doesn't have a sensor of provided type
      */
-    public MeasurementDTO addMeasurement(MeasurementDTO measurementDTO) throws GreenhouseNotRegisteredException, SensorNotFoundException {
-        Greenhouse greenhouse = greenhouseRepository.findFirstByIdAndAccesspoint_Uuid(measurementDTO.getGreenhouseID(), measurementDTO.getAccesspointUUID());
+    public MeasurementDTO addMeasurement(MeasurementDTO measurementDTO) throws GreenhouseNotRegisteredException, SensorNotFoundException, AccessPointNotPublishedException, GreenhouseNotPublishedException {
+        System.out.println("gid: "+ measurementDTO.getGreenhouseID() + "; apid: " + measurementDTO.getAccesspointUUID());
+        Greenhouse greenhouse = greenhouseRepository.findFirstByIdInClusterAndAccesspoint_Uuid(measurementDTO.getGreenhouseID(), measurementDTO.getAccesspointUUID());
         if (greenhouse == null) {
             throw new GreenhouseNotRegisteredException();
+        }
+        if (!greenhouse.getAccesspoint().isPublished()){
+            throw new AccessPointNotPublishedException();
+        }
+        if (!greenhouse.isPublished()){
+            throw new GreenhouseNotPublishedException();
         }
         Sensor sensor = sensorRepository.findFirstByGreenhouseAndSensorType(greenhouse, measurementDTO.getSensorType());
         if (sensor == null) {
             throw new SensorNotFoundException();
         }
+        greenhouse.getAccesspoint().setLastContact(new Date());
+        greenhouse.setLastContact(new Date());
         Measurement measurement = new Measurement();
         measurement.setValue(measurementDTO.getValue());
         measurement.setSensor(sensor);
