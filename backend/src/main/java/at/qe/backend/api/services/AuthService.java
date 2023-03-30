@@ -5,6 +5,8 @@ import at.qe.backend.models.Userx;
 import at.qe.backend.repositories.UserxRepository;
 import io.jsonwebtoken.Jwts;
 import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +26,11 @@ public class AuthService {
     private final String accessSecret;
     private final String refreshSecret;
 
+    private static final Logger LOG = LoggerFactory.getLogger(AuthService.class);
+    /**
+     * initialized Logger to use in the Service
+     */
+
     public AuthService(UserxRepository userRepo, PasswordEncoder passwordEncoder,
                        @Value("${application.security.access-secret}")String accessSecret,
                        @Value("${application.security.refresh-secret}")String refreshSecret) {
@@ -38,10 +45,25 @@ public class AuthService {
      *  - validates password
      *  - creates access & refresh JWT Tokens
      */
+
+    /**
+     * LOG writes a log message to the console
+     * if the user is not found, or the password is incorrect
+     * needs to be extended to write to file by adding properties
+     */
     public LoginService login(String username, String password) {
         var user = userRepo.findFirstByUsername(username);
-        if(user == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid credentials.");
-        if(!passwordEncoder.matches(password, user.getPassword())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid credentials.");
+        if(user == null) {
+            LOG.error("User does not exist.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid credentials.");
+        }
+
+
+        if(!passwordEncoder.matches(password, user.getPassword())) {
+            LOG.error("Password is incorrect.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid credentials.");
+        }
+        else { LOG.info("User logged in successfully.");}
         return LoginService.of(user.getUsername(), accessSecret, refreshSecret);
     }
 

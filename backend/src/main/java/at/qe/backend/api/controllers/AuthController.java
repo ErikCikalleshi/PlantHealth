@@ -20,6 +20,7 @@ public class AuthController {
      * records are DTOs (Data Transfer Object) used to return only the fields we want back to the client
      * used for example to not send the password when a user logs in
     * */
+
     record LoginRequest(String username, String password){}
     record LoginResponse(String accessToken, String refreshToken){}
 
