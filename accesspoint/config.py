@@ -1,9 +1,10 @@
-import requests
 import json
+import threading
+import requests
 
 
-def get_config(ip: str, port: str, admin: str, password: str):
-    url = f"http://{ip}:{port}/api/setting/1"
+def get_config(ip: str, port: str, admin: str, password: str, accesspoint_id: int):
+    url = f"http://{ip}:{port}/api/setting/{accesspoint_id}"
     auth = (admin, password)
     try:
         response = requests.get(url, auth=auth)
@@ -11,10 +12,13 @@ def get_config(ip: str, port: str, admin: str, password: str):
         print("Error: 'api/setting/' API call failed")
         return response.status_code
 
+    if response.status_code != 200:
+        print("Error: 'api/setting/' API call failed")
+        return response.status_code
     data = response.json()
     with open("config/config.json", "w") as f:
-        # save as pretty
         json.dump(data, f, indent=4)
+    threading.Timer(10, get_config).start()
     return response.status_code
 
 
