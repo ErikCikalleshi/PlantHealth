@@ -26,4 +26,6 @@ public class Measurement implements Serializable {
     @ManyToOne
     @JsonBackReference // exclude sensor from serialization
     private Sensor sensor;
+
+    private double LimitExceededBy;
 }

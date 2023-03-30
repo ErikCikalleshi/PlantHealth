@@ -35,4 +35,8 @@ public class AccessPoint implements Serializable {
     private int transmissionIntervalSeconds;
     @OneToMany(mappedBy = "accesspoint", orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Greenhouse> greenhouses;
+
+    private boolean published = false;
+    private Date lastContact;
+
 }

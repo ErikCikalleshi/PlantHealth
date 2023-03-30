@@ -1,6 +1,7 @@
 package at.qe.backend.api.controllers;
 
 import at.qe.backend.api.exceptions.AccessPointNotFoundException;
+import at.qe.backend.api.exceptions.AccessPointNotPublishedException;
 import at.qe.backend.api.exceptions.GreenhouseNotRegisteredException;
 import at.qe.backend.api.exceptions.SensorNotFoundException;
 import at.qe.backend.api.model.AccessPointSettingDTO;
@@ -18,7 +19,7 @@ public class SettingController {
     SettingService settingService;
 
     @GetMapping("/setting/{accessPointId}")
-    private AccessPointSettingDTO getSetting(@PathVariable long accessPointId) throws AccessPointNotFoundException {
+    private AccessPointSettingDTO getSetting(@PathVariable long accessPointId) throws AccessPointNotFoundException, AccessPointNotPublishedException {
         return settingService.getSetting(accessPointId);
     }
 }

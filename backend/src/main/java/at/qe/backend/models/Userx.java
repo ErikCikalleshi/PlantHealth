@@ -62,7 +62,7 @@ public class Userx implements Persistable<String>, Serializable, Comparable<User
 
     @Override
     public String toString() {
-        return "at.qe.skeleton.model.User[ id=" + username + " ]";
+        return "at.qe.skeleton.model.User[ idInCluster=" + username + " ]";
     }
 
     @Override

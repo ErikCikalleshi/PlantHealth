@@ -1,5 +1,7 @@
 package at.qe.backend.api.controllers;
 
+import at.qe.backend.api.exceptions.AccessPointNotPublishedException;
+import at.qe.backend.api.exceptions.GreenhouseNotPublishedException;
 import at.qe.backend.api.exceptions.GreenhouseNotRegisteredException;
 import at.qe.backend.api.exceptions.SensorNotFoundException;
 import at.qe.backend.api.model.MeasurementDTO;
@@ -27,13 +29,14 @@ public class MeasurementController {
      *                       "greenhouseID": int,
      *                       "value": double,
      *                       "sensorType": SensorType enum as String
-     *                       "date": "yyyy-MM-dd HH:mm"
-     * @return returns the MeasurementDTO with the id if it was saved successfully. Otherwise, an exception is thrown.
+     *                       "date": "yyyy-MM-dd HH:mm",
+     *                       "limitExceededBy": double
+     * @return returns the MeasurementDTO with the idInCluster if it was saved successfully. Otherwise, an exception is thrown.
      * @throws SensorNotFoundException The sensor of SensorType could not be found for the specified Greenhouse
      * @throws GreenhouseNotRegisteredException The specified Greenhouse does not yet exist in the database
      */
     @PostMapping("/measurements")
-    private MeasurementDTO createMeasurement(@RequestBody MeasurementDTO measurementDTO) throws SensorNotFoundException, GreenhouseNotRegisteredException {
+    private MeasurementDTO createMeasurement(@RequestBody MeasurementDTO measurementDTO) throws SensorNotFoundException, GreenhouseNotRegisteredException, AccessPointNotPublishedException, GreenhouseNotPublishedException {
         return measurementService.addMeasurement(measurementDTO);
     }
 }
