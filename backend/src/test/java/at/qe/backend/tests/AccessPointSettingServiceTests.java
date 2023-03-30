@@ -1,6 +1,7 @@
 package at.qe.backend.tests;
 
 import at.qe.backend.api.exceptions.AccessPointNotFoundException;
+import at.qe.backend.api.exceptions.AccessPointNotPublishedException;
 import at.qe.backend.api.model.AccessPointSettingDTO;
 import at.qe.backend.api.services.SettingService;
 import org.junit.jupiter.api.Assertions;
@@ -19,7 +20,7 @@ public class AccessPointSettingServiceTests {
     }
 
     @Test
-    public void getSettingsValidAP() throws AccessPointNotFoundException {
+    public void getSettingsValidAP() throws AccessPointNotFoundException, AccessPointNotPublishedException {
        Assertions.assertEquals(AccessPointSettingDTO.class, settingService.getSetting(1).getClass());
     }
 }
