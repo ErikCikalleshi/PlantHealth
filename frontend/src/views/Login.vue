@@ -27,6 +27,7 @@ export default defineComponent({
       this.tokenStore.accessToken = token.accessToken;
       this.tokenStore.refreshToken = token.refreshToken;
       await service.setUser(token.accessToken);
+      if(response.status === 200) this.$router.push('/');
       console.log(token);
     }
   },
@@ -36,7 +37,7 @@ export default defineComponent({
 <template>
   <v-app>
     <div class="login-view">
-      <div class="h-[100vh] w-[100vw] grid items-center">
+      <div class="h-[100vh] w-[100vw] grid items-center" @keydown.enter="login">
         <div>
           <img alt="Plant Health LOGO" src="@/assets/logo.svg" class="pb-[42px] mx-auto"/>
           <div class="w-[467px] p-[25px] bg-white rounded-xl mx-auto">
