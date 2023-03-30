@@ -1,0 +1,17 @@
+{
+  "auth": {
+    "user": "admin",
+    "pass": "passwd"
+  },
+  "server": {
+    "host": "10.0.0.60",
+    "port": 9000
+  },
+  "access_point_id": "1",
+  "mongo": {
+    "port": 27017,
+    "host": "localhost",
+    "database": "PlantHealth",
+    "collection": "Measurements"
+  }
+}

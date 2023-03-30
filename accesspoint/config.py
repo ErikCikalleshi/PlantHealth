@@ -6,6 +6,7 @@ import requests
 def get_config(ip: str, port: str, admin: str, password: str, accesspoint_id: int):
     url = f"http://{ip}:{port}/api/setting/{accesspoint_id}"
     auth = (admin, password)
+    response = None
     try:
         response = requests.get(url, auth=auth)
     except requests.exceptions.ConnectionError:
@@ -24,5 +25,5 @@ def get_config(ip: str, port: str, admin: str, password: str, accesspoint_id: in
 
 # for debug purposes only
 if __name__ == "__main__":
-    # NOTE: put your own IP address
-    get_config("10.0.0.62", "9000", "admin", "passwd")
+    # NOTE: put your own IP address, port, admin and password
+    get_config("10.0.0.62", "9000", "admin", "passwd", accesspoint_id=1)
