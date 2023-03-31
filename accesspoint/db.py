@@ -3,7 +3,7 @@ import json
 
 
 def read_settings():
-    with open('settings.json', 'r') as data_file:
+    with open('/home/ubuntu/g2t4/accesspoint/settings.json') as data_file:
         data = json.load(data_file)
     return data
 
