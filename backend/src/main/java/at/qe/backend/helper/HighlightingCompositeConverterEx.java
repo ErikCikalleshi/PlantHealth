@@ -5,6 +5,11 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.pattern.color.ANSIConstants;
 import ch.qos.logback.core.pattern.color.ForegroundCompositeConverterBase;
 
+/**
+ * This class is used to change the color of the log output.
+ * It is being used in the logback.xml file.
+ * Source: https://github.com/shuwada/logback-custom-color
+ **/
 public class HighlightingCompositeConverterEx extends ForegroundCompositeConverterBase<ILoggingEvent> {
     @Override
     protected String getForegroundColorCode(ILoggingEvent event) {
