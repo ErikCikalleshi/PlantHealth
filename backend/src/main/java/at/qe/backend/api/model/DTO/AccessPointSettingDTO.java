@@ -1,4 +1,4 @@
-package at.qe.backend.api.model;
+package at.qe.backend.api.model.DTO;
 
 import lombok.Getter;
 import lombok.Setter;

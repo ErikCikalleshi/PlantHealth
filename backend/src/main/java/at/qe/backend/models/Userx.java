@@ -17,10 +17,13 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-public class Userx implements Persistable<String>, Serializable, Comparable<Userx> {
+public class Userx implements Persistable<Long>, Serializable, Comparable<Userx> {
     private static final long serialVersionUID = 1L;
+
     @Id
-    @Column(length = 100)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(unique = true,length = 100)
     private String username;
     @CreatedBy
     private String createUserUsername;
@@ -37,7 +40,7 @@ public class Userx implements Persistable<String>, Serializable, Comparable<User
     private String phone;
     boolean enabled;
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "Userx_UserRole")
+    @CollectionTable(name = "Userx_User_Role", joinColumns = @JoinColumn(name = "userx_id"))
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
 
@@ -69,8 +72,8 @@ public class Userx implements Persistable<String>, Serializable, Comparable<User
     }
 
     @Override
-    public String getId() {
-        return getUsername();
+    public Long getId() {
+        return this.id;
     }
 
     public void setId(String id) {

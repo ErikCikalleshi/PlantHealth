@@ -5,8 +5,6 @@ import at.qe.backend.api.exceptions.UserNotDeletedException;
 import at.qe.backend.models.UserRole;
 import at.qe.backend.models.Userx;
 import at.qe.backend.services.UserxService;
-import jakarta.servlet.http.HttpServletRequest;
-import org.hibernate.boot.jaxb.internal.UrlXmlSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -33,12 +31,7 @@ public class UserxController {
 
     //TODO add security check to this api
     @GetMapping("/admin/get-all-users")
-    private Collection<UserDisplay> getAllUsers(HttpServletRequest request) {
-        System.out.println(request);
-        var session = (Userx) request.getAttribute("user");
-        if (!session.getRoles().contains(UserRole.ADMIN)){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
+    private Collection<UserDisplay> getAllUsers() {
         Collection<UserDisplay> userDisplays = new ArrayList<>();
         for (Userx user : userxService.getAllUsers()) {
             userDisplays.add(new UserDisplay(user.getUsername(),
@@ -73,7 +66,7 @@ public class UserxController {
     }
 
     @PatchMapping("/admin/update-user/")
-    private void updateUser(HttpServletRequest request, @RequestBody UserDisplay userDisplay) {
+    private void updateUser(@RequestBody UserDisplay userDisplay) {
         if (userDisplay.roles.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -84,7 +77,6 @@ public class UserxController {
         Set<UserRole> rolesNew = new java.util.HashSet<>(Set.of());
         rolesNew.addAll(userDisplay.roles);
         user.setRoles(rolesNew);
-        var session = (Userx) request.getAttribute("user");
-        userxService.saveUser(user, session.getUsername());
+        userxService.saveUser(user);
     }
 }

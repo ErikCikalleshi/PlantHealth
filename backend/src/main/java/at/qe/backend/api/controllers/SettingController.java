@@ -2,11 +2,7 @@ package at.qe.backend.api.controllers;
 
 import at.qe.backend.api.exceptions.AccessPointNotFoundException;
 import at.qe.backend.api.exceptions.AccessPointNotPublishedException;
-import at.qe.backend.api.exceptions.GreenhouseNotRegisteredException;
-import at.qe.backend.api.exceptions.SensorNotFoundException;
-import at.qe.backend.api.model.AccessPointSettingDTO;
-import at.qe.backend.api.model.MeasurementDTO;
-import at.qe.backend.api.services.MeasurementService;
+import at.qe.backend.api.model.DTO.AccessPointSettingDTO;
 import at.qe.backend.api.services.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

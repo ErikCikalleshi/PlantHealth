@@ -6,6 +6,7 @@ import type ITokenResponse from "@/interfaces/user/ITokenResponse";
 import {useStore as userStore} from "@/stores/user/user";
 import {useStore as tokenStore} from "@/stores/token/token";
 import VueCookies from "vue-cookies";
+import AuthService from "@/services/auth.service";
 export default defineComponent({
   name: "LoginView",
   data() {
@@ -22,13 +23,12 @@ export default defineComponent({
   },
   methods: {
     async login() {
-      let response = await service.login(this.username, this.password);
+      let response = await AuthService.login(this.username, this.password);
       let token: ITokenResponse = response.data;
-      this.tokenStore.accessToken = token.accessToken;
+      this.tokenStore.accessToken = token.token;
       this.tokenStore.refreshToken = token.refreshToken;
-      await service.setUser(token.accessToken);
+      await service.setUser(token.token);
       if(response.status === 200) this.$router.push('/');
-      console.log(token);
     }
   },
 });

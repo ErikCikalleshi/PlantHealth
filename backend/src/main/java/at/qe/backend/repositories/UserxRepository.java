@@ -1,11 +1,14 @@
 package at.qe.backend.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import at.qe.backend.models.Userx;
 import at.qe.backend.models.UserRole;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 /**
  * Repository for managing {@link Userx} entities.
@@ -13,9 +16,11 @@ import org.springframework.data.repository.query.Param;
  * This class is part of the skeleton project provided for students of the
  * course "Software Architecture" offered by Innsbruck University.
  */
-public interface UserxRepository extends AbstractRepository<Userx, String> {
+@Repository
+public interface UserxRepository extends JpaRepository<Userx, Long> {
 
     Userx findFirstByUsername(String username);
+    Optional<Userx> findByUsername(String username);
 
     List<Userx> findByUsernameContaining(String username);
 

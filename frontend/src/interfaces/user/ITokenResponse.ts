@@ -1,4 +1,8 @@
 export default interface ITokenResponse {
-    accessToken: string
+    id: number;
+    email: string
     refreshToken: string
+    token: string
+    username:string
+    roles:string[]
 }
