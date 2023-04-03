@@ -14,8 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import javax.sql.DataSource;
 
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -26,17 +24,10 @@ public class WebSecurityConfig {
     @Autowired
     DataSource dataSource;
 
-//    @Bean
-//    protected LogoutSuccessHandler logoutSuccessHandler() {
-//        return new CustomizedLogoutSuccessHandler();
-//    }
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         try {
             http.csrf().disable();
-            http.headers().frameOptions().disable(); // needed for H2 console
             http.cors().and().authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/**").authenticated()).httpBasic()
                     .and()
                     .authorizeHttpRequests(authorize -> authorize
