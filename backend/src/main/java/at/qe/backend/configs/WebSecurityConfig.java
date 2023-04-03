@@ -8,6 +8,7 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,6 +20,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.sql.DataSource;
@@ -64,8 +66,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         try {
             http.cors().and().csrf().disable()
-                    .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+//                    .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                     .authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/**").authenticated()).httpBasic().and()
                     .authorizeHttpRequests(authorize -> authorize
                             .requestMatchers("/").permitAll()
@@ -89,18 +90,6 @@ public class WebSecurityConfig {
         }
         // :TODO: user failureUrl(/login.xhtml?error) and make sure that a corresponding message is displayed
     }
-
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        //Configure roles and passwords via datasource
-//        auth.
-//                jdbcAuthentication()
-//                .passwordEncoder(passwordEncoder())
-//                .usersByUsernameQuery("select username, password, enabled from userx where username=?")
-//                .authoritiesByUsernameQuery("select u.username, ur.roles from userx u join userx_user_role ur on u.id=ur.userx_id where u.username=?")
-//                .dataSource(dataSource);
-//    }
-//
 
     @Bean
     public static PasswordEncoder passwordEncoder() {

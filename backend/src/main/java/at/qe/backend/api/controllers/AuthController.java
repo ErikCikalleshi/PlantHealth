@@ -1,17 +1,15 @@
 package at.qe.backend.api.controllers;
 
-import at.qe.backend.api.model.request.LoginRequest;
 import at.qe.backend.api.model.DTO.UserDTO;
+import at.qe.backend.api.model.request.LoginRequest;
 import at.qe.backend.api.model.request.TokenRefreshRequest;
 import at.qe.backend.api.model.response.JwtResponse;
 import at.qe.backend.api.model.response.TokenRefreshResponse;
+import at.qe.backend.configs.security.jwt.JwtUtils;
 import at.qe.backend.configs.security.jwt.exception.TokenRefreshException;
 import at.qe.backend.configs.security.jwt.models.RefreshToken;
-//import at.qe.backend.configs.security.jwt.services.AuthService;
-import at.qe.backend.configs.security.jwt.JwtUtils;
 import at.qe.backend.configs.security.jwt.services.RefreshTokenService;
 import at.qe.backend.configs.security.services.UserDetailsImpl;
-import at.qe.backend.models.Userx;
 import at.qe.backend.services.UserxService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,8 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,15 +27,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Controller to handle login requests
+ * Controller to handle user authorization requests
  **/
 @RestController
 @CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
 public class AuthController {
-
-//    @Autowired
-//    private AuthService authService;
-
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -67,28 +59,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
         String jwt = jwtUtils.generateJwtToken(userDetails);
-
-        List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-                .collect(Collectors.toList());
-
+        List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-
-        return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), userDetails.getId(),
-                userDetails.getUsername(), userDetails.getEmail(), roles));
-
-
-    }
-
-    record UserResponse(String username, String firstName, String lastName, String email) {
+        return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
     }
 
     /**
@@ -96,48 +73,19 @@ public class AuthController {
      */
     @GetMapping("/user")
     public UserDTO userInfo(HttpServletRequest request) {
-        var tmp = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var user = userxService.loadUser(((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
-        return new UserDTO(user.getUsername(),
-                user.getFirstName(),
-                user.getLastName(),
-                new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(user.getCreateDate()),
-                user.getRoles(),
-                user.getEmail());
+        return new UserDTO(user.getUsername(), user.getFirstName(), user.getLastName(), new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(user.getCreateDate()), user.getRoles(), user.getEmail());
     }
 
     @PostMapping("/refreshtoken")
     public ResponseEntity<?> refreshtoken(@RequestBody TokenRefreshRequest request) {
         String requestRefreshToken = request.getRefreshToken();
-        return refreshTokenService.findByToken(requestRefreshToken)
-                .map(refreshTokenService::verifyExpiration)
-                .map(RefreshToken::getUser)
-                .map(user -> {
-                    String token = jwtUtils.generateTokenFromUsername(user.getUsername());
-                    return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
-                })
-                .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
-                        "Refresh token is not in database!"));
+        return refreshTokenService.findByToken(requestRefreshToken).map(refreshTokenService::verifyExpiration).map(RefreshToken::getUser).map(user -> {
+            String token = jwtUtils.generateTokenFromUsername(user.getUsername());
+            return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
+        }).orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in database!"));
     }
-
-
-    record RefreshResponse(String token) {
-    }
-
-    record RefreshRequest(String token) {
-    }
-
-    /**
-     * Endpoint '/refresh' that will take the JWT refresh token from your Cookies and validate it
-     * If it's a valid token signed with our secret key, it will respond with a new access token for the user
-     */
-//    @PostMapping("/refresh")
-//    public RefreshResponse refreshToken(@RequestBody RefreshRequest refreshToken) {
-//        System.out.println("REFRESH TOKEN: " + refreshToken.token);
-//        return new RefreshResponse(authService.refreshAccessToken(refreshToken.token).getAccessToken().getToken());
-//    }
-
-    record LogoutResponse(String response) {
+        record LogoutResponse(String response) {
     }
 
     /**

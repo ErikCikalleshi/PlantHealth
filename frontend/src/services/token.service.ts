@@ -2,36 +2,49 @@ import { useStore as tokenStore } from "@/stores/token/token";
 
 class TokenService {
     getLocalRefreshToken(): string {
-        return tokenStore().refreshToken || localStorage.getItem("refreshToken") || "";
+        return tokenStore().refreshToken || this.getCookie("refreshToken") || "";
     }
 
     getLocalAccessToken(): string {
-        return tokenStore().accessToken || localStorage.getItem("accessToken") || "";
+        return tokenStore().accessToken || this.getCookie("accessToken") || "";
     }
 
     updateLocalAccessToken(token: string): void {
         tokenStore().accessToken = token;
-        localStorage.setItem("accessToken", token);
+        this.setCookie("accessToken", token, 60);
     }
 
     updateLocalRefreshToken(token: string): void {
         tokenStore().refreshToken = token;
-        localStorage.setItem("refreshToken", token);
+        this.setCookie("refreshToken", token, 3600);
     }
 
-    getUser(): any {
-        const userStr = localStorage.getItem("user");
-        return userStr ? JSON.parse(userStr) : null;
-    }
 
     setUser(user: any): void {
         this.updateLocalAccessToken(user.token);
         this.updateLocalRefreshToken(user.refreshToken);
-        localStorage.setItem("user", JSON.stringify(user));
     }
 
     removeUser(): void {
-        localStorage.removeItem("user");
+        //TODO delete cookies and logout
+    }
+
+    private setCookie(name: string, value: string, expireSeconds: number) {
+        const d = new Date();
+        d.setTime(d.getTime() + expireSeconds * 1000);
+        const expires = `expires=${d.toUTCString()}`;
+        document.cookie = `${name}=${value};${expires};path=/`;
+    }
+
+    private getCookie(name: string): string {
+        const cookies = document.cookie.split("; ");
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i];
+            if (cookie.startsWith(name + "=")) {
+                return cookie.substring(name.length + 1);
+            }
+        }
+        return "";
     }
 }
 

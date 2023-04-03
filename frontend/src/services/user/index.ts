@@ -12,14 +12,3 @@ export async function setUser(token: string) {
         store.$state = response.data as IUser;
     });
 }
-
-
-// DELETE THIS AFTER SOME TESTING OF NEW AUTH
-// export async function refreshUser(token: string) {
-//     return await axios.post(API_BASE_URL + 'refresh', {token}, {
-//         withCredentials: true,
-//     }).then((response) => {
-//         let store = tokenStore();
-//         store.accessToken = response.data.token;
-//     });
-// }

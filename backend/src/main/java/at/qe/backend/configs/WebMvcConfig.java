@@ -8,20 +8,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
-//    private final AuthInterceptor authorizationInterceptor;
-//
-//    public WebMvcConfig(AuthInterceptor authorizationInterceptor) {
-//        this.authorizationInterceptor = authorizationInterceptor;
-//    }
-    /**
-     * Adds a custom interceptor for '/user' endpoint
-     * */
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(authorizationInterceptor).addPathPatterns("/user");
-//        registry.addInterceptor(authorizationInterceptor).addPathPatterns("/admin/**");
-//    }
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Apply to all endpoints
