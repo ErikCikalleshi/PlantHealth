@@ -76,6 +76,7 @@ public class WebSecurityConfig {
                             .requestMatchers("/logout-user/**").permitAll()
                             .requestMatchers("/user/**").permitAll()
                             .requestMatchers("/refresh/**").permitAll()
+                            .requestMatchers("/refreshtoken/**").permitAll()
                             .requestMatchers("/admin/**").permitAll()
                             .requestMatchers("/secured/**").hasAnyAuthority(ADMIN, GARDENER, USER)
                             .requestMatchers("/omnifaces.push/**").hasAnyAuthority(ADMIN, GARDENER, USER)

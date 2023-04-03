@@ -3,7 +3,6 @@ import {useStore as userStore} from "@/stores/user/user";
 import {useStore as tokenStore} from "@/stores/token/token";
 import * as service from "@/services/user";
 import {defineComponent} from "vue";
-import type {IToken} from "@/stores/token/token";
 
 export default defineComponent({
   data() {
@@ -32,7 +31,6 @@ export default defineComponent({
       await service.setUser(accessToken);
       return;
     }
-    // await service.refreshUser(this.$cookies.get('refreshToken'));
   }
 })
 </script>

@@ -8,7 +8,7 @@ public class TokenRefreshRequest {
     }
 
     public void setRefreshToken(String refreshToken) {
-        if (refreshToken.isBlank()) {
+        if (refreshToken==null|| refreshToken.isBlank()) {
             throw new IllegalArgumentException();
         }
         this.refreshToken = refreshToken;

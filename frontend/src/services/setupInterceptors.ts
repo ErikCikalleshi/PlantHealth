@@ -1,8 +1,9 @@
 import axiosInstance from "./api";
 import TokenService from "./token.service";
-import type {Store} from "vuex";
+import axios from "axios";
 
-const setup = (store: Store<any>) => {
+//Modify our axios instance to always send the correct auth token
+const setup = () => {
     axiosInstance.interceptors.request.use(
         (config) => {
             const token = TokenService.getLocalAccessToken();
@@ -20,32 +21,29 @@ const setup = (store: Store<any>) => {
         (res) => {
             return res;
         },
-        async (err) => {
-            const originalConfig = err.config;
+        async (error) => {
+            const originalRequest = error.config;
 
-            if (originalConfig.url !== "/auth/signin" && err.response) {
-                // Access Token was expired
-                if (err.response.status === 401 && !originalConfig._retry) {
-                    originalConfig._retry = true;
+            if (error.response?.status === 401 && !originalRequest._retry) {
+                originalRequest._retry = true;
 
-                    try {
-                        const rs = await axiosInstance.post("/auth/refreshtoken", {
-                            refreshToken: TokenService.getLocalRefreshToken(),
-                        });
+                const refreshToken = TokenService.getLocalRefreshToken();
 
-                        const {accessToken} = rs.data;
+                try {
+                    const response = await axios.post('/refreshtoken', { refreshToken });
 
-                        store.dispatch('auth/refreshToken', accessToken);
-                        TokenService.updateLocalAccessToken(accessToken);
+                    const { accessToken, refreshToken: newRefreshToken } = response.data;
+                    TokenService.updateLocalAccessToken(accessToken);
+                    TokenService.updateLocalRefreshToken(newRefreshToken);
 
-                        return axiosInstance(originalConfig);
-                    } catch (_error) {
-                        return Promise.reject(_error);
-                    }
+                    originalRequest.headers.Authorization = "Bearer "+accessToken;
+
+                    return axiosInstance(originalRequest);
+                } catch (error) {
+                    // TODO handle refresh token error
                 }
             }
-
-            return Promise.reject(err);
+            return Promise.reject(error);
         }
     );
 };
