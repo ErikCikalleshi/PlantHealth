@@ -60,11 +60,11 @@ public class UserxService {
     public Userx saveUser(Userx user) {
         if (user.isNew()) {
             user.setCreateDate(new Date());
-            user.setCreateUserUsername(getAuthenticatedUser().getUsername());
+            user.setCreateUserUsername(getAuthenticatedUsername());
             user.setRoles(Set.of(UserRole.USER));
         } else {
             user.setUpdateDate(new Date());
-            user.setUpdateUserUsername(getAuthenticatedUser().getUsername());
+            user.setUpdateUserUsername(getAuthenticatedUsername());
         }
         return userRepository.save(user);
     }
@@ -84,9 +84,9 @@ public class UserxService {
         return true;
     }
 
-    private Userx getAuthenticatedUser() {
+    public String getAuthenticatedUsername() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findFirstByUsername(auth.getName());
+        return auth.getName();
     }
 }
 
