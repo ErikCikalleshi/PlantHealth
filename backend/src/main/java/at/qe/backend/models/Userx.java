@@ -11,6 +11,7 @@ import org.springframework.data.domain.Persistable;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -42,7 +43,7 @@ public class Userx implements Persistable<Long>, Serializable, Comparable<Userx>
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "Userx_User_Role", joinColumns = @JoinColumn(name = "userx_id"))
     @Enumerated(EnumType.STRING)
-    private Set<UserRole> roles;
+    private Set<UserRole> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "owner")
     private Set<Greenhouse> greenhouses;
@@ -76,8 +77,8 @@ public class Userx implements Persistable<Long>, Serializable, Comparable<Userx>
         return this.id;
     }
 
-    public void setId(String id) {
-        setUsername(id);
+    public void setId(Long id) {
+        this.id=id;
     }
 
     @Override
