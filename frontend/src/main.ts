@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import { router } from "@/router";
 import App from './App.vue'
 import VueCookies from "vue-cookies";
+import setupInterceptors from './services/setupInterceptors';
 
 import './assets/main.css'
 

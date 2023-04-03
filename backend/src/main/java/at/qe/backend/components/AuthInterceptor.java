@@ -1,10 +1,9 @@
 package at.qe.backend.components;
 
 import at.qe.backend.api.exceptions.NoBearerTokenError;
-import at.qe.backend.api.services.AuthService;
+import at.qe.backend.configs.security.jwt.services.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 /**

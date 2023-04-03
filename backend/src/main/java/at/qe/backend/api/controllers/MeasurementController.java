@@ -4,11 +4,9 @@ import at.qe.backend.api.exceptions.AccessPointNotPublishedException;
 import at.qe.backend.api.exceptions.GreenhouseNotPublishedException;
 import at.qe.backend.api.exceptions.GreenhouseNotRegisteredException;
 import at.qe.backend.api.exceptions.SensorNotFoundException;
-import at.qe.backend.api.model.MeasurementDTO;
-import at.qe.backend.models.Measurement;
+import at.qe.backend.api.model.DTO.MeasurementDTO;
 import at.qe.backend.api.services.MeasurementService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 /**

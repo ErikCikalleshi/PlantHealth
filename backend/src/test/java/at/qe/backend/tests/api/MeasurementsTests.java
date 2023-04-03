@@ -1,6 +1,6 @@
 package at.qe.backend.tests.api;
 
-import at.qe.backend.api.model.MeasurementDTO;
+import at.qe.backend.api.model.DTO.MeasurementDTO;
 import at.qe.backend.models.SensorType;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;

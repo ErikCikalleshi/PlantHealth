@@ -6,7 +6,6 @@ import at.qe.backend.models.UserRole;
 import at.qe.backend.models.Userx;
 import at.qe.backend.services.UserxService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.hibernate.boot.jaxb.internal.UrlXmlSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -34,11 +33,6 @@ public class UserxController {
     //TODO add security check to this api
     @GetMapping("/admin/get-all-users")
     private Collection<UserDisplay> getAllUsers(HttpServletRequest request) {
-        System.out.println(request);
-        var session = (Userx) request.getAttribute("user");
-        if (!session.getRoles().contains(UserRole.ADMIN)){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
         Collection<UserDisplay> userDisplays = new ArrayList<>();
         for (Userx user : userxService.getAllUsers()) {
             userDisplays.add(new UserDisplay(user.getUsername(),
@@ -85,6 +79,6 @@ public class UserxController {
         rolesNew.addAll(userDisplay.roles);
         user.setRoles(rolesNew);
         var session = (Userx) request.getAttribute("user");
-        userxService.saveUser(user, session.getUsername());
+        userxService.saveUser(user);
     }
 }

@@ -43,7 +43,7 @@ public class Greenhouse implements Serializable {
     private Date updateDate;
 
     @ManyToOne
-    @JoinColumn(name="owner_username")
+    @JoinColumn(name="owner_id")
     private Userx owner;
 
 

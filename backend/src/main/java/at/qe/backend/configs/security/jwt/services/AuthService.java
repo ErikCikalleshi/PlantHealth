@@ -1,6 +1,8 @@
-package at.qe.backend.api.services;
+package at.qe.backend.configs.security.jwt.services;
 
 import at.qe.backend.api.exceptions.InvalidTokenError;
+import at.qe.backend.api.services.JwtToken;
+import at.qe.backend.api.services.LoginService;
 import at.qe.backend.models.Userx;
 import at.qe.backend.repositories.UserxRepository;
 import io.jsonwebtoken.Jwts;
@@ -86,8 +88,8 @@ public class AuthService {
         return LoginService.of(username, accessSecret, JwtToken.of(refreshToken));
     }
 
-    public Authentication authenticateUsernamePassword(UsernamePasswordAuthenticationToken authReq) {
-        Userx user = authenticate(authReq.getPrincipal().toString(), authReq.getCredentials().toString());
-        return new UsernamePasswordAuthenticationToken(user.getUsername(), null, user.getRoles().stream().map(x -> new SimpleGrantedAuthority(x.name())).collect(Collectors.toList()));
-    }
+//    public Authentication authenticateUsernamePassword(UsernamePasswordAuthenticationToken authReq) {
+//        Userx user = authenticate(authReq.getPrincipal().toString(), authReq.getCredentials().toString());
+//        return new UsernamePasswordAuthenticationToken(user.getUsername(), null, user.getRoles().stream().map(x -> new SimpleGrantedAuthority(x.getName())).collect(Collectors.toList()));
+//    }
 }

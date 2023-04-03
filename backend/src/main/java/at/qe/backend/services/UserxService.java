@@ -6,6 +6,8 @@ import at.qe.backend.repositories.UserxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -55,14 +57,14 @@ public class UserxService {
      * @return the updated user
      */
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Userx saveUser(Userx user, String username_session) {
+    public Userx saveUser(Userx user) {
         if (user.isNew()) {
             user.setCreateDate(new Date());
-            user.setCreateUserUsername(username_session);
+            user.setCreateUserUsername(getAuthenticatedUser().getUsername());
             user.setRoles(Set.of(UserRole.USER));
         } else {
             user.setUpdateDate(new Date());
-            user.setUpdateUserUsername(username_session);
+            user.setUpdateUserUsername(getAuthenticatedUser().getUsername());
         }
         return userRepository.save(user);
     }
@@ -80,6 +82,11 @@ public class UserxService {
         }
         userRepository.delete(user);
         return true;
+    }
+
+    private Userx getAuthenticatedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findFirstByUsername(auth.getName());
     }
 }
 

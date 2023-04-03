@@ -32,7 +32,7 @@ export default defineComponent({
       await service.setUser(accessToken);
       return;
     }
-    await service.refreshUser(this.$cookies.get('refreshToken'));
+    // await service.refreshUser(this.$cookies.get('refreshToken'));
   }
 })
 </script>
