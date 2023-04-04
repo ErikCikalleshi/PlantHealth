@@ -1,60 +1,3 @@
-<script lang="ts">
-import {defineComponent, ref} from "vue";
-import AdminUserService from "@/services/admin/AdminUserService";
-import headerComponent from "@/components/general/header.vue";
-import footerComponent from "@/components/general/footer.vue";
-import mainContainer from "@/components/general/main_container.vue";
-import PageHeading from "@/components/general/PageHeading.vue";
-import Modal from "@/components/general/Modal.vue";
-import type IUser from "@/interfaces/user/IUser";
-import {useStore as tokenStore} from "@/stores/token/token";
-
-export default defineComponent({
-    name: "adminEditUser",
-    components: {
-        headerComponent,
-        footerComponent,
-        mainContainer,
-        Modal,
-        PageHeading,
-    },
-    props: {
-        username: {
-            type: String,
-            default: 'default username'
-        },
-    },
-    data() {
-        return{
-            tokenStore: tokenStore()
-        }
-    },
-    setup(props) {
-        const tokenStoreSetup= tokenStore();
-        let user = ref<IUser>({username: '', firstname: '', lastname: '', created: '', email: '', roles: []});
-        AdminUserService.getSingleUser(tokenStoreSetup.accessToken, props.username).then((response) => {
-            user.value = (response.data);
-        })
-        return {
-            user
-        }
-    },
-    methods: {
-        toggleUserRole(role: string) {
-            if (this.user.roles.includes(role)) {
-                this.user.roles = this.user.roles.filter(item => item !== role)
-            } else {
-                this.user.roles.push(role)
-            }
-        },
-        updateUser(user:IUser){
-            AdminUserService.updateUser(this.tokenStore.accessToken, user);
-        }
-
-    }
-})
-</script>
-
 <template>
     <v-app>
         <header-component/>
@@ -121,11 +64,11 @@ export default defineComponent({
 
                         </div>
                     </div>
-                    <div class="bg-green w-1/2 h-full" >
+                    <div class="bg-green w-1/2 h-full">
 
                     </div>
                     <button class="bg-primary text-white px-4 py-2 rounded-lg shadow-md transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-100"
-                    @click="updateUser(user)">
+                            @click="updateUser(user)">
                         Speichern
                     </button>
                 </div>
@@ -134,3 +77,52 @@ export default defineComponent({
         <footer-component/>
     </v-app>
 </template>
+
+<script lang="ts">
+import {defineComponent, ref} from "vue";
+import AdminUserService from "@/services/admin/AdminUserService";
+import headerComponent from "@/components/general/header.vue";
+import footerComponent from "@/components/general/footer.vue";
+import mainContainer from "@/components/general/main_container.vue";
+import PageHeading from "@/components/general/PageHeading.vue";
+import Modal from "@/components/general/Modal.vue";
+import type IUser from "@/interfaces/user/IUser";
+
+export default defineComponent({
+    name: "adminEditUser",
+    components: {
+        headerComponent,
+        footerComponent,
+        mainContainer,
+        Modal,
+        PageHeading,
+    },
+    props: {
+        username: {
+            type: String,
+            default: 'default username'
+        },
+    },
+    setup(props) {
+        let user = ref<IUser>({username: '', firstname: '', lastname: '', created: '', email: '', roles: []});
+        AdminUserService.getSingleUser(props.username).then((response) => {
+            user.value = (response.data);
+        })
+        return {
+            user
+        }
+    },
+    methods: {
+        toggleUserRole(role: string) {
+            if (this.user.roles.includes(role)) {
+                this.user.roles = this.user.roles.filter(item => item !== role)
+            } else {
+                this.user.roles.push(role)
+            }
+        },
+        updateUser(user: IUser) {
+            AdminUserService.updateUser(user);
+        }
+    }
+})
+</script>

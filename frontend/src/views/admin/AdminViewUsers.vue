@@ -66,7 +66,6 @@ export default defineComponent({
             users: [] as IUser[],
             deleteUserModalVisible: false,
             selectedUser: null as IUser | null,
-            tokenStore: tokenStore(),
             searchValue: '',
             isOpen: false,
             selectedRoles: []
@@ -74,7 +73,7 @@ export default defineComponent({
     },
     methods: {
         getAllUsers() {
-            AdminUserService.getAllUsers(this.tokenStore.accessToken).then((response) => {
+            AdminUserService.getAllUsers().then((response) => {
                 this.users = response.data;
             })
         },
@@ -82,7 +81,7 @@ export default defineComponent({
             if (user == null) {
                 return;
             }
-            AdminUserService.deleteUser(this.tokenStore.accessToken, user.username).then(() => {
+            AdminUserService.deleteUser(user.username).then(() => {
                 this.users.splice(this.users.indexOf(user), 1);
             })
             this.selectedUser = null;
