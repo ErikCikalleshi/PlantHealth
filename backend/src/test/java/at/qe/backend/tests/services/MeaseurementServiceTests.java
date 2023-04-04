@@ -1,4 +1,4 @@
-package at.qe.backend.tests.api;
+package at.qe.backend.tests.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

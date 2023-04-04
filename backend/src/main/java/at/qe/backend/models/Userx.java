@@ -60,10 +60,9 @@ public class Userx implements Persistable<Long>, Serializable, Comparable<Userx>
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof Userx)) {
+        if (!(obj instanceof Userx other)) {
             return false;
         }
-        final Userx other = (Userx) obj;
         return Objects.equals(this.username, other.username);
     }
 

@@ -32,8 +32,8 @@ public class JwtUtils {
 
     public String generateTokenFromUsername(String username) {
         var issueTimestamp = Instant.now();
-        var issueDate=Date.from(issueTimestamp);
-        var expirationDate=Date.from(issueTimestamp.plus(jwtExpirationMs, ChronoUnit.MILLIS));
+        var issueDate = Date.from(issueTimestamp);
+        var expirationDate = Date.from(issueTimestamp.plus(jwtExpirationMs, ChronoUnit.MILLIS));
         return Jwts.builder().setSubject(username).setIssuedAt(issueDate)
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encode(accessSecret.getBytes(StandardCharsets.UTF_8)))
@@ -43,36 +43,36 @@ public class JwtUtils {
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(Base64.getEncoder().encode(accessSecret.getBytes(StandardCharsets.UTF_8)));
+            Jwts.parser().setSigningKey(Base64.getEncoder().encode(accessSecret.getBytes(StandardCharsets.UTF_8))).parseClaimsJws(authToken);
             return true;
-//        } catch (SignatureException e) {
-//            logger.error("Invalid JWT signature: {}", e.getMessage());
-//            throw e;
+        } catch (SignatureException e) {
+            logger.error("Invalid JWT signature: {}", e.getMessage());
+            throw e;
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
+            throw e;
         } catch (ExpiredJwtException e) {
             logger.error("JWT token is expired: {}", e.getMessage());
+            throw e;
         } catch (UnsupportedJwtException e) {
             logger.error("JWT token is unsupported: {}", e.getMessage());
+            throw e;
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty: {}", e.getMessage());
+            throw e;
         }
 
-        return false;
+//        return false;
     }
 
     public String getUserNameFromJwtToken(String jwt) {
-//        return Jwts.parser().setSigningKey(Base64.getEncoder().encode(accessSecret.getBytes(StandardCharsets.UTF_8))).parseClaimsJws(jwt).getBody().getSubject();
-
-        System.out.println("Raw jwt:" + jwt);
-        String value=Jwts.parserBuilder()
+        String value = Jwts.parserBuilder()
                 .setSigningKey(Base64.getEncoder().encode(accessSecret.getBytes(StandardCharsets.UTF_8)))
                 .build()
                 .parseClaimsJws(jwt)
                 .getBody()
                 .getSubject();
         return value;
-//                .get("username", String.class);
     }
 
 

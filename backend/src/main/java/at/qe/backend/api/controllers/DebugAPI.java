@@ -13,7 +13,7 @@ public class DebugAPI {
     @Autowired
     UserxService userxService;
     @GetMapping("/debug/{username}")
-    private Integer getUserGreenhouseCount(@PathVariable String username){
+    public Integer getUserGreenhouseCount(@PathVariable String username){
         return userxService.loadUser(username).getGreenhouses().size();
     }
 }

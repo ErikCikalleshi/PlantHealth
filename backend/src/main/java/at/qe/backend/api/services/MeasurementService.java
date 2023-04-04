@@ -4,7 +4,7 @@ import at.qe.backend.api.exceptions.AccessPointNotPublishedException;
 import at.qe.backend.api.exceptions.GreenhouseNotPublishedException;
 import at.qe.backend.api.exceptions.GreenhouseNotRegisteredException;
 import at.qe.backend.api.exceptions.SensorNotFoundException;
-import at.qe.backend.api.model.DTO.MeasurementDTO;
+import at.qe.backend.api.model.dto.MeasurementDTO;
 import at.qe.backend.models.Greenhouse;
 import at.qe.backend.models.Measurement;
 import at.qe.backend.models.Sensor;
@@ -36,7 +36,6 @@ public class MeasurementService {
      * @throws SensorNotFoundException The greenhouse doesn't have a sensor of provided type
      */
     public MeasurementDTO addMeasurement(MeasurementDTO measurementDTO) throws GreenhouseNotRegisteredException, SensorNotFoundException, AccessPointNotPublishedException, GreenhouseNotPublishedException {
-        System.out.println("gid: "+ measurementDTO.getGreenhouseID() + "; apid: " + measurementDTO.getAccesspointUUID());
         Greenhouse greenhouse = greenhouseRepository.findFirstByIdInClusterAndAccesspoint_Uuid(measurementDTO.getGreenhouseID(), measurementDTO.getAccesspointUUID());
         if (greenhouse == null) {
             throw new GreenhouseNotRegisteredException();

@@ -1,4 +1,4 @@
-package at.qe.backend.tests;
+package at.qe.backend.tests.models;
 
 import at.qe.backend.models.Greenhouse;
 import at.qe.backend.models.UserRole;
@@ -44,7 +44,7 @@ public class UserxTests {
         user1.setUsername("testuser");
         Userx user2 = new Userx();
         user2.setUsername("testuser");
-        assertTrue(user1.equals(user2));
+        assertEquals(user1, user2);
         assertEquals(user1.hashCode(), user2.hashCode());
     }
 
