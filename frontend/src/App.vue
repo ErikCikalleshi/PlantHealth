@@ -1,7 +1,6 @@
 <script lang="ts">
 import {useStore as userStore} from "@/stores/user/user";
 import {useStore as tokenStore} from "@/stores/token/token";
-import * as service from "@/services/user";
 import {defineComponent} from "vue";
 
 export default defineComponent({
@@ -14,7 +13,6 @@ export default defineComponent({
   watch: {
     async 'tokenStore.accessToken'(newValue: string, _) {
       this.setCookie('accessToken', newValue, 3600); //1 hour
-      await service.setUser(newValue);
     },
     'tokenStore.refreshToken'(newValue: string, _) {
       this.setCookie('refreshToken', newValue, 86400); //1 day
@@ -25,13 +23,6 @@ export default defineComponent({
       this.$cookies.set(key, value, expire);
     }
   },
-  async created() {
-    let accessToken = this.$cookies.get('accessToken');
-    if(accessToken) {
-      await service.setUser(accessToken);
-      return;
-    }
-  }
 })
 </script>
 

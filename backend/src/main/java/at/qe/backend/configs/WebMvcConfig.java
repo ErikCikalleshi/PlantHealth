@@ -12,6 +12,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Apply to all endpoints
                 .allowedOriginPatterns("http://127.0.0.1:5173")
+                .allowedMethods("*")
+                .allowedHeaders("*")
                 .allowCredentials(true); // Set the preflight request cache duration
     }
 }

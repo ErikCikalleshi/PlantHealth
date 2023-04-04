@@ -68,6 +68,7 @@ public class WebSecurityConfig {
                             .requestMatchers("/api/**").permitAll()
                             .requestMatchers("/error/**").permitAll()
                             .requestMatchers("/login/**").permitAll()
+                            .requestMatchers("/logout/**").permitAll()
                             .requestMatchers("/logout-user/**").permitAll()
                             .requestMatchers("/user/**").permitAll()
                             .requestMatchers("/refreshtoken/**").permitAll()

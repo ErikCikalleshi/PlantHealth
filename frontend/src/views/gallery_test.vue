@@ -1,8 +1,8 @@
 <script lang="ts">
 import {defineComponent} from "vue";
-import footerComponent from "@/components/footer.vue";
-import headerComponent from "@/components/header.vue";
-import mainContainer from "@/components/main_container.vue";
+import footerComponent from "@/components/general/footer.vue";
+import headerComponent from "@/components/general/header.vue";
+import mainContainer from "@/components/general/main_container.vue";
 
 export default defineComponent({
   name: "GalleryView",

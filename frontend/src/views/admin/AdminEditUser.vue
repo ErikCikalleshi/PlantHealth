@@ -1,11 +1,11 @@
 <script lang="ts">
 import {defineComponent, ref} from "vue";
 import AdminUserService from "@/services/admin/AdminUserService";
-import headerComponent from "@/components/header.vue";
-import footerComponent from "@/components/footer.vue";
-import mainContainer from "@/components/main_container.vue";
-import PageHeading from "@/components/PageHeading.vue";
-import Modal from "@/components/Modal.vue";
+import headerComponent from "@/components/general/header.vue";
+import footerComponent from "@/components/general/footer.vue";
+import mainContainer from "@/components/general/main_container.vue";
+import PageHeading from "@/components/general/PageHeading.vue";
+import Modal from "@/components/general/Modal.vue";
 import type IUser from "@/interfaces/user/IUser";
 import {useStore as tokenStore} from "@/stores/token/token";
 
