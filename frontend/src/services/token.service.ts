@@ -1,4 +1,5 @@
 import { useStore as tokenStore } from "@/stores/token/token";
+import {useStore as userStore} from "@/stores/user/user";
 
 class TokenService {
     getLocalRefreshToken(): string {
@@ -26,7 +27,10 @@ class TokenService {
     }
 
     removeUser(): void {
-        //TODO delete cookies and logout
+        document.cookie = "refreshToken" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        document.cookie = "accessToken" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        userStore().reset();
+        tokenStore().reset();
     }
 
     private setCookie(name: string, value: string, expireSeconds: number) {

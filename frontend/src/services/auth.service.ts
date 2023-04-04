@@ -17,7 +17,15 @@ class AuthService {
     }
 
     logout() {
-        TokenService.removeUser();
+        let refreshToken = TokenService.getLocalRefreshToken();
+        return api
+            .post("logout-user", {refreshToken})
+            .then((response) => {
+                if (response.status === 200) {
+                    TokenService.removeUser();
+                }
+                return response
+            });
     }
 }
 

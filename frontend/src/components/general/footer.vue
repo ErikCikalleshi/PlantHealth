@@ -12,7 +12,7 @@ export default defineComponent({
   <div class="footer-view display-flex w-[100vw]">
     <div class="wrapper space-x-40 flex">
       <div class="logo h-full flex-1">
-        <img alt="Plant Health Gardening LOGO" src="@/assets/logo.svg"/>
+        <img alt="Plant Health Gardening LOGO" src="../../assets/logo.svg"/>
       </div>
       <div class="text-white flex-1">
         <p class="font-primary text-[20px] mb-3">Documentation:</p>
