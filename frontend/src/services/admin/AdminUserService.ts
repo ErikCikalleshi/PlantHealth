@@ -3,22 +3,22 @@ import api from "@/services/api";
 import {API_BASE_URL} from "@/services";
 
 class AdminUserService {
-    async getAllUsers(token: string) {
+    async getAllUsers() {
         return await api.get('admin/get-all-users', {
         });
     }
 
-    async deleteUser(token: string, username: string) {
+    async deleteUser(username: string) {
         return await api.delete('admin/delete-user/' + username, {
         });
     }
 
-    async getSingleUser(token: string, username: string) {
+    async getSingleUser(username: string) {
         return await api.get('admin/get-single-user/' + username, {
         });
     }
 
-    async updateUser(token: string, user: IUser) {
+    async updateUser(user: IUser) {
         return await api.patch('admin/update-user/', JSON.parse(JSON.stringify(user)), {
         });
     }
