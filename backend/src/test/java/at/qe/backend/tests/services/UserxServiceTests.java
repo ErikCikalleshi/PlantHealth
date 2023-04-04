@@ -1,4 +1,4 @@
-package at.qe.backend.tests;
+package at.qe.backend.tests.services;
 
 import at.qe.backend.models.UserRole;
 import at.qe.backend.models.Userx;

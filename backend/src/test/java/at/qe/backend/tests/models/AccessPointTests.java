@@ -1,4 +1,4 @@
-package at.qe.backend.tests;
+package at.qe.backend.tests.models;
 
 import at.qe.backend.models.AccessPoint;
 import at.qe.backend.models.Greenhouse;

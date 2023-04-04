@@ -1,4 +1,4 @@
-package at.qe.backend.tests;
+package at.qe.backend.tests.services;
 
 import at.qe.backend.api.exceptions.AccessPointNotFoundException;
 import at.qe.backend.api.exceptions.AccessPointNotPublishedException;
