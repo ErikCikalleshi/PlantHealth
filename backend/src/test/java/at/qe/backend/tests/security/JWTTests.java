@@ -91,7 +91,6 @@ public class JWTTests {
                 contentType(ContentType.JSON).
                 body("{\"refreshToken\":\"" + tokens.getValue().getToken() + "\"}"). //Valid refreshToken
                 when().
-                when().
                 post(BaseURI + "/refreshtoken").
                 then().
                 statusCode(HttpStatus.SC_OK);
