@@ -13,11 +13,11 @@ export default defineComponent({
   },
   watch: {
     async 'tokenStore.accessToken'(newValue: string, _) {
-      this.setCookie('accessToken', newValue, 60);
+      this.setCookie('accessToken', newValue, 3600); //1 hour
       await service.setUser(newValue);
     },
     'tokenStore.refreshToken'(newValue: string, _) {
-      this.setCookie('refreshToken', newValue, 3600);
+      this.setCookie('refreshToken', newValue, 86400); //1 day
     },
   },
   methods: {
