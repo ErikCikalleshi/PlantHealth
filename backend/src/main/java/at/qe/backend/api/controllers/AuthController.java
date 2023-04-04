@@ -1,6 +1,6 @@
 package at.qe.backend.api.controllers;
 
-import at.qe.backend.api.model.DTO.UserDTO;
+import at.qe.backend.api.model.dto.UserDTO;
 import at.qe.backend.api.model.request.LoginRequest;
 import at.qe.backend.api.model.request.TokenRefreshRequest;
 import at.qe.backend.api.model.response.JwtResponse;

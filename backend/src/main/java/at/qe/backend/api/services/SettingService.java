@@ -2,8 +2,8 @@ package at.qe.backend.api.services;
 
 import at.qe.backend.api.exceptions.AccessPointNotFoundException;
 import at.qe.backend.api.exceptions.AccessPointNotPublishedException;
-import at.qe.backend.api.model.DTO.AccessPointSettingDTO;
-import at.qe.backend.api.model.DTO.SensorDTO;
+import at.qe.backend.api.model.dto.AccessPointSettingDTO;
+import at.qe.backend.api.model.dto.SensorDTO;
 import at.qe.backend.models.AccessPoint;
 import at.qe.backend.models.Sensor;
 import at.qe.backend.repositories.AccessPointRepository;

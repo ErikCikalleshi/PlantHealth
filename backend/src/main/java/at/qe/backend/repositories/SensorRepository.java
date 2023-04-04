@@ -1,6 +1,8 @@
 package at.qe.backend.repositories;
 
-import at.qe.backend.models.*;
+import at.qe.backend.models.Greenhouse;
+import at.qe.backend.models.Sensor;
+import at.qe.backend.models.SensorType;
 
 import java.util.List;
 

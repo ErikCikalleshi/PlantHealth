@@ -1,4 +1,4 @@
-package at.qe.backend.api.model.DTO;
+package at.qe.backend.api.model.dto;
 
 import at.qe.backend.models.Measurement;
 import at.qe.backend.models.SensorType;

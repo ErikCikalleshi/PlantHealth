@@ -1,8 +1,10 @@
 package at.qe.backend.repositories;
-import java.io.Serializable;
-import java.util.List;
+
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Common base repository for all other repositories. Provides basic methods for
