@@ -36,7 +36,6 @@ public class MeasurementService {
      * @throws SensorNotFoundException The greenhouse doesn't have a sensor of provided type
      */
     public MeasurementDTO addMeasurement(MeasurementDTO measurementDTO) throws GreenhouseNotRegisteredException, SensorNotFoundException, AccessPointNotPublishedException, GreenhouseNotPublishedException {
-        System.out.println("gid: "+ measurementDTO.getGreenhouseID() + "; apid: " + measurementDTO.getAccesspointUUID());
         Greenhouse greenhouse = greenhouseRepository.findFirstByIdInClusterAndAccesspoint_Uuid(measurementDTO.getGreenhouseID(), measurementDTO.getAccesspointUUID());
         if (greenhouse == null) {
             throw new GreenhouseNotRegisteredException();

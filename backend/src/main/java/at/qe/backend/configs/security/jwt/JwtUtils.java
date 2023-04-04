@@ -1,6 +1,7 @@
 package at.qe.backend.configs.security.jwt;
 
 import at.qe.backend.configs.security.services.UserDetailsImpl;
+import at.qe.backend.models.Userx;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
