@@ -15,12 +15,12 @@ import * as directives from 'vuetify/directives'
 
 //OhVueIcons
 import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { FaUserCircle, HiSolidUser } from "oh-vue-icons/icons";
+import { FaUserCircle, HiSolidUser, HiMenuAlt3, PrTimes } from "oh-vue-icons/icons";
 
 
 
 
-addIcons(FaUserCircle, HiSolidUser);
+addIcons(FaUserCircle, HiSolidUser, HiMenuAlt3, PrTimes);
 
 const themeConfigs = {
     dark: false,

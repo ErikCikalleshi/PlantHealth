@@ -1,6 +1,7 @@
 import login from '../views/Login.vue'
 import header from '../components/general/header.vue'
 import footer from '../components/general/footer.vue'
+import landingpage from "@/views/Landingpage.vue";
 import gallery from "../views/gallery_test.vue"
 import adminManageUsers from '../views/admin/AdminViewUsers.vue'
 import adminEditUser from "@/views/admin/AdminEditUser.vue";
@@ -12,7 +13,8 @@ import dashboard from "@/views/Dashboard.vue";
 
 
 const routes = [
-    {path: '/', component: dashboard, meta: { roles: ['ADMIN', 'GARDENER', 'USER']}},
+    {path: '/', component: landingpage},
+    {path: '/dashboard', component: dashboard, meta: { roles: ['ADMIN', 'GARDENER', 'USER']}},
     {path: '/login', name: 'login', component: login},
     {path: '/gallery', component: gallery, meta: { roles: ['ADMIN', 'GARDENER', 'USER']}},
     {path: '/admin/users', name: 'manage-users', component: adminManageUsers, meta: { roles: ['ADMIN'] }},
