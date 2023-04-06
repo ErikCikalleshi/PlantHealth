@@ -10,7 +10,6 @@
 
     <conversionRule conversionWord="highlight1" converterClass="at.qe.backend.helper.HighlightingCompositeConverterEx" />
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <withJansi>true</withJansi>
         <encoder>
             <pattern>
                 %d{yyyy-MM-dd HH:mm:ss} %highlight1(%-5level) %cyan(%logger{15}) - %msg %n
@@ -22,7 +21,7 @@
         <appender-ref ref="FILE1" />
     </logger>
 
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="CONSOLE" />
     </root>
 
