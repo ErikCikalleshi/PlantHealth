@@ -1,7 +1,7 @@
 package at.qe.backend.services;
 
-import at.qe.backend.models.Userx;
 import at.qe.backend.models.UserRole;
+import at.qe.backend.models.Userx;
 import at.qe.backend.repositories.UserxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -51,7 +51,7 @@ public class UserxService {
      * Saves the user. This method will also set {@link Userx#createDate} for new
      * entities or {@link Userx#updateDate} for updated entities. The user
      * requesting this operation will also be stored as {@link Userx#createDate}
-     * or {@link Userx#updateUser} respectively.
+     * or {@link Userx#updateUserUsername} respectively.
      *
      * @param user the user to save
      * @return the updated user
@@ -60,11 +60,11 @@ public class UserxService {
     public Userx saveUser(Userx user) {
         if (user.isNew()) {
             user.setCreateDate(new Date());
-            user.setCreateUser(getAuthenticatedUser());
+            user.setCreateUserUsername(getAuthenticatedUser().getUsername());
             user.setRoles(Set.of(UserRole.USER));
         } else {
             user.setUpdateDate(new Date());
-            user.setUpdateUser(getAuthenticatedUser());
+            user.setUpdateUserUsername(getAuthenticatedUser().getUsername());
         }
         return userRepository.save(user);
     }
@@ -75,14 +75,15 @@ public class UserxService {
      * @param user the user to delete
      */
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteUser(Userx user) {
+    public boolean deleteUser(Userx user) {
+        if(user.getRoles().contains(UserRole.ADMIN) && userRepository.countUserxByRolesContaining(UserRole.ADMIN)<=1){
+            //TODO Add log event here:
+            return false;
+        }
         userRepository.delete(user);
+        return true;
     }
 
-
-    /**
-     * @return user that is currently signed in
-     */
     private Userx getAuthenticatedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findFirstByUsername(auth.getName());

@@ -1,14 +1,9 @@
 package at.qe.backend.api.controllers;
 
 
-import at.qe.backend.api.exceptions.AccessPointNotFoundException;
-import at.qe.backend.api.model.AccessPointSettingDTO;
-import at.qe.backend.models.Greenhouse;
 import at.qe.backend.services.UserxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
 //TODO remove class before deploying
 
 @RestController

@@ -1,10 +1,27 @@
+import type IUser from "@/interfaces/user/IUser";
+import api from "@/services/api";
 import {API_BASE_URL} from "@/services";
-import axios from "axios";
 
-class AdminUserService{
-    getAllUsers(){
-        console.log(API_BASE_URL+'admin/get-all-users');
-        return axios.get(API_BASE_URL+'admin/get-all-users');
+class AdminUserService {
+    async getAllUsers(token: string) {
+        return await api.get('admin/get-all-users', {
+        });
+    }
+
+    async deleteUser(token: string, username: string) {
+        return await api.delete('admin/delete-user/' + username, {
+        });
+    }
+
+    async getSingleUser(token: string, username: string) {
+        return await api.get('admin/get-single-user/' + username, {
+        });
+    }
+
+    async updateUser(token: string, user: IUser) {
+        return await api.patch('admin/update-user/', JSON.parse(JSON.stringify(user)), {
+        });
     }
 }
+
 export default new AdminUserService();

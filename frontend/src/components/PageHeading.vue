@@ -25,7 +25,7 @@ export default {
     },
   },
   computed: {
-    computedClasses() {
+    computedClasses():string[] {
       return [
         `text-${this.size}`,
         `font-${this.font}`,
