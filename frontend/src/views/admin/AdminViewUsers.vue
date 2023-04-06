@@ -1,119 +1,26 @@
-<script lang="ts">
-import {defineComponent} from "vue";
-import AdminUserService from "@/services/admin/AdminUserService";
-import headerComponent from "@/components/header.vue";
-import footerComponent from "@/components/footer.vue";
-import mainContainer from "@/components/main_container.vue";
-import PageHeading from "@/components/PageHeading.vue";
-import Modal from "@/components/Modal.vue";
-import type IUser from "@/interfaces/user/IUser";
-import {useStore as tokenStore} from "@/stores/token/token";
-
-export default defineComponent({
-    name: "adminManageUsers",
-    components: {
-        headerComponent,
-        footerComponent,
-        mainContainer,
-        Modal,
-        PageHeading,
-    },
-    data() {
-        return {
-            users: [] as IUser[],
-            deleteUserModalVisible: false,
-            userToDelete: null as unknown as IUser,
-            tokenStore: tokenStore(),
-        }
-        const colorVariants = {
-            USER: 'border-role-user',
-            GARDENER: 'border-role-gardener',
-            ADMIN: 'border-role-admin',
-        }
-    },
-    methods: {
-        getAllUsers() {
-            AdminUserService.getAllUsers(this.tokenStore.accessToken).then((response) => {
-                this.users = response.data;
-            })
-        },
-        confirmDeleteUser(user: IUser) {
-            this.deleteUserModalVisible = true;
-            this.userToDelete = user;
-        },
-        deleteUser(user: IUser) {
-            AdminUserService.deleteUser(this.tokenStore.accessToken, user.username).then(() => {
-                this.users.splice(this.users.indexOf(user), 1);
-            })
-            this.deleteUserModalVisible = false;
-        },
-        getColorByRole(role: String) {
-            switch (role) {
-                case "GARDENER":
-                    return "role-gardener"
-                case "ADMIN":
-                    return "role-admin"
-                default:
-                    return "role-user"
-            }
-        },
-    },
-    created() {
-        this.getAllUsers()
-    }
-})
-</script>
-
 <template>
     <v-app>
         <header-component/>
-        <main-container negative>
-            <div class="flex flex-wrap">
-                <page-heading>Users</page-heading>
-                <div class="mx-auto my-12 w-full h-full">
-                    <div class="flex flex-wrap justify-center -mx-7 -my-2">
-                        <div v-for="user in users" :key="user.username"
-                             class="my-2 px-7 w-full md:w-1/2 lg:my-16 lg:px-16 lg:w-1/3 xl:w-1/4 2xl:w-1/5">
-                            <article
-                                    class="overflow-hidden rounded-2xl shadow-xl border border-primary  bg-white pa-3 font-roboto h-full">
-                                <div class="flex grid grid-cols-3 gap-4 pb-3">
-                                    <img alt="PlaceholderUserProfilePicture" class="block rounded-full bg"
-                                         src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg">
-                                    <header class="col-span-2">
-                                        <h3 class="text-sm text-center no-underline hover:underline text-black">
-                                            {{ user.firstname }} {{ user.lastname }}
-                                        </h3>
-                                        <p class="text-center text-xs pb-3">{{ user.created }}</p>
-                                    </header>
-
-                                </div>
-                                <div class="flex align-center">
-                                    <v-icon icon="mdi-account" size="19px" class="px-3"></v-icon>
-                                    <p class="text-xs">{{ user.username }}</p>
-                                </div>
-                                <div class="flex align-center overflow-auto">
-                                    <v-icon icon="mdi-email-outline" size="20px" class="px-3"></v-icon>
-                                    <p class="text-xs">{{ user.email }}</p>
-                                </div>
-                                <div class="flex flex-col">
-                                    <div class="flex flex-wrap  my-3 justify-center">
-                                        <div v-for="role in user.roles">
-                                            <p class="my-1 border-2 text-sm rounded-lg mx-1 px-1"
-                                               :class="'border-'+getColorByRole(role) + ' text-' +getColorByRole(role)">
-                                                {{ role }}</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex justify-center gap-4 h-full">
-                                        <button class="bg-primary rounded-lg px-3" @click="$router.push({name:'admin-edit-user', params:{username: user.username}})">Edit User</button>
-                                        <button @click="confirmDeleteUser(user)"
-                                                class="bg-plant-health-red text-white rounded-lg px-3 py-1">Delete User
-                                        </button>
-                                    </div>
-                                </div>
-                            </article>
+        <main-container negative class="mb-10">
+            <div>
+                <div class="flex center justify-space-between mb-10">
+                    <page-heading>Users</page-heading>
+                    <div class="flex items-center justify-start align-center">
+                        <div class="relative text-gray-50 focus-within:text-gray-400">
+                            <input type="text" v-model="searchValue" name="q" class="py-2 text-sm text-gray-50 placeholder-gray-50 text-right focus-within:placeholder-gray-400  bg-gray-100 bg-opacity-50 rounded-md pl-10 pr-5 focus:outline-none focus:bg-white focus:text-gray-900" placeholder="Search user..." autocomplete="off">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-6 h-6"><path
+                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                          </span>
                         </div>
-                        <Modal :is-visible="deleteUserModalVisible" @cancel="deleteUserModalVisible = false"
-                               @confirm="deleteUser(userToDelete)">
+                    </div>
+                </div>
+                <div class="mx-auto w-full h-full flex justify-center">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8">
+                        <user_card v-for="user in userList" :key="user.username" :user="user"
+                                   @delete-user="selectedUser = user" class="w-full"/>
+                        <Modal :is-visible="selectedUser !== null" @cancel="selectedUser = null"
+                               @confirm="deleteUser(selectedUser)">
                             <template v-slot:title>
                                 <p>Confirm Delete</p>
                             </template>
@@ -130,5 +37,71 @@ export default defineComponent({
         </main-container>
         <footer-component/>
     </v-app>
-
 </template>
+
+<script lang="ts">
+import {defineComponent} from "vue";
+import AdminUserService from "@/services/admin/AdminUserService";
+import headerComponent from "@/components/general/header.vue";
+import footerComponent from "@/components/general/footer.vue";
+import mainContainer from "@/components/general/main_container.vue";
+import PageHeading from "@/components/general/PageHeading.vue";
+import Modal from "@/components/general/Modal.vue";
+import type IUser from "@/interfaces/user/IUser";
+import {useStore as tokenStore} from "@/stores/token/token";
+import user_card from "@/components/admin/user_card.vue";
+
+export default defineComponent({
+    name: "adminManageUsers",
+    components: {
+        headerComponent,
+        footerComponent,
+        mainContainer,
+        Modal,
+        PageHeading,
+        user_card,
+    },
+    data() {
+        return {
+            users: [] as IUser[],
+            deleteUserModalVisible: false,
+            selectedUser: null as IUser | null,
+            searchValue: '',
+            isOpen: false,
+            selectedRoles: []
+        }
+    },
+    methods: {
+        getAllUsers() {
+            AdminUserService.getAllUsers().then((response) => {
+                this.users = response.data;
+            })
+        },
+        deleteUser(user: IUser | null) {
+            if (user == null) {
+                return;
+            }
+            AdminUserService.deleteUser(user.username).then(() => {
+                this.users.splice(this.users.indexOf(user), 1);
+            })
+            this.selectedUser = null;
+            this.deleteUserModalVisible = false;
+        },
+    },
+    computed: {
+        userList() {
+            if (this.searchValue.trim().length > 0) {
+                return this.users.filter((user) => {
+                    return user.firstname.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+                        user.lastname.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+                        user.username.toLowerCase().includes(this.searchValue.toLowerCase())
+                })
+            }
+            return this.users;
+        }
+    },
+    created() {
+        this.getAllUsers()
+    }
+})
+</script>

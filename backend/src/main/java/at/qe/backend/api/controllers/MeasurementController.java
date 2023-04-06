@@ -4,7 +4,7 @@ import at.qe.backend.api.exceptions.AccessPointNotPublishedException;
 import at.qe.backend.api.exceptions.GreenhouseNotPublishedException;
 import at.qe.backend.api.exceptions.GreenhouseNotRegisteredException;
 import at.qe.backend.api.exceptions.SensorNotFoundException;
-import at.qe.backend.api.model.DTO.MeasurementDTO;
+import at.qe.backend.api.model.dto.MeasurementDTO;
 import at.qe.backend.api.services.MeasurementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +34,7 @@ public class MeasurementController {
      * @throws GreenhouseNotRegisteredException The specified Greenhouse does not yet exist in the database
      */
     @PostMapping("/measurements")
-    private MeasurementDTO createMeasurement(@RequestBody MeasurementDTO measurementDTO) throws SensorNotFoundException, GreenhouseNotRegisteredException, AccessPointNotPublishedException, GreenhouseNotPublishedException {
+    public MeasurementDTO createMeasurement(@RequestBody MeasurementDTO measurementDTO) throws SensorNotFoundException, GreenhouseNotRegisteredException, AccessPointNotPublishedException, GreenhouseNotPublishedException {
         return measurementService.addMeasurement(measurementDTO);
     }
 }

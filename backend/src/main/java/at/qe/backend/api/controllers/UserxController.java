@@ -31,7 +31,7 @@ public class UserxController {
 
     //TODO add security check to this api
     @GetMapping("/admin/get-all-users")
-    private Collection<UserDisplay> getAllUsers() {
+    public Collection<UserDisplay> getAllUsers() {
         Collection<UserDisplay> userDisplays = new ArrayList<>();
         for (Userx user : userxService.getAllUsers()) {
             userDisplays.add(new UserDisplay(user.getUsername(),
@@ -45,14 +45,14 @@ public class UserxController {
     }
 
     @DeleteMapping("/admin/delete-user/{username}")
-    private void deleteUserByUsername(@PathVariable String username) throws UserNotDeletedException {
+    public void deleteUserByUsername(@PathVariable String username) throws UserNotDeletedException {
         if (!userxService.deleteUser(userxService.loadUser(username))) {
             throw new UserNotDeletedException();
         }
     }
 
     @GetMapping("/admin/get-single-user/{username}")
-    private UserDisplay getSingleUserByUsername(@PathVariable String username) {
+    public UserDisplay getSingleUserByUsername(@PathVariable String username) {
         Userx user = userxService.loadUser(username);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -66,7 +66,7 @@ public class UserxController {
     }
 
     @PatchMapping("/admin/update-user/")
-    private void updateUser(@RequestBody UserDisplay userDisplay) {
+    public void updateUser(@RequestBody UserDisplay userDisplay) {
         if (userDisplay.roles.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }

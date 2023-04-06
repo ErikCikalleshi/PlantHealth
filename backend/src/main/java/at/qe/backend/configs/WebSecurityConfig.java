@@ -14,6 +14,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -26,15 +27,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.sql.DataSource;
 
 @Configuration
-//@EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        // securedEnabled = true,
-        // jsr250Enabled = true,
-        prePostEnabled = true)
+@EnableWebSecurity
+@EnableMethodSecurity
 public class WebSecurityConfig {
-    private static final String ADMIN = UserRole.ADMIN.name();
-    private static final String GARDENER = UserRole.GARDENER.name();
-    private static final String USER = UserRole.USER.name();
 
     @Autowired
     DataSource dataSource;
@@ -71,16 +66,13 @@ public class WebSecurityConfig {
                     .authorizeHttpRequests(authorize -> authorize
                             .requestMatchers("/").permitAll()
                             .requestMatchers("/api/**").permitAll()
-                            .requestMatchers("/jakarta.faces.resource/**").permitAll()
                             .requestMatchers("/error/**").permitAll()
                             .requestMatchers("/login/**").permitAll()
+                            .requestMatchers("/logout/**").permitAll()
                             .requestMatchers("/logout-user/**").permitAll()
                             .requestMatchers("/user/**").permitAll()
-                            .requestMatchers("/refresh/**").permitAll()
                             .requestMatchers("/refreshtoken/**").permitAll()
                             .requestMatchers("/admin/**").permitAll()
-                            .requestMatchers("/secured/**").hasAnyAuthority(ADMIN, GARDENER, USER)
-                            .requestMatchers("/omnifaces.push/**").hasAnyAuthority(ADMIN, GARDENER, USER)
                             .anyRequest().authenticated());
             http.authenticationProvider(authenticationProvider());
             http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

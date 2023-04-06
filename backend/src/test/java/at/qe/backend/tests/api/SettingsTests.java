@@ -21,6 +21,7 @@ public class SettingsTests {
     @BeforeEach
     public void setBaseURI() {
         BaseURI = "http://localhost:" + port;
+        System.out.println(BaseURI);
     }
 
     @Test
