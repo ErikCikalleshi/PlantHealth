@@ -51,8 +51,8 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="header-view h-[30vh] w-[100vw] font-primary">
-    <div class="py-15 px-6 container mx-auto flex items-center justify-between text-white font-primary text-[16px]">
+  <div class="header-view w-[100vw] font-primary">
+    <div class="md:py-7 py-15 px-6 container mx-auto flex items-center justify-between text-white font-primary text-[16px]">
       <div class="flex logo">
         <img alt="Plant Health Gardening LOGO" class="w-[200px] md:w-[270px]" src="../../assets/logo.svg"/>
       </div>
@@ -78,7 +78,7 @@ export default defineComponent({
       </v-btn>
     </div>
     <Transition name="slide-in-right">
-      <div v-if="menu" class="fixed right-0 top-0 bg-black h-[100vh] w-[300px] p-10 flex flex-col gap-14">
+      <div v-if="menu" class="z-50 fixed right-0 top-0 bg-black h-[100vh] w-[300px] p-10 flex flex-col gap-14">
         <oh-icon name="pr-times" scale="2" @click="menu = false;"></oh-icon>
         <div class="flex gap-[20px] flex-col justify-between text-[24px]">
           <router-link v-for="(hyperLink, key) of hyperLinks" :key="key" :to="hyperLink.route">{{ hyperLink.title }}</router-link>
@@ -99,6 +99,7 @@ export default defineComponent({
         </v-dropdown>
       </div>
     </Transition>
+    <slot></slot>
   </div>
 </template>
 
@@ -110,7 +111,6 @@ export default defineComponent({
 }
 .logo img {
   max-width: unset;
-  margin-bottom: -20px;
 }
 .navigation p {
   padding: 0 50px;
