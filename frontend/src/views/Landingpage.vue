@@ -1,8 +1,12 @@
 <template>
   <v-app>
-    <header-view>
+    <header-view presentation>
       <div class="container mx-auto">
-        <v-carousel height="64vh" theme="light">
+        <v-carousel height="64vh"
+                    theme="light"
+                    cycle
+                    hide-delimiter-background
+        >
           <v-carousel-item>
             <div class="carousel__item">
               <h2>Start tracking your plants with <span>Plant Health</span></h2>
@@ -59,6 +63,9 @@ export default {
 }
 .v-carousel__controls {
   background: transparent;
+}
+.v-carousel__controls .v-btn__content {
+  color: #ffffff;
 }
 .carousel__item h2 {
   letter-spacing: -0.05em;

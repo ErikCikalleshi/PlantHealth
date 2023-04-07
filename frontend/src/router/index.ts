@@ -7,7 +7,7 @@ import adminManageUsers from '../views/admin/AdminViewUsers.vue'
 import adminEditUser from "@/views/admin/AdminEditUser.vue";
 import NotFound from "@/views/NotFound.vue";
 import Forbidden from "@/views/Forbidden.vue";
-import {createRouter, createWebHashHistory} from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import {useStore as userStore} from "@/stores/user/user";
 import dashboard from "@/views/Dashboard.vue";
 
@@ -26,7 +26,7 @@ const routes = [
 ]
 
 export const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes,
 })
 
@@ -53,5 +53,3 @@ router.beforeEach((to, from, next) => {
         next();
     }
 });
-
-
