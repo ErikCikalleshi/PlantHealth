@@ -55,6 +55,7 @@ export default defineComponent({
 </script>
 
 <template>
+
   <div :class="{ 'h-[300px]': !presentation }" class="header-view w-[100vw] font-primary">
     <div class="md:py-7 py-15 px-6 container mx-auto flex items-center justify-between text-white font-primary text-[16px]">
       <div class="flex logo">
