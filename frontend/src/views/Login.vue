@@ -23,9 +23,9 @@ export default defineComponent({
     async login() {
       let response = await AuthService.login(this.username, this.password);
       let token: ITokenResponse = response.data;
-      // assign token data to token store
-      this.tokenStore.accessToken = token.token;
-      this.tokenStore.refreshToken = token.refreshToken;
+      // assign token data to token store — you're assigning twice the tokens, first time in authService at line 13 and second time here.
+      // this.tokenStore.accessToken = token.token;
+      // this.tokenStore.refreshToken = token.refreshToken;
       // assign user data to user store
       this.userStore.username = token.username;
       this.userStore.email = token.email;
@@ -46,8 +46,7 @@ export default defineComponent({
         <img alt="Plant Health LOGO" src="@/assets/logo.svg" class="pb-[42px] mx-auto"/>
         <div class="w-full md:w-[467px] p-[25px] bg-white rounded-xl mx-auto">
           <div class="flex flex-row justify-between pt-[6px] pb-[12px]">
-            <p class="text-primary font-primary font-normal text-[32px] leading-[32px]">Sign In
-              {{ userStore.username }}</p>
+            <p class="text-primary font-primary font-normal text-[32px] leading-[32px]">Sign In</p>
             <router-link to="/" class="w-[18.41px] h-[15.41px]">
               <svg width="19" height="16" viewBox="0 0 19 16" fill="none"
                    xmlns="http://www.w3.org/2000/svg">
