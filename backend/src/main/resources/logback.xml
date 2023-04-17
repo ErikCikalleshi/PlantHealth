@@ -17,7 +17,7 @@
         </encoder>
     </appender>
 
-    <logger name="at.qe.backend.configs.security.jwt" additivity="false" level="info">
+    <logger name="at.qe.backend" level="info">
         <appender-ref ref="FILE1" />
     </logger>
 
