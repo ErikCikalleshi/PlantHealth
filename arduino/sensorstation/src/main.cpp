@@ -6,6 +6,11 @@
 
 #define SEALEVELPRESSURE_HPA (1013.25)
 
+BLEService environmentalSensingService("181A");
+BLECharacteristic temperatureCharacteristic("2A6E", BLERead | BLENotify, 4);
+BLECharacteristic humidityCharacteristic("2A6F", BLERead | BLENotify, 4);
+BLECharacteristic pressureCharacteristic("2A6D", BLERead | BLENotify, 4);
+BLECharacteristic vocCharacteristic("FFD5", BLERead | BLENotify, 4);
 
 Adafruit_BME680 bme;
 int dipSwitchPins[] = {D10, D9, D8, D7, D6, D5, D4, D3};
@@ -15,21 +20,21 @@ void sensor_setup();
 
 void BLE_setup();
 
-unsigned int read_light_sensor();
+void read_light_sensor(unsigned int *light);
 
-unsigned int read_hygrometer();
+void read_hygrometer(unsigned int *moisture);
 
-void read_air_sensor();
+int read_air_sensor(int *temperature, int *humidity, int *pressure, int *gas_resistance);
 
-int get_UUID();
+int get_ID();
 
 // the setup function runs once when you press reset or power the board
 void setup() {
   Serial.begin(9600);
   while(!Serial);
   Serial.println("Serial started");
-  int UUID = get_UUID();
-  Serial.println(UUID);
+  int ID = get_ID();
+  Serial.println(ID);
   BLE_setup();
   
   sensor_setup();
@@ -37,8 +42,15 @@ void setup() {
 
 // the loop function runs over and over again forever
 void loop() {
-  read_light_sensor();
-  read_hygrometer();
+  unsigned int light;
+  unsigned int moisture;
+  int temperature;
+  int humidity;
+  int pressure;
+  int gas_resistance;
+  read_light_sensor(&light);
+  read_hygrometer(&moisture);
+  read_air_sensor(&temperature, &humidity, &pressure, &gas_resistance);
   delay(2000);
 }
 
@@ -70,69 +82,76 @@ void BLE_setup() {
   BLE.setLocalName("SensorStation G2T4");
   BLE.setDeviceName("SensorStation G2T4");
 
+  environmentalSensingService.addCharacteristic(temperatureCharacteristic);
+  environmentalSensingService.addCharacteristic(humidityCharacteristic);
+  environmentalSensingService.addCharacteristic(pressureCharacteristic);
+  environmentalSensingService.addCharacteristic(vocCharacteristic);
+  BLE.addService(environmentalSensingService);
+
   BLE.advertise();
 }
 
-unsigned int read_light_sensor() {
-  unsigned int light = analogRead(A6);
+void read_light_sensor(unsigned int *light) {
+  *light = analogRead(A6);
   Serial.print("Light: ");
-  Serial.println(light);
-  return light;
+  Serial.println(*light);
 }
 
-unsigned int read_hygrometer() {
-  unsigned int audio = analogRead(A7);
-  Serial.print("Hygrometer: ");
-  Serial.println(audio);
-  return audio;
+void read_hygrometer(unsigned int *moisture) {
+  *moisture = analogRead(A7);
+  Serial.print("Moisture: ");
+  Serial.println(*moisture);
 }
 
-void read_air_sensor() {
+int read_air_sensor(int *temperature, int *humidity, int *pressure, int *gas_resistance) {
   unsigned long endTime = bme.beginReading();
   if (endTime == 0) {
     Serial.println(F("Failed to begin reading :("));
-    return;
+    return EXIT_FAILURE;
   }
-  Serial.print(F("Reading started at "));
-  Serial.print(millis());
-  Serial.print(F(" and will finish at "));
-  Serial.println(endTime);
 
   if (!bme.endReading()) {
     Serial.println(F("Failed to complete reading :("));
-    return;
+    return EXIT_FAILURE;
   }
-  Serial.print(F("Reading completed at "));
-  Serial.println(millis());
+
+  *temperature = bme.temperature;
+  *humidity = bme.humidity;
+  *pressure = bme.pressure;
+  *gas_resistance = bme.gas_resistance;
+
+  // Update the BLE characteristics with the sensor values
+  temperatureCharacteristic.writeValue((byte*)temperature, sizeof(*temperature));
+  humidityCharacteristic.writeValue((byte*)humidity, sizeof(*humidity));
+  pressureCharacteristic.writeValue((byte*)pressure, sizeof(*pressure));
+  vocCharacteristic.writeValue((byte*)gas_resistance, sizeof(*gas_resistance));
 
   Serial.print(F("Temperature = "));
-  Serial.print(bme.temperature);
+  Serial.print(*temperature);
   Serial.println(F(" *C"));
 
   Serial.print(F("Pressure = "));
-  Serial.print(bme.pressure / 100.0);
+  Serial.print(*pressure / 100.0);
   Serial.println(F(" hPa"));
 
   Serial.print(F("Humidity = "));
-  Serial.print(bme.humidity);
+  Serial.print(*humidity);
   Serial.println(F(" %"));
 
   Serial.print(F("Gas = "));
-  Serial.print(bme.gas_resistance / 1000.0);
+  Serial.print(*gas_resistance / 1000.0);
   Serial.println(F(" KOhms"));
 
-  Serial.print(F("Approx. Altitude = "));
-  Serial.print(bme.readAltitude(SEALEVELPRESSURE_HPA));
-  Serial.println(F(" m"));
+  return EXIT_SUCCESS;
 }
 
-int get_UUID() {
+int get_ID() {
   for (int i = 0; i < 8; i++) {
     pinMode(dipSwitchPins[i], INPUT_PULLDOWN);
   }
-  int UUID = 0;
+  int ID = 0;
   for (int i = 0; i < 8; i++) {
-    UUID += digitalRead(dipSwitchPins[i]) << i;
+    ID += digitalRead(dipSwitchPins[i]) << i;
   }
-  return UUID;
+  return ID;
 }
