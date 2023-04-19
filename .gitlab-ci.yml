@@ -38,7 +38,7 @@ unit-test-job: # This job runs in the test stage.
    - cd ./backend
    - echo "Running unit tests..."
    - mvn test
- allow_failure: true
+ allow_failure: false
 
 sonarqube-check:
   extends: .before_script_template
