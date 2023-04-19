@@ -2,18 +2,7 @@ import json
 import threading
 import requests
 import os
-
-
-def read_settings(file_path: str) -> dict:
-    if not os.path.exists(file_path):
-        os.makedirs(file_path, exist_ok=True)
-        file_path = os.path.join(file_path, "settings.json")
-        with open(file_path, "w") as f:
-            json.dump({}, f)
-    with open(file_path, "r") as data_file:
-        data = json.load(data_file)
-    return data
-
+from Settings import Settings
 
 INTERVAL: int = 1  # seconds
 
@@ -21,18 +10,12 @@ INTERVAL: int = 1  # seconds
 def get_config(script_path):
     current_dir = os.path.dirname(os.path.abspath(script_path))
     sett = os.path.join(current_dir, "settings.json")
-    settings = read_settings(sett)
-    admin = settings["auth"]["user"]
-    password = settings["auth"]["password"]
-    ip = settings["server"]["host"]
-    port = settings["server"]["port"]
-    access_point_id = settings["access_point_id"]
+    settings = Settings()
 
-    url = f"http://{ip}:{port}/api/setting/{access_point_id}"
-    auth: tuple = (admin, password)
+    url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{1}"
     response = None
     try:
-        response = requests.get(url, auth=auth)
+        response = requests.get(url, auth=settings.auth)
     except requests.exceptions.ConnectionError:
         print("Error: 'api/setting/' API call failed")
         return
