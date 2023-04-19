@@ -1,0 +1,28 @@
+<configuration>
+    <appender name="FILE1" class="ch.qos.logback.core.FileAppender">
+        <file>log/app.log</file>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} %-5level %logger{15} - %msg %n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <conversionRule conversionWord="highlight1" converterClass="at.qe.backend.helper.HighlightingCompositeConverterEx" />
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss} %highlight1(%-5level) %cyan(%logger{15}) - %msg %n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="at.qe.backend" level="info">
+        <appender-ref ref="FILE1" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+</configuration>
