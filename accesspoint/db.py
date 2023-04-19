@@ -1,6 +1,8 @@
 import pymongo
 import config
 import requests
+import os
+import json
 
 
 def connect_to_db():
@@ -30,21 +32,27 @@ def write_to_document(descriptor, value):
 
 
 if __name__ == "__main__":
-    print("Test")
-    database = connect_to_db()
-    print(database.name)
-    url = "https://10.0.0.62:9000/api/measurements"
-    body = {
+    # database = connect_to_db()
+    # print(database.name)
+    url = "http://10.0.0.62:9000/api/measurements"
+    payload = {
         "greenhouseID": 27,
         "accesspointUUID": 1,
         "value": 23.0,
         "sensorType": "TEMPERATURE",
         "date": "2023-03-20 12:00",
     }
-    settings = config.read_settings()
+
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    sett = os.path.join(current_dir, "settings.json")
+
+    settings = config.read_settings(sett)
     admin = settings["auth"]["user"]
     password = settings["auth"]["password"]
     auth = (admin, password)
-    response = requests.request("POST", url, auth=auth, data=body)
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.post(url, headers=headers, auth=auth, data=json.dumps(payload))
 
     print(response.text)
