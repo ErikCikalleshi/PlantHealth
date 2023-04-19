@@ -5,3 +5,6 @@ node/
 backend/src/main/resources/public/index.html
 venv/
 config/
+.venv/
+__pycache__/
+accesspoint/settings.json
