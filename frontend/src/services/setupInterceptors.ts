@@ -42,6 +42,7 @@ const setup = () => {
 
                     return axiosInstance(originalRequest);
                 } catch (error) {
+                    TokenService.removeUser();
                     // TODO handle refresh token error
                 }
             }

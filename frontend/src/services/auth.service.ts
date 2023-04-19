@@ -25,8 +25,11 @@ class AuthService {
                     TokenService.removeUser();
                 }
                 return response
-            });
-    }
+            }).catch((response) => {
+                TokenService.removeUser();
+                return response;
+            })
+    };
 }
 
 export default new AuthService();
