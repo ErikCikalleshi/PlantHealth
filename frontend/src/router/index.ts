@@ -1,9 +1,8 @@
 import login from '../views/Login.vue'
-import header from '../components/general/header.vue'
-import footer from '../components/general/footer.vue'
 import landingpage from "@/views/Landingpage.vue";
 import gallery from "../views/gallery_test.vue"
 import adminManageUsers from '../views/admin/AdminViewUsers.vue'
+import adminManageAccessPoints from '../views/admin/AdminViewAccessPoints.vue'
 import adminEditUser from "@/views/admin/AdminEditUser.vue";
 import NotFound from "@/views/NotFound.vue";
 import Forbidden from "@/views/Forbidden.vue";
@@ -19,6 +18,7 @@ const routes = [
     {path: '/gallery', component: gallery, meta: { roles: ['ADMIN', 'GARDENER', 'USER']}},
     {path: '/admin/users', name: 'manage-users', component: adminManageUsers, meta: { roles: ['ADMIN'] }},
     {path: '/admin/users/edit/:username', props: true, name: 'admin-edit-user', component: adminEditUser, meta: { roles: ['ADMIN'] }},
+    {path: '/admin/accesspoints', name: 'manage-accessPoints', component: adminManageAccessPoints, meta: { roles: ['ADMIN'] }},
     {path: '/404', component: NotFound},
     {path: '/403', component: Forbidden},
     {path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound },

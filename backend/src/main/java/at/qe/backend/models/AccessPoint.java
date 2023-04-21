@@ -44,4 +44,17 @@ public class AccessPoint implements Serializable {
     private boolean published = false;
     private Date lastContact;
 
+
+    public String getStatus() {
+        if (lastContact == null) {
+            return "OFFLINE";
+        }
+        long diff = new Date().getTime() - lastContact.getTime();
+        if (diff > 1000L * getTransmissionIntervalSeconds()*2) {
+            //If last contact is more than 2x the transmission interval ago, we consider it offline
+            return "OFFLINE";
+        }
+        return "ONLINE";
+    }
+
 }

@@ -1,6 +1,0 @@
-2023-04-17 23:47:04 INFO  a.q.b.BackendApplication - Starting BackendApplication using Java 17.0.2 with PID 18088 (C:\Users\Georg\IdeaProjects\g2t4\backend\target\classes started by Georg in C:\Users\Georg\IdeaProjects\g2t4) 
-2023-04-17 23:47:04 INFO  a.q.b.BackendApplication - No active profile set, falling back to 1 default profile: "default" 
-2023-04-17 23:47:08 INFO  a.q.b.BackendApplication - Started BackendApplication in 3.784 seconds (process running for 4.232) 
-2023-04-18 00:02:09 INFO  a.q.b.BackendApplication - Starting BackendApplication using Java 17.0.2 with PID 8100 (C:\Users\Georg\IdeaProjects\g2t4\backend\target\classes started by Georg in C:\Users\Georg\IdeaProjects\g2t4) 
-2023-04-18 00:02:09 INFO  a.q.b.BackendApplication - No active profile set, falling back to 1 default profile: "default" 
-2023-04-18 00:02:13 INFO  a.q.b.BackendApplication - Started BackendApplication in 3.813 seconds (process running for 4.25) 
