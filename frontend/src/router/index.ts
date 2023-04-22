@@ -9,6 +9,9 @@ import Forbidden from "@/views/Forbidden.vue";
 import {createRouter, createWebHistory} from 'vue-router'
 import {useStore as userStore} from "@/stores/user/user";
 import dashboard from "@/views/Dashboard.vue";
+import authService from "@/services/auth.service";
+import TokenService from "@/services/token.service";
+
 
 
 const routes = [
@@ -31,12 +34,19 @@ export const router = createRouter({
 })
 
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async(to, from, next) => {
     // check if the route requires authentication
+
+    const accessToken = TokenService.getLocalAccessToken()
+    const refreshToken = TokenService.getLocalRefreshToken()
+    if (!accessToken && refreshToken) {
+        await authService.refreshAccessToken();
+    }
+
     if (to.matched.some(record => record.meta.roles)) {
         // check if the user is authenticated
         const user = userStore();
-        const isAuthenticated = user.username !== '';
+        const isAuthenticated = user.username !== '' && TokenService.getLocalAccessToken();
         if (!isAuthenticated) {
             next({ path: '/login', query: { redirect: to.fullPath } });
         } else {

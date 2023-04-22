@@ -2,6 +2,7 @@ import axiosInstance from "./api";
 import TokenService from "./token.service";
 import axios from "axios";
 import api from "./api";
+import authService from "@/services/auth.service";
 
 
 //Modify our axios instance to always send the correct auth token
@@ -28,18 +29,9 @@ const setup = () => {
 
             if (error.response?.status === 401 && !originalRequest._retry) {
                 originalRequest._retry = true;
-
-                let refreshToken = TokenService.getLocalRefreshToken();
-
                 try {
-                    let response = await api.post("refreshtoken", { refreshToken });
-
-                    let { accessToken, refreshToken: newRefreshToken } = response.data;
-                    TokenService.updateLocalAccessToken(accessToken);
-                    TokenService.updateLocalRefreshToken(newRefreshToken);
-
-                    originalRequest.headers.Authorization = "Bearer "+accessToken;
-
+                    await authService.refreshAccessToken();
+                    originalRequest.headers.Authorization = "Bearer "+TokenService.getLocalAccessToken();
                     return axiosInstance(originalRequest);
                 } catch (error) {
                     TokenService.removeUser();

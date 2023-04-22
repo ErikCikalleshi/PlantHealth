@@ -30,6 +30,33 @@ class AuthService {
                 return response;
             })
     };
+
+
+    async refreshAccessToken() {
+        let refreshToken = TokenService.getLocalRefreshToken();
+        return await
+            // set validate status to null to avoid recursive call by interceptor
+            api.request({
+                url: "refreshtoken",
+                method: "POST",
+                data: {refreshToken},
+                validateStatus: null
+            })
+                .then((response) => {
+                    if (response.status === 200) {
+                        let {accessToken, refreshToken: newRefreshToken} = response.data;
+                        TokenService.updateLocalAccessToken(accessToken);
+                        TokenService.updateLocalRefreshToken(newRefreshToken);
+                    } else {
+                        TokenService.removeUser();
+                    }
+
+                    return response.data.accessToken;
+                }).catch(() => {
+                TokenService.removeUser();
+                return "";
+            });
+    }
 }
 
 export default new AuthService();
