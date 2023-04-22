@@ -73,6 +73,8 @@ public class WebSecurityConfig {
                             .requestMatchers("/user/**").permitAll()
                             .requestMatchers("/refreshtoken/**").permitAll()
                             .requestMatchers("/admin/**").permitAll()
+                            .requestMatchers("/upload/**").permitAll()
+                            .requestMatchers("/greenhouse/get-all/**").permitAll()
                             .anyRequest().authenticated());
             http.authenticationProvider(authenticationProvider());
             http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
