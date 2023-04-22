@@ -1,6 +1,7 @@
 package at.qe.backend.api.controllers;
 
 import at.qe.backend.api.services.UploadImagesService;
+import at.qe.backend.models.UploadImages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +15,8 @@ public class UploadImagesController {
     record UploadImageData(Long userId, String uploadLink, Long plantId){};
 
     @PostMapping("/upload")
-    public void upload(@RequestBody UploadImageData data) {
-        uploadImagesService.create(data.plantId, data.userId, data.uploadLink);
+    public UploadImages upload(@RequestBody UploadImageData data) {
+        return uploadImagesService.create(data.plantId, data.userId, data.uploadLink);
     }
 
     @GetMapping("/greenhouse/get-all/{id}")

@@ -998,3 +998,6 @@ io.jsonwebtoken.ExpiredJwtException: JWT expired at 2023-03-24T17:06:47Z. Curren
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
 	at java.base/java.lang.Thread.run(Thread.java:833)
+2023-04-23 00:38:01 INFO  a.q.b.BackendApplication - Starting BackendApplication using Java 17.0.4.1 with PID 11808 (C:\Users\danie\Desktop\repos\g2t4\backend\target\classes started by danie in C:\Users\danie\Desktop\repos\g2t4\backend) 
+2023-04-23 00:38:01 INFO  a.q.b.BackendApplication - No active profile set, falling back to 1 default profile: "default" 
+2023-04-23 00:38:05 INFO  a.q.b.BackendApplication - Started BackendApplication in 4.043 seconds (process running for 4.372) 
