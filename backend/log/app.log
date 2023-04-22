@@ -720,3 +720,6 @@ io.jsonwebtoken.MalformedJwtException: JWT strings must contain exactly 2 period
 2023-04-18 00:05:13 ERROR a.q.b.c.s.j.JwtUtils - JWT claims string is empty: JWT String argument cannot be null or empty. 
 2023-04-18 00:05:13 ERROR a.q.b.c.s.j.JwtUtils - JWT token is unsupported: Unsigned Claims JWTs are not supported. 
 2023-04-18 00:05:13 ERROR a.q.b.c.s.j.JwtUtils - Invalid JWT token: JWT strings must contain exactly 2 period characters. Found: 0 
+2023-04-22 22:04:12 INFO  a.q.b.BackendApplication - Starting BackendApplication using Java 17.0.4.1 with PID 25820 (C:\Users\danie\Desktop\repos\g2t4\backend\target\classes started by danie in C:\Users\danie\Desktop\repos\g2t4\backend) 
+2023-04-22 22:04:12 INFO  a.q.b.BackendApplication - No active profile set, falling back to 1 default profile: "default" 
+2023-04-22 22:04:16 INFO  a.q.b.BackendApplication - Started BackendApplication in 4.428 seconds (process running for 4.755) 
