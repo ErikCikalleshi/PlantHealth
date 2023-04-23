@@ -1,120 +1,124 @@
 <template>
-  <v-card class="overflow-hidden shadow-xl border border-primary pa-3 font-primary">
-    <div class="flex gap-3 pb-3">
-     <header class="flex flex-col gap-2 w-full">
-        <div>
-          <h3 class="no-underline text-black select-none font-semibold">
-            {{ accessPoint.name }}
-          </h3>
+    <v-card class="overflow-hidden shadow-xl border border-primary pa-3 font-primary">
+        <div class="flex gap-3 pb-3">
+            <header class="flex flex-col gap-2 w-full">
+                <div>
+                    <h3 class="no-underline text-black select-none font-semibold">
+                        {{ accessPoint.name }}
+                    </h3>
 
+                </div>
+                <div class="flex flex-wrap gap-1 rounded">
+                    <p class="border-[1.5px] rounded-full px-2 text-xs"
+                       :class="'border-'+getColorByStatus(accessPoint.status) + ' text-' +getColorByStatus(accessPoint.status)">
+                        {{ accessPoint.status }}
+                    </p>
+                    <p class="ml-2 text-xs text-gray-500">{{ accessPoint.lastContact }}</p>
+                </div>
+                <div>
+                    <div class="flex align-center gap-2">
+                        <v-icon icon="mdi-identifier" size="24px"></v-icon>
+                        <p class="text-xs text-gray-500">{{ accessPoint.id }}</p>
+                    </div>
+                    <div class="flex align-center gap-2">
+                        <v-icon icon="mdi-map-marker" size="24px"></v-icon>
+                        <p class="text-xs text-gray-500">{{ accessPoint.location }}</p>
+                    </div>
+                    <div class="flex align-center gap-2">
+                        <v-icon icon="mdi-information-outline" size="24px"></v-icon>
+                        <p class="text-xs text-gray-500">{{ truncateString(accessPoint.description, 40) }}</p>
+                    </div>
+                </div>
+            </header>
         </div>
-        <div class="flex flex-wrap gap-1 rounded">
-          <p class="border-[1.5px] rounded-full px-2 text-xs"
-             :class="'border-'+getColorByStatus(accessPoint.status) + ' text-' +getColorByStatus(accessPoint.status)">
-            {{ accessPoint.status }}
-          </p>
-            <p class="ml-2 text-xs text-gray-500">{{ accessPoint.lastContact }}</p>
-        </div>
-        <div>
-          <div class="flex align-center gap-2">
-            <v-icon icon="mdi-map-marker" size="24px"></v-icon>
-            <p class="text-xs text-gray-500">{{accessPoint.location }}</p>
-          </div>
-          <div class="flex align-center gap-2">
-            <v-icon icon="mdi-information-outline" size="24px"></v-icon>
-            <p class="text-xs text-gray-500">{{ truncateString(accessPoint.description, 20) }}</p>
-          </div>
-        </div>
-      </header>
-    </div>
-    <div class="grid grid-cols-2 gap-2 items-end">
-      <v-btn variant="flat" color="primary"
-             @click="$router.push({name:'admin-edit-accessPoint', params:{id: accessPoint.id}})">
-        Edit
-      </v-btn>
-      <v-btn variant="flat" color="error">
-        Delete
-
-        <v-dialog
-            v-model="deleteDialog"
-            activator="parent"
-            width="auto"
-        >
-          <v-card class="font-primary">
-            <v-card-title>
-              Confirm Delete
-            </v-card-title>
-            <v-divider></v-divider>
-            <v-card-text>
-              Are you sure you want to delete this Access Point? This cannot be undone.
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                  color="primary"
-                  variant="tonal"
-                  @click="deleteDialog = false;"
-              >
-                Close
-              </v-btn>
-              <v-btn
-                  color="error"
-                  variant="tonal"
-                  @click="emitConfirm"
-              >
+        <div class="grid grid-cols-2 gap-2 items-end">
+            <v-btn variant="flat" color="primary"
+                   @click="$router.push({name:'admin-edit-access-point', params:{apId: Number(accessPoint.id)}})">
+                Edit
+            </v-btn>
+            <v-btn variant="flat" color="error">
                 Delete
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-btn>
-    </div>
-  </v-card>
+
+                <v-dialog
+                        v-model="deleteDialog"
+                        activator="parent"
+                        width="auto"
+                >
+                    <v-card class="font-primary">
+                        <v-card-title>
+                            Confirm Delete
+                        </v-card-title>
+                        <v-divider></v-divider>
+                        <v-card-text>
+                            Are you sure you want to delete this Access Point? This cannot be undone.
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                    color="primary"
+                                    variant="tonal"
+                                    @click="deleteDialog = false;"
+                            >
+                                Close
+                            </v-btn>
+                            <v-btn
+                                    color="error"
+                                    variant="tonal"
+                                    @click="emitConfirm"
+                            >
+                                Delete
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-btn>
+        </div>
+    </v-card>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import {defineComponent} from 'vue';
 import type IAccessPoint from "@/interfaces/IAccessPoint";
+
 export default defineComponent({
-  data() {
-    return {
-      deleteUserModalVisible: false,
-      deleteDialog: false,
-      userToDelete: null as unknown as IAccessPoint,
-    }
-  },
-  props: {
-    accessPoint: {
-      type: Object as () => IAccessPoint,
-      required: true
+    data() {
+        return {
+            deleteUserModalVisible: false,
+            deleteDialog: false,
+        };
     },
-  },
-  methods: {
-    getColorByStatus(status: String) {
-        console.log(status)
-      switch (status.toUpperCase()) {
-        case "OFFLINE":
-          return "status-offline"
-        case "ONLINE":
-          return "status-online"
-        default:
-          return "role-offline"
-      }
+    props: {
+        accessPoint: {
+            type: Object as () => IAccessPoint,
+            required: true,
+        },
+
     },
-    truncateString(str: string, num: number) {
-      if (str.length > num) {
-        return str.slice(0, num) + "...";
-      } else {
-        return str;
-      }
-    }
-  },
-  emits: ['confirm'],
-  setup(props, { emit }) {
-    const emitConfirm = () => {
-      emit('confirm');
-    };
-    return { emitConfirm };
-  },
+    methods: {
+        getColorByStatus(status: String) {
+            switch (status.toUpperCase()) {
+                case "OFFLINE":
+                    return "status-offline"
+                case "ONLINE":
+                    return "status-online"
+                default:
+                    return "role-offline"
+            }
+        },
+        truncateString(str: string, num: number) {
+            if (str.length > num) {
+                return str.slice(0, num) + "...";
+            } else {
+                return str;
+            }
+        }
+    },
+    emits: ['confirm'],
+    setup(props, {emit}) {
+        const emitConfirm = () => {
+            emit('confirm');
+        };
+        return {emitConfirm};
+    },
 });
 </script>

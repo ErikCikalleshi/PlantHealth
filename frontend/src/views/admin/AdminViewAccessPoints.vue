@@ -9,7 +9,7 @@
                             :loading="loading"
                             density="compact"
                             variant="solo"
-                            label="Search...end"
+                            label="Search..."
                             append-inner-icon="mdi-magnify"
                             single-line
                             hide-details
@@ -61,6 +61,7 @@ export default defineComponent({
             AdminAccessPointService.getAllAccessPoints().then((response) => {
                 this.accessPoints = response.data;
             })
+
         },
         deleteAccessPoint(accessPoint: IAccessPoint | null) {
             if (accessPoint == null) {

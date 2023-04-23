@@ -9,4 +9,5 @@ export default interface IAccessPoint {
     greenhouses: IGreenhouse[];
     lastContact: string;
     status: string;
+    published: boolean;
 }

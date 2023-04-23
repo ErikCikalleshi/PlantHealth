@@ -9,4 +9,5 @@ export default interface IGreenhouse {
     gardener: IUser;
     lastContact: string;
     status: string;
+    published: boolean;
 }

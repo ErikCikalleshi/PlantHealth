@@ -5,6 +5,8 @@ import App from './App.vue'
 import VueCookies from "vue-cookies";
 import setupInterceptors from './services/setupInterceptors';
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+import Vue3EasyDataTable from 'vue3-easy-data-table';
+import 'vue3-easy-data-table/dist/style.css';
 import './assets/main.css'
 
 // Vuetify
@@ -45,7 +47,7 @@ setupInterceptors();
 
 const app = createApp(App);
 app.component("oh-icon", OhVueIcon);
-
+app.component('EasyDataTable', Vue3EasyDataTable);
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
