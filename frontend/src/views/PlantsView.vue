@@ -5,17 +5,17 @@
             <div class="flex center justify-space-between mb-10">
                 <page-heading class="text-white">All Plants</page-heading>
                 <div class="w-[220px]">
-                    <v-text-field
-                        :loading="loading"
-                        density="compact"
-                        variant="solo"
-                        label="Search plant"
-                        append-inner-icon="mdi-magnify"
-                        single-line
-                        hide-details
-                        v-model="searchValue"
-                        @click:append-inner="loading = true;"
-                    ></v-text-field>
+<!--                    <v-text-field-->
+<!--                        :loading="loading"-->
+<!--                        density="compact"-->
+<!--                        variant="solo"-->
+<!--                        label="Search plant"-->
+<!--                        append-inner-icon="mdi-magnify"-->
+<!--                        single-line-->
+<!--                        hide-details-->
+<!--                        v-model="searchValue"-->
+<!--                        @click:append-inner="loading = true;"-->
+<!--                    ></v-text-field>-->
                 </div>
             </div>
             <div class="w-[387px] bg-white h-full flex rounded-[5px]">
@@ -34,7 +34,7 @@
     </v-app>
 </template>
 
-<script>
+<script lang="ts">
 import HeaderView from "@/components/general/header.vue";
 import {defineComponent} from "vue";
 import MainComponent from "@/components/general/main_container.vue";
