@@ -1001,3 +1001,10 @@ io.jsonwebtoken.ExpiredJwtException: JWT expired at 2023-03-24T17:06:47Z. Curren
 2023-04-23 00:38:01 INFO  a.q.b.BackendApplication - Starting BackendApplication using Java 17.0.4.1 with PID 11808 (C:\Users\danie\Desktop\repos\g2t4\backend\target\classes started by danie in C:\Users\danie\Desktop\repos\g2t4\backend) 
 2023-04-23 00:38:01 INFO  a.q.b.BackendApplication - No active profile set, falling back to 1 default profile: "default" 
 2023-04-23 00:38:05 INFO  a.q.b.BackendApplication - Started BackendApplication in 4.043 seconds (process running for 4.372) 
+2023-04-24 02:36:29 INFO  a.q.b.BackendApplication - Starting BackendApplication using Java 17.0.4.1 with PID 16824 (C:\Users\danie\Desktop\repos\g2t4\backend\target\classes started by danie in C:\Users\danie\Desktop\repos\g2t4\backend) 
+2023-04-24 02:36:29 INFO  a.q.b.BackendApplication - No active profile set, falling back to 1 default profile: "default" 
+2023-04-24 02:36:40 INFO  a.q.b.BackendApplication - Starting BackendApplication using Java 17.0.4.1 with PID 30536 (C:\Users\danie\Desktop\repos\g2t4\backend\target\classes started by danie in C:\Users\danie\Desktop\repos\g2t4\backend) 
+2023-04-24 02:36:40 INFO  a.q.b.BackendApplication - No active profile set, falling back to 1 default profile: "default" 
+2023-04-24 02:37:01 INFO  a.q.b.BackendApplication - Starting BackendApplication using Java 17.0.4.1 with PID 4636 (C:\Users\danie\Desktop\repos\g2t4\backend\target\classes started by danie in C:\Users\danie\Desktop\repos\g2t4\backend) 
+2023-04-24 02:37:01 INFO  a.q.b.BackendApplication - No active profile set, falling back to 1 default profile: "default" 
+2023-04-24 02:37:05 INFO  a.q.b.BackendApplication - Started BackendApplication in 4.346 seconds (process running for 4.685) 

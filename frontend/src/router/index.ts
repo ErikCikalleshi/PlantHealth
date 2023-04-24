@@ -10,7 +10,7 @@ import Forbidden from "@/views/Forbidden.vue";
 import {createRouter, createWebHistory} from 'vue-router'
 import {useStore as userStore} from "@/stores/user/user";
 import dashboard from "@/views/Dashboard.vue";
-
+import PlantsView from "@/views/PlantsView.vue";
 
 const routes = [
     {path: '/', component: landingpage},
@@ -19,6 +19,7 @@ const routes = [
     {path: '/gallery', component: gallery, meta: { roles: ['ADMIN', 'GARDENER', 'USER']}},
     {path: '/admin/users', name: 'manage-users', component: adminManageUsers, meta: { roles: ['ADMIN'] }},
     {path: '/admin/users/edit/:username', props: true, name: 'admin-edit-user', component: adminEditUser, meta: { roles: ['ADMIN'] }},
+    {path: '/dashboard/plants', component: PlantsView},
     {path: '/404', component: NotFound},
     {path: '/403', component: Forbidden},
     {path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound },

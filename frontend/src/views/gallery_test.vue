@@ -16,6 +16,8 @@ export default defineComponent({
     data() {
         return {
             imageUrl: null,
+            plantId: 1,
+            imgUrls: [],
         };
     },
     methods: {
@@ -48,6 +50,12 @@ export default defineComponent({
                 console.error(error);
             }
         }
+    },
+    mounted() {
+        const response = axios.get(`http://localhost:9000/greenhouse/get-all/${this.plantId}`).then((x) => {
+            this.imgUrls = x.data;
+            console.log(x.data);
+        })
     }
 });
 </script>
