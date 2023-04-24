@@ -54,6 +54,7 @@
                         <span class="text-lg">Plants</span>
                         <div v-if="displayBulkEdit" class="grid gap-6 grid-cols-2 w-1/4">
                             <v-btn color="primary" @click="downloadQrCodes(itemsSelected)">Print Selected</v-btn>
+<!--                            TODO open confirm dialog before deleting-->
                             <v-btn color="error" @click="deleteAllSelected(itemsSelected)">Delete Selected</v-btn>
                         </div>
                     </div>
