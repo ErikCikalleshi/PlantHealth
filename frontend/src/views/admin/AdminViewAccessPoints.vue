@@ -4,23 +4,29 @@
         <main-container negative class="mb-10">
             <div class="flex center justify-space-between mb-10">
                 <page-heading class="text-white">Access Points</page-heading>
-                <div class="w-[220px]">
-                    <v-text-field
-                            :loading="loading"
-                            density="compact"
-                            variant="solo"
-                            label="Search..."
-                            append-inner-icon="mdi-magnify"
-                            single-line
-                            hide-details
-                            v-model="searchValue"
-                            @click:append-inner="loading = true;"
-                    ></v-text-field>
+                <div class="flex items-center">
+                    <div class="ml-auto">
+                        <add-access-point-dialog-form :accessPoints="accessPointList"/>
+                    </div>
+                    <div class="w-[220px]">
+                        <v-text-field
+                                :loading="loading"
+                                density="compact"
+                                variant="solo"
+                                label="Search..."
+                                append-inner-icon="mdi-magnify"
+                                single-line
+                                hide-details
+                                v-model="searchValue"
+                                @click:append-inner="loading = true;"
+                        ></v-text-field>
+                    </div>
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-4 gap-y-8">
-                <accessPoint_card v-for="accessPoint in accessPointList" :key="accessPoint.id" :accessPoint="accessPoint"
-                           class="w-full" @confirm="deleteAccessPoint(accessPoint)"/>
+                <accessPoint_card v-for="accessPoint in accessPointList" :key="accessPoint.id"
+                                  :accessPoint="accessPoint"
+                                  class="w-full" @confirm="deleteAccessPoint(accessPoint)"/>
             </div>
         </main-container>
         <footer-component/>
@@ -36,11 +42,12 @@ import mainContainer from "@/components/general/main_container.vue";
 import PageHeading from "@/components/general/PageHeading.vue";
 import accessPoint_card from "@/components/admin/accessPoint_card.vue";
 import type IAccessPoint from "@/interfaces/IAccessPoint";
-import login from "@/views/Login.vue";
+import AddAccessPointDialogForm from "@/components/admin/add_accesspoint.vue";
 
 export default defineComponent({
     name: "adminManageAccessPoints",
     components: {
+        AddAccessPointDialogForm,
         headerComponent,
         footerComponent,
         mainContainer,

@@ -2,13 +2,18 @@ package at.qe.backend.services;
 
 import at.qe.backend.models.AccessPoint;
 import at.qe.backend.models.Greenhouse;
+import at.qe.backend.models.UserRole;
+import at.qe.backend.models.Userx;
+import at.qe.backend.models.dto.AccessPointDTO;
 import at.qe.backend.repositories.AccessPointRepository;
 import at.qe.backend.repositories.GreenhouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -34,6 +39,19 @@ public class AccessPointService {
         return accessPointRepository.findFirstByUuid(uuid);
     }
 
+
+    public AccessPoint saveAccessPoint(AccessPoint accessPoint) {
+        if (accessPoint.isNew()) {
+            accessPoint.setCreateDate(new Date());
+            accessPoint.setCreateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        } else {
+            accessPoint.setUpdateDate(new Date());
+            accessPoint.setUpdateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        }
+        return accessPointRepository.save(accessPoint);
+    }
+
+
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteGreenhouseByIdAndAccessPointUuid(long greenhouseId, long accessPointUuid) {
         AccessPoint accessPoint = loadAccessPoint(accessPointUuid);
@@ -45,5 +63,26 @@ public class AccessPointService {
         }else {
             throw new IllegalArgumentException("Greenhouse with id " + greenhouseId + " not found in access point with uuid " + accessPointUuid);
         }
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public AccessPoint createNewAccessPoint(String name, String location, String description, int i, boolean published) {
+        AccessPoint accessPoint = new AccessPoint();
+        accessPoint.setName(name);
+        accessPoint.setLocation(location);
+        accessPoint.setDescription(description);
+        accessPoint.setTransmissionIntervalSeconds(i);
+        accessPoint.setPublished(published);
+        return saveAccessPoint(accessPoint);
+    }
+
+    public AccessPoint updateAccessPoint(int id, String name, String location, String description, int i, boolean published) {
+        AccessPoint accessPoint = loadAccessPoint((long) id);
+        accessPoint.setName(name);
+        accessPoint.setLocation(location);
+        accessPoint.setDescription(description);
+        accessPoint.setTransmissionIntervalSeconds(i);
+        accessPoint.setPublished(published);
+        return saveAccessPoint(accessPoint);
     }
 }

@@ -39,7 +39,7 @@ public class AccessPoint implements Serializable {
     @Column(nullable = false)
     private int transmissionIntervalSeconds;
     @OneToMany(mappedBy = "accesspoint", orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<Greenhouse> greenhouses;
+    private Set<Greenhouse> greenhouses=Set.of();
 
     private boolean published = false;
     private Date lastContact;
@@ -55,6 +55,9 @@ public class AccessPoint implements Serializable {
             return "OFFLINE";
         }
         return "ONLINE";
+    }
+    public boolean isNew() {
+        return (null == createDate);
     }
 
 }

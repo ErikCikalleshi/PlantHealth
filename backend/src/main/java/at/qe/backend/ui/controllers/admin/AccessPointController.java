@@ -1,12 +1,10 @@
 package at.qe.backend.ui.controllers.admin;
 
-import at.qe.backend.helper.JSONDateFormatHelper;
 import at.qe.backend.models.AccessPoint;
 import at.qe.backend.models.dto.AccessPointDTO;
-import at.qe.backend.models.dto.GreenhouseDTO;
-import at.qe.backend.models.dto.UserDTO;
 import at.qe.backend.services.AccessPointService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +20,7 @@ public class AccessPointController {
     public List<AccessPointDTO> getAllAccessPoints() {
         List<AccessPoint> accessPoints = accessPointService.getAllAccessPoints();
         //Exclude greenhouses from the response to reduce the response size, as they are not needed in the list view
-        return accessPoints.stream().map(ap -> getAccessPointDtoFromAccessPoint(ap, false)).toList();
+        return accessPoints.stream().map(ap -> new AccessPointDTO(ap, false)).toList();
     }
 
     @DeleteMapping("/admin/delete-access-point/{uuid}")
@@ -32,7 +30,7 @@ public class AccessPointController {
 
     @GetMapping("/admin/get-access-point/{uuid}")
     public AccessPointDTO getAccessPointByUuid(@PathVariable String uuid) {
-        return getAccessPointDtoFromAccessPoint(accessPointService.loadAccessPoint(Long.parseLong(uuid)), true);
+        return new AccessPointDTO(accessPointService.loadAccessPoint(Long.parseLong(uuid)), true);
     }
 
     @DeleteMapping("/admin/delete-greenhouse-by-id-and-access-point-uuid/{greenhouseId}/{accessPointUuid}")
@@ -40,41 +38,16 @@ public class AccessPointController {
         accessPointService.deleteGreenhouseByIdAndAccessPointUuid(Long.parseLong(greenhouseId), Long.parseLong(accessPointUuid));
     }
 
-    private AccessPointDTO getAccessPointDtoFromAccessPoint(AccessPoint accessPoint, boolean includeGreenhouses) {
-        List<GreenhouseDTO> greenhouses = List.of();
-        if (includeGreenhouses) {
-            greenhouses = getGreenhouseDtoFromAccessPoint(accessPoint);
-        }
-        return new AccessPointDTO(
-                accessPoint.getUuid(),
-                accessPoint.getName(),
-                accessPoint.getLocation(),
-                accessPoint.getDescription(),
-                accessPoint.getTransmissionIntervalSeconds(),
-                greenhouses,
-                JSONDateFormatHelper.format(accessPoint.getLastContact()),
-                accessPoint.getStatus(),
-                accessPoint.isPublished()
-        );
+    @PatchMapping("/admin/update-access-point/")
+    public AccessPointDTO updateAccessPoint(@RequestBody AccessPointDTO accessPointDTO) {
+        AccessPoint accessPoint = accessPointService.updateAccessPoint(accessPointDTO.id(),accessPointDTO.name(), accessPointDTO.location(), accessPointDTO.description(), accessPointDTO.transmissionInterval(), accessPointDTO.published());
+        return new AccessPointDTO(accessPoint,true);
     }
 
-    private List<GreenhouseDTO> getGreenhouseDtoFromAccessPoint(AccessPoint accessPoint) {
-        return accessPoint.getGreenhouses().stream().map(g -> new GreenhouseDTO(
-                g.getUuid(),
-                g.getIdInCluster(),
-                g.getName(),
-                g.getDescription(),
-                g.getLocation(),
-                new UserDTO(
-                        g.getOwner().getCreateUserUsername(),
-                        g.getOwner().getFirstName(),
-                        g.getOwner().getLastName(),
-                        JSONDateFormatHelper.format(g.getOwner().getCreateDate()),
-                        g.getOwner().getRoles(),
-                        g.getOwner().getEmail()),
-                JSONDateFormatHelper.format(g.getLastContact()),
-                g.getStatus(),
-                g.isPublished()
-        )).toList();
+    @PostMapping("/admin/create-new-access-point/")
+    @ResponseStatus(HttpStatus.CREATED)
+    public AccessPointDTO createNewAccessPoint(@RequestBody AccessPointDTO accessPointDTO) {
+        AccessPoint accessPoint= accessPointService.createNewAccessPoint(accessPointDTO.name(), accessPointDTO.location(), accessPointDTO.description(), accessPointDTO.transmissionInterval(), accessPointDTO.published());
+        return new AccessPointDTO(accessPoint);
     }
 }

@@ -29,20 +29,14 @@ public class UserxController {
      * used for example to not send the password when a user logs in
      */
 
-
     //TODO add security check to this api
     @GetMapping("/admin/get-all-users")
     public Collection<UserDTO> getAllUsers() {
-        Collection<UserDTO> userDisplays = new ArrayList<>();
+        Collection<UserDTO> users = new ArrayList<>();
         for (Userx user : userxService.getAllUsers()) {
-            userDisplays.add(new UserDTO(user.getUsername(),
-                    user.getFirstName(),
-                    user.getLastName(),
-                    JSONDateFormatHelper.format(user.getCreateDate()),
-                    user.getRoles(),
-                    user.getEmail()));
+            users.add(new UserDTO(user));
         }
-        return userDisplays;
+        return users;
     }
 
     @DeleteMapping("/admin/delete-user/{username}")
@@ -58,52 +52,28 @@ public class UserxController {
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return new UserDTO(user.getUsername(),
-                user.getFirstName(),
-                user.getLastName(),
-                JSONDateFormatHelper.format(user.getCreateDate()),
-                user.getRoles(),
-                user.getEmail());
+        return new UserDTO(user);
     }
 
     @PatchMapping("/admin/update-user/")
-    public void updateUser(@RequestBody UserDTO userDisplay) {
-        if (userDisplay.roles().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    public UserDTO updateUser(@RequestBody UserDTO userDTO) {
+        Userx user = userxService.updateUser(userDTO.username(), userDTO.firstname(), userDTO.lastname(), userDTO.email(), userDTO.roles());
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        Userx user = userxService.loadUser(userDisplay.username());
-        user.setFirstName(userDisplay.firstname());
-        user.setLastName(userDisplay.lastname());
-        user.setEmail(userDisplay.email());
-        Set<UserRole> rolesNew = new java.util.HashSet<>(Set.of());
-        rolesNew.addAll(userDisplay.roles());
-        user.setRoles(rolesNew);
-        userxService.saveUser(user);
+        return new UserDTO(user);
     }
 
     @PostMapping("/admin/create-new-user/")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO createUser(@RequestBody CreateNewUserRequest newUserRequest) {
-        UserDTO newUser = newUserRequest.newUser();
-        if (newUser.roles().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-        Userx user = new Userx();
-        user.setUsername(newUser.username());
-        user.setFirstName(newUser.firstname());
-        user.setLastName(newUser.lastname());
-        user.setEmail(newUser.email());
-        Set<UserRole> rolesNew = new java.util.HashSet<>(Set.of());
-        rolesNew.addAll(newUser.roles());
-        user.setRoles(rolesNew);
-        user.setPassword(WebSecurityConfig.passwordEncoder().encode(newUserRequest.password()));
-        user=userxService.saveUser(user);
-
-        return new UserDTO(user.getUsername(),
-                user.getFirstName(),
-                user.getLastName(),
-                JSONDateFormatHelper.format(user.getCreateDate()),
-                user.getRoles(),
-                user.getEmail());
+        Userx user = userxService.createUser(
+                newUserRequest.newUser().username(),
+                newUserRequest.newUser().firstname(),
+                newUserRequest.newUser().lastname(),
+                newUserRequest.newUser().email(),
+                newUserRequest.newUser().roles(),
+                newUserRequest.password());
+        return new UserDTO(user);
     }
 }
