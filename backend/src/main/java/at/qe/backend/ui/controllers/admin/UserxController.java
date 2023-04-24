@@ -1,18 +1,19 @@
 package at.qe.backend.ui.controllers.admin;
 
 
+import at.qe.backend.configs.WebSecurityConfig;
 import at.qe.backend.exceptions.UserNotDeletedException;
 import at.qe.backend.helper.JSONDateFormatHelper;
 import at.qe.backend.models.UserRole;
 import at.qe.backend.models.Userx;
 import at.qe.backend.models.dto.UserDTO;
+import at.qe.backend.models.request.CreateNewUserRequest;
 import at.qe.backend.services.UserxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -78,5 +79,31 @@ public class UserxController {
         rolesNew.addAll(userDisplay.roles());
         user.setRoles(rolesNew);
         userxService.saveUser(user);
+    }
+
+    @PostMapping("/admin/create-new-user/")
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDTO createUser(@RequestBody CreateNewUserRequest newUserRequest) {
+        UserDTO newUser = newUserRequest.newUser();
+        if (newUser.roles().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        Userx user = new Userx();
+        user.setUsername(newUser.username());
+        user.setFirstName(newUser.firstname());
+        user.setLastName(newUser.lastname());
+        user.setEmail(newUser.email());
+        Set<UserRole> rolesNew = new java.util.HashSet<>(Set.of());
+        rolesNew.addAll(newUser.roles());
+        user.setRoles(rolesNew);
+        user.setPassword(WebSecurityConfig.passwordEncoder().encode(newUserRequest.password()));
+        user=userxService.saveUser(user);
+
+        return new UserDTO(user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
+                JSONDateFormatHelper.format(user.getCreateDate()),
+                user.getRoles(),
+                user.getEmail());
     }
 }
