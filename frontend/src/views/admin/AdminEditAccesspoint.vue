@@ -9,7 +9,6 @@
                         <div class="col-span-3">
                             <v-label text="Name"/>
                             <v-text-field v-model="accessPoint.name" color="primary" hide-details type="text"
-                                          readonly
                                           placeholder="Name"/>
                         </div>
                         <div class=" row-span-2 col-span-4">
@@ -196,7 +195,9 @@ export default defineComponent({
     },
     methods: {
         updateAccessPoint(accessPoint: IAccessPoint) {
-            // AdminAccessPointService.updateAccessPoint(accessPoint);
+            AdminAccessPointService.updateAccessPoint(accessPoint).then((response) => {
+                this.accessPoint = response.data;
+            });
         },
         deleteGreenhouse(item: Item | Item[] | null) {
             if (item != null) {

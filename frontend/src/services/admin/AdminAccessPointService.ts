@@ -3,27 +3,28 @@ import type IAccessPoint from "@/interfaces/IAccessPoint";
 
 class AdminAccessPointService {
     async getAllAccessPoints() {
-        return await api.get('admin/get-all-access-points', {
-        });
+        return await api.get('admin/get-all-access-points', {});
     }
 
     async deleteAccessPoint(id: number) {
-        return await api.delete('admin/delete-access-point/' + id, {
-        });
+        return await api.delete('admin/delete-access-point/' + id, {});
     }
 
     async getSingleAccessPoint(id: number) {
-        return await api.get('admin/get-access-point/' + id, {
-        });
+        return await api.get('admin/get-access-point/' + id, {});
     }
 
-    updateAccessPoint(accessPoint: IAccessPoint) {
-        return api.put('admin/update-access-point', accessPoint);
+    async updateAccessPoint(accessPoint: IAccessPoint) {
+        return await api.patch('admin/update-access-point/', JSON.parse(JSON.stringify(accessPoint)));
     }
 
-    async deleteGreenhouseByIdAndAccessPoint(greenhouseId: number, id:number) {
-        return await api.delete('admin/delete-greenhouse-by-id-and-access-point-uuid/' + greenhouseId + '/' + id, {
-        });
+    async deleteGreenhouseByIdAndAccessPoint(greenhouseId: number, id: number) {
+        return await api.delete('admin/delete-greenhouse-by-id-and-access-point-uuid/' + greenhouseId + '/' + id, {});
+    }
+
+    async createNewAccessPoint(newAccessPoint: IAccessPoint) {
+        return await api.post('admin/create-new-access-point/', JSON.parse(JSON.stringify(newAccessPoint)));
     }
 }
+
 export default new AdminAccessPointService();
