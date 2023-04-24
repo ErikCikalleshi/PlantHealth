@@ -54,8 +54,8 @@
                         <span class="text-lg">Plants</span>
                         <div v-if="displayBulkEdit" class="grid gap-6 grid-cols-2 w-1/4">
                             <v-btn color="primary" @click="downloadQrCodes(itemsSelected)">Print Selected</v-btn>
-<!--                            TODO open confirm dialog before deleting-->
-                            <v-btn color="error" @click="deleteAllSelected(itemsSelected)">Delete Selected</v-btn>
+                            <!--                            TODO open confirm dialog before deleting-->
+                            <v-btn color="error" @click="deleteDialog=true; itemToDelete = itemsSelected">Delete Selected</v-btn>
                         </div>
                     </div>
 
@@ -70,7 +70,7 @@
                                 <v-checkbox v-model="item.greenhousePublished" color="primary" hide-details disabled/>
                             </template>
                             <template #item-greenhouseStatus="item">
-                                <span :class="' text-' +getColorByStatus(accessPoint.status)">{{
+                                <span :class="' text-' +getColorByStatus(item.greenhouseStatus)">{{
                                     item.greenhouseStatus
                                     }}</span>
                             </template>
@@ -120,7 +120,6 @@ import JSZip from "jszip";
 import QRCode from "qrcode";
 
 
-
 export default defineComponent({
     name: "adminEditAccessPoint",
     computed: {
@@ -131,7 +130,7 @@ export default defineComponent({
     data() {
         return {
             deleteDialog: false,
-            itemToDelete: null as Item | null,
+            itemToDelete: null as Item | Item[] | null,
         };
     },
     components: {
@@ -199,10 +198,18 @@ export default defineComponent({
         updateAccessPoint(accessPoint: IAccessPoint) {
             // AdminAccessPointService.updateAccessPoint(accessPoint);
         },
-        deleteGreenhouse(item: Item | null) {
+        deleteGreenhouse(item: Item | Item[] | null) {
             if (item != null) {
-                this.items = this.items.filter((i) => i.greenhouseId != item.greenhouseId);
-                AdminAccessPointService.deleteGreenhouseByIdAndAccessPoint(item.greenhouseId, this.accessPoint.id)
+                if (Array.isArray(item)) {
+                    item.forEach((i) => {
+                        console.log(i.greenhouseId)
+                        this.items = this.items.filter((item) => item.greenhouseId != i.greenhouseId);
+                        AdminAccessPointService.deleteGreenhouseByIdAndAccessPoint(i.greenhouseId, this.accessPoint.id)
+                    })
+                } else {
+                    this.items = this.items.filter((i) => i.greenhouseId != item.greenhouseId);
+                    AdminAccessPointService.deleteGreenhouseByIdAndAccessPoint(item.greenhouseId, this.accessPoint.id)
+                }
                 this.deleteDialog = false;
             }
         },
@@ -219,11 +226,11 @@ export default defineComponent({
         generateQrCode(uuid: number): Promise<Blob> {
             const url = `/upload-image/${uuid}`
             const canvas = document.createElement('canvas')
-            const size=1024
-            canvas.width=size
-            canvas.height=size
+            const size = 1024
+            canvas.width = size
+            canvas.height = size
             return new Promise((resolve, reject) => {
-                QRCode.toCanvas(canvas, url,{ width: size}, (error: any) => {
+                QRCode.toCanvas(canvas, url, {width: size}, (error: any) => {
                     if (error) {
                         reject(error)
                         return
@@ -288,13 +295,6 @@ export default defineComponent({
                 })
             })
         },
-        deleteAllSelected(selected:Item[]){
-            this.items = this.items.filter((i) => !selected.includes(i));
-            selected.forEach((item) => {
-                AdminAccessPointService.deleteGreenhouseByIdAndAccessPoint(item.greenhouseId, this.accessPoint.id)
-            })
-
-        }
     }
 })
 </script>
