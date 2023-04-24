@@ -32,7 +32,7 @@ public class MeasurementsTests {
     @Test
     public void GreenhouseNotFound() {
         MeasurementDTO measurement = new MeasurementDTO();
-        measurement.setGreenhouseID(1);
+        measurement.setGreenhouseID(-1);
         measurement.setAccesspointUUID(2);
         measurement.setValue(23.0);
         measurement.setSensorType(SensorType.TEMPERATURE);

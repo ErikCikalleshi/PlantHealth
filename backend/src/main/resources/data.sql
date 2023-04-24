@@ -71,6 +71,7 @@ INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_u
 INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (18, 'Peace Lily', 'Shaded corner', 'Leafy plant with white flowers that purifies the air', 1, 'admin', NOW(), 3, FALSE);
 INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (19, 'Begonia', 'Windowsill', 'Colorful flowers in shades of red, pink, and white', 1, 'admin', NOW(), 4, FALSE);
 INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (20, 'Fern', 'Bathroom', 'Moisture-loving plant with delicate leaves', 1, 'admin', NOW(), 5, FALSE);
+INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (27, 'Test', 'TestLocation', 'Test', 1, 'admin', NOW(), 5, TRUE);
 
 --Greenhouses for Access Point 2
 INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (1, 'Tomatoes', 'South-facing window', 'Vine plants that produce red fruit', 2, 'admin', NOW(), 2, FALSE);
