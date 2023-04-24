@@ -45,6 +45,10 @@ export default defineComponent({
                     userId: 1,
                     uploadLink: this.imageUrl,
                     plantId: 1
+                }).then(() => {
+                    let response = axios.get(`http://localhost:9000/greenhouse/get-all/${this.plantId}`).then((x) => {
+                        this.imgUrls = x.data;
+                    })
                 })
             } catch (error) {
                 console.error(error);
@@ -64,11 +68,12 @@ export default defineComponent({
     <v-app>
         <header-component/>
         <main-container negative>
-            <img alt="glasshouse" src="@/assets/house.png"/>
-            <img alt="glasshouse" referrerpolicy="no-referrer" src="https://i.imgur.com/suLRm1B.jpg"/>
+            <div class="grid grid-cols-5">
+                <img v-for="(img, index) in imgUrls" :key="index" :src="img" alt="failed" referrerpolicy="no-referrer" />
+            </div>
 
             <input type="file" ref="fileInput" @change="uploadImage" />
-            <img v-if="imageUrl" :src="imageUrl" referrerpolicy="no-referrer" />
+
         </main-container>
         <footer-component/>
     </v-app>

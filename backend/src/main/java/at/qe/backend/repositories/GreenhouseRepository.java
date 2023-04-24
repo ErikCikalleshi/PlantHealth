@@ -2,6 +2,7 @@ package at.qe.backend.repositories;
 
 import at.qe.backend.models.Greenhouse;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface GreenhouseRepository extends AbstractRepository<Greenhouse, Long> {

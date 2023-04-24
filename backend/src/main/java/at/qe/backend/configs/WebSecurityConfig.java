@@ -74,7 +74,7 @@ public class WebSecurityConfig {
                             .requestMatchers("/refreshtoken/**").permitAll()
                             .requestMatchers("/admin/**").permitAll()
                             .requestMatchers("/upload/**").permitAll()
-                            .requestMatchers("/greenhouse/get-all/**").permitAll()
+                            .requestMatchers("/greenhouse/**").permitAll()
                             .anyRequest().authenticated());
             http.authenticationProvider(authenticationProvider());
             http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

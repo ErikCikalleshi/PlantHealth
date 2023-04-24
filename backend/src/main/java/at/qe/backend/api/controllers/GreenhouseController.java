@@ -1,0 +1,23 @@
+package at.qe.backend.api.controllers;
+
+import at.qe.backend.api.services.GreenhouseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
+public class GreenhouseController {
+    @Autowired
+    private GreenhouseService greenhouseService;
+    record GreenhouseData(Long id, String name, String location, String description){};
+
+    @GetMapping("/greenhouse/get")
+    public List<GreenhouseData> getAllGreenhouses() {
+        var greenhouses = greenhouseService.getAll();
+        return greenhouses.stream()
+               .map(greenhouse -> new GreenhouseData(greenhouse.getUuid(), greenhouse.getName(), greenhouse.getLocation(), greenhouse.getDescription()))
+               .toList();
+    }
+}
