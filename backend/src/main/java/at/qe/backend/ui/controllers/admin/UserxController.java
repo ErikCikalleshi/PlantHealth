@@ -1,9 +1,11 @@
-package at.qe.backend.api.controllers;
+package at.qe.backend.ui.controllers.admin;
 
 
-import at.qe.backend.api.exceptions.UserNotDeletedException;
+import at.qe.backend.exceptions.UserNotDeletedException;
+import at.qe.backend.helper.JSONDateFormatHelper;
 import at.qe.backend.models.UserRole;
 import at.qe.backend.models.Userx;
+import at.qe.backend.models.dto.UserDTO;
 import at.qe.backend.services.UserxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,19 +27,17 @@ public class UserxController {
      * records are DTOs (Data Transfer Object) used to return only the fields we want back to the client
      * used for example to not send the password when a user logs in
      */
-    record UserDisplay(String username, String firstname, String lastname, String created, Collection<UserRole> roles,
-                       String email) {
-    }
+
 
     //TODO add security check to this api
     @GetMapping("/admin/get-all-users")
-    public Collection<UserDisplay> getAllUsers() {
-        Collection<UserDisplay> userDisplays = new ArrayList<>();
+    public Collection<UserDTO> getAllUsers() {
+        Collection<UserDTO> userDisplays = new ArrayList<>();
         for (Userx user : userxService.getAllUsers()) {
-            userDisplays.add(new UserDisplay(user.getUsername(),
+            userDisplays.add(new UserDTO(user.getUsername(),
                     user.getFirstName(),
                     user.getLastName(),
-                    new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(user.getCreateDate()),
+                    JSONDateFormatHelper.format(user.getCreateDate()),
                     user.getRoles(),
                     user.getEmail()));
         }
@@ -52,30 +52,30 @@ public class UserxController {
     }
 
     @GetMapping("/admin/get-single-user/{username}")
-    public UserDisplay getSingleUserByUsername(@PathVariable String username) {
+    public UserDTO getSingleUserByUsername(@PathVariable String username) {
         Userx user = userxService.loadUser(username);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return new UserDisplay(user.getUsername(),
+        return new UserDTO(user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
-                new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(user.getCreateDate()),
+                JSONDateFormatHelper.format(user.getCreateDate()),
                 user.getRoles(),
                 user.getEmail());
     }
 
     @PatchMapping("/admin/update-user/")
-    public void updateUser(@RequestBody UserDisplay userDisplay) {
-        if (userDisplay.roles.isEmpty()) {
+    public void updateUser(@RequestBody UserDTO userDisplay) {
+        if (userDisplay.roles().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        Userx user = userxService.loadUser(userDisplay.username);
-        user.setFirstName(userDisplay.firstname);
-        user.setLastName(userDisplay.lastname);
-        user.setEmail(userDisplay.email);
+        Userx user = userxService.loadUser(userDisplay.username());
+        user.setFirstName(userDisplay.firstname());
+        user.setLastName(userDisplay.lastname());
+        user.setEmail(userDisplay.email());
         Set<UserRole> rolesNew = new java.util.HashSet<>(Set.of());
-        rolesNew.addAll(userDisplay.roles);
+        rolesNew.addAll(userDisplay.roles());
         user.setRoles(rolesNew);
         userxService.saveUser(user);
     }

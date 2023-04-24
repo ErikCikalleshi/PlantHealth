@@ -1,9 +1,10 @@
-package at.qe.backend.api.controllers;
+package at.qe.backend.ui.controllers;
 
-import at.qe.backend.api.model.request.LoginRequest;
-import at.qe.backend.api.model.request.TokenRefreshRequest;
-import at.qe.backend.api.model.response.JwtResponse;
-import at.qe.backend.api.model.response.TokenRefreshResponse;
+import at.qe.backend.helper.JSONDateFormatHelper;
+import at.qe.backend.models.request.LoginRequest;
+import at.qe.backend.models.request.TokenRefreshRequest;
+import at.qe.backend.models.response.JwtResponse;
+import at.qe.backend.models.response.TokenRefreshResponse;
 import at.qe.backend.configs.security.jwt.JwtUtils;
 import at.qe.backend.configs.security.jwt.exception.TokenRefreshException;
 import at.qe.backend.configs.security.jwt.models.RefreshToken;
@@ -58,7 +59,7 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
         Userx user = userxService.loadUser(userDetails.getUsername());
-        return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(), new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(user.getCreateDate()), user.getEmail(), user.getRoles()));
+        return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(), JSONDateFormatHelper.format(user.getCreateDate()), user.getEmail(), user.getRoles()));
     }
 
 

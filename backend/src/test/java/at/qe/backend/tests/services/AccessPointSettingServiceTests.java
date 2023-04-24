@@ -1,7 +1,7 @@
 package at.qe.backend.tests.services;
 
-import at.qe.backend.api.exceptions.AccessPointNotFoundException;
-import at.qe.backend.api.exceptions.AccessPointNotPublishedException;
+import at.qe.backend.exceptions.AccessPointNotFoundException;
+import at.qe.backend.exceptions.AccessPointNotPublishedException;
 import at.qe.backend.api.model.dto.AccessPointSettingDTO;
 import at.qe.backend.api.services.SettingService;
 import org.junit.jupiter.api.Assertions;

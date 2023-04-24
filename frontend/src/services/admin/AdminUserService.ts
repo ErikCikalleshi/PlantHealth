@@ -1,6 +1,5 @@
 import type IUser from "@/interfaces/user/IUser";
 import api from "@/services/api";
-import {API_BASE_URL} from "@/services";
 
 class AdminUserService {
     async getAllUsers() {

@@ -1,9 +1,9 @@
 package at.qe.backend.api.services;
 
-import at.qe.backend.api.exceptions.AccessPointNotPublishedException;
-import at.qe.backend.api.exceptions.GreenhouseNotPublishedException;
-import at.qe.backend.api.exceptions.GreenhouseNotRegisteredException;
-import at.qe.backend.api.exceptions.SensorNotFoundException;
+import at.qe.backend.exceptions.AccessPointNotPublishedException;
+import at.qe.backend.exceptions.GreenhouseNotPublishedException;
+import at.qe.backend.exceptions.GreenhouseNotRegisteredException;
+import at.qe.backend.exceptions.SensorNotFoundException;
 import at.qe.backend.api.model.dto.MeasurementDTO;
 import at.qe.backend.models.Greenhouse;
 import at.qe.backend.models.Measurement;

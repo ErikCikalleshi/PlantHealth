@@ -1,4 +1,4 @@
-package at.qe.backend.api.model.request;
+package at.qe.backend.models.request;
 
 public class LoginRequest {
     private String username;

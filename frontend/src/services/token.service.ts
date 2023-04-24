@@ -27,8 +27,8 @@ class TokenService {
     }
 
     removeUser(): void {
-        document.cookie = "refreshToken" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        document.cookie = "accessToken" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        this.deleteCookie("accessToken");
+        this.deleteCookie("refreshToken");
         userStore().reset();
         tokenStore().reset();
     }
@@ -38,6 +38,10 @@ class TokenService {
         d.setTime(d.getTime() + expireSeconds * 1000);
         const expires = `expires=${d.toUTCString()}`;
         document.cookie = `${name}=${value};${expires};path=/`;
+    }
+
+    private deleteCookie(name: string) {
+        document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
 
     private getCookie(name: string): string {

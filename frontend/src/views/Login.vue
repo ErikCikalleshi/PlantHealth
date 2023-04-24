@@ -5,6 +5,8 @@ import type ITokenResponse from "@/interfaces/user/ITokenResponse";
 import {useStore as userStore} from "@/stores/user/user";
 import {useStore as tokenStore} from "@/stores/token/token";
 import AuthService from "@/services/auth.service";
+import type {RouteLocationNormalized} from "vue-router";
+
 export default defineComponent({
   name: "LoginView",
   data() {
@@ -33,7 +35,12 @@ export default defineComponent({
       this.userStore.lastname = token.lastname;
       this.userStore.roles = token.roles;
       // redirect to dashboard
-      if (response.status === 200) this.$router.push('/');
+      if (response.status === 200) {
+          console.log(this.$route.query.redirect)
+          const redirectLocation:any = this.$route.query.redirect || '/';
+          const locationNormalized: RouteLocationNormalized = this.$router.resolve(redirectLocation);
+          this.$router.push(locationNormalized);
+      }
     },
   },
 });
