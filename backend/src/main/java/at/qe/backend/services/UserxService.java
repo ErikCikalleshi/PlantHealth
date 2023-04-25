@@ -1,22 +1,22 @@
 package at.qe.backend.services;
 
 import at.qe.backend.configs.WebSecurityConfig;
+import at.qe.backend.exceptions.Userx.LastAdminException;
+import at.qe.backend.exceptions.Userx.UserAlreadyExistsException;
+import at.qe.backend.exceptions.Userx.UserDoesNotExistException;
 import at.qe.backend.models.UserRole;
 import at.qe.backend.models.Userx;
 import at.qe.backend.repositories.UserxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Service for accessing and manipulating user data.
@@ -64,9 +64,6 @@ public class UserxService {
         if (user.isNew()) {
             user.setCreateDate(new Date());
             user.setCreateUserUsername(getAuthenticatedUsername());
-            if (user.getRoles().isEmpty()) {
-                user.setRoles(Set.of(UserRole.USER));
-            }
         } else {
             user.setUpdateDate(new Date());
             user.setUpdateUserUsername(getAuthenticatedUsername());
@@ -81,13 +78,14 @@ public class UserxService {
      * @param user the user to delete
      */
     @PreAuthorize("hasAuthority('ADMIN')")
-    public boolean deleteUser(Userx user) {
+    public void deleteUser(Userx user) throws UserDoesNotExistException, LastAdminException {
+        if (!userRepository.existsByUsername(user.getUsername())) {
+            throw new UserDoesNotExistException();
+        }
         if (user.getRoles().contains(UserRole.ADMIN) && userRepository.countUserxByRolesContaining(UserRole.ADMIN) <= 1) {
-            //TODO Add log event here:
-            return false;
+            throw new LastAdminException();
         }
         userRepository.delete(user);
-        return true;
     }
 
 
@@ -97,36 +95,30 @@ public class UserxService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
-    public Userx updateUser(String username, String firstname, String lastname, String email, Collection<UserRole> roles) {
-        if (roles.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    public Userx updateUser(String username, String firstname, String lastname, String email, Collection<UserRole> roles) throws UserAlreadyExistsException {
+        if (userRepository.existsByEmail(email) && !userRepository.findByEmail(email).getUsername().equals(username)) {
+            throw new UserAlreadyExistsException();
         }
-
         Userx user = loadUser(username);
         user.setFirstName(firstname);
         user.setLastName(lastname);
         user.setEmail(email);
-        user.getRoles().clear();
-        user.getRoles().addAll(roles);
+        user.setRoles(new HashSet<>(roles));
         return saveUser(user);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Userx createUser(String username, String firstname, String lastname, String email, Collection<UserRole> roles, String password) {
-        if (roles.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    public Userx createUser(String username, String firstname, String lastname, String email, Collection<UserRole> roles, String password) throws UserAlreadyExistsException {
+        if (userRepository.existsByUsername(username) || userRepository.existsByEmail(email)) {
+            throw new UserAlreadyExistsException();
         }
-        List<Userx> userxList = userRepository.findAll();
         Userx user = new Userx();
         user.setUsername(username);
         user.setFirstName(firstname);
         user.setLastName(lastname);
         user.setEmail(email);
-        user.setRoles(Set.copyOf(roles));
+        user.setRoles(new HashSet<>(roles));
         user.setPassword(WebSecurityConfig.passwordEncoder().encode(password));
         return saveUser(user);
     }
 }
-
-
-

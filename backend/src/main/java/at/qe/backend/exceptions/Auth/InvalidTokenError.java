@@ -1,4 +1,4 @@
-package at.qe.backend.exceptions;
+package at.qe.backend.exceptions.Auth;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
