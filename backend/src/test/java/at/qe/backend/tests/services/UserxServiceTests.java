@@ -1,5 +1,6 @@
 package at.qe.backend.tests.services;
 
+import at.qe.backend.configs.WebSecurityConfig;
 import at.qe.backend.models.UserRole;
 import at.qe.backend.models.Userx;
 import at.qe.backend.repositories.UserxRepository;
@@ -10,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +27,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("classpath:application-test.properties")
@@ -49,6 +52,7 @@ class UserxServiceTests {
         testUser.setLastName("User");
         testUser.setPassword("password");
         testUser.setEmail("testuser@example.com");
+        testUser.getRoles().add(UserRole.USER);
 
         Userx adminUser = new Userx();
         adminUser.setUsername("adminuser");
@@ -78,14 +82,18 @@ class UserxServiceTests {
         assertEquals(testUser, loadedUser);
     }
 
+
     @Test
-    void testSaveUserNew() {
+    void testCreateNewUser() {
+        //this line is needed to get a return value in the tests otherwise the save method just returns null instead of a Userx object
         when(userRepository.save(any(Userx.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        Userx savedUser = userxService.saveUser(testUser);
+        Userx savedUser = userxService.createUser(testUser.getUsername(), testUser.getFirstName(), testUser.getLastName(), testUser.getEmail(), testUser.getRoles(), testUser.getPassword());
+        assertNotNull(savedUser);
         assertNotNull(savedUser.getCreateDate());
         assertNotNull(savedUser.getCreateUserUsername());
         assertEquals(testUser.getUsername(), savedUser.getUsername());
         assertEquals(testUser, savedUser);
+        assertTrue(WebSecurityConfig.passwordEncoder().matches(testUser.getPassword(), savedUser.getPassword()) );
         assertTrue(savedUser.getRoles().contains(UserRole.USER));
     }
 
@@ -96,13 +104,21 @@ class UserxServiceTests {
         SecurityContextHolder.getContext().setAuthentication(auth);
 
         var tmp = userxService.getAuthenticatedUsername();
-        testUser.setId(1L);
         when(userRepository.save(any(Userx.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        Userx savedUser = userxService.saveUser(testUser);
-        assertNotNull(savedUser.getCreateDate());
-        assertNull(savedUser.getUpdateDate());
-        assertNotNull(savedUser.getCreateUserUsername());
-        assertNull(savedUser.getUpdateUserUsername());
+        Userx savedUser = userxService.createUser(testUser.getUsername(), testUser.getFirstName(), testUser.getLastName(), testUser.getEmail(), testUser.getRoles(), testUser.getPassword());
+        String firstname = "Test2";
+        String lastname = "User2";
+        String email = "testemail_new";
+        Set<UserRole> roles = Set.of(UserRole.USER, UserRole.ADMIN);
+        //TODO Add password to update method
+        Userx updatedUser = userxService.updateUser(savedUser.getUsername(), firstname, lastname, email, roles);
+        assertEquals(savedUser, updatedUser);
+        assertEquals("Test2", updatedUser.getFirstName());
+        assertEquals("User2", updatedUser.getLastName());
+        assertEquals("testemail_new", updatedUser.getEmail());
+        assertEquals(2, updatedUser.getRoles().size());
+        assertTrue(updatedUser.getRoles().contains(UserRole.USER));
+        assertTrue(updatedUser.getRoles().contains(UserRole.ADMIN));
         assertEquals(testUser.getUsername(), savedUser.getUsername());
     }
 

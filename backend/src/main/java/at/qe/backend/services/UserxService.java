@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -70,7 +71,8 @@ public class UserxService {
             user.setUpdateDate(new Date());
             user.setUpdateUserUsername(getAuthenticatedUsername());
         }
-        return userRepository.save(user);
+        user = userRepository.save(user);
+        return user;
     }
 
     /**
@@ -99,11 +101,13 @@ public class UserxService {
         if (roles.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+
         Userx user = loadUser(username);
         user.setFirstName(firstname);
         user.setLastName(lastname);
         user.setEmail(email);
-        user.setRoles(Set.copyOf(roles));
+        user.getRoles().clear();
+        user.getRoles().addAll(roles);
         return saveUser(user);
     }
 
@@ -112,6 +116,7 @@ public class UserxService {
         if (roles.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+        List<Userx> userxList = userRepository.findAll();
         Userx user = new Userx();
         user.setUsername(username);
         user.setFirstName(firstname);
