@@ -1025,3 +1025,6 @@ io.jsonwebtoken.ExpiredJwtException: JWT expired at 2023-03-24T17:06:47Z. Curren
 2023-04-25 21:36:17 INFO  a.q.b.BackendApplication - Starting BackendApplication using Java 17.0.4.1 with PID 26280 (C:\Users\danie\Desktop\repos\g2t4\backend\target\classes started by danie in C:\Users\danie\Desktop\repos\g2t4\backend) 
 2023-04-25 21:36:17 INFO  a.q.b.BackendApplication - No active profile set, falling back to 1 default profile: "default" 
 2023-04-25 21:36:21 INFO  a.q.b.BackendApplication - Started BackendApplication in 3.989 seconds (process running for 4.312) 
+2023-04-25 21:41:01 INFO  a.q.b.BackendApplication - Starting BackendApplication using Java 17.0.4.1 with PID 984 (C:\Users\danie\Desktop\repos\g2t4\backend\target\classes started by danie in C:\Users\danie\Desktop\repos\g2t4\backend) 
+2023-04-25 21:41:01 INFO  a.q.b.BackendApplication - No active profile set, falling back to 1 default profile: "default" 
+2023-04-25 21:41:04 INFO  a.q.b.BackendApplication - Started BackendApplication in 3.942 seconds (process running for 4.265) 

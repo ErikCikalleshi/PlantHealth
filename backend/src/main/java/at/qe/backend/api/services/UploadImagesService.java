@@ -22,14 +22,14 @@ public class UploadImagesService {
     @Autowired
     private UserxRepository userxRepository;
 
-    public UploadImages create(Long plantId, Long userId, String uploadLink) {
+    public UploadImages create(Long plantId, String username, String uploadLink) {
         var greenHouse = greenhouseRepository.findByUuid(plantId).orElse(null);
         if(greenHouse == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "GreenhouseId is invalid.");
         }
-        var user = userxRepository.findById(userId).orElse(null);
+        var user = userxRepository.findByUsername(username).orElse(null);
         if(user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "UserId is invalid.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Username is invalid.");
         }
         if(uploadLink.length() < 1) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid upload link.");
@@ -37,7 +37,7 @@ public class UploadImagesService {
         var newImage = new UploadImages();
         newImage.setUploadDate(new Date());
         newImage.setPlantId(plantId);
-        newImage.setUserId(userId);
+        newImage.setUserId(user.getId());
         newImage.setUploadLink(uploadLink);
         uploadImagesRepository.save(newImage);
         return newImage;

@@ -11,13 +11,13 @@ import java.util.List;
 public class GreenhouseController {
     @Autowired
     private GreenhouseService greenhouseService;
-    record GreenhouseData(Long id, String name, String location, String description){};
+    record GreenhouseData(Long id, String name, String location, String description, String status){};
 
     @GetMapping("/greenhouse/get")
     public List<GreenhouseData> getAllGreenhouses() {
         var greenhouses = greenhouseService.getAll();
         return greenhouses.stream()
-               .map(greenhouse -> new GreenhouseData(greenhouse.getUuid(), greenhouse.getName(), greenhouse.getLocation(), greenhouse.getDescription()))
+               .map(greenhouse -> new GreenhouseData(greenhouse.getUuid(), greenhouse.getName(), greenhouse.getLocation(), greenhouse.getDescription(), greenhouse.getStatus()))
                .toList();
     }
 }

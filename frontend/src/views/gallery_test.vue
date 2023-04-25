@@ -4,7 +4,8 @@ import footerComponent from "@/components/general/footer.vue";
 import headerComponent from "@/components/general/header.vue";
 import mainContainer from "@/components/general/main_container.vue";
 import axios from "axios";
-
+import {API_BASE_URL} from "@/services";
+import {useStore as userStore} from "@/stores/user/user";
 export default defineComponent({
     name: "GalleryView",
     components: {
@@ -16,7 +17,7 @@ export default defineComponent({
     data() {
         return {
             imageUrl: null,
-            plantId: 1,
+            plantId: -1,
             imgUrls: [],
         };
     },
@@ -41,10 +42,10 @@ export default defineComponent({
 
                 const data = await response.json();
                 this.imageUrl = data.data.link;
-                await axios.post("http://localhost:9000/upload", {
-                    userId: 1,
+                await axios.post(API_BASE_URL + "upload", {
+                    username: userStore().username,
                     uploadLink: this.imageUrl,
-                    plantId: 1
+                    plantId: this.plantId,
                 }).then(() => {
                     let response = axios.get(`http://localhost:9000/greenhouse/get-all/${this.plantId}`).then((x) => {
                         this.imgUrls = x.data;
@@ -53,9 +54,10 @@ export default defineComponent({
             } catch (error) {
                 console.error(error);
             }
-        }
+        },
     },
     mounted() {
+        this.plantId = Number(this.$route.params.id);
         const response = axios.get(`http://localhost:9000/greenhouse/get-all/${this.plantId}`).then((x) => {
             this.imgUrls = x.data;
             console.log(x.data);
