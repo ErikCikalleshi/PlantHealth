@@ -15,6 +15,9 @@ BLECharacteristic vocCharacteristic("FFD5", BLERead | BLENotify, 4);
 Adafruit_BME680 bme;
 int dipSwitchPins[] = {D10, D9, D8, D7, D6, D5, D4, D3};
 
+void blePeripheralConnectHandler(BLEDevice central);
+
+void blePeripheralDisconnectHandler(BLEDevice central);
 
 void sensor_setup();
 
@@ -71,6 +74,16 @@ void sensor_setup() {
   bme.setGasHeater(320, 150); // 320*C for 150 ms
 }
 
+void blePeripheralConnectHandler(BLEDevice central) {
+  Serial.println("Connected event, central: ");
+  Serial.println(central.address());
+}
+
+void blePeripheralDisconnectHandler(BLEDevice central) {
+  Serial.println("Disconnected event, central: ");
+  Serial.println(central.address());
+}
+
 void BLE_setup() {
   if (!BLE.begin()) {
     Serial.println("Starting BLE failed!");
@@ -82,13 +95,25 @@ void BLE_setup() {
   BLE.setLocalName("SensorStation G2T4");
   BLE.setDeviceName("SensorStation G2T4");
 
+  BLE.setAdvertisedService(environmentalSensingService);
+  
   environmentalSensingService.addCharacteristic(temperatureCharacteristic);
   environmentalSensingService.addCharacteristic(humidityCharacteristic);
   environmentalSensingService.addCharacteristic(pressureCharacteristic);
   environmentalSensingService.addCharacteristic(vocCharacteristic);
   BLE.addService(environmentalSensingService);
 
+  BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
+  BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
+
   BLE.advertise();
+
+  /*
+  BLEDevice central;
+  while(!central) {
+     central = BLE.central();
+  }
+  */
 }
 
 void read_light_sensor(unsigned int *light) {
