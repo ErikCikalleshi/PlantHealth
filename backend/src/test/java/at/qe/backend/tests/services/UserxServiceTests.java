@@ -1,5 +1,4 @@
 package at.qe.backend.tests.services;
-
 import at.qe.backend.configs.WebSecurityConfig;
 import at.qe.backend.exceptions.Userx.LastAdminException;
 import at.qe.backend.exceptions.Userx.UserAlreadyExistsException;
@@ -8,34 +7,33 @@ import at.qe.backend.models.UserRole;
 import at.qe.backend.models.Userx;
 import at.qe.backend.repositories.UserxRepository;
 import at.qe.backend.services.UserxService;
-import org.apache.commons.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 
-@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 @TestPropertySource("classpath:application-test.properties")
+@SpringBootTest
 class UserxServiceTests {
-
-    @Autowired
-    UserxService userxService;
-    @MockBean
+    @Mock
     UserxRepository userRepository;
+    @InjectMocks
+    UserxService userxService;
 
 
     private Userx testUser;

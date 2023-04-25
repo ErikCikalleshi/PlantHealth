@@ -12,62 +12,62 @@
                                        src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg"></v-img>
                             </div>
                         </div>
-                        <div class="grid gap-6 mb-6">
-                            <v-form ref="addUserForm">
-                                <v-card-text>
-                                    <v-container>
-                                        <v-row>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field label="Username" readonly
-                                                              :rules="textRules"
-                                                              prepend-inner-icon="mdi-account-outline"
-                                                              v-model="user.username"/>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field label="Firstname*" required
-                                                              :rules="textRules"
-                                                              v-model="user.firstname"/>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field label="Lastname*" required
-                                                              :rules="textRules"
-                                                              v-model="user.lastname"/>
-                                            </v-col>
-                                            <v-col cols="12">
-                                                <v-text-field label="Email*" required v-model="user.email" prepend-inner-icon="mdi-email-outline"
-                                                              :rules="emailRules"/>
-                                            </v-col>
-                                            <v-col cols="12" sm="6">
-                                                <v-select
-                                                        clearable
-                                                        chips
-                                                        label="Select roles*"
-                                                        :items="['USER', 'GARDENER', 'ADMIN']"
-                                                        :rules="[v => v.length>0 || 'Select at least one role']"
-                                                        v-model="user.roles"
-                                                        multiple
-                                                        required
-                                                        prepend-inner-icon="mdi-account-group-outline"
-                                                ></v-select>
-                                            </v-col>
-                                        </v-row>
-                                    </v-container>
-                                    <small>*indicates required field</small>
-                                </v-card-text>
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn color="error" variant="flat" @click="this.$router.back()">Cancel</v-btn>
-                                    <v-btn color="primary" variant="flat" @click="updateUser(user)">Save</v-btn>
-                                </v-card-actions>
-                                <v-snackbar color="error" v-model="snackbar">Username or email already exists
-                                    <template v-slot:actions>
-                                        <v-btn color="white" variant="text" @click="snackbar = false">
-                                            Close
-                                        </v-btn>
-                                    </template>
-                                </v-snackbar>
-                            </v-form>
-                        </div>
+                        <v-form ref="addUserForm" >
+                            <v-card-text >
+                                <!--                                    <v-container>-->
+                                <v-row>
+                                    <v-col cols="12" sm="6" md="4" class="pl-1">
+                                        <v-text-field label="Username" readonly
+                                                      :rules="textRules"
+                                                      prepend-inner-icon="mdi-account-outline"
+                                                      v-model="user.username"
+                                        />
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field label="Firstname*" required
+                                                      :rules="textRules"
+                                                      v-model="user.firstname"/>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4" >
+                                        <v-text-field label="Lastname*" required
+                                                      :rules="textRules"
+                                                      v-model="user.lastname"/>
+                                    </v-col>
+                                    <v-col cols="12" class="pl-1">
+                                        <v-text-field label="Email*" required v-model="user.email"
+                                                      prepend-inner-icon="mdi-email-outline"
+                                                      :rules="emailRules"/>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" class="pl-1">
+                                        <v-select
+                                                clearable
+                                                chips
+                                                label="Select roles*"
+                                                :items="['USER', 'GARDENER', 'ADMIN']"
+                                                :rules="[v => v.length>0 || 'Select at least one role']"
+                                                v-model="user.roles"
+                                                multiple
+                                                required
+                                                prepend-inner-icon="mdi-account-group-outline"
+                                        ></v-select>
+                                    </v-col>
+                                </v-row>
+                                <!--                                    </v-container>-->
+                                <small>*indicates required field</small>
+                            </v-card-text>
+                            <v-card-actions>
+                                <!--                                    <v-spacer />-->
+                                <v-btn color="error" variant="flat" @click="$router.back()">Cancel</v-btn>
+                                <v-btn color="primary" variant="flat" @click="updateUser(user)">Save</v-btn>
+                            </v-card-actions>
+                            <v-snackbar color="error" v-model="snackbar">E-mail is already in use
+                                <template v-slot:actions>
+                                    <v-btn color="white" variant="text" @click="snackbar = false">
+                                        Close
+                                    </v-btn>
+                                </template>
+                            </v-snackbar>
+                        </v-form>
                     </div>
                 </div>
             </div>
@@ -157,7 +157,7 @@ export default defineComponent({
                         this.$router.back();
                     }
                 }).catch((error) => {
-                    if (error.response.status === 409){
+                    if (error.response.status === 409) {
                         this.snackbar = true;
                     }
                 });
