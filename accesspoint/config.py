@@ -3,8 +3,9 @@ import threading
 import requests
 import os
 from Settings import Settings
+import db
 
-INTERVAL: int = 1  # seconds
+INTERVAL: int = 20  # seconds
 
 
 def get_config(script_path):
@@ -18,16 +19,19 @@ def get_config(script_path):
         print("Error: 'api/setting/' API call failed")
         return
 
+    if response.status_code != 200:
+        print("Error: 'api/setting/' API call failed")
+        return
+
     data = response.json()
-    current_dir = os.path.dirname(os.path.abspath(script_path))
-    config_dir_path = os.path.join(current_dir, "config")
-    config_file_path = os.path.join(config_dir_path, "config.json")
+    # write to db the config
+    database = db.connect_to_db()
+    # clear collection config
+    collection = database["config"]
+    collection.drop()
+    # insert new config
+    collection.insert_one(data)
 
-    if not os.path.exists(config_dir_path):
-        os.makedirs(config_dir_path)
-
-    with open(config_file_path, "w+") as f:
-        json.dump(data, f, indent=4)
     threading.Timer(INTERVAL, get_config, args=[script_path]).start()
     print("INFO: 'api/setting/' API call successful")
 

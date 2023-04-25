@@ -14,10 +14,14 @@ def connect_to_db():
         print("Database does not exist. Creating...")
         db = client[settings.mongo_database]
         db.create_collection(settings.mongo_collection)
+    if settings.mongo_collection not in db.list_collection_names():
+        print("Collection does not exist. Creating...")
+        db.create_collection(settings.mongo_collection)
+
     return db
 
 
-def write_to_document(descriptor, value):
+def write_to_document_sensor(descriptor, value):
     settings = Settings()
     db = connect_to_db()
     if db is None:
@@ -28,7 +32,8 @@ def write_to_document(descriptor, value):
         db.create_collection(settings.mongo_collection)
     collection = db[descriptor]
     # TODO: check if limits are exceeded
-    # ___
+    #get from config/config.json
+
     collection.insert_one(value)
 
 
