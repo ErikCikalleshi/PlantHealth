@@ -48,17 +48,14 @@ public class JwtUtils {
             return true;
         } catch (MalformedJwtException e) {
             jwtLogger.error("Invalid JWT token: ", e);
-            throw e;
         } catch (ExpiredJwtException e) {
             jwtLogger.error("JWT token is expired: ", e);
-            throw e;
         } catch (UnsupportedJwtException e) {
             jwtLogger.error("JWT token is unsupported: ", e);
-            throw e;
         } catch (IllegalArgumentException e) {
             jwtLogger.error("JWT claims string is empty: ", e);
-            throw e;
         }
+        return false;
     }
 
     public String getUserNameFromJwtToken(String jwt) {

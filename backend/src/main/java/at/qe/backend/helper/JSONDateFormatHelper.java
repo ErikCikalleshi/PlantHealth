@@ -11,4 +11,6 @@ public class JSONDateFormatHelper {
         }
         return new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(date);
     }
+    private JSONDateFormatHelper() {
+    }
 }
