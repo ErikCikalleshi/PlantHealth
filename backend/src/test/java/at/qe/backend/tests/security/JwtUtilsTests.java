@@ -5,6 +5,7 @@ import at.qe.backend.configs.security.services.UserDetailsImpl;
 import at.qe.backend.models.Userx;
 import at.qe.backend.services.UserxService;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,13 +60,13 @@ public class JwtUtilsTests {
 
     @Test
     public void testValidateJwtTokenWithInvalidToken() {
-        assertThrows(MalformedJwtException.class, () -> jwtUtils.validateJwtToken("invalidToken"));
+        assertFalse(jwtUtils.validateJwtToken("invalidToken"));
     }
 
     @Test
     public void testValidateJwtTokenWithEmptyToken() {
-        assertThrows(IllegalArgumentException.class, () -> jwtUtils.validateJwtToken(null));
-        assertThrows(IllegalArgumentException.class, () -> jwtUtils.validateJwtToken(""));
+        assertFalse(jwtUtils.validateJwtToken(null));
+        assertFalse(jwtUtils.validateJwtToken(""));
     }
 
     @Test
@@ -74,7 +75,7 @@ public class JwtUtilsTests {
         String nonSignedToken = Jwts.builder().setSubject("admin").setIssuedAt(Date.from(issueTimestamp))
                 .setExpiration(Date.from(issueTimestamp.plus(10, ChronoUnit.HOURS)))
                 .compact();
-        assertThrows(UnsupportedJwtException.class, () -> jwtUtils.validateJwtToken(nonSignedToken));
+        assertFalse(jwtUtils.validateJwtToken(nonSignedToken));
     }
 
 
@@ -83,9 +84,9 @@ public class JwtUtilsTests {
         var issueTimestamp = Instant.now().minus(1, java.time.temporal.ChronoUnit.DAYS);
         String expiredToken = Jwts.builder().setSubject("admin").setIssuedAt(Date.from(issueTimestamp))
                 .setExpiration(Date.from(issueTimestamp.plus(10, ChronoUnit.HOURS)))
-                .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encode(accessSecret.getBytes(StandardCharsets.UTF_8)))
+                .signWith(Keys.hmacShaKeyFor(Base64.getEncoder().encode(accessSecret.getBytes(StandardCharsets.UTF_8))), SignatureAlgorithm.HS256)
                 .compact();
-        assertThrows(ExpiredJwtException.class, () -> jwtUtils.validateJwtToken(expiredToken));
+        assertFalse(jwtUtils.validateJwtToken(expiredToken));
     }
 
 
