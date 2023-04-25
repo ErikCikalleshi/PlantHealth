@@ -4,16 +4,20 @@ import at.qe.backend.models.Userx;
 import at.qe.backend.repositories.UserxRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
+@Scope("application")
 public class UserDetailsServiceImpl implements UserDetailsService {
-    @Autowired
-    UserxRepository userRepository;
 
+    private final UserxRepository userRepository;
+    public UserDetailsServiceImpl(UserxRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Transactional
     @Override
