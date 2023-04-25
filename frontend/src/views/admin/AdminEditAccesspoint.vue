@@ -51,10 +51,11 @@
                     </div>
                     <div class="mb-3 mt-6">
                         <span class="text-lg">Plants</span>
-                        <div v-if="displayBulkEdit" class="grid gap-6 grid-cols-2 w-1/4">
-                            <v-btn color="primary" @click="downloadQrCodes(itemsSelected)">Print Selected</v-btn>
+                        <div class="grid gap-3 grid-cols-3 w-1/3">
+                            <add-greenhouse-dialog-form :greenhouses="items" :access-point-id="accessPoint.id"/>
+                            <v-btn color="primary" @click="downloadQrCodes(itemsSelected)" :disabled="!displayBulkEdit" >Print Selected</v-btn>
                             <!--                            TODO open confirm dialog before deleting-->
-                            <v-btn color="error" @click="deleteDialog=true; itemToDelete = itemsSelected">Delete Selected</v-btn>
+                            <v-btn color="error" @click="deleteDialog=true; itemToDelete = itemsSelected" :disabled="!displayBulkEdit" >Delete Selected</v-btn>
                         </div>
                     </div>
 
@@ -117,6 +118,7 @@ import type {Header, Item} from "vue3-easy-data-table";
 import type IGreenhouse from "@/interfaces/IGreenhouse";
 import JSZip from "jszip";
 import QRCode from "qrcode";
+import AddGreenhouseDialogForm from "@/components/admin/add_greenhouse.vue";
 
 
 export default defineComponent({
@@ -130,9 +132,11 @@ export default defineComponent({
         return {
             deleteDialog: false,
             itemToDelete: null as Item | Item[] | null,
+            addNewGreenhouseDialog: false,
         };
     },
     components: {
+        AddGreenhouseDialogForm,
         headerComponent,
         footerComponent,
         mainContainer,
