@@ -8,8 +8,6 @@ INTERVAL: int = 1  # seconds
 
 
 def get_config(script_path):
-    current_dir = os.path.dirname(os.path.abspath(script_path))
-    sett = os.path.join(current_dir, "settings.json")
     settings = Settings()
 
     url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{1}"
@@ -20,9 +18,6 @@ def get_config(script_path):
         print("Error: 'api/setting/' API call failed")
         return
 
-    # if response.status_code != 200:
-    #     print("Error: 'api/setting/' API call failed")
-    #     return response.status_code
     data = response.json()
     current_dir = os.path.dirname(os.path.abspath(script_path))
     config_dir_path = os.path.join(current_dir, "config")
@@ -40,5 +35,5 @@ def get_config(script_path):
 # for debug purposes only
 if __name__ == "__main__":
     # NOTE: put your own IP address, port, admin and password
-    script_path = os.path.abspath(__file__)
-    get_config(script_path)
+    test_script_path = os.path.abspath(__file__)
+    get_config(test_script_path)

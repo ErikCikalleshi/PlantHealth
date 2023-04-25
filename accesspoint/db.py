@@ -3,28 +3,29 @@ import config
 import requests
 import os
 import json
+from Settings import Settings
 
 
 def connect_to_db():
-    settings = config.read_settings()
-    client = pymongo.MongoClient(settings["mongo"]["host"], settings["mongo"]["port"])
-    db = client[settings["mongo"]["database"]]
-    if settings["mongo"]["database"] not in client.list_database_names():
+    settings = Settings()
+    client = pymongo.MongoClient(settings.mongo_host, settings.mongo_port)
+    db = client[settings.mongo_database]
+    if settings.mongo_database not in client.list_database_names():
         print("Database does not exist. Creating...")
-        db = client[settings["mongo"]["database"]]
-        db.create_collection(settings["mongo"]["collection"])
+        db = client[settings.mongo_database]
+        db.create_collection(settings.mongo_collection)
     return db
 
 
 def write_to_document(descriptor, value):
-    settings = config.read_settings()
+    settings = Settings()
     db = connect_to_db()
     if db is None:
         print("ERROR: Could not connect to database")
         return
-    if settings["mongo"]["collection"] not in db.list_collection_names():
+    if settings.mongo_collection not in db.list_collection_names():
         print("Collection does not exist. Creating...")
-        db.create_collection(settings["mongo"]["collection"])
+        db.create_collection(settings.mongo_collection)
     collection = db[descriptor]
     # TODO: check if limits are exceeded
     # ___
@@ -44,12 +45,10 @@ if __name__ == "__main__":
     }
 
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    sett = os.path.join(current_dir, "settings.json")
 
-    settings = config.read_settings(sett)
-    admin = settings["auth"]["user"]
-    password = settings["auth"]["password"]
-    auth = (admin, password)
+    sett = Settings()
+
+    auth = sett.auth
 
     headers = {"Content-Type": "application/json"}
 
