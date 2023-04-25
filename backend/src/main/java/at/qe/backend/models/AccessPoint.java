@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -39,7 +40,7 @@ public class AccessPoint implements Serializable {
     @Column(nullable = false)
     private int transmissionIntervalSeconds;
     @OneToMany(mappedBy = "accesspoint", orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<Greenhouse> greenhouses=Set.of();
+    private Set<Greenhouse> greenhouses= new HashSet<>();
 
     private boolean published = false;
     private Date lastContact;

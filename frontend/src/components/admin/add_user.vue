@@ -13,30 +13,42 @@
                         <v-row>
                             <v-col cols="12" sm="6" md="4">
                                 <v-text-field label="Username*" required
-                                              :rules="[v => !!v || 'Item is required']"
+                                              :rules="textRules"
+                                              prepend-inner-icon="mdi-account-outline"
                                               v-model="newUser.username"/>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
                                 <v-text-field label="Firstname*" required
-                                              :rules="[v => !!v || 'Item is required']"
+                                              :rules="textRules"
                                               v-model="newUser.firstname"/>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
                                 <v-text-field label="Lastname*" required
-                                              :rules="[v => !!v || 'Item is required']"
+                                              :rules="textRules"
                                               v-model="newUser.lastname"/>
                             </v-col>
                             <v-col cols="12">
                                 <v-text-field label="Email*" required v-model="newUser.email"
-                                              :rules="[v => !!v || 'Item is required']"/>
+                                              prepend-inner-icon="mdi-email-outline"
+                                              :rules="emailRules"/>
                             </v-col>
                             <v-col cols="12" sm="6">
-                                <v-text-field label="Password*" type="password" required
-                                              v-model="password" :rules="passwordRules"/>
+                                <v-text-field label="Password*" required
+                                              prepend-inner-icon="mdi-lock-outline"
+                                              :append-inner-icon="visiblePassword ? 'mdi-eye-off' : 'mdi-eye'"
+                                              :type="visiblePassword ? 'text' : 'password'"
+                                              @click:append-inner="visiblePassword = !visiblePassword"
+                                              v-model="password" :rules="passwordRules"
+                                              autocomplete="new-password"/>
                             </v-col>
                             <v-col cols="12" sm="6">
-                                <v-text-field label="Confirm password*" type="password" required
-                                              v-model=" confirmPassword" :rules="confirmPasswordRules"/>
+                                <v-text-field label="Confirm password*" required
+                                              prepend-inner-icon="mdi-lock-outline"
+                                              :append-inner-icon="visibleConfirmPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                                              :type="visibleConfirmPassword ? 'text' : 'password'"
+                                              @click:append-inner="visibleConfirmPassword = !visibleConfirmPassword"
+                                              v-model=" confirmPassword" :rules="confirmPasswordRules"
+                                              autocomplete="new-password"/>
                             </v-col>
                             <v-col cols="12" sm="6">
                                 <v-select
@@ -48,6 +60,7 @@
                                         v-model="newUser.roles"
                                         multiple
                                         required
+                                        prepend-inner-icon="mdi-account-group-outline"
                                 ></v-select>
                             </v-col>
                         </v-row>
@@ -64,8 +77,16 @@
                     <v-btn color="primary" variant="flat" @click="addNewUser()">Save</v-btn>
                 </v-card-actions>
             </v-form>
+            <v-snackbar color="error" v-model="snackbar">Username or email already exists
+                <template v-slot:actions>
+                    <v-btn color="white" variant="text" @click="snackbar = false">
+                        Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
         </v-card>
     </v-dialog>
+
 </template>
 
 <script lang="ts">
@@ -87,6 +108,10 @@ export default defineComponent({
             addUserDialog: false,
             password: '',
             confirmPassword: '',
+            visiblePassword: false,
+            visibleConfirmPassword: false,
+            snackbar: false,
+
             newUser: {
                 firstname: '',
                 lastname: '',
@@ -95,6 +120,15 @@ export default defineComponent({
                 email: '',
                 roles: ['USER'],
             } as IUser,
+            textRules: [
+                (v: any) => !!v || 'required',
+                (v: any) => (v && v.length <= 20) || 'Max 20 characters',
+                (v: any) => !v.match(/^ *$/) || 'No spaces allowed'
+            ],
+            emailRules: [
+                (v: any) => !!v || 'required',
+                (v: any) => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v) || 'E-mail must be valid'
+            ],
             passwordRules: [
                 (v: any) => !!v || 'required',
                 (v: any) => (v && v.length >= 8) || 'Min 8 characters',
@@ -103,10 +137,11 @@ export default defineComponent({
                 (v: any) => (v && /[a-z]/.test(v)) || 'One lowercase letter required',
                 (v: any) => (v && /[0-9]/.test(v)) || 'One number required',
             ],
-            confirmPasswordRules:[
+            confirmPasswordRules: [
                 (v: any) => !!v || 'required',
-                (v:any) => v === this.password || 'Passwords must match'
-            ]
+                (v: any) => v === this.password || 'Passwords must match'
+            ],
+
         }
     },
     methods: {
@@ -130,13 +165,17 @@ export default defineComponent({
             const {valid} = await form.validate();
             if (valid) {
                 AdminUserService.createNewUser(this.newUser, this.password).then((response) => {
-                    if (response.status===201){
-                        const user:IUser = response.data;
-                        if (this.users){
+                    if (response.status === 201) {
+                        const user: IUser = response.data;
+                        if (this.users) {
                             this.users.push(user);
                         }
                         this.addUserDialog = false;
                         this.resetNewUser();
+                    }}).catch((error) => {
+                    if (error.response.status === 409) {
+                        console.log("Username or email already exists")
+                        this.snackbar = true;
                     }
                 })
             }

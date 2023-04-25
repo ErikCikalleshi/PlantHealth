@@ -2,11 +2,12 @@
     <v-card class="overflow-hidden shadow-xl border border-primary pa-3 font-primary">
         <div class="flex gap-3 pb-3">
             <header class="flex flex-col gap-2 w-full">
-                <div>
-                    <h3 class="no-underline text-black select-none font-semibold">
+                <div class="flex justify-between">
+                    <h3 class="no-underline text-black font-semibold">
                         {{ accessPoint.name }}
                     </h3>
-
+                    <v-icon icon="mdi-earth-off" color="error" v-if="!accessPoint.published"/>
+                    <v-icon icon="mdi-earth" color="primary" v-if="accessPoint.published"/>
                 </div>
                 <div class="flex flex-wrap gap-1 rounded">
                     <p class="border-[1.5px] rounded-full px-2 text-xs"
