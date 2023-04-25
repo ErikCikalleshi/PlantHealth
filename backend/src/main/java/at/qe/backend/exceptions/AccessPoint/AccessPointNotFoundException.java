@@ -1,4 +1,4 @@
-package at.qe.backend.api.exceptions;
+package at.qe.backend.exceptions.AccessPoint;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -11,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -42,8 +43,7 @@ public class Sensor implements Serializable {
     @JsonBackReference // exclude greenhouse from serialization
     private Greenhouse greenhouse;
     @OneToMany(mappedBy = "sensor", orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<Measurement> measurements=Set.of();
-
+    private Set<Measurement> measurements= new HashSet<>();
     public void addMeasurement(Measurement measurement){
         measurements.add(measurement);
     }

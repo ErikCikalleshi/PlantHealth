@@ -1,4 +1,4 @@
-package at.qe.backend.api.model.response;
+package at.qe.backend.models.response;
 
 import lombok.Getter;
 import lombok.Setter;

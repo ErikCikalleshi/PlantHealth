@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -39,9 +40,25 @@ public class AccessPoint implements Serializable {
     @Column(nullable = false)
     private int transmissionIntervalSeconds;
     @OneToMany(mappedBy = "accesspoint", orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<Greenhouse> greenhouses;
+    private Set<Greenhouse> greenhouses= new HashSet<>();
 
     private boolean published = false;
     private Date lastContact;
+
+
+    public String getStatus() {
+        if (lastContact == null) {
+            return "OFFLINE";
+        }
+        long diff = new Date().getTime() - lastContact.getTime();
+        if (diff > 1000L * getTransmissionIntervalSeconds()*2) {
+            //If last contact is more than 2x the transmission interval ago, we consider it offline
+            return "OFFLINE";
+        }
+        return "ONLINE";
+    }
+    public boolean isNew() {
+        return (null == createDate);
+    }
 
 }

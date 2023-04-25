@@ -3,17 +3,17 @@
         <header-component/>
         <main-container negative class="mb-10">
             <div class="flex center justify-space-between mb-10">
-                <page-heading class="text-white">Users</page-heading>
+                <page-heading class="text-white">Access Points</page-heading>
                 <div class="flex items-center">
                     <div class="ml-auto">
-                        <add-users-dialog-form :users="users"/>
+                        <add-access-point-dialog-form :accessPoints="accessPointList"/>
                     </div>
                     <div class="w-[220px]">
                         <v-text-field
                                 :loading="loading"
                                 density="compact"
                                 variant="solo"
-                                label="Search user"
+                                label="Search..."
                                 append-inner-icon="mdi-magnify"
                                 single-line
                                 hide-details
@@ -21,12 +21,12 @@
                                 @click:append-inner="loading = true;"
                         ></v-text-field>
                     </div>
-
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-4 gap-y-8">
-                <user_card v-for="user in userList" :key="user.username" :user="user"
-                           class="w-full" @confirm="deleteUser(user)"/>
+                <accessPoint_card v-for="accessPoint in accessPointList" :key="accessPoint.id"
+                                  :accessPoint="accessPoint"
+                                  class="w-full" @confirm="deleteAccessPoint(accessPoint)"/>
             </div>
         </main-container>
         <footer-component/>
@@ -35,28 +35,28 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import AdminUserService from "@/services/admin/AdminUserService";
+import AdminAccessPointService from "@/services/admin/AdminAccessPointService";
 import headerComponent from "@/components/general/header.vue";
 import footerComponent from "@/components/general/footer.vue";
 import mainContainer from "@/components/general/main_container.vue";
 import PageHeading from "@/components/general/PageHeading.vue";
-import type IUser from "@/interfaces/user/IUser";
-import user_card from "@/components/admin/user_card.vue";
-import AddUsersDialogForm from "@/components/admin/add_user.vue";
+import accessPoint_card from "@/components/admin/accessPoint_card.vue";
+import type IAccessPoint from "@/interfaces/IAccessPoint";
+import AddAccessPointDialogForm from "@/components/admin/add_accesspoint.vue";
 
 export default defineComponent({
-    name: "adminManageUsers",
+    name: "adminManageAccessPoints",
     components: {
-        AddUsersDialogForm,
+        AddAccessPointDialogForm,
         headerComponent,
         footerComponent,
         mainContainer,
         PageHeading,
-        user_card,
+        accessPoint_card,
     },
     data() {
         return {
-            users: [] as IUser[],
+            accessPoints: [] as IAccessPoint[],
             searchValue: '',
             isOpen: false,
             selectedRoles: [],
@@ -64,34 +64,35 @@ export default defineComponent({
         }
     },
     methods: {
-        getAllUsers() {
-            AdminUserService.getAllUsers().then((response) => {
-                this.users = response.data;
+        getAllAccessPoints() {
+            AdminAccessPointService.getAllAccessPoints().then((response) => {
+                this.accessPoints = response.data;
             })
+
         },
-        deleteUser(user: IUser | null) {
-            if (user == null) {
+        deleteAccessPoint(accessPoint: IAccessPoint | null) {
+            if (accessPoint == null) {
                 return;
             }
-            AdminUserService.deleteUser(user.username).then(() => {
-                this.users.splice(this.users.indexOf(user), 1);
+            AdminAccessPointService.deleteAccessPoint(accessPoint.id).then(() => {
+                this.accessPoints.splice(this.accessPoints.indexOf(accessPoint), 1);
             })
         },
     },
     computed: {
-        userList() {
+        accessPointList() {
             if (this.searchValue.trim().length > 0) {
-                return this.users.filter((user) => {
-                    return user.firstname.toLowerCase().includes(this.searchValue.toLowerCase()) ||
-                        user.lastname.toLowerCase().includes(this.searchValue.toLowerCase()) ||
-                        user.username.toLowerCase().includes(this.searchValue.toLowerCase())
+                return this.accessPoints.filter((accessPoints) => {
+                    return accessPoints.name.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+                        accessPoints.status.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+                        accessPoints.location.toLowerCase().includes(this.searchValue.toLowerCase())
                 })
             }
-            return this.users;
+            return this.accessPoints;
         }
     },
     created() {
-        this.getAllUsers()
+        this.getAllAccessPoints();
     }
 })
 </script>

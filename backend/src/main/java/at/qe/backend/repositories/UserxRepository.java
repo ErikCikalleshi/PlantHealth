@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import at.qe.backend.models.Userx;
 import at.qe.backend.models.UserRole;
+import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,4 +32,8 @@ public interface UserxRepository extends JpaRepository<Userx, Long> {
 
     @Query("SELECT u FROM Userx u WHERE :role MEMBER OF u.roles")
     List<Userx> findByRole(@Param("role") UserRole role);
+
+    Boolean existsByUsername(String username);
+    Boolean existsByEmail(String email);
+    Userx findByEmail(String email);
 }

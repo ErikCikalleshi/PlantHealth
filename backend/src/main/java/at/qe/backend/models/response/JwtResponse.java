@@ -1,4 +1,4 @@
-package at.qe.backend.api.model.response;
+package at.qe.backend.models.response;
 
 import at.qe.backend.models.UserRole;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package at.qe.backend.api.controllers;
 
-import at.qe.backend.api.exceptions.AccessPointNotFoundException;
-import at.qe.backend.api.exceptions.AccessPointNotPublishedException;
+import at.qe.backend.exceptions.AccessPoint.AccessPointNotFoundException;
+import at.qe.backend.exceptions.AccessPoint.AccessPointNotPublishedException;
 import at.qe.backend.api.model.dto.AccessPointSettingDTO;
 import at.qe.backend.api.services.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
