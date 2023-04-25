@@ -1,16 +1,16 @@
 package at.qe.backend.ui.controllers;
 
-import at.qe.backend.helper.JSONDateFormatHelper;
-import at.qe.backend.models.request.LoginRequest;
-import at.qe.backend.models.request.TokenRefreshRequest;
-import at.qe.backend.models.response.JwtResponse;
-import at.qe.backend.models.response.TokenRefreshResponse;
 import at.qe.backend.configs.security.jwt.JwtUtils;
 import at.qe.backend.configs.security.jwt.exception.TokenRefreshException;
 import at.qe.backend.configs.security.jwt.models.RefreshToken;
 import at.qe.backend.configs.security.jwt.services.RefreshTokenService;
 import at.qe.backend.configs.security.services.UserDetailsImpl;
+import at.qe.backend.helper.JSONDateFormatHelper;
 import at.qe.backend.models.Userx;
+import at.qe.backend.models.request.LoginRequest;
+import at.qe.backend.models.request.TokenRefreshRequest;
+import at.qe.backend.models.response.JwtResponse;
+import at.qe.backend.models.response.TokenRefreshResponse;
 import at.qe.backend.services.UserxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
