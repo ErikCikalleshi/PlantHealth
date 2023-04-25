@@ -17,7 +17,6 @@ def handle_data(sender, data):
     db.write_to_document_sensor(descriptor, value)
 
 
-
 # Define a function to connect to the sensor station and start reading data
 async def read_sensor_data():
     devices = await BleakScanner.discover(timeout=30.0)
@@ -32,7 +31,6 @@ async def read_sensor_data():
 
         client = BleakClient(device.address)
         await client.connect()
-
 
         for service in client.services:
             for characteristic in service.characteristics:
