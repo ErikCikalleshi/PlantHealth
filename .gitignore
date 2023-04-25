@@ -3,8 +3,9 @@ out/
 node_modules/
 node/
 backend/src/main/resources/public/index.html
-venv/
-config/
-.venv/
-__pycache__/
-accesspoint/settings.json
+/target/sonar/.sonar_lock
+/frontend/target/frontend-0.0.1-SNAPSHOT.jar
+/frontend/target/maven-archiver/pom.properties
+/target/sonar/report-task.txt
+/git-stats.sh
+/log/app.log
