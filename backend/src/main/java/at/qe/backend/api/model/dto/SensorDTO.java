@@ -1,19 +1,14 @@
 package at.qe.backend.api.model.dto;
 
+import at.qe.backend.models.Sensor;
 import at.qe.backend.models.SensorType;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * This Class represents a Sensor DataTransmissionObject that contains all the settings for one Sensor of a Greenhouse
  * Objects of this Class are always sent back as children of the AccessPointSettingDTO
  */
-@Getter
-@Setter
-public class SensorDTO {
-    private long greenhouseID;
-    private SensorType sensorType;
-    private double limitUpper;
-    private double limitLower;
-    private int limitThresholdMinutes;
+public record SensorDTO(long greenhouseID, SensorType sensorType, double limitUpper, double limitLower, int limitThresholdMinutes) {
+    public SensorDTO(Sensor sensor){
+        this(sensor.getGreenhouse().getUuid(), sensor.getSensorType(), sensor.getLimitUpper(), sensor.getLimitLower(), sensor.getLimitThresholdMinutes());
+    }
 }

@@ -11,6 +11,8 @@ import at.qe.backend.models.Sensor;
 import at.qe.backend.repositories.GreenhouseRepository;
 import at.qe.backend.repositories.MeasurementRepository;
 import at.qe.backend.repositories.SensorRepository;
+import at.qe.backend.services.GreenhouseService;
+import at.qe.backend.services.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +24,9 @@ import java.util.Date;
 @Service
 public class MeasurementService {
     @Autowired
-    private SensorRepository sensorRepository;
+    private SensorService sensorService;
     @Autowired
-    private GreenhouseRepository greenhouseRepository;
+    private GreenhouseService greenhouseService;
     @Autowired
     private MeasurementRepository measurementRepository;
 
@@ -36,17 +38,18 @@ public class MeasurementService {
      * @throws SensorNotFoundException The greenhouse doesn't have a sensor of provided type
      */
     public MeasurementDTO addMeasurement(MeasurementDTO measurementDTO) throws GreenhouseNotRegisteredException, SensorNotFoundException, AccessPointNotPublishedException, GreenhouseNotPublishedException {
-        Greenhouse greenhouse = greenhouseRepository.findFirstByIdInClusterAndAccesspoint_Uuid(measurementDTO.getGreenhouseID(), measurementDTO.getAccesspointUUID());
+        Greenhouse greenhouse = greenhouseService.loadGreenhouse(measurementDTO.getGreenhouseID(), measurementDTO.getAccesspointUUID());
         if (greenhouse == null) {
             throw new GreenhouseNotRegisteredException();
         }
+        greenhouseService.updateLastContact(greenhouse);
         if (!greenhouse.getAccesspoint().isPublished()){
             throw new AccessPointNotPublishedException();
         }
         if (!greenhouse.isPublished()){
             throw new GreenhouseNotPublishedException();
         }
-        Sensor sensor = sensorRepository.findFirstByGreenhouseAndSensorType(greenhouse, measurementDTO.getSensorType());
+        Sensor sensor = sensorService.loadSensor(greenhouse, measurementDTO.getSensorType());
         if (sensor == null) {
             throw new SensorNotFoundException();
         }
@@ -56,6 +59,7 @@ public class MeasurementService {
         measurement.setValue(measurementDTO.getValue());
         measurement.setSensor(sensor);
         measurement.setMeasurementDate(measurementDTO.getDate());
+        measurement.setLimitExceededBy(measurementDTO.getLimitExceededBy());
         measurement = measurementRepository.save(measurement);
         sensor.addMeasurement(measurement);
         return new MeasurementDTO(measurement);
