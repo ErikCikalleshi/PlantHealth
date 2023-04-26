@@ -1,6 +1,6 @@
-package at.qe.backend.api.controllers;
+package at.qe.backend.ui.controllers;
 
-import at.qe.backend.api.services.UploadImagesService;
+import at.qe.backend.services.UploadImagesService;
 import at.qe.backend.models.UploadImages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

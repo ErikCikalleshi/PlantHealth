@@ -1,6 +1,6 @@
-package at.qe.backend.api.controllers;
+package at.qe.backend.ui.controllers;
 
-import at.qe.backend.api.services.GreenhouseService;
+import at.qe.backend.services.GreenhouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

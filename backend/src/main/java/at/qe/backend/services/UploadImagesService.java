@@ -1,4 +1,4 @@
-package at.qe.backend.api.services;
+package at.qe.backend.services;
 
 import at.qe.backend.models.UploadImages;
 import at.qe.backend.repositories.GreenhouseRepository;
