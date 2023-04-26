@@ -42,6 +42,7 @@ public class MeasurementService {
         if (greenhouse == null) {
             throw new GreenhouseNotRegisteredException();
         }
+        greenhouseService.updateLastContact(greenhouse);
         if (!greenhouse.getAccesspoint().isPublished()){
             throw new AccessPointNotPublishedException();
         }

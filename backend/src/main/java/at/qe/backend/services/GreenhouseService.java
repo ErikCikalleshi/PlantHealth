@@ -78,4 +78,12 @@ public class GreenhouseService {
     public Greenhouse loadGreenhouse(long greenhouseID, long accesspointUUID) {
         return greenhouseRepository.findFirstByIdInClusterAndAccesspoint_Uuid(greenhouseID, accesspointUUID);
     }
+
+    public void updateLastContact(Greenhouse greenhouse){
+        Date lastContact = new Date();
+        greenhouse.setLastContact(lastContact);
+        greenhouse.getAccesspoint().setLastContact(lastContact);
+        greenhouseRepository.save(greenhouse);
+        accessPointService.saveAccessPoint(greenhouse.getAccesspoint());
+    }
 }
