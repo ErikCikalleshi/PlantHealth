@@ -47,4 +47,8 @@ public class Sensor implements Serializable {
     public void addMeasurement(Measurement measurement){
         measurements.add(measurement);
     }
+
+    public boolean isNew() {
+        return (null == createDate);
+    }
 }

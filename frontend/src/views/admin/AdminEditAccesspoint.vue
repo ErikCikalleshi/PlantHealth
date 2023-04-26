@@ -53,9 +53,13 @@
                         <span class="text-lg">Plants</span>
                         <div class="grid gap-3 grid-cols-3 w-1/3">
                             <add-greenhouse-dialog-form :greenhouses="items" :access-point-id="accessPoint.id"/>
-                            <v-btn color="primary" @click="downloadQrCodes(itemsSelected)" :disabled="!displayBulkEdit" >Print Selected</v-btn>
+                            <v-btn color="primary" @click="downloadQrCodes(itemsSelected)" :disabled="!displayBulkEdit">
+                                Print Selected
+                            </v-btn>
                             <!--                            TODO open confirm dialog before deleting-->
-                            <v-btn color="error" @click="deleteDialog=true; itemToDelete = itemsSelected" :disabled="!displayBulkEdit" >Delete Selected</v-btn>
+                            <v-btn color="error" @click="deleteDialog=true; itemToDelete = itemsSelected"
+                                   :disabled="!displayBulkEdit">Delete Selected
+                            </v-btn>
                         </div>
                     </div>
 
@@ -63,6 +67,7 @@
                         <EasyDataTable
                                 :loading="loading"
                                 :headers="headers"
+                                :key="items.length"
                                 :items="items"
                                 v-model:items-selected="itemsSelected"
                                 :alternating="true">
@@ -86,6 +91,7 @@
                             </template>
                         </EasyDataTable>
                     </div>
+                    <v-btn @click="test()">TEST</v-btn>
                     <v-dialog v-model="deleteDialog" width="auto">
                         <v-card class="font-primary" title="Confirm Delete"
                                 text="Are you sure you want to delete this plant? This cannot be undone.">
@@ -101,6 +107,7 @@
                     </v-dialog>
                 </div>
             </div>
+
         </main-container>
         <footer-component/>
     </v-app>
@@ -198,6 +205,9 @@ export default defineComponent({
         return {accessPoint, items, headers, loading, itemsSelected}
     },
     methods: {
+        test() {
+            console.log(this.items.length)
+        },
         updateAccessPoint(accessPoint: IAccessPoint) {
             AdminAccessPointService.updateAccessPoint(accessPoint).then((response) => {
                 this.accessPoint = response.data;
@@ -219,6 +229,9 @@ export default defineComponent({
             }
         },
         getColorByStatus(status: String) {
+            if (status==undefined){
+                return "status-offline";
+            }
             switch (status.toUpperCase()) {
                 case "OFFLINE":
                     return "status-offline"
