@@ -7,6 +7,7 @@ import os
 import json
 from Settings import Settings
 import logging
+import pandas as pd
 
 
 def connect_to_db():
@@ -34,16 +35,10 @@ def write_to_document_sensor(descriptor, value, sensor_type, greenhouse_id):
         print("Collection does not exist. Creating...")
         db.create_collection(settings.mongo_collection)
     collection = db[settings.mongo_collection]
-    #get from config/config.json
+    # get from config/config.json
     config_collection = db["config"]
     config = config_collection.find_one()
-    # for x in config:
-    #     if x == "sensorSettings":
-    #         for y in config[x]:
-    #             if y["sensorType"] == sensor_type:
-    #                 print(y)
-    #                 if value < y["limitUpper"] or value > y["limitUpper"]:
-    #                     logging.error("Value out of range")
+
     '''
     {
     "greenhouseID": 27,
@@ -62,26 +57,8 @@ def write_to_document_sensor(descriptor, value, sensor_type, greenhouse_id):
 
 
 if __name__ == "__main__":
-    write_to_document_sensor("Test", 23.0, "TEMPERATURE", 27)
-    # database = connect_to_db()
-    # print(database.name)
-    # url = "http://10.0.0.62:9000/api/measurements"
-    # payload = {
-    #     "greenhouseID": 27,
-    #     "accesspointUUID": 1,
-    #     "value": 23.0,
-    #     "sensorType": "TEMPERATURE",
-    #     "date": "2023-03-20 12:00",
-    # }
-    #
-    # current_dir = os.path.dirname(os.path.abspath(__file__))
-    #
-    # sett = Settings()
-    #
-    # auth = sett.auth
-    #
-    # headers = {"Content-Type": "application/json"}
-    #
-    # response = requests.post(url, headers=headers, auth=auth, data=json.dumps(payload))
-    #
-    # print(response.text)
+    # generate random data
+    import random
+
+    for i in range(100):
+        write_to_document_sensor("test", random.randint(20, 21), "TEMPERATURE", 27)
