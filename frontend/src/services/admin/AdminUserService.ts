@@ -17,6 +17,7 @@ class AdminUserService {
     async updateUser(user: IUser) {
         return await api.patch('admin/update-user/', JSON.parse(JSON.stringify(user)), {});
     }
+    
 
     createNewUser(newUser: IUser, password: string) {
         return api.post('admin/create-new-user/', {

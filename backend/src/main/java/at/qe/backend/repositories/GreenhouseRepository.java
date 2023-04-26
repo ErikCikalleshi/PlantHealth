@@ -1,5 +1,6 @@
 package at.qe.backend.repositories;
 
+import at.qe.backend.models.AccessPoint;
 import at.qe.backend.models.Greenhouse;
 
 import java.util.List;
@@ -9,4 +10,5 @@ public interface GreenhouseRepository extends AbstractRepository<Greenhouse, Lon
 
     Greenhouse findFirstByIdInClusterAndAccesspoint_Uuid(long idInCluster,long accesspoint_uuid);
     Optional<Greenhouse> findByUuid(long uuid);
+    int countGreenhouseByAccesspoint(AccessPoint accesspoint);
 }

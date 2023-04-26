@@ -44,12 +44,7 @@ public class SettingService {
         accessPointSettingDTO.setTransmissionIntervalSeconds(accessPoint.getTransmissionIntervalSeconds());
         ArrayList<SensorDTO> sensorSettings = new ArrayList<>();
         for (Sensor sensor : sensorRepository.findAllByGreenhouse_Accesspoint_Uuid(accessPoint.getUuid())) {
-            SensorDTO newSensorSetting = new SensorDTO();
-            newSensorSetting.setGreenhouseID(sensor.getGreenhouse().getIdInCluster());
-            newSensorSetting.setSensorType(sensor.getSensorType());
-            newSensorSetting.setLimitUpper(sensor.getLimitUpper());
-            newSensorSetting.setLimitLower(sensor.getLimitLower());
-            newSensorSetting.setLimitThresholdMinutes(sensor.getLimitThresholdMinutes());
+            SensorDTO newSensorSetting = new SensorDTO(sensor.getGreenhouse().getIdInCluster(), sensor.getSensorType(), sensor.getLimitUpper(), sensor.getLimitLower(), sensor.getLimitThresholdMinutes());
             sensorSettings.add(newSensorSetting);
         }
         accessPointSettingDTO.setSensorSettings(sensorSettings);

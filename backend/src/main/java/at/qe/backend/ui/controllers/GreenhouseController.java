@@ -1,0 +1,32 @@
+package at.qe.backend.ui.controllers;
+
+import at.qe.backend.models.dto.GreenhouseDTO;
+import at.qe.backend.models.request.CreateNewGreenhouseRequest;
+import at.qe.backend.services.GreenhouseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
+public class GreenhouseController {
+    @Autowired
+    private GreenhouseService greenhouseService;
+    record GreenhouseData(Long id, String name, String location, String description, String status){};
+
+    @GetMapping("/greenhouse/get")
+    public List<GreenhouseData> getAllGreenhouses() {
+        var greenhouses = greenhouseService.getAll();
+        return greenhouses.stream()
+                .map(greenhouse -> new GreenhouseData(greenhouse.getUuid(), greenhouse.getName(), greenhouse.getLocation(), greenhouse.getDescription(), greenhouse.getStatus()))
+                .toList();
+    }
+
+    @PostMapping("/admin/greenhouse/add")
+    @ResponseStatus(HttpStatus.CREATED)
+    public GreenhouseDTO addGreenhouse(@RequestBody CreateNewGreenhouseRequest request) {
+        return new GreenhouseDTO(greenhouseService.createGreenhouse(request));
+    }
+}
