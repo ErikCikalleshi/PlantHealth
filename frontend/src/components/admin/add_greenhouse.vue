@@ -3,29 +3,29 @@
         <template v-slot:activator="{ props }">
             <v-btn color="primary" v-bind="props">Add Plant</v-btn>
         </template>
-        <v-card>
-            <v-card-title>
-                <span class="text-xl">Add new Plant</span>
-            </v-card-title>
+        <v-card class="pa-5">
             <v-form ref="addUserForm">
+                <v-card-title>
+                    <span class="text-xl">Add new Plant</span>
+                </v-card-title>
                 <v-card-text>
-                    <v-container>
-                        <v-row>
-                            <v-col cols="12" sm="6" md="5">
-                                <v-text-field label="Name*" required
-                                              :rules="[v => !!v || 'Item is required']"
-                                              v-model="newGreenhouse.name"/>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="5">
-                                <v-text-field label="Location*" required
-                                              :rules="[v => !!v || 'Item is required']"
-                                              v-model="newGreenhouse.location"/>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="2">
-                                <v-select
+                    <!--                    <v-container>-->
+                    <v-row>
+                        <v-col cols="12" sm="6" md="5">
+                            <v-text-field label="Name*" required
+                                          :rules="[v => !!v || 'Item is required']"
+                                          v-model="newGreenhouse.name"/>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="5">
+                            <v-text-field label="Location*" required
+                                          :rules="[v => !!v || 'Item is required']"
+                                          v-model="newGreenhouse.location"/>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="2">
+                            <v-select
                                     v-if="gardeners.length > 0"
-                                        v-model="newGreenhouse.gardener"
-                                        :items="gardeners.map(gardener => ({
+                                    v-model="newGreenhouse.gardener"
+                                    :items="gardeners.map(gardener => ({
                                             firstname: gardener.firstname,
                                             lastname: gardener.lastname,
                                             gardener: {
@@ -33,31 +33,49 @@
                                               title: `${gardener.firstname} ${gardener.lastname}`
                                             }
                                           }))"
-                                        :rules="[v => !!v || 'Item is required']"
-                                        item-title="gardener.title"
-                                        item-text="gardener"
-                                        return-object
+                                    :rules="[v => !!v || 'Item is required']"
+                                    item-title="gardener.title"
+                                    item-text="gardener"
+                                    return-object
                                     label="Gardener"
 
-                                />
-                            </v-col>
-                            <v-col cols="12">
-                                <v-textarea label="Description"
-                                            v-model="newGreenhouse.description"
-                                />
-                            </v-col>
-                            <v-col cols="12">
-                                <v-checkbox label="Published" required
-                                            v-model="newGreenhouse.published"/>
-                            </v-col>
-                            <v-row>
-                                <v-col cols="6">
+                            />
+                        </v-col>
+                    </v-row>
+                    <v-row no-gutters>
+                        <v-col cols="12">
+                            <v-textarea label="Description"
+                                        v-model="newGreenhouse.description"
+                            />
+                        </v-col>
+                    </v-row>
+                    <v-row no-gutters>
+                        <v-col cols="12">
+                            <v-checkbox label="Published" required
+                                        v-model="newGreenhouse.published"/>
+                        </v-col>
+                    </v-row>
+                    <v-card-title>Sensors</v-card-title>
+                    <div class="flex grid-cols-6 gap-3 mb-5">
+                        <v-card v-for="sensor in newGreenhouse.sensors" class="w-full" :subtitle="sensor.sensorType">
+                            <!--                                <v-card-subtitle>-->
+                            <!--                                    <span class="text-sm">{{ sensor.sensorType }}</span>-->
+                            <!--                                </v-card-subtitle>-->
+                            <v-card-text>
+                                <v-text-field label="max val*" required :rules="[v => !!v || 'Item is required']"
+                                              v-model="sensor.limitUpper" :prefix="getUnitByType(sensor.sensorType)"/>
+                                <v-text-field label="min val*" required :rules="[v => !!v || 'Item is required']"
+                                              v-model="sensor.limitLower" :prefix="getUnitByType(sensor.sensorType)"/>
+                                <v-text-field label="notify after*" required :rules="[v => !!v || 'Item is required']"
+                                              v-model="sensor.limitThresholdMinutes" prefix="min"/>
+                            </v-card-text>
+                        </v-card>
+                    </div>
 
-                                </v-col>
-                            </v-row>
-                        </v-row>
-                    </v-container>
 
+                    <!--                    </v-container>-->
+
+                    <v-spacer/>
                     <small>*indicates required field</small>
                 </v-card-text>
                 <v-card-actions>
@@ -123,7 +141,7 @@ export default defineComponent({
             })
 
         },
-        getSensorsEmpty(){
+        getSensorsEmpty() {
             const sensorTypes = [
                 "AIR_PRESSURE",
                 "AIR_QUALITY",
@@ -140,6 +158,24 @@ export default defineComponent({
                 limitThresholdMinutes: null,
             }));
 
+        },
+        getUnitByType(type:string){
+            switch (type) {
+                case "AIR_PRESSURE":
+                    return "hPa";
+                case "AIR_QUALITY":
+                    return "%";
+                case "HUMIDITY_AIR":
+                    return "%";
+                case "HUMIDITY_DIRT":
+                    return "%";
+                case "LIGHT":
+                    return "lx";
+                case "TEMPERATURE":
+                    return "°C";
+                default:
+                    return "";
+            }
         },
         resetNewGreenhouse() {
             this.newGreenhouse = {

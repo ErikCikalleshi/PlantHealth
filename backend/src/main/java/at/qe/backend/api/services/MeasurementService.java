@@ -56,6 +56,7 @@ public class MeasurementService {
         measurement.setValue(measurementDTO.getValue());
         measurement.setSensor(sensor);
         measurement.setMeasurementDate(measurementDTO.getDate());
+        measurement.setLimitExceededBy(measurementDTO.getLimitExceededBy());
         measurement = measurementRepository.save(measurement);
         sensor.addMeasurement(measurement);
         return new MeasurementDTO(measurement);
