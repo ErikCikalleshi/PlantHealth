@@ -39,8 +39,7 @@ def write_to_document_sensor(descriptor, value, sensor_type, greenhouse_id):
     config_collection = db["config"]
     config = config_collection.find_one()
 
-    date = datetime.datetime.now()
-    date = date.strftime("%Y-%m-%d %H:%M")
+    date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
     collection.insert_one({"greenhouseID": greenhouse_id, "accesspointID": config["accessPointId"],
                            "value": value, "sensorType": sensor_type, "date": date})

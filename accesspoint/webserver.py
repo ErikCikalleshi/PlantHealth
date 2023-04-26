@@ -1,10 +1,11 @@
-import json
 import logging
 import requests
-import config
+import threading
 import db
 from Settings import Settings
 import pandas as pd
+import json
+import datetime
 
 
 def get_avg_measurements(database):
@@ -25,11 +26,28 @@ def get_avg_measurements(database):
         return
 
     df = pd.DataFrame(data)
-    avg = df.groupby('sensorType')['value'].mean()
 
-    print(avg)
+    sensor_types = df['sensorType'].unique()
 
-    return avg.to_dict()
+    json_arrays = []
+
+    for sensor_type in sensor_types:
+        subset = df[df['sensorType'] == sensor_type]
+        # iterate over all greenhouses
+        greenhouses = subset['greenhouseID'].unique()
+        for greenhouse in greenhouses:
+            subset = df[(df['sensorType'] == sensor_type) & (df['greenhouseID'] == greenhouse)]
+            avg = float(subset['value'].mean())
+
+            date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            data = {"greenhouseID": int(subset["greenhouseID"].iloc[0]),
+                    "accesspointUUID": int(subset["accesspointID"].iloc[0]),
+                    "value": avg,
+                    "sensorType": sensor_type,
+                    "date": date}
+            print(data)
+            json_arrays.append(json.dumps(data))
+    return data
 
 
 def send_measurements():
@@ -48,9 +66,16 @@ def send_measurements():
         logging.warning("Could not get average measurements")
         return
     headers = {"Content-Type": "application/json"}
-    response = requests.post(url, headers=headers, auth=settings.auth, json=avg_measurements)
+
+    auth = settings.auth
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.post(url, headers=headers, auth=auth, data=json.dumps(avg_measurements))
+
+    print(response.status_code)
     if response.status_code == 200:
-        logging.info("Measurements sent successfully")
+        logging.warning("Measurements sent successfully")
 
     # delete collection from db
     if database is None:
@@ -60,7 +85,10 @@ def send_measurements():
         logging.warning("Collection does not exist. Nothing to delete.")
         return
     collection = database[settings.mongo_collection]
-    collection.drop()
+    # empty collection
+    # collection.drop()
+    # threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
+    logging.warning("Collection deleted successfully. Timer started.")
 
 
 if __name__ == "__main__":

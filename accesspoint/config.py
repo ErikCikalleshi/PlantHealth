@@ -6,14 +6,14 @@ from Settings import Settings
 import db
 import logging
 
-INTERVAL: int = 20  # seconds
+INTERVAL: int = 5  # seconds
 
 
 def get_config(script_path):
     settings = Settings()
 
     url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{1}"
-    response = None
+
     try:
         response = requests.get(url, auth=settings.auth)
     except requests.exceptions.ConnectionError:
@@ -34,7 +34,7 @@ def get_config(script_path):
     collection.insert_one(data)
 
     threading.Timer(INTERVAL, get_config, args=[script_path]).start()
-    logging.info("'api/setting/' API call successful")
+    logging.warning("'api/setting/' API call successful")
 
 
 # for debug purposes only
