@@ -1,6 +1,7 @@
 import asyncio
 from bleak import BleakClient, BleakScanner
 import db
+import logging
 
 # Define the name of the sensor station you want to connect to
 SENSORSTATION_NAME = "sensorstationG2T4"
@@ -47,7 +48,7 @@ async def read_sensor_data():
         await client.disconnect()
 
     else:
-        print("Could not find sensor station with name ", SENSORSTATION_NAME)
+        logging.warning("Could not find sensor station with name ", SENSORSTATION_NAME)
 
 
 # Start reading data from the sensor station

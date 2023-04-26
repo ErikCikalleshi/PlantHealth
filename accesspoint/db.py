@@ -15,11 +15,11 @@ def connect_to_db():
     client = pymongo.MongoClient(settings.mongo_host, settings.mongo_port)
     db = client[settings.mongo_database]
     if settings.mongo_database not in client.list_database_names():
-        print("Database does not exist. Creating...")
+        logging.warning("Database does not exist. Creating...")
         db = client[settings.mongo_database]
         db.create_collection(settings.mongo_collection)
     if settings.mongo_collection not in db.list_collection_names():
-        print("Collection does not exist. Creating...")
+        logging.warning("Collection does not exist. Creating...")
         db.create_collection(settings.mongo_collection)
 
     return db
@@ -29,26 +29,16 @@ def write_to_document_sensor(descriptor, value, sensor_type, greenhouse_id):
     settings = Settings()
     db = connect_to_db()
     if db is None:
-        print("ERROR: Could not connect to database")
+        logging.error("Could not connect to database")
         return
     if settings.mongo_collection not in db.list_collection_names():
-        print("Collection does not exist. Creating...")
+        logging.warning("Collection does not exist. Creating...")
         db.create_collection(settings.mongo_collection)
     collection = db[settings.mongo_collection]
     # get from config/config.json
     config_collection = db["config"]
     config = config_collection.find_one()
 
-    '''
-    {
-    "greenhouseID": 27,
-    "accesspointID": 1,
-    "value": 23.0,
-    "sensorType": "TEMPERATURE",
-    "date": "2023-03-20 12:00"
-    }
-    '''
-    # crete actual time with this format 2023-03-20 12:00
     date = datetime.datetime.now()
     date = date.strftime("%Y-%m-%d %H:%M")
 

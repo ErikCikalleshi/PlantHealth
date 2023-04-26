@@ -6,21 +6,22 @@ import db
 from Settings import Settings
 import pandas as pd
 
+
 def get_avg_measurements(database):
     settings = Settings()
     if database is None:
-        print("ERROR: Could not connect to database")
+        logging.error("Could not connect to database")
         return
 
     if settings.mongo_collection not in database.list_collection_names():
-        print("Collection does not exist. Nothing to make average from.")
+        logging.warning("Collection does not exist. Nothing to make average from.")
         return
 
     collection = database[settings.mongo_collection]
 
     data = list(collection.find())
     if len(data) == 0:
-        print("Collection is empty. Nothing to make average from.")
+        logging.warning("Collection is empty. Nothing to make average from.")
         return
 
     df = pd.DataFrame(data)
@@ -44,7 +45,7 @@ def send_measurements():
 
     avg_measurements = get_avg_measurements(database)
     if avg_measurements is None:
-        logging.error("Could not get average measurements")
+        logging.warning("Could not get average measurements")
         return
     headers = {"Content-Type": "application/json"}
     response = requests.post(url, headers=headers, auth=settings.auth, json=avg_measurements)
@@ -53,10 +54,10 @@ def send_measurements():
 
     # delete collection from db
     if database is None:
-        print("ERROR: Could not connect to database")
+        logging.error("Could not connect to database")
         return
     if settings.mongo_collection not in database.list_collection_names():
-        print("Collection does not exist. Nothing to delete.")
+        logging.warning("Collection does not exist. Nothing to delete.")
         return
     collection = database[settings.mongo_collection]
     collection.drop()

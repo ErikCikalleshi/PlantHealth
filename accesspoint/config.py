@@ -4,6 +4,7 @@ import requests
 import os
 from Settings import Settings
 import db
+import logging
 
 INTERVAL: int = 20  # seconds
 
@@ -16,11 +17,11 @@ def get_config(script_path):
     try:
         response = requests.get(url, auth=settings.auth)
     except requests.exceptions.ConnectionError:
-        print("Error: 'api/setting/' API call failed")
+        logging.error("'api/setting/' API call failed")
         return
 
     if response.status_code != 200:
-        print("Error: 'api/setting/' API call failed")
+        logging.error("'api/setting/' API call failed")
         return
 
     data = response.json()
@@ -33,7 +34,7 @@ def get_config(script_path):
     collection.insert_one(data)
 
     threading.Timer(INTERVAL, get_config, args=[script_path]).start()
-    print("INFO: 'api/setting/' API call successful")
+    logging.info("'api/setting/' API call successful")
 
 
 # for debug purposes only
