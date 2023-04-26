@@ -49,9 +49,6 @@ public class UploadImagesService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "GreenhouseId is invalid.");
         }
         var imagesList = uploadImagesRepository.getAllUploadLinksByPlantId(id);
-        if(imagesList.size() < 1) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No images found.");
-        }
         return imagesList.stream().map(UploadImages::getUploadLink).collect(Collectors.toList());
     }
 
