@@ -51,7 +51,7 @@ INSERT INTO access_point(name, location, description, create_user_username, crea
 
 --Greenhouses
 --Greenhouses for Access Point 1
-INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (1, 'Basil', 'North wall', 'Small basil plants', 1, 'admin', NOW(), 2, TRUE);
+INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (1, 'Basil', 'North wall', 'Small basil plants', 1, 'admin', NOW(), 2, FALSE);
 INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (2, 'Mint', 'East wall', 'Small mint plants', 1, 'admin', NOW(), 3, TRUE);
 INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (3, 'Parsley', 'South wall', 'Small parsley plants', 1, 'admin', NOW(), 4, TRUE);
 INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (4, 'Chives', 'West wall', 'Small chives plants', 1, 'admin', NOW(), 5, TRUE);
