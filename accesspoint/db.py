@@ -50,4 +50,6 @@ if __name__ == "__main__":
     import random
 
     for i in range(100):
+        write_to_document_sensor("test", random.randint(20, 36), "LIGHT", 27)
         write_to_document_sensor("test", random.randint(20, 21), "TEMPERATURE", 27)
+

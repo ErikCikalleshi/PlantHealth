@@ -45,9 +45,9 @@ def get_avg_measurements(database):
                     "value": avg,
                     "sensorType": sensor_type,
                     "date": date}
-            print(data)
+
             json_arrays.append(json.dumps(data))
-    return data
+    return json_arrays
 
 
 def send_measurements():
@@ -70,12 +70,13 @@ def send_measurements():
     auth = settings.auth
 
     headers = {"Content-Type": "application/json"}
+    for avg_measurement in avg_measurements:
+        print(avg_measurement)
+        response = requests.post(url, headers=headers, auth=auth, data=avg_measurement)
+        print(response.status_code)
+        if response.status_code == 200:
+            logging.warning("Measurements sent successfully")
 
-    response = requests.post(url, headers=headers, auth=auth, data=json.dumps(avg_measurements))
-
-    print(response.status_code)
-    if response.status_code == 200:
-        logging.warning("Measurements sent successfully")
 
     # delete collection from db
     if database is None:
@@ -86,8 +87,8 @@ def send_measurements():
         return
     collection = database[settings.mongo_collection]
     # empty collection
-    # collection.drop()
-    # threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
+    collection.delete_many({})
+    threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
     logging.warning("Collection deleted successfully. Timer started.")
 
 
