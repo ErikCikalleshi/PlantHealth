@@ -1,4 +1,5 @@
 import type IUser from "@/interfaces/user/IUser";
+import type ISensor from "@/interfaces/ISensor";
 
 export default interface IGreenhouse {
     uuid: number;
@@ -10,4 +11,5 @@ export default interface IGreenhouse {
     lastContact: string;
     status: string;
     published: boolean;
+    sensors: ISensor[];
 }
