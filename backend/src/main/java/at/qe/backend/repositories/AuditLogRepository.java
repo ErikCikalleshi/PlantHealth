@@ -27,7 +27,4 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
 
     @Query("SELECT l FROM AuditLog l WHERE l.entityModified = :entity_modified")
     List <Userx> findEntityModified(@Param("entity_modified") String entity_modified);
-
-    @Query("SELECT l FROM AuditLog l WHERE l.timestamp = :timestamp")
-    List <Userx> findEntityModified(@Param("timestamp") Date timestamp);
 }
