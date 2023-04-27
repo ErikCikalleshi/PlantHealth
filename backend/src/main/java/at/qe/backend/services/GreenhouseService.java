@@ -1,6 +1,7 @@
 package at.qe.backend.services;
 
 import at.qe.backend.models.Greenhouse;
+import at.qe.backend.models.dto.GreenhouseDTO;
 import at.qe.backend.repositories.GreenhouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -94,11 +95,28 @@ public class GreenhouseService {
         return greenhouseRepository.findFirstByIdInClusterAndAccesspoint_Uuid(greenhouseID, accesspointUUID);
     }
 
+    public Greenhouse loadGreenhouse(long greenhouseUUID) {
+        return greenhouseRepository.findByUuid(greenhouseUUID).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid greenhouse id."));
+    }
+
+
     public void updateLastContact(Greenhouse greenhouse){
         Date lastContact = new Date();
         greenhouse.setLastContact(lastContact);
         greenhouse.getAccesspoint().setLastContact(lastContact);
         greenhouseRepository.save(greenhouse);
         accessPointService.saveAccessPoint(greenhouse.getAccesspoint());
+    }
+
+    public Greenhouse updateGreenhouse(GreenhouseDTO greenhouseDTO) {
+        Greenhouse greenhouse = loadGreenhouse(greenhouseDTO.uuid());
+        greenhouse.setName(greenhouseDTO.name());
+        greenhouse.setLocation(greenhouseDTO.location());
+        greenhouse.setDescription(greenhouseDTO.description());
+        greenhouse.setPublished(greenhouseDTO.published());
+        for (SensorDTO sensorDTO : greenhouseDTO.sensors()) {
+            sensorService.updateSensor(sensorDTO);
+        }
+        return saveGreenhouse(greenhouse);
     }
 }

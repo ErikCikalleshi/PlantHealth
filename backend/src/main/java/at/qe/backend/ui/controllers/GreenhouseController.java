@@ -26,6 +26,10 @@ public class GreenhouseController {
                 .map(greenhouse -> new GreenhouseData(greenhouse.getUuid(), greenhouse.getName(), greenhouse.getLocation(), greenhouse.getDescription(), greenhouse.getStatus()))
                 .toList();
     }
+    @GetMapping("/greenhouse/get/{id}")
+    public GreenhouseDTO getGreenhouseById(@PathVariable("id") Long id) {
+        return new GreenhouseDTO(greenhouseService.loadGreenhouse(id));
+    }
 
     @GetMapping("greenhouse/get-name/{id}")
     public String getGreenHouseNameById(@PathVariable("id") Long id) {
@@ -35,5 +39,12 @@ public class GreenhouseController {
     @ResponseStatus(HttpStatus.CREATED)
     public GreenhouseDTO addGreenhouse(@RequestBody CreateNewGreenhouseRequest request) {
         return new GreenhouseDTO(greenhouseService.createGreenhouse(request));
+    }
+
+
+
+    @PutMapping("/gardener/greenhouse/update")
+    public GreenhouseDTO updateGreenhouse(@RequestBody GreenhouseDTO greenhouseDTO) {
+        return new GreenhouseDTO(greenhouseService.updateGreenhouse(greenhouseDTO));
     }
 }

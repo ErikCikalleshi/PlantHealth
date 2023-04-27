@@ -1,5 +1,6 @@
 package at.qe.backend.services;
 
+import at.qe.backend.api.model.dto.SensorDTO;
 import at.qe.backend.models.Greenhouse;
 import at.qe.backend.models.Sensor;
 import at.qe.backend.models.SensorType;
@@ -51,6 +52,14 @@ public class SensorService {
         sensor.setLimitLower(limitLower);
         sensor.setLimitThresholdMinutes(limitThresholdMinutes);
         sensor.setGreenhouse(greenhouse);
+        return saveSensor(sensor);
+    }
+
+    public Sensor updateSensor(SensorDTO sensorDTO) {
+        Sensor sensor = loadSensor(sensorDTO.id());
+        sensor.setLimitUpper(sensorDTO.limitUpper());
+        sensor.setLimitLower(sensorDTO.limitLower());
+        sensor.setLimitThresholdMinutes(sensorDTO.limitThresholdMinutes());
         return saveSensor(sensor);
     }
 }
