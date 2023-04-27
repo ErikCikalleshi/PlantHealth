@@ -8,6 +8,15 @@
         </layout>
     </appender>
 
+    <appender name="FILE2" class="ch.qos.logback.core.FileAppender">
+        <file>log/warn.log</file>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} %-5level %logger{15} - %msg %n
+            </Pattern>
+        </layout>
+    </appender>
+
     <conversionRule conversionWord="highlight1" converterClass="at.qe.backend.helper.HighlightingCompositeConverterEx" />
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -17,11 +26,15 @@
         </encoder>
     </appender>
 
-    <logger name="at.qe.backend" level="info">
+    <logger name="at.qe.backend" level="debug">
         <appender-ref ref="FILE1" />
     </logger>
 
-    <root level="INFO">
+    <logger name="at.qe.backend" level="warn">
+        <appender-ref ref="FILE2" />
+    </logger>
+
+    <root level="DEBUG">
         <appender-ref ref="CONSOLE" />
     </root>
 
