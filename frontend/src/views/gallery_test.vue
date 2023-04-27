@@ -91,8 +91,8 @@ export default defineComponent({
         <header-component/>
         <main-container negative>
             <div class="flex justify-space-between mb-10">
-                <page-heading class="text-white">Gallery {{ greenHouseName }}</page-heading>
-                <div>
+                <page-heading class="text-white">Gallery — {{ greenHouseName }}</page-heading>
+                <div class="text-white">
                     <v-file-input type="file" label="Upload Image" ref="fileInput" @change="uploadImage" class="w-[190px]"
                                   color="primary"
                                   bg-color="primary"
@@ -100,8 +100,14 @@ export default defineComponent({
                     ></v-file-input>
                 </div>
             </div>
-            <div class="flex flex-wrap gap-3">
-                <img v-for="(imgUrl, index) in imgUrls" :key="index" :src="imgUrl" alt="refresh browser" referrerpolicy="no-referrer" />
+            <div class="flex flex-wrap gap-3 mb-10">
+                <img v-for="(imgUrl, index) in imgUrls" :key="index"
+                     :src="imgUrl"
+                     alt="refresh browser"
+                     referrerpolicy="no-referrer"
+                     width="350"
+                     height="350"
+                />
             </div>
         </main-container>
         <footer-component/>
@@ -110,7 +116,7 @@ export default defineComponent({
         <header-view presentation class="h-full">
             <div class="container mx-auto flex justify-space-between mb-10">
                 <page-heading class="text-white">Gallery {{ greenHouseName }}</page-heading>
-                <div>
+                <div class="text-white">
                     <v-file-input type="file" label="Upload Image" ref="fileInput" @change="uploadImage" class="w-[190px]"
                                   color="primary"
                                   bg-color="primary"
