@@ -28,7 +28,6 @@ public class UserxController {
     UserxService userxService;
     @Autowired
     AuditLogService auditLogService;
-    AuditLog auditLog = new AuditLog();
 
     /**
      * records are DTOs (Data Transfer Object) used to return only the fields we want back to the client
@@ -47,9 +46,7 @@ public class UserxController {
 
     @DeleteMapping("/admin/delete-user/{username}")
     public void deleteUserByUsername(@PathVariable String username) throws UserDoesNotExistException, LastAdminException {
-        auditLog.setAction("deleted");
-        auditLog.setEntityModified(username);
-        auditLogService.saveAuditLog(auditLog);
+        auditLogService.createNewAudit("delete", username);
         userxService.deleteUser(userxService.loadUser(username));
     }
 

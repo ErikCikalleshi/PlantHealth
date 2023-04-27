@@ -43,4 +43,11 @@ public class AuditLogService {
         return auditLogRepository.save(auditLog);
     }
 
+    public AuditLog createNewAudit(String action, String EntityModified) {
+        AuditLog auditLog = new AuditLog();
+        auditLog.setAction(action);
+        auditLog.setEntityModified(EntityModified);
+        return saveAuditLog(auditLog);
+    }
+
 }
