@@ -4,7 +4,7 @@
             <v-btn color="primary" v-bind="props">Add Plant</v-btn>
         </template>
         <v-card class="pa-5">
-            <v-form ref="addUserForm">
+            <v-form ref="addGreenhouseForm">
                 <v-card-title>
                     <span class="text-xl">Add new Plant</span>
                 </v-card-title>
@@ -34,23 +34,19 @@
                     </v-row>
                     <v-row no-gutters>
                         <v-col cols="12">
-                            <v-textarea label="Description"
-                                        v-model="newGreenhouse.description"
-                            />
+                            <v-textarea label="Description" v-model="newGreenhouse.description"                            />
                         </v-col>
                     </v-row>
-                    <v-row no-gutters>
+                    <v-row no-gutters class="-my-5">
                         <v-col cols="12">
-                            <v-checkbox label="Published" required
-                                        v-model="newGreenhouse.published"/>
+                            <v-checkbox label="Published" required v-model="newGreenhouse.published"/>
                         </v-col>
                     </v-row>
-                    <v-card-title>Sensors</v-card-title>
-                    <div class="flex grid-cols-6 gap-3 mb-5">
+                </v-card-text>
+                <v-card-title>Sensors</v-card-title>
+                <v-card-text>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3">
                         <v-card v-for="sensor in newGreenhouse.sensors" class="w-full" :subtitle="sensor.sensorType">
-                            <!--                                <v-card-subtitle>-->
-                            <!--                                    <span class="text-sm">{{ sensor.sensorType }}</span>-->
-                            <!--                                </v-card-subtitle>-->
                             <v-card-text>
                                 <v-text-field label="max val*" required :rules="[v => !!v || 'Item is required']"
                                               v-model="sensor.limitUpper" :prefix="getUnitByType(sensor.sensorType)"/>
@@ -61,10 +57,6 @@
                             </v-card-text>
                         </v-card>
                     </div>
-
-
-                    <!--                    </v-container>-->
-
                     <v-spacer/>
                     <small>*indicates required field</small>
                 </v-card-text>
@@ -89,9 +81,11 @@ import type IUser from "@/interfaces/user/IUser";
 import AdminUserService from "@/services/admin/AdminUserService";
 import AdminGreenhouseService from "@/services/admin/AdminGreenhouseService";
 import type {Item} from "vue3-easy-data-table";
+import LoadingOverlay from "@/components/general/loadingOverlay.vue";
 
 export default defineComponent({
     name: "addGreenhouseDialogForm",
+    components: {LoadingOverlay},
     props: {
         greenhouses: {
             type: Array<Item>,
@@ -125,15 +119,15 @@ export default defineComponent({
         getDisplayName(item: IUser) {
             return `${item.firstname} ${item.lastname}`;
         },
-        getAllGardeners() {
-            AdminUserService.getAllUsers().then((response) => {
+        async getAllGardeners() {
+            await AdminUserService.getAllUsers().then((response) => {
                 if (response.status === 200) {
                     const tmp: IUser[] = response.data;
                     this.gardeners = tmp.filter((user) => user.roles.includes('GARDENER'));
                     // this.newGreenhouse.gardener = this.gardeners[0];
                 }
             })
-
+            await new Promise(resolve => setTimeout(resolve, 1000));
         },
         getSensorsEmpty() {
             const sensorTypes = [
@@ -189,7 +183,7 @@ export default defineComponent({
             return !!v || 'Field is required'
         },
         async addNewGreenhouse() {
-            const form = this.$refs.addUserForm as { validate: () => Promise<{ valid: boolean }> };
+            const form = this.$refs.addGreenhouseForm as { validate: () => Promise<{ valid: boolean }> };
             const {valid} = await form.validate();
             if (valid) {
                 AdminGreenhouseService.addGreenhouseToAccessPoint(this.newGreenhouse, this.accessPointId).then((response) => {

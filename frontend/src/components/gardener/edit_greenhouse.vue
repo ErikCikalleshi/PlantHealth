@@ -3,21 +3,11 @@
         <template v-slot:activator="{ props }">
             <v-btn variant="plain" icon="mdi-pencil-outline" v-bind="props" @click="loading=true; init()"/>
         </template>
-        <v-card class="pa-5" :loading="loading">
-            <template slot="progress">
-                <v-overlay absolute class="d-flex flex-column text-center">
-                    <div>
-                        <v-progress-circular size="500" color="accent " :value="50" indeterminate>
-                            <span>Loading</span>
-                        </v-progress-circular>
-                    </div>
-                </v-overlay>
-            </template>
-
-
-            <v-form ref="addUserForm">
+        <v-card class="pa-5">
+            <loading-overlay :loading="loading"/>
+            <v-form ref="editGreenhouseForm">
                 <v-card-title>
-                    <span class="text-xl">Add new Plant</span>
+                    <span class="text-xl">Edit Plant</span>
                 </v-card-title>
                 <v-card-text>
                     <v-row>
@@ -38,26 +28,23 @@
                                     :item-title="getDisplayName"
                                     :rules="[v => !!v || 'Item is required']"
                                     label="Gardener"
-                                    return-object
-
-                            />
-                        </v-col>
-                    </v-row>
-                    <v-row no-gutters>
-                        <v-col cols="12" class="my-0">
-                            <v-textarea label="Description"
-                                        v-model="greenhouse.description"
-                            />
+                                    return-object/>
                         </v-col>
                     </v-row>
                     <v-row no-gutters>
                         <v-col cols="12">
-                            <v-checkbox label="Published" required
-                                        v-model="greenhouse.published"/>
+                            <v-textarea label="Description" v-model="greenhouse.description"/>
                         </v-col>
                     </v-row>
-                    <v-card-title>Sensors</v-card-title>
-                    <div class="flex grid-cols-6 gap-3 mb-5">
+                    <v-row no-gutters class="-my-5">
+                        <v-col cols="12">
+                            <v-checkbox label="Published" required v-model="greenhouse.published"/>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+                <v-card-title>Sensors</v-card-title>
+                <v-card-text>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3">
                         <v-card v-for="sensor in greenhouse.sensors" class="w-full" :subtitle="sensor.sensorType">
                             <v-card-text>
                                 <v-text-field label="max val*" required :rules="[v => !!v || 'Item is required']"
@@ -69,10 +56,6 @@
                             </v-card-text>
                         </v-card>
                     </div>
-
-
-                    <!--                    </v-container>-->
-
                     <small>*indicates required field</small>
                 </v-card-text>
                 <v-card-actions>
@@ -96,9 +79,11 @@ import type IUser from "@/interfaces/user/IUser";
 import AdminUserService from "@/services/admin/AdminUserService";
 import AdminGreenhouseService from "@/services/admin/AdminGreenhouseService";
 import type {Item} from "vue3-easy-data-table";
+import LoadingOverlay from "@/components/general/loadingOverlay.vue";
 
 export default defineComponent({
     name: "editGreenhouseDialogForm",
+    components: {LoadingOverlay},
     props: {
         greenhouseUUID: {
             type: Number,
@@ -138,11 +123,10 @@ export default defineComponent({
             })
         },
         async init() {
-            console.log(this.loading);
+            await new Promise(f => setTimeout(f, 1000));
             await this.getAllGardeners();
             await this.loadGreenhouse();
-            // this.loading= false;
-            console.log(this.loading);
+            this.loading = false;
         },
         getUnitByType(type: string) {
             switch (type) {
@@ -166,7 +150,7 @@ export default defineComponent({
             return !!v || 'Field is required'
         },
         async saveGreenhouse() {
-            const form = this.$refs.addUserForm as { validate: () => Promise<{ valid: boolean }> };
+            const form = this.$refs.editGreenhouseForm as { validate: () => Promise<{ valid: boolean }> };
             const {valid} = await form.validate();
             if (valid) {
                 AdminGreenhouseService.updateGreenhouse(this.greenhouse).then((response) => {
@@ -185,7 +169,7 @@ export default defineComponent({
                             greenhouseActions: ""
                         } as Item;
                         //replace item in greenhouses
-                        const itemInGreenhouses  = this.greenhouses.find((item) => item.greenhouseUUID === this.greenhouseUUID);
+                        const itemInGreenhouses = this.greenhouses.find((item) => item.greenhouseUUID === this.greenhouseUUID);
                         if (itemInGreenhouses !== undefined) {
                             this.greenhouses.splice(this.greenhouses.indexOf(itemInGreenhouses), 1, item);
                             this.editGreenhouseDialog = false;
@@ -195,8 +179,5 @@ export default defineComponent({
             }
         }
     },
-    created() {
-
-    }
 })
 </script>
