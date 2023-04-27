@@ -19,13 +19,13 @@ import java.util.List;
 @Repository
 public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
 
-    @Query("SELECT l FROM AuditLog l WHERE l.username_modifier = :username_modifier")
+    @Query("SELECT l FROM AuditLog l WHERE l.usernameModifier = :username_modifier")
     List <Userx> findAllLastModifiedBy(@Param("username_modifier") String username_modifier);
 
     @Query("SELECT l FROM AuditLog l WHERE l.action = :action")
     List <Userx> findByAction(@Param("action") String action);
 
-    @Query("SELECT l FROM AuditLog l WHERE l.entity_modified = :entity_modified")
+    @Query("SELECT l FROM AuditLog l WHERE l.entityModified = :entity_modified")
     List <Userx> findEntityModified(@Param("entity_modified") String entity_modified);
 
     @Query("SELECT l FROM AuditLog l WHERE l.timestamp = :timestamp")
