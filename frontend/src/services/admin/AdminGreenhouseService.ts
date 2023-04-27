@@ -11,6 +11,13 @@ class AdminGreenhouseService {
         });
     };
 
+    async getGreenhouse(greenhouseUUID: number) {
+        return await api.get('greenhouse/get/' + greenhouseUUID);
+    }
+
+    async updateGreenhouse(greenhouse: IGreenhouse) {
+        return await api.put('gardener/greenhouse/update', JSON.parse(JSON.stringify(greenhouse)));
+    }
 }
 
 export default new AdminGreenhouseService();
