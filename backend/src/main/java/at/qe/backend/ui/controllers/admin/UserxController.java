@@ -4,22 +4,18 @@ package at.qe.backend.ui.controllers.admin;
 import at.qe.backend.exceptions.Userx.LastAdminException;
 import at.qe.backend.exceptions.Userx.UserAlreadyExistsException;
 import at.qe.backend.exceptions.Userx.UserDoesNotExistException;
-import at.qe.backend.models.AuditLog;
 import at.qe.backend.models.Userx;
 import at.qe.backend.models.dto.UserDTO;
 import at.qe.backend.models.request.CreateNewUserRequest;
-import at.qe.backend.repositories.AuditLogRepository;
 import at.qe.backend.services.AuditLogService;
 import at.qe.backend.services.UserxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
@@ -69,6 +65,7 @@ public class UserxController {
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+        auditLogService.createNewAudit("update", userDTO.username());
         return new UserDTO(user);
     }
 
@@ -84,6 +81,7 @@ public class UserxController {
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+        auditLogService.createNewAudit("create", newUserRequest.newUser().username());
         return new UserDTO(user);
     }
 }
