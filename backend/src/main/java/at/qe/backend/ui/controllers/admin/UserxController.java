@@ -81,7 +81,6 @@ public class UserxController {
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        auditLogService.createNewAudit("create", newUserRequest.newUser().username());
         return new UserDTO(user);
     }
 }
