@@ -45,6 +45,7 @@ void setup() {
 
 // the loop function runs over and over again forever
 void loop() {
+  BLE.poll();
   unsigned int light;
   unsigned int moisture;
   int temperature;
@@ -96,7 +97,19 @@ void BLE_setup() {
   BLE.setDeviceName("SensorStation G2T4");
 
   BLE.setAdvertisedService(environmentalSensingService);
-  
+
+  BLEDescriptor temperatureDescriptor("2901", "Temperature in degrees Celsius");
+  temperatureCharacteristic.addDescriptor(temperatureDescriptor);
+
+  BLEDescriptor humidityDescriptor("2901", "Humidity in percent");
+  humidityCharacteristic.addDescriptor(humidityDescriptor);
+
+  BLEDescriptor pressureDescriptor("2901", "Pressure in hPa");
+  pressureCharacteristic.addDescriptor(pressureDescriptor);
+
+  BLEDescriptor vocDescriptor("2901", "Gas Resistance in kOhm");
+  vocCharacteristic.addDescriptor(vocDescriptor);
+
   environmentalSensingService.addCharacteristic(temperatureCharacteristic);
   environmentalSensingService.addCharacteristic(humidityCharacteristic);
   environmentalSensingService.addCharacteristic(pressureCharacteristic);
@@ -140,9 +153,9 @@ int read_air_sensor(int *temperature, int *humidity, int *pressure, int *gas_res
     return EXIT_FAILURE;
   }
 
-  *temperature = bme.temperature;
-  *humidity = bme.humidity;
-  *pressure = bme.pressure;
+  *temperature = bme.temperature * 100;
+  *humidity = bme.humidity * 100;
+  *pressure = bme.pressure * 10;
   *gas_resistance = bme.gas_resistance;
 
   // Update the BLE characteristics with the sensor values
