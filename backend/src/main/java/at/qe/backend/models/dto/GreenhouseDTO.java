@@ -1,6 +1,5 @@
 package at.qe.backend.models.dto;
 
-import at.qe.backend.api.model.dto.SensorDTO;
 import at.qe.backend.helper.JSONDateFormatHelper;
 import at.qe.backend.models.Greenhouse;
 

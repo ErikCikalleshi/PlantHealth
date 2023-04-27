@@ -9,16 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import at.qe.backend.api.model.dto.SensorDTO;
+import at.qe.backend.models.dto.SensorDTO;
 import at.qe.backend.models.AccessPoint;
-import at.qe.backend.models.Greenhouse;
 import at.qe.backend.models.Sensor;
 import at.qe.backend.models.Userx;
 import at.qe.backend.models.request.CreateNewGreenhouseRequest;
-import at.qe.backend.repositories.GreenhouseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 

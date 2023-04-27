@@ -1,17 +1,13 @@
 package at.qe.backend.services;
 
-import at.qe.backend.api.model.dto.SensorDTO;
+import at.qe.backend.models.dto.SensorDTO;
 import at.qe.backend.models.Greenhouse;
 import at.qe.backend.models.Sensor;
 import at.qe.backend.models.SensorType;
-import at.qe.backend.models.Userx;
 import at.qe.backend.repositories.SensorRepository;
-import at.qe.backend.repositories.UserxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
