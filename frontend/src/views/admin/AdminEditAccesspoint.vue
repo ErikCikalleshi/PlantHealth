@@ -85,13 +85,11 @@
                                            @click="downloadQrCode(item)"/>
                                     <v-btn variant="plain" color="error" icon="mdi-delete-outline"
                                            @click="deleteDialog=true; itemToDelete = item"/>
-                                    <v-btn variant="plain" icon="mdi-pencil-outline"
-                                           @click="$router.push({name:'edit-greenhouse', params:{greenhouseId: item.greenhouseId, accessPointId: accessPoint.id}})"/>
+                                    <edit-greenhouse-dialog-form :greenhouseUUID="item.greenhouseUUID" :greenhouses="items"/>
                                 </div>
                             </template>
                         </EasyDataTable>
                     </div>
-                    <v-btn @click="test()">TEST</v-btn>
                     <v-dialog v-model="deleteDialog" width="auto">
                         <v-card class="font-primary" title="Confirm Delete"
                                 text="Are you sure you want to delete this plant? This cannot be undone.">
@@ -126,6 +124,7 @@ import type IGreenhouse from "@/interfaces/IGreenhouse";
 import JSZip from "jszip";
 import QRCode from "qrcode";
 import AddGreenhouseDialogForm from "@/components/admin/add_greenhouse.vue";
+import EditGreenhouseDialogForm from "@/components/gardener/edit_greenhouse.vue";
 
 
 export default defineComponent({
@@ -143,6 +142,7 @@ export default defineComponent({
         };
     },
     components: {
+        EditGreenhouseDialogForm,
         AddGreenhouseDialogForm,
         headerComponent,
         footerComponent,
@@ -205,9 +205,6 @@ export default defineComponent({
         return {accessPoint, items, headers, loading, itemsSelected}
     },
     methods: {
-        test() {
-            console.log(this.items.length)
-        },
         updateAccessPoint(accessPoint: IAccessPoint) {
             AdminAccessPointService.updateAccessPoint(accessPoint).then((response) => {
                 this.accessPoint = response.data;

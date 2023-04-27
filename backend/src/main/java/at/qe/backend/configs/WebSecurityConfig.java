@@ -72,6 +72,7 @@ public class WebSecurityConfig {
                             .requestMatchers("/user/**").permitAll()
                             .requestMatchers("/refreshtoken/**").permitAll()
                             .requestMatchers("/admin/**").permitAll()
+                            .requestMatchers("/gardener/**").permitAll()
                             .requestMatchers("/upload/**").permitAll()
                             .requestMatchers("/greenhouse/**").permitAll()
                             .anyRequest().authenticated());
