@@ -10,6 +10,7 @@ import logging
 SENSORSTATION_NAME = "XHLN03H"
 INTERVAL = 30
 
+
 # Define a function to handle incoming data from the sensor station
 def handle_data(sender, data):
     print("Received data from sensor station: ", data)
@@ -19,7 +20,6 @@ def handle_data(sender, data):
     value = data[1]
     # write the data to the database
     db.write_to_document_sensor(descriptor, value)
-
 
 
 async def read_sensor_data():
@@ -36,9 +36,9 @@ async def read_sensor_data():
     while True:
         # Retrieve the latest configuration from the database
         config = config_collection.find_one()
-        data = pd.DataFrame(config["sensorSettings"])
-        sensor_stations: list = data["greenhouseID"].unique()
-
+        data = pd.DataFrame(config["greenhouses"])
+        sensor_stations: list = data["id"].unique()
+        # TODO: make a name convention for the sensor stations
         for name in sensor_stations:
             device = await BleakScanner.find_device_by_name(name)
             if device is None:
@@ -68,5 +68,3 @@ async def read_sensor_data():
 
 # Start reading data from the sensor station
 asyncio.run(read_sensor_data())
-
-

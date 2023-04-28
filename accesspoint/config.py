@@ -27,10 +27,9 @@ def get_config(script_path):
     data = response.json()
     # write to db the config
     database = db.connect_to_db()
-    # clear collection config
+    # clear collection config and insert new config
     collection = database["config"]
-    collection.drop()
-    # insert new config
+    collection.delete_many({})
     collection.insert_one(data)
 
     threading.Timer(INTERVAL, get_config, args=[script_path]).start()

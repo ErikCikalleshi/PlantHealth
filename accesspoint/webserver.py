@@ -38,13 +38,27 @@ def get_avg_measurements(database):
         for greenhouse in greenhouses:
             subset = df[(df['sensorType'] == sensor_type) & (df['greenhouseID'] == greenhouse)]
             avg = float(subset['value'].mean())
+            config = database["config"].find_one()
+            data = pd.DataFrame(config["greenhouses"])
+            sensors_greenhouse = pd.DataFrame(
+                pd.DataFrame(data[data["id"] == greenhouse]["sensors"]).iloc[0]['sensors'])
+            limit = (sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitUpper"].iloc[0],
+                     sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitLower"].iloc[0])
+
+            limit_exceeded_by = 0
+            if avg > limit[0]:
+                limit_exceeded_by = avg - limit[0]
+            elif avg < limit[1]:
+                limit_exceeded_by = limit[1] - avg
 
             date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
             data = {"greenhouseID": int(subset["greenhouseID"].iloc[0]),
                     "accesspointUUID": int(subset["accesspointID"].iloc[0]),
                     "value": avg,
                     "sensorType": sensor_type,
-                    "date": date}
+                    "date": date,
+                    "limitExceededBy": limit_exceeded_by,
+                    }
 
             json_arrays.append(json.dumps(data))
     return json_arrays
@@ -65,7 +79,6 @@ def send_measurements():
     if avg_measurements is None:
         logging.warning("Could not get average measurements")
         return
-    headers = {"Content-Type": "application/json"}
 
     auth = settings.auth
 
@@ -76,7 +89,6 @@ def send_measurements():
         print(response.status_code)
         if response.status_code == 200:
             logging.warning("Measurements sent successfully")
-
 
     # delete collection from db
     if database is None:
