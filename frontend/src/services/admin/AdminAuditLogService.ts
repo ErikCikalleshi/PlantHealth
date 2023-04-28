@@ -4,7 +4,10 @@ import type IAuditLog from "@/interfaces/IAuditLog";
 class AdminAuditLogService {
 
     async getAllAuditLogs() {
-        return await api.get('admin/get-all-audit-logs', {});
+        const result = await api.get('admin/get-all-audit-logs', {});
+        console.log("Debugging get All method")
+        console.log(result)
+        return result;
     }
 
     async getAuditLogsByAction(action: String) {

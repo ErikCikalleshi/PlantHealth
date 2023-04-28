@@ -3,5 +3,5 @@ export default interface IAuditLog {
     usernameModifier: string;
     entityModified: string;
     action: string;
-    timestamp: string;
+    timestamp: Date;
 }
