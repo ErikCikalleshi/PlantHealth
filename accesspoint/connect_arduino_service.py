@@ -1,11 +1,14 @@
 import asyncio
-from bleak import BleakClient, BleakScanner
+from asyncio import tasks
+
+import pandas as pd
+from bleak import BleakClient, BleakScanner, BleakError
 import db
 import logging
 
 # Define the name of the sensor station you want to connect to
-SENSORSTATION_NAME = "sensorstationG2T4"
-
+SENSORSTATION_NAME = "XHLN03H"
+INTERVAL = 30
 
 # Define a function to handle incoming data from the sensor station
 def handle_data(sender, data):
@@ -18,38 +21,52 @@ def handle_data(sender, data):
     db.write_to_document_sensor(descriptor, value)
 
 
-# Define a function to connect to the sensor station and start reading data
+
 async def read_sensor_data():
-    devices = await BleakScanner.discover(timeout=30.0)
+    """
+    Continuously reads data from sensor stations based on the latest configuration.
 
-    device = None
-    for device in devices:
-        if device.name == SENSORSTATION_NAME:
-            device = device
-            break
+    This function connects to sensor stations, starts data notifications, and continuously reads and handles incoming data.
+    It periodically checks the configuration document in the database for updates.
 
-    if device:
+    """
+    database = db.connect_to_db()
+    config_collection = database["config"]
 
-        client = BleakClient(device.address)
-        await client.connect()
+    while True:
+        # Retrieve the latest configuration from the database
+        config = config_collection.find_one()
+        data = pd.DataFrame(config["sensorSettings"])
+        sensor_stations: list = data["greenhouseID"].unique()
 
-        for service in client.services:
-            for characteristic in service.characteristics:
-                await client.start_notify(characteristic, handle_data)
+        for name in sensor_stations:
+            device = await BleakScanner.find_device_by_name(name)
+            if device is None:
+                print("ERROR: Could not find device with name {0}".format(name))
+                continue
 
-        # # Keep reading data until the user interrupts the program
-        # while True:
-        #     await asyncio.sleep(1)
+            async def read_single_sensor():
+                while True:
+                    try:
+                        async with BleakClient(device) as client:
+                            for service in client.services:
+                                for characteristic in service.characteristics:
+                                    await client.start_notify(characteristic, handle_data)
+                            while True:
+                                await asyncio.sleep(1)
+                    except BleakError:
+                        # Handle disconnection here
+                        # Wait for a while before attempting to reconnect
+                        await asyncio.sleep(5)
+                        # Cancel and close the task
+                        tasks.current_task().cancel()
 
-        # Stop notifications and disconnect from the device
-        for service in client.services:
-            for characteristic in service.characteristics:
-                await client.stop_notify(characteristic)
-        await client.disconnect()
+            tasks.create_task(read_single_sensor())
 
-    else:
-        logging.warning("Could not find sensor station with name ", SENSORSTATION_NAME)
+        await asyncio.sleep(INTERVAL)  # Wait for 30 seconds before checking again
 
 
 # Start reading data from the sensor station
 asyncio.run(read_sensor_data())
+
+
