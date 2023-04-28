@@ -3,7 +3,6 @@ package at.qe.backend.ui.controllers.admin;
 import at.qe.backend.models.AccessPoint;
 import at.qe.backend.models.dto.AccessPointDTO;
 import at.qe.backend.services.AccessPointService;
-import at.qe.backend.services.AuditLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +16,6 @@ public class AccessPointController {
     @Autowired
     private AccessPointService accessPointService;
 
-    @Autowired
-    AuditLogService auditLogService;
-
     @GetMapping("/admin/get-all-access-points")
     public List<AccessPointDTO> getAllAccessPoints() {
         List<AccessPoint> accessPoints = accessPointService.getAllAccessPoints();
@@ -30,7 +26,6 @@ public class AccessPointController {
     @DeleteMapping("/admin/delete-access-point/{uuid}")
     public void deleteAccessPointByUuid(@PathVariable String uuid) {
         accessPointService.deleteAccessPoint(accessPointService.loadAccessPoint(Long.parseLong(uuid)));
-        auditLogService.createNewAudit("delete", "accessPoint " + uuid);
     }
 
     @GetMapping("/admin/get-access-point/{uuid}")
@@ -41,13 +36,11 @@ public class AccessPointController {
     @DeleteMapping("/admin/delete-greenhouse-by-id-and-access-point-uuid/{greenhouseId}/{accessPointUuid}")
     public void deleteGreenhouseByIdAndAccessPointUuid(@PathVariable String greenhouseId, @PathVariable String accessPointUuid) {
         accessPointService.deleteGreenhouseByIdAndAccessPointUuid(Long.parseLong(greenhouseId), Long.parseLong(accessPointUuid));
-        auditLogService.createNewAudit("delete", "greenhouse " + greenhouseId + " from accessPoint" + accessPointUuid);
     }
 
     @PatchMapping("/admin/update-access-point/")
     public AccessPointDTO updateAccessPoint(@RequestBody AccessPointDTO accessPointDTO) {
         AccessPoint accessPoint = accessPointService.updateAccessPoint(accessPointDTO.id(),accessPointDTO.name(), accessPointDTO.location(), accessPointDTO.description(), accessPointDTO.transmissionInterval(), accessPointDTO.published());
-        auditLogService.createNewAudit("update", "accessPoint " + accessPointDTO.id());
         return new AccessPointDTO(accessPoint,true);
     }
 
@@ -55,7 +48,6 @@ public class AccessPointController {
     @ResponseStatus(HttpStatus.CREATED)
     public AccessPointDTO createNewAccessPoint(@RequestBody AccessPointDTO accessPointDTO) {
         AccessPoint accessPoint= accessPointService.createNewAccessPoint(accessPointDTO.name(), accessPointDTO.location(), accessPointDTO.description(), accessPointDTO.transmissionInterval(), accessPointDTO.published());
-        auditLogService.createNewAudit("create", "accessPoint " + accessPointDTO.id());
         return new AccessPointDTO(accessPoint);
     }
 }
