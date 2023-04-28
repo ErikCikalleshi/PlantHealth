@@ -5,35 +5,36 @@
       <div class="flex center justify-space-between mb-10">
         <page-heading class="text-white">Audit Logs</page-heading>
           <div class="flex items-center">
-            <div class="mx-2">
-              <v-text-field
-                  label="Filter by action"
+            <div class="w-[220px]">
+              <v-select
+                  label="Select"
+                  :items="['all', 'update', 'delete', 'create']"
                   v-model="filterAction"
                   @change="getAuditsByAction(filterAction)"
-              ></v-text-field>
+              ></v-select>
             </div>
-            <v-simple-table>
-              <template>
-                <thead>
-                <tr>
-                  <th class="text-left">ID</th>
-                  <th class="text-left">User</th>
-                  <th class="text-left">Action</th>
-                  <th class="text-left">Time</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="audit in auditsList" :key="audit.id">
-                  <td>{{ audit.id }}</td>
-                  <td>{{ audit.usernameModifier }}</td>
-                  <td>{{ audit.action }}</td>
-                  <td>{{ audit.timestamp }}</td>
-                </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
           </div>
         </div>
+      <v-simple-table>
+        <template>
+          <thead>
+          <tr>
+            <th class="text-left">ID</th>
+            <th class="text-left">User</th>
+            <th class="text-left">Action</th>
+            <th class="text-left">Time</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="audit in filteredAudits" :key="audit.id">
+            <td>{{ audit.id }}</td>
+            <td>{{ audit.usernameModifier }}</td>
+            <td>{{ audit.action }}</td>
+            <td>{{ audit.timestamp }}</td>
+          </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
     </main-container>
     <footer-component/>
   </v-app>
@@ -59,7 +60,7 @@ export default defineComponent({
   data() {
     return {
       audits: [] as IAuditLog[],
-      filterAction: '',
+      filterAction: 'all',
       loading: false,
     }
   },
@@ -69,15 +70,27 @@ export default defineComponent({
         this.audits = response.data;
       })
     },
-    getAuditsByAction(action: String) {
+    getAuditsByAction(action: string) {
       AdminAuditLogService.getAuditLogsByAction(action).then((response) => {
-        this.audits = response.data;
+        if (action == 'all') {
+          this.getAllAuditLogs();
+        } else  {
+          this.audits = response.data;
+        }
       })
       }
     },
+  computed: {
+    filteredAudits() {
+      if (this.filterAction === "all") {
+        return this.audits;
+      } else {
+        return this.audits.filter((audit) => audit.action === this.filterAction);
+      }
+    },
+  },
   created() {
     this.getAllAuditLogs();
-    this.getAuditsByAction(this.filterAction);
   },
   });
 </script>
