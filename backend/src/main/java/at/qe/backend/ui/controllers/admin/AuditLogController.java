@@ -3,7 +3,6 @@ package at.qe.backend.ui.controllers.admin;
 import at.qe.backend.models.AuditLog;
 import at.qe.backend.services.AuditLogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
