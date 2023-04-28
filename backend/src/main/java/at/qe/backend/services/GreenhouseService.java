@@ -33,14 +33,19 @@ public class GreenhouseService {
     @Autowired
     private SensorService sensorService;
 
+    @Autowired
+    private AuditLogService auditLogService;
+
     private Greenhouse saveGreenhouse(Greenhouse greenhouse) {
         if (greenhouse.isNew()) {
             greenhouse.setCreateDate(new Date());
             greenhouse.setCreateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
             greenhouse.setIdInCluster(greenhouseRepository.countGreenhouseByAccesspoint(greenhouse.getAccesspoint()) + 1);
+            auditLogService.createNewAudit("create", "greenhouse " + greenhouse.getUuid());
         } else {
             greenhouse.setUpdateDate(new Date());
             greenhouse.setUpdateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+            auditLogService.createNewAudit("update", "greenhouse " + greenhouse.getUuid());
         }
         greenhouse = greenhouseRepository.save(greenhouse);
         return greenhouse;

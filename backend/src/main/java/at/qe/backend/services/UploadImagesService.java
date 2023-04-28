@@ -22,6 +22,9 @@ public class UploadImagesService {
     @Autowired
     private UserxRepository userxRepository;
 
+    @Autowired
+    private AuditLogService auditLogService;
+
     public UploadImages create(Long plantId, String username, String uploadLink) {
         var greenHouse = greenhouseRepository.findByUuid(plantId).orElse(null);
         if(greenHouse == null) {
@@ -40,6 +43,7 @@ public class UploadImagesService {
         newImage.setUserId(user.getId());
         newImage.setUploadLink(uploadLink);
         uploadImagesRepository.save(newImage);
+        auditLogService.createNewAudit("create", "image " + newImage.getId());
         return newImage;
     }
 

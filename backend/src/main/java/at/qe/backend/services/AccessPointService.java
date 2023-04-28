@@ -24,6 +24,9 @@ public class AccessPointService {
     @Autowired
     private GreenhouseRepository greenhouseRepository;
 
+    @Autowired
+    private AuditLogService auditLogService;
+
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<AccessPoint> getAllAccessPoints() {
         return accessPointRepository.findAll();
@@ -32,6 +35,7 @@ public class AccessPointService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteAccessPoint(AccessPoint accessPoint) {
         accessPointRepository.delete(accessPoint);
+        auditLogService.createNewAudit("delete", "accesspoint " + accessPoint.getUuid());
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -44,9 +48,11 @@ public class AccessPointService {
         if (accessPoint.isNew()) {
             accessPoint.setCreateDate(new Date());
             accessPoint.setCreateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+            auditLogService.createNewAudit("create", "accesspoint " + accessPoint.getUuid());
         } else {
             accessPoint.setUpdateDate(new Date());
             accessPoint.setUpdateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+            auditLogService.createNewAudit("create", "accesspoint " + accessPoint.getUuid());
         }
         return accessPointRepository.save(accessPoint);
     }
@@ -60,6 +66,7 @@ public class AccessPointService {
             accessPoint.getGreenhouses().remove(greenhouse);
             greenhouseRepository.delete(greenhouse);
             accessPointRepository.save(accessPoint);
+            auditLogService.createNewAudit("delete", "greenhouse " + greenhouseId);
         }else {
             throw new IllegalArgumentException("Greenhouse with id " + greenhouseId + " not found in access point with uuid " + accessPointUuid);
         }
