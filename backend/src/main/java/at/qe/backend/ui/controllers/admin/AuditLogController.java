@@ -26,19 +26,9 @@ public class AuditLogController {
         return auditLogService.getAllAuditLogs();
     }
 
-    @GetMapping("/admin/lastModifiedBy/{username}")
-    public List<Userx> getAllLastModifiedBy(@PathVariable String username) {
-        return auditLogService.getAllLastModifiedBy(username);
-    }
-
     @GetMapping("/admin/action/{action}")
-    public List<Userx> getAuditLogsByAction(@PathVariable String action) {
+    public List<AuditLog> getAuditLogsByAction(@PathVariable String action) {
         return auditLogService.getAuditLogsByAction(action);
-    }
-
-    @GetMapping("/admin/entityModified/{entityModified}")
-    public List<Userx> getEntityModified(@PathVariable String entityModified) {
-        return auditLogService.getEntityModified(entityModified);
     }
 }
 

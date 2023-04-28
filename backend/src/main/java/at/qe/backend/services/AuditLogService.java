@@ -25,16 +25,9 @@ public class AuditLogService {
         return auditLogRepository.findAll();
     }
 
-    public List<Userx> getAllLastModifiedBy(String usernameModifier) {
-        return auditLogRepository.findAllLastModifiedBy(usernameModifier);
-    }
 
-    public List<Userx> getAuditLogsByAction(String action) {
-        return auditLogRepository.findByAction(action);
-    }
-
-    public List<Userx> getEntityModified(String entityModified) {
-        return auditLogRepository.findEntityModified(entityModified);
+    public List<AuditLog> getAuditLogsByAction(String action) {
+        return auditLogRepository.findAllByAction(action);
     }
 
     public AuditLog saveAuditLog(AuditLog auditLog) {
