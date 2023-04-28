@@ -25,7 +25,7 @@ const routes = [
     {path: '/dashboard/plants', component: PlantsView},
     {path: '/admin/access-points', name: 'manage-accessPoints', component: adminManageAccessPoints, meta: { roles: ['ADMIN'] }},
     {path: '/admin/access-points/edit/:apId', props: true, name: 'admin-edit-access-point', component: adminEditAccesspoint, meta: { roles: ['ADMIN'] }},
-    {path: '/admin/admin-audit-log', name: 'view-audit-logs', component: adminAuditLog, meta: { roles: ['ADMIN'] }},
+    {path: '/admin/audit-log', name: 'view-audit-logs', component: adminAuditLog, meta: { roles: ['ADMIN'] }},
     {path: '/404', component: NotFound},
     {path: '/403', component: Forbidden},
     {path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound },

@@ -8,7 +8,7 @@ class AdminAuditLogService {
     }
 
     async getAuditLogsByAction(action: String) {
-        return await api.get('/admin/get-audit-logs-by-action/{action}', {});
+        return await api.get('/admin/get-audit-logs-by-action/' + action, {});
     }
 }
 
