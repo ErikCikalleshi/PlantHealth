@@ -22,13 +22,11 @@ public class AuditLogService {
     }
 
     public List<AuditLog> getAllAuditLogs() {
-        System.out.println("getting AllAuditLogs Service");
         return auditLogRepository.findAll();
     }
 
 
     public List<AuditLog> getAuditLogsByAction(String action) {
-        System.out.println("getting findAllByAction Service");
         return auditLogRepository.findAllByAction(action);
     }
 

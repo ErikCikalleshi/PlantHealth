@@ -30,7 +30,7 @@
           {{ item.action }}
         </template>
         <template #item.timestamp="{ item }">
-          {{ item.timestamp }}
+          {{ format(new Date(item.timestamp), 'yyyy-MM-dd hh:mm:ss a') }}
         </template>
         </EasyDataTable>
     </main-container>
@@ -45,6 +45,7 @@ import headerComponent from "@/components/general/header.vue";
 import footerComponent from "@/components/general/footer.vue";
 import mainContainer from "@/components/general/main_container.vue";
 import PageHeading from "@/components/general/PageHeading.vue";
+import { format } from 'date-fns';
 import type IAuditLog from "@/interfaces/IAuditLog";
 
 export default defineComponent({
