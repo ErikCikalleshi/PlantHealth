@@ -6,11 +6,17 @@
 
 #define SEALEVELPRESSURE_HPA (1013.25)
 
-BLEService environmentalSensingService("181A");
-BLECharacteristic temperatureCharacteristic("2A6E", BLERead | BLENotify, 4);
-BLECharacteristic humidityCharacteristic("2A6F", BLERead | BLENotify, 4);
-BLECharacteristic pressureCharacteristic("2A6D", BLERead | BLENotify, 4);
-BLECharacteristic vocCharacteristic("FFD5", BLERead | BLENotify, 4);
+BLEService airSensorService("181A");
+BLEIntCharacteristic temperatureCharacteristic("2A6E", BLERead | BLENotify);
+BLEUnsignedIntCharacteristic humidityCharacteristic("2A6F", BLERead | BLENotify);
+BLEUnsignedIntCharacteristic pressureCharacteristic("2A6D", BLERead | BLENotify);
+BLECharacteristic vocCharacteristic("2BD3", BLERead | BLENotify, 4);
+
+BLEService lightSensorService("8444401e-ffb9-424d-9dc1-c2bc273b47b5");
+BLEIntCharacteristic lightIntensityCharacteristic("4ab3244f-d156-4e76-a329-6de917bdc8f9", BLERead | BLENotify);
+
+BLEService hygrometerService("f8cbfa9a-920e-4e31-ae5f-fca3b1cef4f7");
+BLEIntCharacteristic moistureCharacteristic("29c1083c-5166-433c-9b7c-98658c826968", BLERead | BLENotify);
 
 Adafruit_BME680 bme;
 int dipSwitchPins[] = {D10, D9, D8, D7, D6, D5, D4, D3};
@@ -96,25 +102,37 @@ void BLE_setup() {
   BLE.setLocalName("SensorStation G2T4");
   BLE.setDeviceName("SensorStation G2T4");
 
-  BLE.setAdvertisedService(environmentalSensingService);
+  BLE.setAdvertisedService(airSensorService);
 
-  BLEDescriptor temperatureDescriptor("2901", "Temperature in degrees Celsius");
+  BLEDescriptor temperatureDescriptor("2901", "Temperature in degrees Celsius * 100");
   temperatureCharacteristic.addDescriptor(temperatureDescriptor);
 
-  BLEDescriptor humidityDescriptor("2901", "Humidity in percent");
+  BLEDescriptor humidityDescriptor("2901", "Humidity between 0 (0%) and 10000 (100%)");
   humidityCharacteristic.addDescriptor(humidityDescriptor);
 
-  BLEDescriptor pressureDescriptor("2901", "Pressure in hPa");
+  BLEDescriptor pressureDescriptor("2901", "Pressure in dPa");
   pressureCharacteristic.addDescriptor(pressureDescriptor);
 
   BLEDescriptor vocDescriptor("2901", "Gas Resistance in kOhm");
   vocCharacteristic.addDescriptor(vocDescriptor);
 
-  environmentalSensingService.addCharacteristic(temperatureCharacteristic);
-  environmentalSensingService.addCharacteristic(humidityCharacteristic);
-  environmentalSensingService.addCharacteristic(pressureCharacteristic);
-  environmentalSensingService.addCharacteristic(vocCharacteristic);
-  BLE.addService(environmentalSensingService);
+  BLEDescriptor lightIntensityDescriptor("2901", "Light Intensity between 0 and 1023");
+  lightIntensityCharacteristic.addDescriptor(lightIntensityDescriptor);
+
+  BLEDescriptor moistureDescriptor("2901", "Moisture of Earth between 0 and 1023");
+  moistureCharacteristic.addDescriptor(moistureDescriptor);
+
+  airSensorService.addCharacteristic(temperatureCharacteristic);
+  airSensorService.addCharacteristic(humidityCharacteristic);
+  airSensorService.addCharacteristic(pressureCharacteristic);
+  airSensorService.addCharacteristic(vocCharacteristic);
+  BLE.addService(airSensorService);
+
+  lightSensorService.addCharacteristic(lightIntensityCharacteristic);
+  BLE.addService(lightSensorService);
+
+  hygrometerService.addCharacteristic(moistureCharacteristic);
+  BLE.addService(hygrometerService);
 
   BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
@@ -131,12 +149,14 @@ void BLE_setup() {
 
 void read_light_sensor(unsigned int *light) {
   *light = analogRead(A6);
+  lightIntensityCharacteristic.writeValue(*light);
   Serial.print("Light: ");
   Serial.println(*light);
 }
 
 void read_hygrometer(unsigned int *moisture) {
   *moisture = analogRead(A7);
+  moistureCharacteristic.writeValue(*moisture);
   Serial.print("Moisture: ");
   Serial.println(*moisture);
 }
@@ -159,21 +179,21 @@ int read_air_sensor(int *temperature, int *humidity, int *pressure, int *gas_res
   *gas_resistance = bme.gas_resistance;
 
   // Update the BLE characteristics with the sensor values
-  temperatureCharacteristic.writeValue((byte*)temperature, sizeof(*temperature));
-  humidityCharacteristic.writeValue((byte*)humidity, sizeof(*humidity));
-  pressureCharacteristic.writeValue((byte*)pressure, sizeof(*pressure));
+  temperatureCharacteristic.writeValue(*temperature);
+  humidityCharacteristic.writeValue(*humidity);
+  pressureCharacteristic.writeValue(*pressure);
   vocCharacteristic.writeValue((byte*)gas_resistance, sizeof(*gas_resistance));
 
   Serial.print(F("Temperature = "));
-  Serial.print(*temperature);
+  Serial.print(*temperature / 100.0);
   Serial.println(F(" *C"));
 
   Serial.print(F("Pressure = "));
-  Serial.print(*pressure / 100.0);
+  Serial.print(*pressure / 1000.0);
   Serial.println(F(" hPa"));
 
   Serial.print(F("Humidity = "));
-  Serial.print(*humidity);
+  Serial.print(*humidity / 100.0);
   Serial.println(F(" %"));
 
   Serial.print(F("Gas = "));
