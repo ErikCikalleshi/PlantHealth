@@ -13,7 +13,7 @@ import PlantsView from "@/views/PlantsView.vue";
 import authService from "@/services/auth.service";
 import TokenService from "@/services/token.service";
 import adminEditAccesspoint from "@/views/admin/AdminEditAccesspoint.vue";
-//import adminAuditLog from "@/views/admin/AdminAuditLog.vue";
+import adminAuditLog from "@/views/admin/AdminViewAuditLog.vue";
 
 const routes = [
     {path: '/', component: landingpage},
@@ -25,7 +25,7 @@ const routes = [
     {path: '/dashboard/plants', component: PlantsView},
     {path: '/admin/access-points', name: 'manage-accessPoints', component: adminManageAccessPoints, meta: { roles: ['ADMIN'] }},
     {path: '/admin/access-points/edit/:apId', props: true, name: 'admin-edit-access-point', component: adminEditAccesspoint, meta: { roles: ['ADMIN'] }},
-    //{path: '/admin/admin-audit-log', name: 'view-audit-logs', component: adminAuditLog, meta: { roles: ['ADMIN'] }},
+    {path: '/admin/admin-audit-log', name: 'view-audit-logs', component: adminAuditLog, meta: { roles: ['ADMIN'] }},
     {path: '/404', component: NotFound},
     {path: '/403', component: Forbidden},
     {path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound },
