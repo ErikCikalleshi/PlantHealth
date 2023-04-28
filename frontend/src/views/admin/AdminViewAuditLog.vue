@@ -15,26 +15,24 @@
             </div>
           </div>
         </div>
-      <v-simple-table>
-        <template>
-          <thead>
-          <tr>
-            <th class="text-left">ID</th>
-            <th class="text-left">User</th>
-            <th class="text-left">Action</th>
-            <th class="text-left">Time</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="audit in filteredAudits" :key="audit.id">
-            <td>{{ audit.id }}</td>
-            <td>{{ audit.usernameModifier }}</td>
-            <td>{{ audit.action }}</td>
-            <td>{{ audit.timestamp }}</td>
-          </tr>
-          </tbody>
+      <EasyDataTable
+          :loading="loading"
+          :headers="headers"
+          :items="filteredAudits"
+          :alternating="true">
+        <template #item.id="{ item }">
+          {{ item.id }}
         </template>
-      </v-simple-table>
+        <template #item.usernameModifier="{ item }">
+          {{ item.usernameModifier }}
+        </template>
+        <template #item.action="{ item }">
+          {{ item.action }}
+        </template>
+        <template #item.timestamp="{ item }">
+          {{ item.timestamp }}
+        </template>
+        </EasyDataTable>
     </main-container>
     <footer-component/>
   </v-app>
@@ -62,6 +60,13 @@ export default defineComponent({
       audits: [] as IAuditLog[],
       filterAction: 'all',
       loading: false,
+      headers: [
+        { text: 'ID', value: 'id' },
+        { text: 'Action', value: 'action' },
+        { text: 'Modified', value: 'entityModified' },
+        { text: 'User', value: 'usernameModifier' },
+        { text: 'Time', value: 'timestamp' },
+      ],
     }
   },
   methods: {
