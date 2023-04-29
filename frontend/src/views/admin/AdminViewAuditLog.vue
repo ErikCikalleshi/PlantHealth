@@ -42,7 +42,7 @@
           {{ item.success }}
         </template>
 
-        </EasyDataTable>
+      </EasyDataTable>
     </main-container>
     <footer-component class="mt-auto"/>
   </v-app>
