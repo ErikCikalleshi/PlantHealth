@@ -42,6 +42,7 @@ public class UserxController {
 
     @DeleteMapping("/admin/delete-user/{username}")
     public void deleteUserByUsername(@PathVariable String username) throws UserDoesNotExistException, LastAdminException {
+        auditLogService.createNewAudit("delete", Long.toString(userxService.loadUser(username).getId()), "user", true);
         userxService.deleteUser(userxService.loadUser(username));
     }
 
