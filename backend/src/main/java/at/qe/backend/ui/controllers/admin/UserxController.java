@@ -42,8 +42,16 @@ public class UserxController {
 
     @DeleteMapping("/admin/delete-user/{username}")
     public void deleteUserByUsername(@PathVariable String username) throws UserDoesNotExistException, LastAdminException {
-        auditLogService.createNewAudit("delete", Long.toString(userxService.loadUser(username).getId()), "user", true);
-        userxService.deleteUser(userxService.loadUser(username));
+        try {
+            userxService.deleteUser(userxService.loadUser(username));
+            auditLogService.createNewAudit("delete", "NA", "user", true);
+        }
+        catch (UserDoesNotExistException e) {
+            auditLogService.createNewAudit("delete", "NA", "user", false);
+        }
+        catch (LastAdminException e) {
+            auditLogService.createNewAudit("delete", "NA", "user", false);
+        }
     }
 
     @GetMapping("/admin/get-single-user/{username}")
@@ -72,16 +80,23 @@ public class UserxController {
     @PostMapping("/admin/create-new-user/")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO createUser(@RequestBody CreateNewUserRequest newUserRequest) throws UserAlreadyExistsException {
-        Userx user = userxService.createUser(newUserRequest.newUser().username(),
-                newUserRequest.newUser().firstname(),
-                newUserRequest.newUser().lastname(),
-                newUserRequest.newUser().email(),
-                newUserRequest.newUser().roles(),
-                newUserRequest.password());
-        if (user == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        try {
+            Userx user = userxService.createUser(newUserRequest.newUser().username(),
+                    newUserRequest.newUser().firstname(),
+                    newUserRequest.newUser().lastname(),
+                    newUserRequest.newUser().email(),
+                    newUserRequest.newUser().roles(),
+                    newUserRequest.password());
+            auditLogService.createNewAudit("create", Long.toString(user.getId()), "user", true);
+            if (user == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+
+            return new UserDTO(user);
         }
-        auditLogService.createNewAudit("create", Long.toString(user.getId()), "user", true);
-        return new UserDTO(user);
+        catch (UserAlreadyExistsException e) {
+            auditLogService.createNewAudit("create", "NA", "user", false);
+        }
+        return null;
     }
 }

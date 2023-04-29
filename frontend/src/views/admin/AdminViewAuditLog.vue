@@ -24,7 +24,7 @@
           {{ item.id }}
         </template>
         <template #item.date="{ item }">
-          {{item.date}}
+          {{ item.date }}
         </template>
         <template #item.user="{ item }">
           {{ item.user }}
@@ -44,7 +44,7 @@
 
         </EasyDataTable>
     </main-container>
-    <footer-component/>
+    <footer-component class="mt-auto"/>
   </v-app>
 </template>
 
@@ -55,7 +55,7 @@ import headerComponent from "@/components/general/header.vue";
 import footerComponent from "@/components/general/footer.vue";
 import mainContainer from "@/components/general/main_container.vue";
 import PageHeading from "@/components/general/PageHeading.vue";
-//import { format } from 'date-fns';
+import { format } from 'date-fns';
 import type IAuditLog from "@/interfaces/IAuditLog";
 
 export default defineComponent({
@@ -92,11 +92,14 @@ export default defineComponent({
       AdminAuditLogService.getAuditLogsByAction(action).then((response) => {
         if (action == 'all') {
           this.getAllAuditLogs();
-        } else  {
+        } else {
           this.audits = response.data;
         }
       })
-      }
+    },
+    formatAuditDate(date: Date) {
+      return format(new Date(date), 'dd/MM/yyyy HH:mm:ss');
+    },
     },
   computed: {
     filteredAudits() {
