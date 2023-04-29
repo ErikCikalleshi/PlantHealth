@@ -11,7 +11,7 @@
                 <dashboard_button v-if="isAdmin" title="Audit Log" icon="mdi-shield-lock" description="View audit logs"/>
                 <dashboard_button title="All Plants" icon="mdi-sprout" description="View all plants" @click="$router.push('/dashboard/plants')"/>
                 <dashboard_button v-if="isAdmin" title="Access Points" icon="mdi-raspberry-pi" description="View and Manage all access points" @click="$router.push({name:'manage-accessPoints'})"/>
-                <dashboard_button v-if="isGardener" title="My Plants" icon="mdi-sprout-outline" description="View and manage my plants"/>
+                <dashboard_button v-if="isGardener" title="My Plants" icon="mdi-sprout-outline" description="View and manage my plants"  @click="$router.push('/dashboard/my_plants')"/>
             </div>
         </main-container>
         <footer-component/>
