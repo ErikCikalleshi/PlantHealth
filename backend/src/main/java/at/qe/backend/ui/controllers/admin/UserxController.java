@@ -7,6 +7,7 @@ import at.qe.backend.exceptions.Userx.UserDoesNotExistException;
 import at.qe.backend.models.Userx;
 import at.qe.backend.models.dto.UserDTO;
 import at.qe.backend.models.request.CreateNewUserRequest;
+import at.qe.backend.services.AuditLogService;
 import at.qe.backend.services.UserxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,8 @@ import java.util.Collection;
 public class UserxController {
     @Autowired
     UserxService userxService;
+    @Autowired
+    AuditLogService auditLogService;
 
     /**
      * records are DTOs (Data Transfer Object) used to return only the fields we want back to the client
