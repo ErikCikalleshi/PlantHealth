@@ -62,10 +62,8 @@ public class UserxController {
                 userDTO.email(),
                 userDTO.roles());
         if (user == null) {
-            auditLogService.createNewAudit("update", Long.toString(user.getId()), "user", false);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        auditLogService.createNewAudit("update", Long.toString(user.getId()), "user", true);
         return new UserDTO(user);
     }
 
@@ -81,7 +79,6 @@ public class UserxController {
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        auditLogService.createNewAudit("create", Long.toString(user.getId()), "user", true);
         return new UserDTO(user);
     }
 }
