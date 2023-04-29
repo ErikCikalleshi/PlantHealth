@@ -71,11 +71,9 @@ public class UserxService {
         if (user.isNew()) {
             user.setCreateDate(new Date());
             user.setCreateUserUsername(getAuthenticatedUsername());
-            auditLogService.createNewAudit("create", Long.toString(user.getId()), "user", true);
         } else {
             user.setUpdateDate(new Date());
             user.setUpdateUserUsername(getAuthenticatedUsername());
-            auditLogService.createNewAudit("update", Long.toString(user.getId()), "user", true);
         }
         user = userRepository.save(user);
         return user;

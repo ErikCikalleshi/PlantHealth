@@ -1,7 +1,15 @@
 export default interface IAuditLog {
     id: number;
-    usernameModifier: string;
-    entityModified: string;
+
+    date: Date;
+
+    user: string;
+
     action: string;
-    timestamp: Date;
+
+    targetID: string;
+
+    targetType: string;
+
+    success: boolean;
 }

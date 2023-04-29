@@ -40,9 +40,8 @@ public class AuditLogService {
         AuditLog auditLog = new AuditLog();
         auditLog.setAction(action);
         auditLog.setTargetID(targetID);
-        auditLog.setTargetID(targetType);
+        auditLog.setTargetType(targetType);
         auditLog.setSuccess(success);
         return saveAuditLog(auditLog);
     }
-
 }

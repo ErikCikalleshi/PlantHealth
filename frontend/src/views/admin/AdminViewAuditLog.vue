@@ -23,15 +23,25 @@
         <template #item.id="{ item }">
           {{ item.id }}
         </template>
-        <template #item.usernameModifier="{ item }">
-          {{ item.usernameModifier }}
+        <template #item.date="{ item }">
+          {{item.date}}
+        </template>
+        <template #item.user="{ item }">
+          {{ item.user }}
         </template>
         <template #item.action="{ item }">
           {{ item.action }}
         </template>
-        <template #item.timestamp="{ item }">
-          {{item.timestamp}}
+        <template #item.targetID="{ item }">
+          {{ item.targetID }}
         </template>
+        <template #item.targetType="{ item }">
+          {{ item.targetType }}
+        </template>
+        <template #item.success="{ item }">
+          {{ item.success }}
+        </template>
+
         </EasyDataTable>
     </main-container>
     <footer-component/>
@@ -63,10 +73,12 @@ export default defineComponent({
       loading: false,
       headers: [
         { text: 'ID', value: 'id' },
+        { text: 'Date', value: 'date' },
+        { text: 'User', value: 'user' },
         { text: 'Action', value: 'action' },
-        { text: 'Modified', value: 'entityModified' },
-        { text: 'User', value: 'usernameModifier' },
-        { text: 'Time', value: 'timestamp' },
+        { text: 'TargetID', value: 'targetID' },
+        { text: 'TargetType', value: 'targetType' },
+        { text: 'Success', value: 'success' },
       ],
     }
   },
