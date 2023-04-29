@@ -14,7 +14,7 @@
                 <dashboard_button v-if="isGardener" title="My Plants" icon="mdi-sprout-outline" description="View and manage my plants"/>
             </div>
         </main-container>
-        <footer-component/>
+        <footer-component class="mt-auto" />
     </v-app>
 </template>
 

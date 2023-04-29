@@ -15,34 +15,24 @@
             </div>
           </div>
         </div>
-      <EasyDataTable
-          :loading="loading"
-          :headers="headers"
-          :items="filteredAudits"
-          :alternating="true">
-        <template #item.id="{ item }">
-          {{ item.id }}
-        </template>
-        <template #item.date="{ item }">
-          {{ item.date }}
-        </template>
-        <template #item.user="{ item }">
-          {{ item.user }}
-        </template>
-        <template #item.action="{ item }">
-          {{ item.action }}
-        </template>
-        <template #item.targetID="{ item }">
-          {{ item.targetID }}
-        </template>
-        <template #item.targetType="{ item }">
-          {{ item.targetType }}
-        </template>
-        <template #item.success="{ item }">
-          {{ item.success }}
-        </template>
-
-      </EasyDataTable>
+      <div class="table-wrapper ">
+      <table>
+        <tr>
+          <th v-for="item in this.headers" :key="item.text">
+            {{ item.text }}
+          </th>
+        </tr>
+      <tr v-for="item in filteredAudits" :key="item.id">
+        <td> {{ item.id }} </td>
+        <td> {{ formatAuditDate(item.date) }} </td>
+        <td> {{ item.user }} </td>
+        <td> {{ item.action }} </td>
+        <td> {{ item.targetID }} </td>
+        <td> {{ item.targetType }} </td>
+        <td> {{ item.success }} </td>
+      </tr>
+      </table>
+      </div>
     </main-container>
     <footer-component class="mt-auto"/>
   </v-app>
@@ -83,6 +73,7 @@ export default defineComponent({
     }
   },
   methods: {
+    format,
     getAllAuditLogs() {
       AdminAuditLogService.getAllAuditLogs().then((response) => {
         this.audits = response.data;
@@ -104,9 +95,9 @@ export default defineComponent({
   computed: {
     filteredAudits() {
       if (this.filterAction === "all") {
-        return this.audits;
+        return this.audits.reverse();
       } else {
-        return this.audits.filter((audit) => audit.action === this.filterAction);
+        return this.audits.filter((audit) => audit.action === this.filterAction).reverse();
       }
     },
   },
@@ -115,3 +106,21 @@ export default defineComponent({
   },
   });
 </script>
+
+<style scoped>
+table {
+  width: 100%;
+}
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  color: black;
+}
+
+.table-wrapper {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+</style>
