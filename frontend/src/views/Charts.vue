@@ -83,6 +83,53 @@ export default defineComponent({
         }
       }
     },
+    // Method to get the icon for a sensor type
+    getSensorIcon(sensorType: string) {
+      console.log(sensorType)
+      // Define the mapping of sensor types to icons
+      const iconMapping: any = {
+        "Air Quality": "mdi-air-filter",
+        "Temperature": "mdi-thermometer",
+        "Light": "mdi-lightbulb",
+        "Humidity Dirt": "mdi-water",
+        "Air Pressure": "mdi-gauge",
+        "Humidity Air": "mdi-water-percent",
+      };
+
+      // Return the corresponding icon for the sensor type
+      return iconMapping[sensorType] || "";
+    },
+
+    // Method to get the color for a sensor icon
+    getSensorIconColor(sensorType: string) {
+      // Define the color mapping for the icons
+      const colorMapping: any = {
+        "Light": "yellow",
+        "Air Quality": "purple",
+        "Humidity Dirt": "blue",
+        "Humidity Air": "teal",
+        "Temperature": "red",
+      };
+
+      // Return the corresponding color for the sensor type
+      return colorMapping[sensorType] || "";
+    },
+
+    // Method to get the size for a sensor icon
+    getSensorIconSize(sensorType: string) {
+      // Define the size mapping for the icons
+      const sizeMapping: any = {
+        LIGHT: "24",
+        AIR_QUALITY: "24",
+        HUMIDITY_DIRT: "24",
+        HUMIDITY_AIR: "24",
+        TEMPERATURE: "24",
+        // Add more sensor types and sizes as needed
+      };
+
+      // Return the corresponding size for the sensor type
+      return sizeMapping[sensorType] || "";
+    },
   },
   mounted() {
     this.getSensorType();
@@ -107,12 +154,6 @@ export default defineComponent({
             <v-card ref="cardRef" class="card-item">
               <v-card-item :title="sensorType">
                 <template v-slot:subtitle>
-                  <v-icon
-                      icon="mdi-alert"
-                      size="18"
-                      color="error"
-                      class="me-1 pb-1"
-                  ></v-icon>
                   Extreme Weather Alert
                 </template>
               </v-card-item>
@@ -124,9 +165,10 @@ export default defineComponent({
 
                   <v-col cols="6" class="text-right">
                     <v-icon
-                        color="error"
-                        icon="mdi-weather-hurricane"
+                        :color="getSensorIconColor(sensorType)"
                         size="88"
+                        :icon="getSensorIcon(sensorType)"
+
                     ></v-icon>
                   </v-col>
                 </v-row>
@@ -143,7 +185,6 @@ export default defineComponent({
               </div>
               <v-expand-transition>
                 <template v-if="expand === index">
-
                   <apexchart width="100%" type="bar" :options="chartOptions" :series="series" />
                 </template>
               </v-expand-transition>
