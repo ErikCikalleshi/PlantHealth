@@ -18,7 +18,7 @@
       <div class="table-wrapper ">
       <table>
         <tr>
-          <th v-for="item in this.headers" :key="item.text">
+          <th v-for="item in headers" :key="item.text">
             {{ item.text }}
           </th>
         </tr>
