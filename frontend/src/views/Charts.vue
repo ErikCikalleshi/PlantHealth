@@ -73,7 +73,9 @@ export default defineComponent({
     },
     scrollToChart() {
       // Find the element for the revealed card
+      // @ts-ignore
       const cardElement = this.$refs.cardRef[this.expand];
+
       if (cardElement) {
         // Find the chart element within the card
         const chartElement = cardElement.querySelector(".chart-container");
