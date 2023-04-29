@@ -28,11 +28,11 @@ public class SensorService {
         if (sensor.isNew()) {
             sensor.setCreateDate(new Date());
             sensor.setCreateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-            auditLogService.createNewAudit("create", "sensor " + sensor.getId());
+            auditLogService.createNewAudit("create", Integer.toString(sensor.getId()), "sensor", true);
         } else {
             sensor.setUpdateDate(new Date());
             sensor.setUpdateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-            auditLogService.createNewAudit("update", "sensor " + sensor.getId());
+            auditLogService.createNewAudit("update", Integer.toString(sensor.getId()), "sensor", true);
         }
         sensor = sensorRepository.save(sensor);
         return sensor;
@@ -45,7 +45,7 @@ public class SensorService {
     }
 
     public void deleteSensor(Sensor sensor) {
-        auditLogService.createNewAudit("delete", "sensor " + sensor.getId());
+        auditLogService.createNewAudit("delete", Integer.toString(sensor.getId()), "sensor", true);
         sensorRepository.delete(sensor);
     }
 

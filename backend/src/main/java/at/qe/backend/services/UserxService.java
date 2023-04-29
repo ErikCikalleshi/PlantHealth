@@ -30,6 +30,10 @@ import java.util.HashSet;
 public class UserxService {
 
     private final UserxRepository userRepository;
+
+    @Autowired
+    private AuditLogService auditLogService;
+
     public UserxService(UserxRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -67,9 +71,11 @@ public class UserxService {
         if (user.isNew()) {
             user.setCreateDate(new Date());
             user.setCreateUserUsername(getAuthenticatedUsername());
+            auditLogService.createNewAudit("create", Long.toString(user.getId()), "user", true);
         } else {
             user.setUpdateDate(new Date());
             user.setUpdateUserUsername(getAuthenticatedUsername());
+            auditLogService.createNewAudit("update", Long.toString(user.getId()), "user", true);
         }
         user = userRepository.save(user);
         return user;
@@ -83,11 +89,14 @@ public class UserxService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(Userx user) throws UserDoesNotExistException, LastAdminException {
         if (!userRepository.existsByUsername(user.getUsername())) {
+            auditLogService.createNewAudit("delete", "NA", "user", false);
             throw new UserDoesNotExistException();
         }
         if (user.getRoles().contains(UserRole.ADMIN) && userRepository.countUserxByRolesContaining(UserRole.ADMIN) <= 1) {
+            auditLogService.createNewAudit("delete", Long.toString(user.getId()), "user", false);
             throw new LastAdminException();
         }
+        auditLogService.createNewAudit("delete", Long.toString(user.getId()), "user", true);
         userRepository.delete(user);
     }
 
@@ -113,6 +122,7 @@ public class UserxService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public Userx createUser(String username, String firstname, String lastname, String email, Collection<UserRole> roles, String password) throws UserAlreadyExistsException {
         if (userRepository.existsByUsername(username) || userRepository.existsByEmail(email)) {
+            auditLogService.createNewAudit("create", "NA", "user", false);
             throw new UserAlreadyExistsException();
         }
         Userx user = new Userx();

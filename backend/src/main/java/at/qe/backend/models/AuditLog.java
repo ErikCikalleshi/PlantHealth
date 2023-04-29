@@ -13,31 +13,45 @@ public class AuditLog {
     private Long id;
 
     @Column(nullable = false)
-    private String usernameModifier;
+    private Date date;
 
     @Column(nullable = false)
-    private String entityModified;
+    private String user;
 
     @Column(nullable = false)
     private String action;
 
     @Column(nullable = false)
-    private Date timestamp;
+    private String targetID;
 
-    public String getUsernameModifier() {
-        return usernameModifier;
+    @Column(nullable = false)
+    private String targetType;
+
+    @Column(nullable = false)
+    private Boolean success;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setUsernameModifier(String usernameModifier) {
-        this.usernameModifier = usernameModifier;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getEntityModified() {
-        return entityModified;
+    public Date getDate() {
+        return date;
     }
 
-    public void setEntityModified(String entityModified) {
-        this.entityModified = entityModified;
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getAction() {
@@ -48,19 +62,27 @@ public class AuditLog {
         this.action = action;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public String getTargetID() {
+        return targetID;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public void setTargetID(String targetID) {
+        this.targetID = targetID;
     }
 
-    public Long getId() {
-        return id;
+    public String getTargetType() {
+        return targetType;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTargetType(String targetType) {
+        this.targetType = targetType;
+    }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(Boolean success) {
+        this.success = success;
     }
 }

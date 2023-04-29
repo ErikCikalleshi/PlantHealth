@@ -42,7 +42,6 @@ public class UserxController {
 
     @DeleteMapping("/admin/delete-user/{username}")
     public void deleteUserByUsername(@PathVariable String username) throws UserDoesNotExistException, LastAdminException {
-        auditLogService.createNewAudit("delete", username);
         userxService.deleteUser(userxService.loadUser(username));
     }
 
@@ -65,7 +64,6 @@ public class UserxController {
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        auditLogService.createNewAudit("update", userDTO.username());
         return new UserDTO(user);
     }
 
@@ -81,7 +79,6 @@ public class UserxController {
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        auditLogService.createNewAudit("create", newUserRequest.newUser().username());
         return new UserDTO(user);
     }
 }

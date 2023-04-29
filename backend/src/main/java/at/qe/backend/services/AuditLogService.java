@@ -31,15 +31,17 @@ public class AuditLogService {
     }
 
     public AuditLog saveAuditLog(AuditLog auditLog) {
-        auditLog.setTimestamp(new Date());
-        auditLog.setUsernameModifier(SecurityContextHolder.getContext().getAuthentication().getName());
+        auditLog.setDate(new Date());
+        auditLog.setUser(SecurityContextHolder.getContext().getAuthentication().getName());
         return auditLogRepository.save(auditLog);
     }
 
-    public AuditLog createNewAudit(String action, String EntityModified) {
+    public AuditLog createNewAudit(String action,String targetID, String targetType, Boolean success) {
         AuditLog auditLog = new AuditLog();
         auditLog.setAction(action);
-        auditLog.setEntityModified(EntityModified);
+        auditLog.setTargetID(targetID);
+        auditLog.setTargetID(targetType);
+        auditLog.setSuccess(success);
         return saveAuditLog(auditLog);
     }
 

@@ -35,7 +35,7 @@ public class AccessPointService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteAccessPoint(AccessPoint accessPoint) {
         accessPointRepository.delete(accessPoint);
-        auditLogService.createNewAudit("delete", "accesspoint " + accessPoint.getUuid());
+        auditLogService.createNewAudit("delete", Integer.toString(accessPoint.getUuid()), "accesspoint", true);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -48,11 +48,11 @@ public class AccessPointService {
         if (accessPoint.isNew()) {
             accessPoint.setCreateDate(new Date());
             accessPoint.setCreateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-            auditLogService.createNewAudit("create", "accesspoint " + accessPoint.getUuid());
+            auditLogService.createNewAudit("create", Integer.toString(accessPoint.getUuid()), "accesspoint", true);
         } else {
             accessPoint.setUpdateDate(new Date());
             accessPoint.setUpdateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-            auditLogService.createNewAudit("create", "accesspoint " + accessPoint.getUuid());
+            auditLogService.createNewAudit("update", Integer.toString(accessPoint.getUuid()), "accesspoint", true);
         }
         return accessPointRepository.save(accessPoint);
     }
@@ -66,8 +66,9 @@ public class AccessPointService {
             accessPoint.getGreenhouses().remove(greenhouse);
             greenhouseRepository.delete(greenhouse);
             accessPointRepository.save(accessPoint);
-            auditLogService.createNewAudit("delete", "greenhouse " + greenhouseId);
+            auditLogService.createNewAudit("delete", Long.toString(greenhouseId), "greenhouse", true);
         }else {
+            auditLogService.createNewAudit("delete", Long.toString(greenhouseId), "greenhouse", false);
             throw new IllegalArgumentException("Greenhouse with id " + greenhouseId + " not found in access point with uuid " + accessPointUuid);
         }
     }
