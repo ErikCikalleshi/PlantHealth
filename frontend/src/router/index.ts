@@ -14,13 +14,14 @@ import authService from "@/services/auth.service";
 import TokenService from "@/services/token.service";
 import adminEditAccesspoint from "@/views/admin/AdminEditAccesspoint.vue";
 import MyPlantsView from "@/views/MyPlantsView.vue";
+import Charts from "@/views/Charts.vue";
 
 const routes = [
     {path: '/', component: landingpage},
     {path: '/dashboard', component: dashboard, meta: { roles: ['ADMIN', 'GARDENER', 'USER']}},
     {path: '/login', name: 'login', component: login},
     {path: '/gallery/:id', component: gallery, meta: { roles: ['ADMIN', 'GARDENER', 'USER']}},
-    {path: '/charts/:id', component: gallery, meta: { roles: ['ADMIN', 'GARDENER']}},
+    {path: '/charts/:id', component: Charts, meta: { roles: ['ADMIN', 'GARDENER']}},
     {path: '/admin/users', name: 'manage-users', component: adminManageUsers, meta: { roles: ['ADMIN'] }},
     {path: '/admin/users/edit/:username', props: true, name: 'admin-edit-user', component: adminEditUser, meta: { roles: ['ADMIN'] }},
     {path: '/dashboard/plants', component: PlantsView},
