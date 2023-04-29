@@ -78,8 +78,14 @@ export default defineComponent({
         // Find the chart element within the card
         const chartElement = cardElement.querySelector(".chart-container");
         if (chartElement) {
-          // Scroll to the chart element
-          chartElement.scrollIntoView({ behavior: "smooth", block: "start" });
+          // Calculate the scroll position by adding 300 pixels to the current scroll position
+          const scrollPosition = chartElement.offsetTop + 300;
+
+          // Scroll to the chart element with auto-scrolling
+          window.scrollTo({
+            top: scrollPosition,
+            behavior: "smooth",
+          });
         }
       }
     },
@@ -119,11 +125,11 @@ export default defineComponent({
     getSensorIconSize(sensorType: string) {
       // Define the size mapping for the icons
       const sizeMapping: any = {
-        LIGHT: "24",
-        AIR_QUALITY: "24",
-        HUMIDITY_DIRT: "24",
-        HUMIDITY_AIR: "24",
-        TEMPERATURE: "24",
+        "Light": "24",
+        "Air Quality": "24",
+        "Humidity Dirt": "24",
+        "Humidity Air": "24",
+        "Temperature": "24",
         // Add more sensor types and sizes as needed
       };
 
