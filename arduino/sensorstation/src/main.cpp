@@ -10,13 +10,13 @@ BLEService airSensorService("181A");
 BLEIntCharacteristic temperatureCharacteristic("2A6E", BLERead | BLENotify);
 BLEUnsignedIntCharacteristic humidityCharacteristic("2A6F", BLERead | BLENotify);
 BLEUnsignedIntCharacteristic pressureCharacteristic("2A6D", BLERead | BLENotify);
-BLECharacteristic vocCharacteristic("2BD3", BLERead | BLENotify, 4);
+BLEFloatCharacteristic vocCharacteristic("2BD3", BLERead | BLENotify);
 
 BLEService lightSensorService("8444401e-ffb9-424d-9dc1-c2bc273b47b5");
-BLEIntCharacteristic lightIntensityCharacteristic("4ab3244f-d156-4e76-a329-6de917bdc8f9", BLERead | BLENotify);
+BLEUnsignedIntCharacteristic lightIntensityCharacteristic("4ab3244f-d156-4e76-a329-6de917bdc8f9", BLERead | BLENotify);
 
 BLEService hygrometerService("f8cbfa9a-920e-4e31-ae5f-fca3b1cef4f7");
-BLEIntCharacteristic moistureCharacteristic("29c1083c-5166-433c-9b7c-98658c826968", BLERead | BLENotify);
+BLEUnsignedIntCharacteristic moistureCharacteristic("29c1083c-5166-433c-9b7c-98658c826968", BLERead | BLENotify);
 
 Adafruit_BME680 bme;
 int dipSwitchPins[] = {D10, D9, D8, D7, D6, D5, D4, D3};
@@ -48,20 +48,18 @@ void setup() {
   
   sensor_setup();
 }
-
+int c = 0;
 // the loop function runs over and over again forever
 void loop() {
+  while (c++ < 3000) {
+    BLE.poll();
+    delay(10);
+  }
   BLE.poll();
-  unsigned int light;
-  unsigned int moisture;
-  int temperature;
-  int humidity;
-  int pressure;
-  int gas_resistance;
-  read_light_sensor(&light);
-  read_hygrometer(&moisture);
-  read_air_sensor(&temperature, &humidity, &pressure, &gas_resistance);
-  delay(2000);
+  read_light_sensor();
+  read_hygrometer();
+  read_air_sensor();
+  delay(5000);
 }
 
 void sensor_setup() {
@@ -147,21 +145,21 @@ void BLE_setup() {
   */
 }
 
-void read_light_sensor(unsigned int *light) {
-  *light = analogRead(A6);
-  lightIntensityCharacteristic.writeValue(*light);
+void read_light_sensor() {
+  unsigned int light = analogRead(A6);
+  lightIntensityCharacteristic.writeValue(light);
   Serial.print("Light: ");
-  Serial.println(*light);
+  Serial.println(light);
 }
 
-void read_hygrometer(unsigned int *moisture) {
-  *moisture = analogRead(A7);
-  moistureCharacteristic.writeValue(*moisture);
+void read_hygrometer() {
+  unsigned int moisture = analogRead(A7);
+  moistureCharacteristic.writeValue(moisture);
   Serial.print("Moisture: ");
-  Serial.println(*moisture);
+  Serial.println(moisture);
 }
 
-int read_air_sensor(int *temperature, int *humidity, int *pressure, int *gas_resistance) {
+int read_air_sensor() {
   unsigned long endTime = bme.beginReading();
   if (endTime == 0) {
     Serial.println(F("Failed to begin reading :("));
@@ -173,31 +171,31 @@ int read_air_sensor(int *temperature, int *humidity, int *pressure, int *gas_res
     return EXIT_FAILURE;
   }
 
-  *temperature = bme.temperature * 100;
-  *humidity = bme.humidity * 100;
-  *pressure = bme.pressure * 10;
-  *gas_resistance = bme.gas_resistance;
+  int temperature = bme.temperature * 100;
+  int humidity = bme.humidity * 100;
+  int pressure = bme.pressure * 10;
+  float gas_resistance = bme.gas_resistance / 1000.0;
 
   // Update the BLE characteristics with the sensor values
-  temperatureCharacteristic.writeValue(*temperature);
-  humidityCharacteristic.writeValue(*humidity);
-  pressureCharacteristic.writeValue(*pressure);
-  vocCharacteristic.writeValue((byte*)gas_resistance, sizeof(*gas_resistance));
+  temperatureCharacteristic.writeValue(temperature);
+  humidityCharacteristic.writeValue(humidity);
+  pressureCharacteristic.writeValue(pressure);
+  vocCharacteristic.writeValue(gas_resistance);
 
   Serial.print(F("Temperature = "));
-  Serial.print(*temperature / 100.0);
+  Serial.print(temperature / 100.0);
   Serial.println(F(" *C"));
 
   Serial.print(F("Pressure = "));
-  Serial.print(*pressure / 1000.0);
+  Serial.print(pressure / 1000.0);
   Serial.println(F(" hPa"));
 
   Serial.print(F("Humidity = "));
-  Serial.print(*humidity / 100.0);
+  Serial.print(humidity / 100.0);
   Serial.println(F(" %"));
 
   Serial.print(F("Gas = "));
-  Serial.print(*gas_resistance / 1000.0);
+  Serial.print(gas_resistance);
   Serial.println(F(" KOhms"));
 
   return EXIT_SUCCESS;
