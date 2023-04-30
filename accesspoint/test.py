@@ -8,25 +8,35 @@ async def notification_handler(sender, data):
     # This function will be called whenever a notification is received from the device
     # You can perform your desired actions with the received data
     # For example, you can parse and print the data:
+    # write into a file
+    with open("data.txt", "a") as f:
+        if sender.uuid == "00002a6e-0000-1000-8000-00805f9b34fb":
+            temperature = struct.unpack("<h", data[:2])[0] / 100.0
+            print("Temperature: {0} °C".format(temperature))
+            f.write("Temperature: {0}\n".format(temperature))
+        elif sender.uuid == "00002a6f-0000-1000-8000-00805f9b34fb":
+            humidity = struct.unpack("<H", data[:2])[0] / 100.0
+            print("Humidity: {0}%".format(humidity))
+            f.write("Humidity: {0}%\n".format(humidity))
+        elif sender.uuid == "00002a6d-0000-1000-8000-00805f9b34fb":
+            pressure = struct.unpack("<I", data[:4])[0] / 10.0
+            print("Pressure: {0} Pa".format(pressure))
+            f.write("Pressure: {0} Pa\n".format(pressure))
+        elif sender.uuid == "00002bd3-0000-1000-8000-00805f9b34fb":
+            gas_resistance = struct.unpack("<H", data[:2])[0] / 1000.0
+            print("Gas Resistance: {0} kOhm".format(gas_resistance))
+            f.write("Gas Resistance: {0} kOhm\n".format(gas_resistance))
+        elif sender.uuid == "4ab3244f-d156-4e76-a329-6de917bdc8f9":
+            light_intensity = struct.unpack("<H", data[:2])[0]
+            print("Light Intensity: {0}".format(light_intensity))
+            f.write("Light Intensity: {0}\n".format(light_intensity))
+        elif sender.uuid == "29c1083c-5166-433c-9b7c-98658c826968":
+            moisture = struct.unpack("<H", data[:2])[0]
+            print("Moisture: {0}".format(moisture))
+            f.write("Moisture: {0}\n".format(moisture))
 
-    if sender.uuid == "00002a6e-0000-1000-8000-00805f9b34fb":
-        temperature = struct.unpack("<h", data[:2])[0] / 100.0
-        print("Temperature: {0} °C".format(temperature))
-    elif sender.uuid == "00002a6f-0000-1000-8000-00805f9b34fb":
-        humidity = struct.unpack("<H", data[:2])[0] / 100.0
-        print("Humidity: {0}%".format(humidity))
-    elif sender.uuid == "00002a6d-0000-1000-8000-00805f9b34fb":
-        pressure = struct.unpack("<I", data[:4])[0] / 10.0
-        print("Pressure: {0} Pa".format(pressure))
-    elif sender.uuid == "00002bd3-0000-1000-8000-00805f9b34fb":
-        gas_resistance = struct.unpack("<H", data[:2])[0] / 1000.0
-        print("Gas Resistance: {0} kOhm".format(gas_resistance))
-    elif sender.uuid == "4ab3244f-d156-4e76-a329-6de917bdc8f9":
-        light_intensity = struct.unpack("<H", data[:2])[0]
-        print("Light Intensity: {0}".format(light_intensity))
-    elif sender.uuid == "29c1083c-5166-433c-9b7c-98658c826968":
-        moisture = struct.unpack("<H", data[:2])[0]
-        print("Moisture: {0}".format(moisture))
+
+
 
 
 async def main(device_name="SensorStation G2T4"):
@@ -36,6 +46,8 @@ async def main(device_name="SensorStation G2T4"):
         return
 
     async with BleakClient(device, timeout=120) as client:
+        # notify that we are connected
+
         print("Connected to device {0}".format(device_name))
 
         for service in client.services:
