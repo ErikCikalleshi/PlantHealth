@@ -28,8 +28,10 @@ import java.util.HashSet;
 @Service
 @Scope("application")
 public class UserxService {
-
+    @Autowired
+    private AuditLogService auditLogService;
     private final UserxRepository userRepository;
+
     public UserxService(UserxRepository userRepository) {
         this.userRepository = userRepository;
     }

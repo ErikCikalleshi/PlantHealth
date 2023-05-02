@@ -22,16 +22,22 @@ public class UploadImagesService {
     @Autowired
     private UserxRepository userxRepository;
 
+    @Autowired
+    private AuditLogService auditLogService;
+
     public UploadImages create(Long plantId, String username, String uploadLink) {
         var greenHouse = greenhouseRepository.findByUuid(plantId).orElse(null);
         if(greenHouse == null) {
+            auditLogService.createNewAudit("create", "NA", "image", false);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "GreenhouseId is invalid.");
         }
         var user = userxRepository.findByUsername(username).orElse(null);
         if(user == null) {
+            auditLogService.createNewAudit("create", "NA", "image", false);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Username is invalid.");
         }
         if(uploadLink.length() < 1) {
+            auditLogService.createNewAudit("create", "NA", "image", false);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid upload link.");
         }
         var newImage = new UploadImages();
@@ -40,6 +46,7 @@ public class UploadImagesService {
         newImage.setUserId(user.getId());
         newImage.setUploadLink(uploadLink);
         uploadImagesRepository.save(newImage);
+        auditLogService.createNewAudit("create", Long.toString(newImage.getId()), "image", true);
         return newImage;
     }
 

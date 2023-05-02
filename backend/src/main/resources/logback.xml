@@ -20,6 +20,8 @@
             <level>WARN</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
+        </filter>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
@@ -35,7 +37,7 @@
         </encoder>
     </appender>
 
-    <logger name="at.qe.backend" level="DEBUG">
+    <logger name="at.qe.backend" level="INFO">
         <appender-ref ref="FILE1" />
     </logger>
 
@@ -43,7 +45,7 @@
         <appender-ref ref="FILE2" />
     </logger>
 
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE1" />
         <appender-ref ref="FILE2" />

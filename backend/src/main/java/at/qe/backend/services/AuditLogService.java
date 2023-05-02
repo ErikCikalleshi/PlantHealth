@@ -1,13 +1,11 @@
 package at.qe.backend.services;
 
-import at.qe.backend.models.AccessPoint;
+
 import at.qe.backend.models.AuditLog;
-import at.qe.backend.models.Userx;
 import at.qe.backend.repositories.AuditLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
 
@@ -25,29 +23,23 @@ public class AuditLogService {
         return auditLogRepository.findAll();
     }
 
-    public List<Userx> getAllLastModifiedBy(String usernameModifier) {
-        return auditLogRepository.findAllLastModifiedBy(usernameModifier);
-    }
 
-    public List<Userx> getAuditLogsByAction(String action) {
-        return auditLogRepository.findByAction(action);
-    }
-
-    public List<Userx> getEntityModified(String entityModified) {
-        return auditLogRepository.findEntityModified(entityModified);
+    public List<AuditLog> getAuditLogsByAction(String action) {
+        return auditLogRepository.findAllByAction(action);
     }
 
     public AuditLog saveAuditLog(AuditLog auditLog) {
-        auditLog.setTimestamp(new Date());
-        auditLog.setUsernameModifier(SecurityContextHolder.getContext().getAuthentication().getName());
+        auditLog.setDate(new Date());
+        auditLog.setUser(SecurityContextHolder.getContext().getAuthentication().getName());
         return auditLogRepository.save(auditLog);
     }
 
-    public AuditLog createNewAudit(String action, String EntityModified) {
+    public AuditLog createNewAudit(String action,String targetID, String targetType, Boolean success) {
         AuditLog auditLog = new AuditLog();
         auditLog.setAction(action);
-        auditLog.setEntityModified(EntityModified);
+        auditLog.setTargetID(targetID);
+        auditLog.setTargetType(targetType);
+        auditLog.setSuccess(success);
         return saveAuditLog(auditLog);
     }
-
 }
