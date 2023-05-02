@@ -58,14 +58,14 @@ async def read_sensor_data():
         for name in sensor_stations:
             device = await BleakScanner.find_device_by_name(name, timeout=120)
             if device is None:
-                print("ERROR: Could not find device with name {0}".format(name))
+                logging.error("Could not find device with name {0}".format(name))
                 continue
 
             async def read_single_sensor():
                 while True:
                     try:
                         async with BleakClient(device, timeout=120) as client:
-                            print("Connected to device {0}".format(name))
+                            logging.warning("Connected to device {0}".format(name))
 
                             for service in client.services:
                                 print("Service: {0}".format(service))

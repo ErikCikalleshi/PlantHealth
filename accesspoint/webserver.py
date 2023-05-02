@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import requests
 import threading
@@ -6,6 +7,8 @@ from Settings import Settings
 import pandas as pd
 import json
 import datetime
+
+from control_services_arduino import send_flag
 
 
 def get_avg_measurements(database):
@@ -48,8 +51,12 @@ def get_avg_measurements(database):
             limit_exceeded_by = 0
             if avg > limit[0]:
                 limit_exceeded_by = avg - limit[0]
+                loop = asyncio.get_event_loop() # returns the event loop object associated with the current thread
+                loop.run_until_complete(send_flag(greenhouse, 1))  # pause send_data() until flag is sent
             elif avg < limit[1]:
                 limit_exceeded_by = limit[1] - avg
+                loop = asyncio.get_event_loop()
+                loop.run_until_complete(send_flag(greenhouse, 2))
 
             date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
             data = {"greenhouseID": int(subset["greenhouseID"].iloc[0]),
