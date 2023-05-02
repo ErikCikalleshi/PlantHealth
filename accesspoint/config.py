@@ -9,7 +9,7 @@ import logging
 INTERVAL: int = 5  # seconds
 
 
-def get_config(script_path):
+def get_config():
     settings = Settings()
 
     url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{1}"
@@ -32,12 +32,9 @@ def get_config(script_path):
     collection.delete_many({})
     collection.insert_one(data)
 
-    threading.Timer(INTERVAL, get_config, args=[script_path]).start()
     logging.warning("'api/setting/' API call successful")
 
 
 # for debug purposes only
 if __name__ == "__main__":
-    # NOTE: put your own IP address, port, admin and password
-    test_script_path = os.path.abspath(__file__)
-    get_config(test_script_path)
+    get_config()

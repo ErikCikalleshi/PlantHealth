@@ -25,7 +25,7 @@ def connect_to_db():
     return db
 
 
-def write_to_document_sensor(descriptor, value, sensor_type, greenhouse_id):
+def write_to_document_sensor(value, sensor_type, greenhouse_id):
     settings = Settings()
     db = connect_to_db()
     if db is None:

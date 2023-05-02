@@ -10,6 +10,8 @@ import datetime
 
 from control_services_arduino import send_flag
 
+collection_deletion_event = asyncio.Event()
+
 
 def get_avg_measurements(database):
     settings = Settings()
@@ -51,7 +53,7 @@ def get_avg_measurements(database):
             limit_exceeded_by = 0
             if avg > limit[0]:
                 limit_exceeded_by = avg - limit[0]
-                loop = asyncio.get_event_loop() # returns the event loop object associated with the current thread
+                loop = asyncio.get_event_loop()  # returns the event loop object associated with the current thread
                 loop.run_until_complete(send_flag(greenhouse, 1))  # pause send_data() until flag is sent
             elif avg < limit[1]:
                 limit_exceeded_by = limit[1] - avg
@@ -91,9 +93,8 @@ def send_measurements():
 
     headers = {"Content-Type": "application/json"}
     for avg_measurement in avg_measurements:
-        print(avg_measurement)
+        logging.warning(avg_measurement)
         response = requests.post(url, headers=headers, auth=auth, data=avg_measurement)
-        print(response.status_code)
         if response.status_code == 200:
             logging.warning("Measurements sent successfully")
 
@@ -105,8 +106,12 @@ def send_measurements():
         logging.warning("Collection does not exist. Nothing to delete.")
         return
     collection = database[settings.mongo_collection]
+
     # empty collection
+    collection_deletion_event.set()
     collection.delete_many({})
+    collection_deletion_event.clear()
+
     threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
     logging.warning("Collection deleted successfully. Timer started.")
 
