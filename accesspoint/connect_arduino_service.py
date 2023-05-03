@@ -12,7 +12,7 @@ INTERVAL = 30
 collection_deletion_event = asyncio.Event()
 
 
-async def notification_handler(sender, data):
+async def notification_handler(sender, value, greenhouses: pd.DataFrame):
     # with open("data.txt", "a") as f:
     #     if sender.uuid == "00002a6e-0000-1000-8000-00805f9b34fb":
     #         temperature = struct.unpack("<h", data[:2])[0] / 100.0
@@ -58,13 +58,14 @@ async def notification_handler(sender, data):
         "29c1083c-5166-433c-9b7c-98658c826968": ("HUMIDITY_DIRT", "<H", 1.0),
     }
     from webserver import collection_deletion_event
-
+    # sender.
     for uuid, (sensor_type, unpack_format, scale_factor) in sensor_mappings.items():
         if sender.uuid == uuid:
-            value = struct.unpack(unpack_format, data[:2])[0] / scale_factor
-            print("{0}: {1}".format(sensor_type, value))
+            val = struct.unpack(unpack_format, value[:2])[0] / scale_factor
+            print("{0}: {1}".format(sensor_type, val))
             await collection_deletion_event.wait()
-            db.write_to_document_sensor(value, sensor_type)
+            sensor_id = greenhouses[greenhouses["sensors"] == sensor_type]["id"].iloc[0]
+            db.write_to_document_sensor(val, sensor_type, sensor_id)
             break
 
 
@@ -111,7 +112,12 @@ async def read_sensor_data():
                                             characteristic.uuid == "00002a05-0000-1000-8000-00805f9b34fb":
                                         continue
 
-                                    await client.start_notify(characteristic.uuid, notification_handler)
+                                    await client.start_notify(characteristic.uuid,
+                                                              lambda sender, value,
+                                                                     greenhouses=data: notification_handler(sender,
+                                                                                                            value,
+                                                                                                            greenhouses)
+                                                              )
                             while True:
                                 await asyncio.sleep(1)
                     except BleakError:
@@ -127,4 +133,4 @@ async def read_sensor_data():
 
 
 # Start reading data from the sensor station
-# asyncio.run(read_sensor_data())
+asyncio.run(read_sensor_data())
