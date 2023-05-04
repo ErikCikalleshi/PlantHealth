@@ -6,6 +6,7 @@ import at.qe.backend.exceptions.Userx.UserDoesNotExistException;
 import at.qe.backend.models.UserRole;
 import at.qe.backend.models.Userx;
 import at.qe.backend.repositories.UserxRepository;
+import at.qe.backend.services.AuditLogService;
 import at.qe.backend.services.UserxService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,6 +35,9 @@ class UserxServiceTests {
     UserxRepository userRepository;
     @InjectMocks
     UserxService userxService;
+
+    @Mock
+    AuditLogService auditLogService;
 
 
     private Userx testUser;
@@ -110,6 +114,7 @@ class UserxServiceTests {
         String lastname = "User2";
         String email = "testemail_new";
         Set<UserRole> roles = Set.of(UserRole.USER, UserRole.ADMIN);
+        savedUser.setId(25L);
         when(userRepository.findFirstByUsername(testUser.getUsername())).thenReturn(savedUser);
         Userx updatedUser = userxService.updateUser(savedUser.getUsername(), firstname, lastname, email, roles);
         assertEquals(savedUser, updatedUser);
@@ -142,6 +147,7 @@ class UserxServiceTests {
     @DisplayName("Delete user")
     @WithMockUser(username = "adminuser", authorities = {"ADMIN"})
     void testDeleteUser() throws LastAdminException, UserDoesNotExistException {
+        testUser.setId(25L);
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
         assertThrows(UserDoesNotExistException.class,() -> userxService.deleteUser(testUser));
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
