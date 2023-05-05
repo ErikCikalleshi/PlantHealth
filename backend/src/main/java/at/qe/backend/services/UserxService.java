@@ -28,10 +28,14 @@ import java.util.HashSet;
 @Service
 @Scope("application")
 public class UserxService {
-
+    @Autowired
+    private AuditLogService auditLogService;
     private final UserxRepository userRepository;
-    public UserxService(UserxRepository userRepository) {
+
+    @Autowired
+    public UserxService(UserxRepository userRepository, AuditLogService auditLogService) {
         this.userRepository = userRepository;
+        this.auditLogService = auditLogService;
     }
 
     /**
@@ -67,7 +71,9 @@ public class UserxService {
         if (user.isNew()) {
             user.setCreateDate(new Date());
             user.setCreateUserUsername(getAuthenticatedUsername());
+            auditLogService.createNewAudit("create", "NA", "user", true);
         } else {
+            auditLogService.createNewAudit("update", Long.toString(user.getId()), "user", true);
             user.setUpdateDate(new Date());
             user.setUpdateUserUsername(getAuthenticatedUsername());
         }
@@ -83,11 +89,14 @@ public class UserxService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(Userx user) throws UserDoesNotExistException, LastAdminException {
         if (!userRepository.existsByUsername(user.getUsername())) {
+            auditLogService.createNewAudit("delete", "NA", "user", false);
             throw new UserDoesNotExistException();
         }
         if (user.getRoles().contains(UserRole.ADMIN) && userRepository.countUserxByRolesContaining(UserRole.ADMIN) <= 1) {
+            auditLogService.createNewAudit("delete", "NA", "user", false);
             throw new LastAdminException();
         }
+        auditLogService.createNewAudit("delete", Long.toString(user.getId()), "user", true);
         userRepository.delete(user);
     }
 
@@ -100,6 +109,7 @@ public class UserxService {
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
     public Userx updateUser(String username, String firstname, String lastname, String email, Collection<UserRole> roles) throws UserAlreadyExistsException {
         if (userRepository.existsByEmail(email) && !userRepository.findByEmail(email).getUsername().equals(username)) {
+            auditLogService.createNewAudit("update", "NA", "user", false);
             throw new UserAlreadyExistsException();
         }
         Userx user = loadUser(username);
@@ -113,6 +123,7 @@ public class UserxService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public Userx createUser(String username, String firstname, String lastname, String email, Collection<UserRole> roles, String password) throws UserAlreadyExistsException {
         if (userRepository.existsByUsername(username) || userRepository.existsByEmail(email)) {
+            auditLogService.createNewAudit("create", "NA", "user", false);
             throw new UserAlreadyExistsException();
         }
         Userx user = new Userx();
