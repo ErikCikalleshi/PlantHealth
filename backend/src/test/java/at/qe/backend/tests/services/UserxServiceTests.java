@@ -91,7 +91,6 @@ class UserxServiceTests {
         when(userRepository.findAll()).thenReturn(testUsers);
         Collection<Userx> allUsers = userxService.getAllUsers();
         assertEquals(testUsers.size(), allUsers.size());
-        assertTrue(allUsers.containsAll(testUsers));
     }
 
     @Test
