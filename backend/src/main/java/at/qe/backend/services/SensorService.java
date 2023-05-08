@@ -17,14 +17,19 @@ public class SensorService {
     @Autowired
     private SensorRepository sensorRepository;
 
+    @Autowired
+    private AuditLogService auditLogService;
+
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('GARDENER')")
     public Sensor saveSensor(Sensor sensor) {
         if (sensor.isNew()) {
             sensor.setCreateDate(new Date());
             sensor.setCreateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+            auditLogService.createNewAudit("create", Integer.toString(sensor.getId()), "sensor", true);
         } else {
             sensor.setUpdateDate(new Date());
             sensor.setUpdateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+            auditLogService.createNewAudit("update", Integer.toString(sensor.getId()), "sensor", true);
         }
         sensor = sensorRepository.save(sensor);
         return sensor;
@@ -37,6 +42,7 @@ public class SensorService {
     }
 
     public void deleteSensor(Sensor sensor) {
+        auditLogService.createNewAudit("delete", Integer.toString(sensor.getId()), "sensor", true);
         sensorRepository.delete(sensor);
     }
 

@@ -29,7 +29,7 @@
                            class="w-full" @confirm="deleteUser(user)"/>
             </div>
         </main-container>
-        <footer-component/>
+      <footer-component class="mt-auto"/>
     </v-app>
 </template>
 
