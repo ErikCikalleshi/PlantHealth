@@ -1,13 +1,12 @@
 import datetime
+import sys
 
 import pymongo
-import config
-import requests
-import os
-import json
+
 from Settings import Settings
-import logging
-import pandas as pd
+from log_config import AuditLogger
+
+logging = AuditLogger()
 
 
 def connect_to_db():
@@ -21,7 +20,7 @@ def connect_to_db():
     if settings.mongo_collection not in db.list_collection_names():
         logging.warning("Collection does not exist. Creating...")
         db.create_collection(settings.mongo_collection)
-
+    logging.info("Connected to database")
     return db
 
 
@@ -34,15 +33,20 @@ def write_to_document_sensor(value, sensor_type, greenhouse_id):
     if settings.mongo_collection not in db.list_collection_names():
         logging.warning("Collection does not exist. Creating...")
         db.create_collection(settings.mongo_collection)
+        logging.info("Collection created successfully")
     collection = db[settings.mongo_collection]
     # get from config/config.json
     config_collection = db["config"]
     config = config_collection.find_one()
+    if config is None:
+        logging.error("Could not find config in database")
+        return
+    logging.info("Writing to database...")
 
     date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-
     collection.insert_one({"greenhouseID": greenhouse_id, "accesspointID": config["accessPointId"],
                            "value": value, "sensorType": sensor_type, "date": date})
+    logging.info("Successfully written to database")
 
 
 if __name__ == "__main__":

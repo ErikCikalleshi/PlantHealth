@@ -1,6 +1,11 @@
 import asyncio
 import struct
+
 from bleak import BleakClient, BleakScanner
+
+from log_config import AuditLogger
+
+logging = AuditLogger()
 
 
 async def notification_handler(sender, data):
@@ -36,9 +41,6 @@ async def notification_handler(sender, data):
             f.write("Moisture: {0}\n".format(moisture))
 
 
-
-
-
 async def main(device_name="SensorStation G2T4"):
     device = await BleakScanner.find_device_by_name(device_name, timeout=120)
     if device is None:
@@ -67,13 +69,13 @@ async def main(device_name="SensorStation G2T4"):
             # The main code loop continues here
             # You can perform other tasks or wait for events while notifications are being received
             await asyncio.sleep(10)  # Add a delay or other tasks here if needed
-                    #
-                    # for descriptor in characteristic.descriptors:
-                    #     try:
-                    #         value = await client.read_gatt_descriptor(descriptor.handle)
-                    #         print("Descriptor {0} says: {1}".format(descriptor, value))
-                    #     except Exception as e:
-                    #         print("ERROR: reading descriptor {0}. Error is {1}".format(descriptor, e))
+            #
+            # for descriptor in characteristic.descriptors:
+            #     try:
+            #         value = await client.read_gatt_descriptor(descriptor.handle)
+            #         print("Descriptor {0} says: {1}".format(descriptor, value))
+            #     except Exception as e:
+            #         print("ERROR: reading descriptor {0}. Error is {1}".format(descriptor, e))
 
         print("INFO: Disconnecting from device {0} ...".format(device_name))
     print("INFO: Disconnected from device {0}".format(device_name))

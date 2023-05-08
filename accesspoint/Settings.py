@@ -1,5 +1,9 @@
-import os
 import json
+import os
+
+from log_config import AuditLogger
+
+logging = AuditLogger()
 
 
 class Settings:
@@ -30,10 +34,29 @@ class Settings:
         settings_file_path = os.path.join(current_dir, "settings.json")
 
         if not os.path.exists(settings_file_path):
+            logging.warning("Settings file not found. Creating...")
             os.makedirs(settings_file_path, exist_ok=True)
             settings_file_path = os.path.join(settings_file_path, "settings.json")
             with open(settings_file_path, "w") as f:
-                json.dump({}, f)
+                json.dump({
+                    "auth": {
+                        "user": "admin",
+                        "password": "passwd"
+                    },
+                    "server": {
+                        "host": "10.0.0.62",
+                        "port": 9000
+                    },
+                    "access_point_id": "1",
+                    "mongo": {
+                        "port": 27017,
+                        "host": "localhost",
+                        "database": "PlantHealth",
+                        "collection": "Measurements"
+                    }
+                }, f)
+                logging.info("Settings file created")
         with open(settings_file_path, "r") as data_file:
             data = json.load(data_file)
+        logging.info("Settings file read")
         return data

@@ -1,13 +1,17 @@
 import asyncio
-import logging
-import requests
+import datetime
+import json
+
+from log_config import AuditLogger
+
+logging = AuditLogger()
 import threading
+
+import pandas as pd
+import requests
+
 import db
 from Settings import Settings
-import pandas as pd
-import json
-import datetime
-
 from control_services_arduino import send_flag
 
 collection_deletion_event = asyncio.Event()
@@ -55,10 +59,12 @@ def get_avg_measurements(database):
                 limit_exceeded_by = avg - limit[0]
                 loop = asyncio.get_event_loop()  # returns the event loop object associated with the current thread
                 loop.run_until_complete(send_flag(greenhouse, 1))  # pause send_data() until flag is sent
+                logging.error("Upper Limit exceeded by: " + str(limit_exceeded_by))
             elif avg < limit[1]:
                 limit_exceeded_by = limit[1] - avg
                 loop = asyncio.get_event_loop()
                 loop.run_until_complete(send_flag(greenhouse, 2))
+                logging.error("Lower Limit exceeded by: " + str(limit_exceeded_by))
 
             date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
             data = {"greenhouseID": int(subset["greenhouseID"].iloc[0]),
@@ -70,6 +76,7 @@ def get_avg_measurements(database):
                     }
 
             json_arrays.append(json.dumps(data))
+    logging.info("Average measurements created successfully")
     return json_arrays
 
 
@@ -111,7 +118,7 @@ def send_measurements():
     collection_deletion_event.set()
     collection.delete_many({})
     collection_deletion_event.clear()
-
+    logging.warning("Collection with measurements deleted successfully")
     threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
     logging.warning("Collection deleted successfully. Timer started.")
 
