@@ -33,7 +33,7 @@ export default defineComponent({
           id: "vuechart-example",
         },
         xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+          categories:
         },
       },
       series: [
@@ -193,14 +193,14 @@ export default defineComponent({
               </div>
               <v-expand-transition>
                 <template v-if="expand === index">
-                  <apexchart width="100%" type="bar" :options="chartOptions" :series="series" />
+                  <apexchart type="line" height="350" ref="chart" :options="chartOptions" :series="series"/>
                 </template>
               </v-expand-transition>
 
               <v-divider></v-divider>
 
               <v-card-actions>
-                <v-btn @click="revealCard(index, true)">
+                <v-btn @click="revealCard(index, true)"  variant="outlined">
                   {{ expand === index ? "Hide Report" : "Full Report" }}
                 </v-btn>
               </v-card-actions>

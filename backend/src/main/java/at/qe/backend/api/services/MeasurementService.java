@@ -16,7 +16,10 @@ import at.qe.backend.services.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * This Service is responsible for saving the Measurements provided by the AccessPoints
@@ -63,5 +66,21 @@ public class MeasurementService {
         measurement = measurementRepository.save(measurement);
         sensor.addMeasurement(measurement);
         return new MeasurementDTO(measurement);
+    }
+
+    public List<MeasurementDTO> getMeasurement(int greenhouseId) {
+        //get all measurements from the database
+        List<Measurement> measurements = measurementRepository.findAll();
+
+        List<MeasurementDTO> greenhouseMeasurements = new ArrayList<>();
+
+        for (Measurement measurement : measurements) {
+            //if the measurement is from the specified greenhouse
+            if (measurement.getSensor().getGreenhouse().getUuid() == greenhouseId) {
+                //add the measurement to the list
+                greenhouseMeasurements.add(new MeasurementDTO(measurement));
+            }
+        }
+        return greenhouseMeasurements;
     }
 }

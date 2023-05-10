@@ -16,7 +16,7 @@ cursor.execute(
 sensor_data = cursor.fetchall()
 
 # Set the time interval between data sending in seconds
-interval_seconds = 60
+interval_seconds = 10
 
 # Set the maximum percentage change allowed for sensor data
 max_change_percent = 10.0

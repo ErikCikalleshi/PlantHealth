@@ -9,6 +9,9 @@ import at.qe.backend.api.services.MeasurementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.UUID;
+
 /**
  * REST Interface for the measurement API
  */
@@ -36,5 +39,10 @@ public class MeasurementController {
     @PostMapping("/measurements")
     public MeasurementDTO createMeasurement(@RequestBody MeasurementDTO measurementDTO) throws SensorNotFoundException, GreenhouseNotRegisteredException, AccessPointNotPublishedException, GreenhouseNotPublishedException {
         return measurementService.addMeasurement(measurementDTO);
+    }
+
+    @GetMapping
+    public List<MeasurementDTO> getMeasurement(@RequestParam("measurementId") int measurementId) {
+        return measurementService.getMeasurement(measurementId);
     }
 }
