@@ -16,37 +16,6 @@ collection_deletion_event = asyncio.Event()
 
 
 async def notification_handler(sender, value, greenhouses: pd.DataFrame):
-    # with open("data.txt", "a") as f:
-    #     if sender.uuid == "00002a6e-0000-1000-8000-00805f9b34fb":
-    #         temperature = struct.unpack("<h", data[:2])[0] / 100.0
-    #         print("Temperature: {0} °C".format(temperature))
-    #         db.write_to_document_sensor(temperature, "TEMPERATURE")
-    #         # f.write("Temperature: {0}\n".format(temperature))
-    #     elif sender.uuid == "00002a6f-0000-1000-8000-00805f9b34fb":
-    #         humidity = struct.unpack("<H", data[:2])[0] / 100.0
-    #         print("Humidity: {0}%".format(humidity))
-    #         db.write_to_document_sensor(humidity, "HUMIDITY_AIR")
-    #         # f.write("Humidity: {0}%\n".format(humidity))
-    #     elif sender.uuid == "00002a6d-0000-1000-8000-00805f9b34fb":
-    #         pressure = struct.unpack("<I", data[:4])[0] / 10.0
-    #         print("Pressure: {0} Pa".format(pressure))
-    #         db.write_to_document_sensor(pressure, "PRESSURE")
-    #         # f.write("Pressure: {0} Pa\n".format(pressure))
-    #     elif sender.uuid == "00002bd3-0000-1000-8000-00805f9b34fb":
-    #         gas_resistance = struct.unpack("<H", data[:2])[0] / 1000.0
-    #         print("Gas Resistance: {0} kOhm".format(gas_resistance))
-    #         db.write_to_document_sensor(gas_resistance, "GAS_RESISTANCE")
-    #         # f.write("Gas Resistance: {0} kOhm\n".format(gas_resistance))
-    #     elif sender.uuid == "4ab3244f-d156-4e76-a329-6de917bdc8f9":
-    #         light_intensity = struct.unpack("<H", data[:2])[0]
-    #         print("Light Intensity: {0}".format(light_intensity))
-    #         db.write_to_document_sensor(light_intensity, "LIGHT")
-    #         # f.write("Light Intensity: {0}\n".format(light_intensity))
-    #     elif sender.uuid == "29c1083c-5166-433c-9b7c-98658c826968":
-    #         moisture = struct.unpack("<H", data[:2])[0]
-    #         print("Moisture: {0}".format(moisture))
-    #         db.write_to_document_sensor(moisture, "HUMIDITY_DIRT")
-    #         # f.write("Moisture: {0}\n".format(moisture))
     from webserver import collection_deletion_event
     if collection_deletion_event.is_set():
         logging.warning("Collection deletion in progress. Skipping writing to the database.")
@@ -88,6 +57,8 @@ async def read_sensor_data():
         # Retrieve the latest configuration from the database
         config = config_collection.find_one()
         data = pd.DataFrame(config["greenhouses"])
+        data = data[data["published"] == True]
+        data = data.assign(id=lambda x: "SensorStation " + x["id"].astype(str))
         sensor_stations: list = data["id"].unique()
         # TODO: make a name convention for the sensor stations
         sensor_stations = ["SensorStation G2T4"]
