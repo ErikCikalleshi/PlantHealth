@@ -107,6 +107,7 @@ export default defineComponent({
   });
 </script>
 
+
 <style scoped>
 table {
   width: 100%;
