@@ -14,15 +14,19 @@ import authService from "@/services/auth.service";
 import TokenService from "@/services/token.service";
 import adminEditAccesspoint from "@/views/admin/AdminEditAccesspoint.vue";
 import adminAuditLog from "@/views/admin/AdminViewAuditLog.vue";
+import MyPlantsView from "@/views/MyPlantsView.vue";
+import Charts from "@/views/Charts.vue";
 
 const routes = [
     {path: '/', component: landingpage},
     {path: '/dashboard', component: dashboard, meta: { roles: ['ADMIN', 'GARDENER', 'USER']}},
     {path: '/login', name: 'login', component: login},
     {path: '/gallery/:id', component: gallery, meta: { roles: ['ADMIN', 'GARDENER', 'USER']}},
+    {path: '/charts/:id', component: Charts, meta: { roles: ['ADMIN', 'GARDENER']}},
     {path: '/admin/users', name: 'manage-users', component: adminManageUsers, meta: { roles: ['ADMIN'] }},
     {path: '/admin/users/edit/:username', props: true, name: 'admin-edit-user', component: adminEditUser, meta: { roles: ['ADMIN'] }},
     {path: '/dashboard/plants', component: PlantsView},
+    {path: '/dashboard/my_plants', component: MyPlantsView},
     {path: '/admin/access-points', name: 'manage-accessPoints', component: adminManageAccessPoints, meta: { roles: ['ADMIN'] }},
     {path: '/admin/access-points/edit/:apId', props: true, name: 'admin-edit-access-point', component: adminEditAccesspoint, meta: { roles: ['ADMIN'] }},
     {path: '/admin/audit-log', name: 'view-audit-logs', component: adminAuditLog, meta: { roles: ['ADMIN'] }},
