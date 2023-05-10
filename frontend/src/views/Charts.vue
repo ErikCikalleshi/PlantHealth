@@ -9,11 +9,14 @@ import PageHeading from "@/components/general/PageHeading.vue";
 import api from "@/services/api";
 import MeasurementsService from "@/services/MeasurementsService";
 import AdminGreenhouseService from "@/services/admin/AdminGreenhouseService";
-import VueApexCharts from "vue3-apexcharts";
+import Custom_Chart from '@/components/charts/line_chart_with_annotations_component.vue';
+import Chart from "@/components/charts/line_chart_with_annotations_component.vue";
 
 export default defineComponent({
   name: "ChartsView",
   components: {
+    Chart,
+    Custom_Chart,
     FooterView,
     HeaderView,
     PageHeading,
@@ -26,104 +29,17 @@ export default defineComponent({
     return {
       revealedCardIndex: -1,
       expand: -1,
-      components: {
-        apexchart: VueApexCharts,
-      },
       series: [{
-        data: [31, 40, 28, 51, 42, 109, 100]
+        name: "Desktops",
+        data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
       }],
       chartOptions: {
         chart: {
           height: 350,
           type: 'line',
-          id: 'areachart-2'
-        },
-        annotations: {
-          yaxis: [{
-            y: 8200,
-            borderColor: '#00E396',
-            label: {
-              borderColor: '#00E396',
-              style: {
-                color: '#fff',
-                background: '#00E396',
-              },
-              text: 'Support',
-            }
-          }, {
-            y: 8600,
-            y2: 9000,
-            borderColor: '#000',
-            fillColor: '#FEB019',
-            opacity: 0.2,
-            label: {
-              borderColor: '#333',
-              style: {
-                fontSize: '10px',
-                color: '#333',
-                background: '#FEB019',
-              },
-              text: 'Y-axis range',
-            }
-          }],
-          xaxis: [{
-            x: new Date('23 Nov 2017').getTime(),
-            strokeDashArray: 0,
-            borderColor: '#775DD0',
-            label: {
-              borderColor: '#775DD0',
-              style: {
-                color: '#fff',
-                background: '#775DD0',
-              },
-              text: 'Anno Test',
-            }
-          }, {
-            x: new Date('26 Nov 2017').getTime(),
-            x2: new Date('28 Nov 2017').getTime(),
-            fillColor: '#B3F7CA',
-            opacity: 0.4,
-            label: {
-              borderColor: '#B3F7CA',
-              style: {
-                fontSize: '10px',
-                color: '#fff',
-                background: '#00E396',
-              },
-              offsetY: -10,
-              text: 'X-axis range',
-            }
-          }],
-          points: [{
-            x: new Date('01 Dec 2017').getTime(),
-            y: 8607.55,
-            marker: {
-              size: 8,
-              fillColor: '#fff',
-              strokeColor: 'red',
-              radius: 2,
-              cssClass: 'apexcharts-custom-class'
-            },
-            label: {
-              borderColor: '#FF4560',
-              offsetY: 0,
-              style: {
-                color: '#fff',
-                background: '#FF4560',
-              },
-
-              text: 'Point Annotation',
-            }
-          }, {
-            x: new Date('08 Dec 2017').getTime(),
-            y: 9340.85,
-            marker: {
-              size: 0
-            },
-            image: {
-              path: '../../assets/images/ico-instagram.png'
-            }
-          }]
+          zoom: {
+            enabled: false
+          }
         },
         dataLabels: {
           enabled: false
@@ -131,28 +47,19 @@ export default defineComponent({
         stroke: {
           curve: 'straight'
         },
-        grid: {
-          padding: {
-            right: 30,
-            left: 20
-          }
-        },
         title: {
-          text: 'Line with Annotations',
+          text: 'Product Trends by Month',
           align: 'left'
         },
-        labels: [
-          '13 Nov 2017',
-          '14 Nov 2017',
-          '15 Nov 2017',
-          '16 Nov 2017',
-          '17 Nov 2017',
-          '20 Nov 2017',
-          '21 Nov 2017'
-        ],
-        xaxis: {
-          type: 'datetime',
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+          },
         },
+        xaxis: {
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+        }
       },
       sensorTypes: [] as string[],
     };
@@ -313,10 +220,7 @@ export default defineComponent({
                 </v-list-item>
               </div>
               <v-expand-transition>
-                <template v-if="expand === index">
-                  <apexchart type="line" height="350" :options="chartOptions" :series="series"></apexchart>
-
-                </template>
+                  <Custom_Chart v-if="expand === index"/>
               </v-expand-transition>
 
               <v-divider></v-divider>

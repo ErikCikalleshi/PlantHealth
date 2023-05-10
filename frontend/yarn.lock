@@ -415,7 +415,7 @@ anymatch@~3.1.2:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
-apexcharts@^3.39.0, "apexcharts@> 3.0.0":
+apexcharts@^3.26.0, apexcharts@^3.39.0, "apexcharts@> 3.0.0":
   version "3.39.0"
   resolved "https://registry.npmjs.org/apexcharts/-/apexcharts-3.39.0.tgz"
   integrity sha512-GRvdTg+ZaD55P7/jxqEXpbdCMZQOaej9qE9f7zKkN/oWAbBuuE3mnSCi44UkGMS2X249uEOEXWx0A96jjP3lcA==
@@ -2506,6 +2506,11 @@ vite@^4.0.0, vite@^4.1.4:
     rollup "^3.10.0"
   optionalDependencies:
     fsevents "~2.3.2"
+
+vue-apexcharts@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.npmjs.org/vue-apexcharts/-/vue-apexcharts-1.6.2.tgz"
+  integrity sha512-9HS3scJwWgKjmkcWIf+ndNDR0WytUJD8Ju0V2ZYcjYtlTLwJAf2SKUlBZaQTkDmwje/zMgulvZRi+MXmi+WkKw==
 
 vue-cookies@^1.8.3:
   version "1.8.3"
