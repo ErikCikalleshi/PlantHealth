@@ -6,6 +6,7 @@ import at.qe.backend.exceptions.Greenhouse.GreenhouseNotRegisteredException;
 import at.qe.backend.exceptions.SensorNotFoundException;
 import at.qe.backend.api.model.dto.MeasurementDTO;
 import at.qe.backend.api.services.MeasurementService;
+import at.qe.backend.models.Measurement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,7 @@ public class MeasurementController {
      * @param measurementDTO measurement in JSON format.
      *                       Required parameters:
      *                       "greenhouseID": int,
-     *                       "value": double,
+     *                       "value": double,Ah
      *                       "sensorType": SensorType enum as String
      *                       "date": "yyyy-MM-dd HH:mm",
      *                       "limitExceededBy": double
@@ -41,8 +42,8 @@ public class MeasurementController {
         return measurementService.addMeasurement(measurementDTO);
     }
 
-    @GetMapping
-    public List<MeasurementDTO> getMeasurement(@RequestParam("measurementId") int measurementId) {
-        return measurementService.getMeasurement(measurementId);
+    @GetMapping("measurements/get-measurements-by-greenhouse-id/{greenhouseId}")
+    public List<MeasurementDTO> getMeasurements(@PathVariable String greenhouseId) {
+        return measurementService.getMeasurement(Integer.parseInt(greenhouseId));
     }
 }

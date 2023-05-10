@@ -1,17 +1,15 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import footerComponent from "@/components/general/footer.vue";
-import headerComponent from "@/components/general/header.vue";
-import mainContainer from "@/components/general/main_container.vue";
-import axios from "axios";
-import {API_BASE_URL} from "@/services";
-import {useStore as userStore} from "@/stores/user/user";
-import PageHeading from "@/components/general/PageHeading.vue";
-import HeaderView from "@/components/general/header.vue";
 import FooterView from "@/components/general/footer.vue";
-import VueApexCharts from "vue3-apexcharts";
+import headerComponent from "@/components/general/header.vue";
+import HeaderView from "@/components/general/header.vue";
+import mainContainer from "@/components/general/main_container.vue";
+import PageHeading from "@/components/general/PageHeading.vue";
 import api from "@/services/api";
-import {th} from "vuetify/locale";
+import MeasurementsService from "@/services/MeasurementsService";
+import AdminGreenhouseService from "@/services/admin/AdminGreenhouseService";
+import VueApexCharts from "vue3-apexcharts";
 
 export default defineComponent({
   name: "ChartsView",
@@ -28,29 +26,151 @@ export default defineComponent({
     return {
       revealedCardIndex: -1,
       expand: -1,
+      components: {
+        apexchart: VueApexCharts,
+      },
+      series: [{
+        data: [31, 40, 28, 51, 42, 109, 100]
+      }],
       chartOptions: {
         chart: {
-          id: "vuechart-example",
+          height: 350,
+          type: 'line',
+          id: 'areachart-2'
         },
+        annotations: {
+          yaxis: [{
+            y: 8200,
+            borderColor: '#00E396',
+            label: {
+              borderColor: '#00E396',
+              style: {
+                color: '#fff',
+                background: '#00E396',
+              },
+              text: 'Support',
+            }
+          }, {
+            y: 8600,
+            y2: 9000,
+            borderColor: '#000',
+            fillColor: '#FEB019',
+            opacity: 0.2,
+            label: {
+              borderColor: '#333',
+              style: {
+                fontSize: '10px',
+                color: '#333',
+                background: '#FEB019',
+              },
+              text: 'Y-axis range',
+            }
+          }],
+          xaxis: [{
+            x: new Date('23 Nov 2017').getTime(),
+            strokeDashArray: 0,
+            borderColor: '#775DD0',
+            label: {
+              borderColor: '#775DD0',
+              style: {
+                color: '#fff',
+                background: '#775DD0',
+              },
+              text: 'Anno Test',
+            }
+          }, {
+            x: new Date('26 Nov 2017').getTime(),
+            x2: new Date('28 Nov 2017').getTime(),
+            fillColor: '#B3F7CA',
+            opacity: 0.4,
+            label: {
+              borderColor: '#B3F7CA',
+              style: {
+                fontSize: '10px',
+                color: '#fff',
+                background: '#00E396',
+              },
+              offsetY: -10,
+              text: 'X-axis range',
+            }
+          }],
+          points: [{
+            x: new Date('01 Dec 2017').getTime(),
+            y: 8607.55,
+            marker: {
+              size: 8,
+              fillColor: '#fff',
+              strokeColor: 'red',
+              radius: 2,
+              cssClass: 'apexcharts-custom-class'
+            },
+            label: {
+              borderColor: '#FF4560',
+              offsetY: 0,
+              style: {
+                color: '#fff',
+                background: '#FF4560',
+              },
+
+              text: 'Point Annotation',
+            }
+          }, {
+            x: new Date('08 Dec 2017').getTime(),
+            y: 9340.85,
+            marker: {
+              size: 0
+            },
+            image: {
+              path: '../../assets/images/ico-instagram.png'
+            }
+          }]
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        grid: {
+          padding: {
+            right: 30,
+            left: 20
+          }
+        },
+        title: {
+          text: 'Line with Annotations',
+          align: 'left'
+        },
+        labels: [
+          '13 Nov 2017',
+          '14 Nov 2017',
+          '15 Nov 2017',
+          '16 Nov 2017',
+          '17 Nov 2017',
+          '20 Nov 2017',
+          '21 Nov 2017'
+        ],
         xaxis: {
-          categories:
+          type: 'datetime',
         },
       },
-      series: [
-        {
-          name: "series-1",
-          data: [30, 40, 35, 50, 49, 60, 70, 91],
-        },
-      ],
       sensorTypes: [] as string[],
     };
   },
   methods: {
+    async getMeasurement() {
+      let greenhouseUUID = this.$route.params.id;
+      //TODO: put greenhouseUUID in function call
+      MeasurementsService.getMeasurementsByGreenhouseId(20).then((response) => {
+        if (response.status === 200) {
+          console.log(response)
+        }
+      })
+    },
     getSensorType() {
       let greenhouseUUID = this.$route.params.id;
-      console.log(this.$route.params.id)
 
-      api.get(`greenhouse/get/${greenhouseUUID}`).then((response) => {
+      AdminGreenhouseService.getGreenhouse(+greenhouseUUID).then((response) => {
         response.data.sensors.forEach((sensor: { sensorType: string; }) => {
           const words: any = sensor.sensorType.toLowerCase().split("_");
           for (let i = 0; i < words.length; i++) {
@@ -141,6 +261,7 @@ export default defineComponent({
   },
   mounted() {
     this.getSensorType();
+    this.getMeasurement();
   }
 
 
@@ -149,7 +270,7 @@ export default defineComponent({
 </script>
 <template>
   <v-app>
-    <header-component />
+    <header-component/>
     <main-container negative>
       <div class="container mx-auto">
         <v-row>
@@ -193,14 +314,15 @@ export default defineComponent({
               </div>
               <v-expand-transition>
                 <template v-if="expand === index">
-                  <apexchart type="line" height="350" ref="chart" :options="chartOptions" :series="series"/>
+                  <apexchart type="line" height="350" :options="chartOptions" :series="series"></apexchart>
+
                 </template>
               </v-expand-transition>
 
               <v-divider></v-divider>
 
               <v-card-actions>
-                <v-btn @click="revealCard(index, true)"  variant="outlined">
+                <v-btn @click="revealCard(index, true)" variant="outlined">
                   {{ expand === index ? "Hide Report" : "Full Report" }}
                 </v-btn>
               </v-card-actions>
@@ -209,7 +331,7 @@ export default defineComponent({
         </v-row>
       </div>
     </main-container>
-    <footer-component />
+    <footer-component/>
   </v-app>
 </template>
 

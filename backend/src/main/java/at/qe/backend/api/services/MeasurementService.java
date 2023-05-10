@@ -69,15 +69,17 @@ public class MeasurementService {
     }
 
     public List<MeasurementDTO> getMeasurement(int greenhouseId) {
+        System.out.println("getMeasurement" + greenhouseId);
         //get all measurements from the database
         List<Measurement> measurements = measurementRepository.findAll();
-
         List<MeasurementDTO> greenhouseMeasurements = new ArrayList<>();
 
         for (Measurement measurement : measurements) {
+            System.out.println(measurement.getSensor().getGreenhouse().getUuid());
             //if the measurement is from the specified greenhouse
             if (measurement.getSensor().getGreenhouse().getUuid() == greenhouseId) {
                 //add the measurement to the list
+                System.out.println("measurement added" + measurement.getId());
                 greenhouseMeasurements.add(new MeasurementDTO(measurement));
             }
         }
