@@ -41,7 +41,6 @@ class UserxServiceTests {
     @Mock
     AuditLogService auditLogService;
 
-
     private Userx testUser;
     private List<Userx> testUsers;
 
@@ -74,6 +73,8 @@ class UserxServiceTests {
     void testCreateNewUser() throws UserAlreadyExistsException {
         //this line is needed to get a return value in the tests otherwise the save method just returns null instead of a Userx object
         when(userRepository.save(any(Userx.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        AuditLog auditLog = mock(AuditLog.class);
+        when(auditLogService.createNewAudit(anyString(), anyString(), anyString(), anyBoolean())).thenReturn(auditLog);
         Userx savedUser = userxService.createUser(testUser.getUsername(), testUser.getFirstName(), testUser.getLastName(), testUser.getEmail(), testUser.getRoles(), testUser.getPassword());
         assertNotNull(savedUser);
         assertNotNull(savedUser.getCreateDate());
@@ -110,6 +111,8 @@ class UserxServiceTests {
     @WithMockUser(username = "adminuser", authorities = {"ADMIN"})
     void testUpdateUser() throws UserAlreadyExistsException {
         when(userRepository.save(any(Userx.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        AuditLog auditLog = mock(AuditLog.class);
+        when(auditLogService.createNewAudit(anyString(), anyString(), anyString(), anyBoolean())).thenReturn(auditLog);
         Userx savedUser = userxService.createUser(testUser.getUsername(), testUser.getFirstName(), testUser.getLastName(), testUser.getEmail(), testUser.getRoles(), testUser.getPassword());
         String firstname = "Test2";
         String lastname = "User2";
@@ -133,6 +136,8 @@ class UserxServiceTests {
     @WithMockUser(username = "adminuser", authorities = {"ADMIN"})
     void testUpdateEmailAlreadyInUse() throws UserAlreadyExistsException {
         when(userRepository.save(any(Userx.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        AuditLog auditLog = mock(AuditLog.class);
+        when(auditLogService.createNewAudit(anyString(), anyString(), anyString(), anyBoolean())).thenReturn(auditLog);
         Userx savedUser = userxService.createUser(testUser.getUsername(), testUser.getFirstName(), testUser.getLastName(), testUser.getEmail(), testUser.getRoles(), testUser.getPassword());
         Userx secondUser = userxService.createUser("seconduser", "Second", "User", "secondemail", Set.of(UserRole.USER), "password");
         Set<UserRole> roles = Set.of(UserRole.USER, UserRole.ADMIN);
