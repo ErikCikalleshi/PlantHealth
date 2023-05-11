@@ -89,8 +89,9 @@ export default defineComponent({
                 console.log(response.status)
             }).catch((error) => {
                     if (error.response.status === 400) {
+                        console.log(error)
                         this.snackbar = true;
-                        this.snackbarMessage="Cannot delete last admin!"
+                        this.snackbarMessage=error.response.data.message;
                     }
                 })
             },
