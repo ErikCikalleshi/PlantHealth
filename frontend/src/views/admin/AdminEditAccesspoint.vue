@@ -220,7 +220,7 @@ export default defineComponent({
                     })
                 } else {
                     this.items = this.items.filter((i) => i.greenhouseId != item.greenhouseId);
-                    this.itemsSelected = this.itemsSelected.filter((item) => item.greenhouseId != i.greenhouseId);
+                    this.itemsSelected = this.itemsSelected.filter((i) => i.greenhouseId != item.greenhouseId);
                     AdminAccessPointService.deleteGreenhouseByIdAndAccessPoint(item.greenhouseId, this.accessPoint.id)
                 }
                 this.deleteDialog = false;
