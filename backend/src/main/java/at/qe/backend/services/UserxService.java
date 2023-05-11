@@ -4,16 +4,20 @@ import at.qe.backend.configs.WebSecurityConfig;
 import at.qe.backend.exceptions.Userx.LastAdminException;
 import at.qe.backend.exceptions.Userx.UserAlreadyExistsException;
 import at.qe.backend.exceptions.Userx.UserDoesNotExistException;
+import at.qe.backend.exceptions.Userx.UserStillHasGreenhousesException;
+import at.qe.backend.models.AuditLog;
 import at.qe.backend.models.UserRole;
 import at.qe.backend.models.Userx;
 import at.qe.backend.repositories.UserxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.Date;
@@ -88,16 +92,20 @@ public class UserxService {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(Userx user) throws UserDoesNotExistException, LastAdminException {
+        AuditLog auditLog = auditLogService.createNewAudit("delete", "NA", "user", false);
         if (!userRepository.existsByUsername(user.getUsername())) {
-            auditLogService.createNewAudit("delete", "NA", "user", false);
             throw new UserDoesNotExistException();
         }
         if (user.getRoles().contains(UserRole.ADMIN) && userRepository.countUserxByRolesContaining(UserRole.ADMIN) <= 1) {
-            auditLogService.createNewAudit("delete", "NA", "user", false);
-            throw new LastAdminException();
+            throw new LastAdminException(HttpStatus.BAD_REQUEST, "Cannot delete last admin!");
         }
-        auditLogService.createNewAudit("delete", Long.toString(user.getId()), "user", true);
+        if (!user.getGreenhouses().isEmpty()){
+            throw new UserStillHasGreenhousesException(HttpStatus.BAD_REQUEST, "User is still responsible for at least one greenhouse.");
+        }
         userRepository.delete(user);
+        auditLog.setSuccess(true);
+        auditLog.setTargetID(user.getUsername());
+        auditLogService.saveAuditLog(auditLog);
     }
 
 

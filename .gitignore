@@ -10,3 +10,5 @@ backend/src/main/resources/public/index.html
 /git-stats.sh
 /log/app.log
 /log/warn.log
+/backend/log/warn.log
+/backend/log/app.log

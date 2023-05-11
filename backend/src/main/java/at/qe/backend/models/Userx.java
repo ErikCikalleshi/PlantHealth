@@ -43,7 +43,7 @@ public class Userx implements Persistable<Long>, Serializable, Comparable<Userx>
     private Set<UserRole> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "owner")
-    private Set<Greenhouse> greenhouses;
+    private Set<Greenhouse> greenhouses = new HashSet<>();
 
     @Override
     public int hashCode() {

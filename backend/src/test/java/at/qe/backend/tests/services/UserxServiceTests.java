@@ -3,6 +3,7 @@ import at.qe.backend.configs.WebSecurityConfig;
 import at.qe.backend.exceptions.Userx.LastAdminException;
 import at.qe.backend.exceptions.Userx.UserAlreadyExistsException;
 import at.qe.backend.exceptions.Userx.UserDoesNotExistException;
+import at.qe.backend.models.AuditLog;
 import at.qe.backend.models.UserRole;
 import at.qe.backend.models.Userx;
 import at.qe.backend.repositories.UserxRepository;
@@ -23,7 +24,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
@@ -146,8 +148,10 @@ class UserxServiceTests {
     @DisplayName("Delete user")
     @WithMockUser(username = "adminuser", authorities = {"ADMIN"})
     void testDeleteUser() throws LastAdminException, UserDoesNotExistException {
-        testUser.setId(25L);
+        AuditLog auditLog = mock(AuditLog.class);
+        when(auditLogService.createNewAudit(anyString(), anyString(), anyString(), anyBoolean())).thenReturn(auditLog);
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
+        when(userRepository.findFirstByUsername(testUser.getUsername())).thenReturn(testUser);
         assertThrows(UserDoesNotExistException.class,() -> userxService.deleteUser(testUser));
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
         assertDoesNotThrow(() -> userxService.deleteUser(testUser));
