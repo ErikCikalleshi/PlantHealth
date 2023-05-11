@@ -44,8 +44,8 @@ public class AuditLogService {
     /**
      * Saves the user. This method will also set {@link AuditLog#getDate()} for new entities.
      *
-     * @param auditLog the audit log to save
-     * @return the saved audit log
+     * @param auditLog the audit log to save.
+     * @return the saved audit log.
      */
     public AuditLog saveAuditLog(AuditLog auditLog) {
         auditLog.setDate(new Date());
