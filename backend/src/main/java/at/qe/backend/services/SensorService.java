@@ -25,11 +25,9 @@ public class SensorService {
         if (sensor.isNew()) {
             sensor.setCreateDate(new Date());
             sensor.setCreateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-            auditLogService.createNewAudit("create", Integer.toString(sensor.getId()), "sensor", true);
         } else {
             sensor.setUpdateDate(new Date());
             sensor.setUpdateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-            auditLogService.createNewAudit("update", Integer.toString(sensor.getId()), "sensor", true);
         }
         sensor = sensorRepository.save(sensor);
         return sensor;
@@ -46,7 +44,6 @@ public class SensorService {
         sensorRepository.delete(sensor);
     }
 
-
     public Sensor createSensor(SensorType sensorType, double limitUpper, double limitLower, int limitThresholdMinutes, Greenhouse greenhouse) {
         Sensor sensor = new Sensor();
         sensor.setSensorType(sensorType);
@@ -54,6 +51,7 @@ public class SensorService {
         sensor.setLimitLower(limitLower);
         sensor.setLimitThresholdMinutes(limitThresholdMinutes);
         sensor.setGreenhouse(greenhouse);
+        auditLogService.createNewAudit("create", Integer.toString(sensor.getId()), "sensor", true);
         return saveSensor(sensor);
     }
 

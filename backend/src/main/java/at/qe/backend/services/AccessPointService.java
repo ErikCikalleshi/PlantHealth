@@ -48,7 +48,6 @@ public class AccessPointService {
         if (accessPoint.isNew()) {
             accessPoint.setCreateDate(new Date());
             accessPoint.setCreateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-            auditLogService.createNewAudit("create", Integer.toString(accessPoint.getUuid()), "accesspoint", true);
         } else {
             accessPoint.setUpdateDate(new Date());
             accessPoint.setUpdateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
