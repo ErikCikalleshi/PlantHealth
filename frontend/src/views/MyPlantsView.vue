@@ -3,7 +3,7 @@
     <header-component/>
     <main-container negative class="mb-10">
       <div class="flex center justify-space-between mb-10">
-        <page-heading class="text-white">All Plants</page-heading>
+        <page-heading class="text-white">My Plants</page-heading>
         <div class="w-[220px]">
           <v-text-field
               :loading="loading"
@@ -27,9 +27,15 @@
               <h1 class="text-[20px] font-[600] font-primary">{{ greenhouse.name }}</h1>
               <p class="font-secondary text-[14px]">{{ greenhouse.description }}</p>
             </div>
-            <div tabindex="1" role="button" @click="navigateToCharts(greenhouse.id)" class="w-full flex justify-end ">
-              <oh-icon name="fa-arrow-right" scale="1.6" color="#449a8b"></oh-icon>
-            </div>
+              <div class="flex justify-start items-center">
+                   <edit-greenhouse-dialog-form :greenhouseUUID="greenhouse.uuid" :greenhouses="greenhousesList"/>
+               <v-btn variant="plain" icon="mdi-chart-bar" color="#449a8b" @click="navigateToCharts(greenhouse.id)"/>
+              </div>
+
+<!--            <div tabindex="1" role="button" @click="navigateToCharts(greenhouse.id)" class="w-full flex justify-end ">-->
+
+<!--              <oh-icon name="fa-arrow-right" scale="1.6" color="#449a8b"></oh-icon>-->
+<!--            </div>-->
           </div>
         </div>
       </div>
@@ -40,28 +46,22 @@
 </template>
 
 <script lang="ts">
-import HeaderView from "@/components/general/header.vue";
 import {defineComponent} from "vue";
-import MainComponent from "@/components/general/main_container.vue";
 import PageHeading from "@/components/general/PageHeading.vue";
 import mainContainer from "@/components/general/main_container.vue";
 import footerComponent from "@/components/general/footer.vue";
 import headerComponent from "@/components/general/header.vue";
-import axios from "axios";
-import {API_BASE_URL} from "@/services";
-interface GreenhouseData {
-  id: number,
-  name: string,
-  location: string,
-  description: string,
-  status: string
-}
+import EditGreenhouseDialogForm from "@/components/gardener/edit_greenhouse.vue";
+import adminGreenhouseService from "@/services/admin/AdminGreenhouseService";
+import type IGreenhouse from "@/interfaces/IGreenhouse";
 export default defineComponent({
   name: "PlantsView",
-  components: {headerComponent, footerComponent, mainContainer, PageHeading, MainComponent, HeaderView},
+  components: {
+      EditGreenhouseDialogForm,
+      headerComponent, footerComponent, mainContainer, PageHeading},
   data() {
     return {
-      greenhouses: [] as GreenhouseData[],
+      greenhouses: [] as IGreenhouse[],
       loading: false,
       searchValue: ''
     }
@@ -83,9 +83,9 @@ export default defineComponent({
     }
   },
   mounted() {
-    axios.get(API_BASE_URL + "greenhouse/get").then((response =>  {
-      this.greenhouses = response.data;
-    }))
+      adminGreenhouseService.getAllGreenhousesForCurrentUser().then((response => {
+          this.greenhouses = response.data;
+      }))
   }
 })
 </script>

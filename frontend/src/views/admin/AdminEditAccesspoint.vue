@@ -85,7 +85,7 @@
                                            @click="downloadQrCode(item)"/>
                                     <v-btn variant="plain" color="error" icon="mdi-delete-outline"
                                            @click="deleteDialog=true; itemToDelete = item"/>
-                                    <edit-greenhouse-dialog-form :greenhouseUUID="item.greenhouseUUID" :greenhouses="items"/>
+                                    <edit-greenhouse-dialog-form :greenhouseUUID="item.greenhouseUUID" :greenhouseItems="items"/>
                                 </div>
                             </template>
                         </EasyDataTable>
