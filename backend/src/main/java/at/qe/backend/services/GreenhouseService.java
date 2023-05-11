@@ -1,6 +1,6 @@
 package at.qe.backend.services;
 
-import at.qe.backend.models.Greenhouse;
+import at.qe.backend.models.*;
 import at.qe.backend.models.dto.GreenhouseDTO;
 import at.qe.backend.repositories.GreenhouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +10,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import at.qe.backend.models.dto.SensorDTO;
-import at.qe.backend.models.AccessPoint;
-import at.qe.backend.models.Sensor;
-import at.qe.backend.models.Userx;
 import at.qe.backend.models.request.CreateNewGreenhouseRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -119,5 +116,24 @@ public class GreenhouseService {
             sensorService.updateSensor(sensorDTO);
         }
         return saveGreenhouse(greenhouse);
+    }
+
+
+    /**
+     * @return all greenhouses for the current user (Owner=currentUser) or all greenhouses if the current user is an admin
+     * @throws ResponseStatusException if the current user is not logged in
+     */
+    public List<Greenhouse> getAllForCurrentUser() {
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not logged in.");
+        }
+        Userx currentUser = userxService.loadUser(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (currentUser == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not logged in.");
+        }
+        if (currentUser.getRoles().contains(UserRole.ADMIN)) {
+            return getAll();
+        }
+        return greenhouseRepository.findAllByOwner_Username(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 }

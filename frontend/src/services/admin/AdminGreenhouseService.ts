@@ -18,6 +18,10 @@ class AdminGreenhouseService {
     async updateGreenhouse(greenhouse: IGreenhouse) {
         return await api.put('gardener/greenhouse/update', JSON.parse(JSON.stringify(greenhouse)));
     }
+
+    async getAllGreenhousesForCurrentUser(){
+        return await api.get('gardener/greenhouse/get-all');
+    }
 }
 
 export default new AdminGreenhouseService();

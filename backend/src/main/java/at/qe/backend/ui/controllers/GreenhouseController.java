@@ -1,7 +1,6 @@
 package at.qe.backend.ui.controllers;
 
-import at.qe.backend.services.GreenhouseService;
-import org.springframework.beans.factory.annotation.Autowired;
+import at.qe.backend.models.Greenhouse;
 import at.qe.backend.models.dto.GreenhouseDTO;
 import at.qe.backend.models.request.CreateNewGreenhouseRequest;
 import at.qe.backend.services.GreenhouseService;
@@ -41,10 +40,16 @@ public class GreenhouseController {
         return new GreenhouseDTO(greenhouseService.createGreenhouse(request));
     }
 
-
-
     @PutMapping("/gardener/greenhouse/update")
     public GreenhouseDTO updateGreenhouse(@RequestBody GreenhouseDTO greenhouseDTO) {
         return new GreenhouseDTO(greenhouseService.updateGreenhouse(greenhouseDTO));
+    }
+
+    @GetMapping("/gardener/greenhouse/get-all")
+    public List<GreenhouseDTO> getGreenhouseById() {
+        List<Greenhouse> greenhouses =  greenhouseService.getAllForCurrentUser();
+        return greenhouses.stream()
+                .map(GreenhouseDTO::new)
+                .toList();
     }
 }

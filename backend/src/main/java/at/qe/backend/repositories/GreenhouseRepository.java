@@ -11,4 +11,6 @@ public interface GreenhouseRepository extends AbstractRepository<Greenhouse, Lon
     Greenhouse findFirstByIdInClusterAndAccesspoint_Uuid(long idInCluster,long accesspoint_uuid);
     Optional<Greenhouse> findByUuid(long uuid);
     int countGreenhouseByAccesspoint(AccessPoint accesspoint);
+
+    List<Greenhouse> findAllByOwner_Username(String name);
 }
