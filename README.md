@@ -1,12 +1,23 @@
-# g2t4
+# Plant Health (G2T4)
 
+## Installation
 
+### Prerequisites
+Node.js (Version 18) and npm are required to run the application. To install them, follow the instructions on the [Node.js website](https://nodejs.org/en/download/).
 
-## Getting started
+MySQL (Version 8) is required to run the application. To install it, follow the instructions on the [MySQL website](https://dev.mysql.com/downloads/installer/).
+Run the database/init_database.sql script to create the user for this application and grant it all rights on the database. Be sure that the username/password + databse name in the script match the ones in the application.properties file.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Starting the application
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Run the backend application via mvn spring-boot:run in the backend folder. The application will be available at http://localhost:9000. (Port is defined in application.properties)
+
+To start the frontend application, navigate to the frontend folder and run the follwoing commands:
+~~~
+npm install
+npm i
+npm run dev
+~~~
 
 ## Add your files
 
