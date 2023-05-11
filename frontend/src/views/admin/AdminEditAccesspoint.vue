@@ -214,12 +214,13 @@ export default defineComponent({
             if (item != null) {
                 if (Array.isArray(item)) {
                     item.forEach((i) => {
-                        console.log(i.greenhouseId)
                         this.items = this.items.filter((item) => item.greenhouseId != i.greenhouseId);
+                        this.itemsSelected = this.itemsSelected.filter((item) => item.greenhouseId != i.greenhouseId);
                         AdminAccessPointService.deleteGreenhouseByIdAndAccessPoint(i.greenhouseId, this.accessPoint.id)
                     })
                 } else {
                     this.items = this.items.filter((i) => i.greenhouseId != item.greenhouseId);
+                    this.itemsSelected = this.itemsSelected.filter((item) => item.greenhouseId != i.greenhouseId);
                     AdminAccessPointService.deleteGreenhouseByIdAndAccessPoint(item.greenhouseId, this.accessPoint.id)
                 }
                 this.deleteDialog = false;
