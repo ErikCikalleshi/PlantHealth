@@ -189,7 +189,7 @@ export default defineComponent({
                             }
                         } else if (this.greenhouses != undefined) {
                             let oldGreenhouse = this.greenhouses.find((x) => x.uuid === this.greenhouseUUID);
-                            if (greenhouse !== undefined) {
+                            if (oldGreenhouse !== undefined) {
                                 this.greenhouses.splice(this.greenhouses.indexOf(oldGreenhouse), 1, greenhouse);
 
                             }
