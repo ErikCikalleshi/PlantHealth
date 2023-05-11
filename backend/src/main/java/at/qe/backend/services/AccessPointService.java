@@ -52,7 +52,6 @@ public class AccessPointService {
         } else {
             accessPoint.setUpdateDate(new Date());
             accessPoint.setUpdateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-            auditLogService.createNewAudit("update", Integer.toString(accessPoint.getUuid()), "accesspoint", true);
         }
         return accessPointRepository.save(accessPoint);
     }
@@ -81,6 +80,7 @@ public class AccessPointService {
         accessPoint.setDescription(description);
         accessPoint.setTransmissionIntervalSeconds(i);
         accessPoint.setPublished(published);
+        auditLogService.createNewAudit("create", Integer.toString(accessPoint.getUuid()), "accesspoint", true);
         return saveAccessPoint(accessPoint);
     }
 
@@ -91,6 +91,7 @@ public class AccessPointService {
         accessPoint.setDescription(description);
         accessPoint.setTransmissionIntervalSeconds(i);
         accessPoint.setPublished(published);
+        auditLogService.createNewAudit("update", Integer.toString(accessPoint.getUuid()), "accesspoint", true);
         return saveAccessPoint(accessPoint);
     }
 }
