@@ -75,9 +75,7 @@ public class UserxService {
         if (user.isNew()) {
             user.setCreateDate(new Date());
             user.setCreateUserUsername(getAuthenticatedUsername());
-            auditLogService.createNewAudit("create", "NA", "user", true);
         } else {
-            auditLogService.createNewAudit("update", Long.toString(user.getId()), "user", true);
             user.setUpdateDate(new Date());
             user.setUpdateUserUsername(getAuthenticatedUsername());
         }
@@ -100,6 +98,8 @@ public class UserxService {
             throw new LastAdminException(HttpStatus.BAD_REQUEST, "Cannot delete last admin!");
         }
         if (!user.getGreenhouses().isEmpty()){
+            auditLog.setTargetID(user.getUsername());
+            auditLogService.saveAuditLog(auditLog);
             throw new UserStillHasGreenhousesException(HttpStatus.BAD_REQUEST, "User is still responsible for at least one greenhouse.");
         }
         userRepository.delete(user);
@@ -116,8 +116,8 @@ public class UserxService {
 
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
     public Userx updateUser(String username, String firstname, String lastname, String email, Collection<UserRole> roles) throws UserAlreadyExistsException {
-        if (userRepository.existsByEmail(email) && !userRepository.findByEmail(email).getUsername().equals(username)) {
-            auditLogService.createNewAudit("update", "NA", "user", false);
+        AuditLog auditLog = auditLogService.createNewAudit("update", username, "user", false);
+        if (userRepository.existsByEmail(email) && !userRepository.findByEmail(email).getUsername().equals(username)) {;
             throw new UserAlreadyExistsException();
         }
         Userx user = loadUser(username);
@@ -125,13 +125,15 @@ public class UserxService {
         user.setLastName(lastname);
         user.setEmail(email);
         user.setRoles(new HashSet<>(roles));
+        auditLog.setSuccess(true);
+        auditLogService.saveAuditLog(auditLog);
         return saveUser(user);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Userx createUser(String username, String firstname, String lastname, String email, Collection<UserRole> roles, String password) throws UserAlreadyExistsException {
+        AuditLog auditLog = auditLogService.createNewAudit("create", "NA", "user", false);
         if (userRepository.existsByUsername(username) || userRepository.existsByEmail(email)) {
-            auditLogService.createNewAudit("create", "NA", "user", false);
             throw new UserAlreadyExistsException();
         }
         Userx user = new Userx();
@@ -141,6 +143,9 @@ public class UserxService {
         user.setEmail(email);
         user.setRoles(new HashSet<>(roles));
         user.setPassword(WebSecurityConfig.passwordEncoder().encode(password));
+        auditLog.setSuccess(true);
+        auditLog.setTargetID(username);
+        auditLogService.saveAuditLog(auditLog);
         return saveUser(user);
     }
 }
