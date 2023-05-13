@@ -9,7 +9,6 @@ import {useStore as userStore} from "@/stores/user/user";
 import PageHeading from "@/components/general/PageHeading.vue";
 import HeaderView from "@/components/general/header.vue";
 import FooterView from "@/components/general/footer.vue";
-
 export default defineComponent({
     name: "GalleryView",
     components: {
@@ -28,6 +27,7 @@ export default defineComponent({
             imgUrls: [],
             greenHouseName: '',
             empty: true,
+            user: userStore(),
         };
     },
     methods: {
@@ -66,22 +66,34 @@ export default defineComponent({
             } catch (error) {
                 console.error(error);
             }
+            location.reload();
         },
+        async deleteImage(url: string) {
+            await axios.delete(API_BASE_URL + `greenhouse/delete`, {
+                data: {url: url}
+            }).then(() => {
+                this.update();
+            });
+            location.reload();
+        },
+        update() {
+            this.empty = this.imgUrls.length <= 0;
+            this.plantId = Number(this.$route.params.id);
+            if(this.plantId <= 0)
+                return;
+            const response = axios.get(API_BASE_URL + `greenhouse/get-all/${this.plantId}`).then((x) => {
+                this.imgUrls = x.data;
+                if(this.imgUrls.length > 0) {
+                    this.empty = false
+                }
+            })
+            const ghName = axios.get(API_BASE_URL + `greenhouse/get-name/${this.plantId}`).then((x) => {
+                this.greenHouseName = x.data;
+            })
+        }
     },
     mounted() {
-        this.plantId = Number(this.$route.params.id);
-        if(this.plantId <= 0)
-            return;
-        const response = axios.get(API_BASE_URL + `greenhouse/get-all/${this.plantId}`).then((x) => {
-            this.imgUrls = x.data;
-            console.log(x.data);
-            if(this.imgUrls.length > 0) {
-                this.empty = false
-            }
-        })
-        const ghName = axios.get(API_BASE_URL + `greenhouse/get-name/${this.plantId}`).then((x) => {
-            this.greenHouseName = x.data;
-        })
+        this.update();
     }
 });
 </script>
@@ -101,13 +113,16 @@ export default defineComponent({
                 </div>
             </div>
             <div class="flex flex-wrap gap-3 mb-10">
-                <img v-for="(imgUrl, index) in imgUrls" :key="index"
-                     :src="imgUrl"
-                     alt="refresh browser"
-                     referrerpolicy="no-referrer"
-                     width="350"
-                     height="350"
-                />
+                <div v-for="(imgUrl, index) in imgUrls" :key="index" class="relative">
+                    <oh-icon v-if="user.roles.includes('GARDENER') || user.roles.includes('ADMIN')" name="io-close-sharp" scale="1.4" class="absolute top-[10px] right-[10px] fill-white bg-red-700 rounded cursor-pointer" @click="deleteImage(imgUrl)"></oh-icon>
+                    <img
+                        :src="imgUrl"
+                        alt="refresh browser"
+                        referrerpolicy="no-referrer"
+                        width="350"
+                        height="350"
+                    />
+                </div>
             </div>
         </main-container>
         <footer-component/>
