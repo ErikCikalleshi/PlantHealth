@@ -1,16 +1,14 @@
 package at.qe.backend.api.services;
 
+import at.qe.backend.api.model.dto.MeasurementDTO;
 import at.qe.backend.exceptions.AccessPoint.AccessPointNotPublishedException;
 import at.qe.backend.exceptions.Greenhouse.GreenhouseNotPublishedException;
 import at.qe.backend.exceptions.Greenhouse.GreenhouseNotRegisteredException;
 import at.qe.backend.exceptions.SensorNotFoundException;
-import at.qe.backend.api.model.dto.MeasurementDTO;
 import at.qe.backend.models.Greenhouse;
 import at.qe.backend.models.Measurement;
 import at.qe.backend.models.Sensor;
-import at.qe.backend.repositories.GreenhouseRepository;
 import at.qe.backend.repositories.MeasurementRepository;
-import at.qe.backend.repositories.SensorRepository;
 import at.qe.backend.services.GreenhouseService;
 import at.qe.backend.services.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * This Service is responsible for saving the Measurements provided by the AccessPoints
@@ -68,21 +65,4 @@ public class MeasurementService {
         return new MeasurementDTO(measurement);
     }
 
-    public List<MeasurementDTO> getMeasurement(int greenhouseId) {
-        System.out.println("getMeasurement" + greenhouseId);
-        //get all measurements from the database
-        List<Measurement> measurements = measurementRepository.findAll();
-        List<MeasurementDTO> greenhouseMeasurements = new ArrayList<>();
-
-        for (Measurement measurement : measurements) {
-            System.out.println(measurement.getSensor().getGreenhouse().getUuid());
-            //if the measurement is from the specified greenhouse
-            if (measurement.getSensor().getGreenhouse().getUuid() == greenhouseId) {
-                //add the measurement to the list
-                System.out.println("measurement added" + measurement.getId());
-                greenhouseMeasurements.add(new MeasurementDTO(measurement));
-            }
-        }
-        return greenhouseMeasurements;
-    }
 }

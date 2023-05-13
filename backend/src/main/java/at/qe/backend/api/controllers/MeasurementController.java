@@ -6,12 +6,10 @@ import at.qe.backend.exceptions.Greenhouse.GreenhouseNotRegisteredException;
 import at.qe.backend.exceptions.SensorNotFoundException;
 import at.qe.backend.api.model.dto.MeasurementDTO;
 import at.qe.backend.api.services.MeasurementService;
-import at.qe.backend.models.Measurement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * REST Interface for the measurement API
@@ -40,10 +38,5 @@ public class MeasurementController {
     @PostMapping("/measurements")
     public MeasurementDTO createMeasurement(@RequestBody MeasurementDTO measurementDTO) throws SensorNotFoundException, GreenhouseNotRegisteredException, AccessPointNotPublishedException, GreenhouseNotPublishedException {
         return measurementService.addMeasurement(measurementDTO);
-    }
-
-    @GetMapping("measurements/get-measurements-by-greenhouse-id/{greenhouseId}")
-    public List<MeasurementDTO> getMeasurements(@PathVariable String greenhouseId) {
-        return measurementService.getMeasurement(Integer.parseInt(greenhouseId));
     }
 }
