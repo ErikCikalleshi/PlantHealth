@@ -11,6 +11,8 @@
 #define BME_READING_INTERVAL 500 // 500 ms
 #define SENDING_INTERVAL 10000 // 10 s
 #define BLE_PAIRING_TIME 300000 // 5 min
+#define BLINK_INTERVAL 500
+#define BLINK_PAUSE 3000
 
 BLEService airSensorService("181A");
 BLEIntCharacteristic temperatureCharacteristic("2A6E", BLERead | BLENotify);
@@ -24,8 +26,13 @@ BLEUnsignedIntCharacteristic lightIntensityCharacteristic("4ab3244f-d156-4e76-a3
 BLEService hygrometerService("f8cbfa9a-920e-4e31-ae5f-fca3b1cef4f7");
 BLEUnsignedIntCharacteristic moistureCharacteristic("29c1083c-5166-433c-9b7c-98658c826968", BLERead | BLENotify);
 
+BLEService ledService("f5a38368-9851-41cc-b49e-6ad0bba76f9b");
+BLEByteCharacteristic ledFlagCharacteristic("eac630d2-9e86-4005-b7b9-6f6955f7ec10", BLERead | BLEWrite);
+
 Adafruit_BME680 bme;
+
 int dipSwitchPins[] = {D10, D9, D8, D7, D6, D5, D4, D3};
+enum Color { YELLOW, RED, GREEN, PURPLE, BLUE };
 
 int num_light_readings = 0;
 int num_hygrometer_readings = 0;
@@ -44,6 +51,13 @@ unsigned long previous_hygrometer_reading_millis = 0;
 unsigned long previous_bme_reading_millis = 0;
 unsigned long previous_writing_millis = 0;
 
+int pairing_mode = 0;
+int led_on = 0;
+char color = GREEN;
+int num_blinks = 0;
+int current_blinks = 0;
+unsigned long next_led_change_millis = 0;
+
 void blePeripheralConnectHandler(BLEDevice central);
 
 void blePeripheralDisconnectHandler(BLEDevice central);
@@ -58,6 +72,9 @@ void read_hygrometer();
 void read_bme();
 
 void write_sensor_data();
+
+void check_led_flag();
+void update_led();
 
 int get_ID();
 
@@ -79,6 +96,8 @@ void loop() {
   BLE.poll();
   read_sensors();
   write_sensor_data();
+  check_led_flag();
+  update_led();
 }
 
 void sensor_setup() {
@@ -150,6 +169,9 @@ void BLE_setup() {
 
   hygrometerService.addCharacteristic(moistureCharacteristic);
   BLE.addService(hygrometerService);
+
+  ledService.addCharacteristic(ledFlagCharacteristic);
+  BLE.addService(ledService);
 
   BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
@@ -246,15 +268,15 @@ void write_sensor_data() {
     Serial.println(num_hygrometer_readings);
 
     Serial.print(F("Temperature = "));
-    Serial.print(temperature_value / 100.0);
+    Serial.print(temperature_value);
     Serial.println(F(" *C"));
 
     Serial.print(F("Pressure = "));
-    Serial.print(pressure_value / 1000.0);
+    Serial.print(pressure_value / 100.0);
     Serial.println(F(" hPa"));
 
     Serial.print(F("Humidity = "));
-    Serial.print(humidity_value / 100.0);
+    Serial.print(humidity_value);
     Serial.println(F(" %"));
 
     Serial.print(F("Gas = "));
@@ -266,10 +288,68 @@ void write_sensor_data() {
 
     previous_writing_millis = current_millis;
 
+    light_readings = 0;
+    hygrometer_readings = 0;
+    temperature_readings = 0;
+    pressure_readings = 0;
+    humidity_readings = 0;
+    gas_resistance_readings = 0;
+
     num_bme_readings = 0;
     num_hygrometer_readings = 0;
     num_light_readings = 0;
   }
+}
+
+void check_led_flag() {
+  if (ledFlagCharacteristic.written()) {
+    byte flag = ledFlagCharacteristic.value();
+    num_blinks = 127 & flag;
+    if (num_blinks == 0) {
+      color = GREEN;
+    } else {
+      color = flag >> 7;
+    }
+  }
+  
+}
+
+void update_led() {
+  if (current_millis >= next_led_change_millis) {
+    if (led_on) {
+      set_led(0, 0, 0);
+      led_on = 0;
+      current_blinks++;
+      if (current_blinks >= num_blinks) {
+        next_led_change_millis = current_millis + BLINK_PAUSE;
+        current_blinks = 0;
+      } else {
+        next_led_change_millis = current_millis + BLINK_INTERVAL;
+      }
+    } else {
+      switch(color) {
+        case RED:
+          set_led(255, 0, 0);
+          break;
+        case YELLOW:
+          set_led(255, 255, 0);
+          break;
+        case GREEN:
+          set_led(0, 255, 0);
+          break;
+        default:
+          set_led(255, 0, 255);
+      }
+      led_on = 1;
+      next_led_change_millis = current_millis + BLINK_INTERVAL;
+    }
+  }
+}
+
+void set_led(int red_val, int green_val, int blue_val) {
+  analogWrite(A2, red_val);
+  analogWrite(A0, green_val);
+  analogWrite(A1, blue_val);
 }
 
 int get_ID() {
