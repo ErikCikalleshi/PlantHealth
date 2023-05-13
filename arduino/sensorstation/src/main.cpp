@@ -8,7 +8,7 @@
 
 #define LIGHT_READING_INTERVAL 100 // 100 ms
 #define HYGROMETER_READING_INTERVAL 100 // 100 ms
-#define BME_READING_INTERVAL 500 // 500 ms
+#define BME_READING_INTERVAL 1000 // 500 ms
 #define SENDING_INTERVAL 10000 // 10 s
 #define BLE_PAIRING_TIME 300000 // 5 min
 #define BLINK_INTERVAL 500
@@ -29,10 +29,11 @@ BLEUnsignedIntCharacteristic moistureCharacteristic("29c1083c-5166-433c-9b7c-986
 BLEService ledService("f5a38368-9851-41cc-b49e-6ad0bba76f9b");
 BLEByteCharacteristic ledFlagCharacteristic("eac630d2-9e86-4005-b7b9-6f6955f7ec10", BLERead | BLEWrite);
 
+BLEDevice central;
 Adafruit_BME680 bme;
 
 int dipSwitchPins[] = {D10, D9, D8, D7, D6, D5, D4, D3};
-enum Color { YELLOW, RED, GREEN, PURPLE, BLUE };
+enum Color { YELLOW, RED, GREEN, PURPLE, BLUE, OFF };
 
 int num_light_readings = 0;
 int num_hygrometer_readings = 0;
@@ -52,18 +53,22 @@ unsigned long previous_bme_reading_millis = 0;
 unsigned long previous_writing_millis = 0;
 
 int pairing_mode = 0;
+unsigned long pairing_mode_start = 0;
 int led_on = 0;
-char color = GREEN;
+int color = PURPLE;
 int num_blinks = 0;
 int current_blinks = 0;
+int blink_on = 0;
+int warning_on = 0;
+
 unsigned long next_led_change_millis = 0;
 
 void blePeripheralConnectHandler(BLEDevice central);
 
 void blePeripheralDisconnectHandler(BLEDevice central);
 
+void button_setup();
 void sensor_setup();
-
 void BLE_setup();
 
 void read_sensors();
@@ -76,6 +81,9 @@ void write_sensor_data();
 void check_led_flag();
 void update_led();
 
+void stop_blink_handler();
+void pairing_mode_handler();
+void check_pairing_mode();
 int get_ID();
 
 // the setup function runs once when you press reset or power the board
@@ -85,8 +93,9 @@ void setup() {
   Serial.println("Serial started");
   int ID = get_ID();
   Serial.println(ID);
-  BLE_setup();
   
+  button_setup();
+  BLE_setup();
   sensor_setup();
 }
 
@@ -98,6 +107,7 @@ void loop() {
   write_sensor_data();
   check_led_flag();
   update_led();
+  check_pairing_mode();
 }
 
 void sensor_setup() {
@@ -118,13 +128,26 @@ void sensor_setup() {
 }
 
 void blePeripheralConnectHandler(BLEDevice central) {
+  pairing_mode = 0;
+  color = GREEN;
+  blink_on = 0;
+  led_on = 1;
+  BLE.stopAdvertise();
   Serial.println("Connected event, central: ");
   Serial.println(central.address());
 }
 
 void blePeripheralDisconnectHandler(BLEDevice central) {
+  color = PURPLE;
+  blink_on = 0;
+  led_on = 1;
   Serial.println("Disconnected event, central: ");
   Serial.println(central.address());
+}
+
+void button_setup() {
+  attachInterrupt(digitalPinToInterrupt(D11), stop_blink_handler, FALLING);
+  attachInterrupt(digitalPinToInterrupt(D12), pairing_mode_handler, FALLING);
 }
 
 void BLE_setup() {
@@ -175,8 +198,6 @@ void BLE_setup() {
 
   BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
-
-  BLE.advertise();
 
   /*
   BLEDevice central;
@@ -307,49 +328,108 @@ void check_led_flag() {
     num_blinks = 127 & flag;
     if (num_blinks == 0) {
       color = GREEN;
+      blink_on = 0;
     } else {
       color = flag >> 7;
+      blink_on = 1;
+      warning_on = 1;
     }
   }
-  
 }
 
 void update_led() {
-  if (current_millis >= next_led_change_millis) {
-    if (led_on) {
-      set_led(0, 0, 0);
-      led_on = 0;
-      current_blinks++;
-      if (current_blinks >= num_blinks) {
-        next_led_change_millis = current_millis + BLINK_PAUSE;
-        current_blinks = 0;
+  if (blink_on) {
+    if (current_millis >= next_led_change_millis) {
+      if (led_on) {
+        set_led(OFF);
+        led_on = 0;
+        current_blinks++;
+        if (current_blinks >= num_blinks) {
+          next_led_change_millis = current_millis + BLINK_PAUSE;
+          current_blinks = 0;
+        } else {
+          next_led_change_millis = current_millis + BLINK_INTERVAL;
+        }
       } else {
+        set_led(color);
+        led_on = 1;
         next_led_change_millis = current_millis + BLINK_INTERVAL;
       }
-    } else {
-      switch(color) {
-        case RED:
-          set_led(255, 0, 0);
-          break;
-        case YELLOW:
-          set_led(255, 255, 0);
-          break;
-        case GREEN:
-          set_led(0, 255, 0);
-          break;
-        default:
-          set_led(255, 0, 255);
-      }
-      led_on = 1;
-      next_led_change_millis = current_millis + BLINK_INTERVAL;
     }
+  } else {
+    set_led(color);
   }
 }
 
-void set_led(int red_val, int green_val, int blue_val) {
+void set_led(int color) {
+  int red_val, green_val, blue_val;
+  switch (color) {
+    case RED:
+      red_val = 255;
+      green_val = 0;
+      blue_val = 0;
+      break;
+    case YELLOW:
+      red_val = 255;
+      green_val = 40;
+      blue_val = 10;
+      break;
+    case GREEN:
+      red_val = 0;
+      green_val = 255;
+      blue_val = 0;
+      break;
+    case BLUE:
+      red_val = 0;
+      green_val = 0;
+      blue_val = 255;
+      break;
+    case PURPLE:
+      red_val = 255;
+      green_val = 0;
+      blue_val = 150;
+      break;
+    case OFF:
+      red_val = 0;
+      green_val = 0;
+      blue_val = 0;
+      break;
+    default:
+      red_val = 0;
+      green_val = 0;
+      blue_val = 0;
+  }
+  
   analogWrite(A2, red_val);
   analogWrite(A0, green_val);
   analogWrite(A1, blue_val);
+}
+
+void stop_blink_handler() {
+  if (warning_on) {
+    blink_on = 0;
+    color = GREEN;
+  }
+}
+
+void pairing_mode_handler() {
+  Serial.println("Pairing Mode started.");
+  pairing_mode = 1;
+  pairing_mode_start = current_millis;
+  BLE.advertise();
+  color = BLUE;
+  num_blinks = 50000;
+  blink_on = 1;
+}
+
+void check_pairing_mode() {
+  if (pairing_mode && (current_millis - pairing_mode_start >= BLE_PAIRING_TIME)) {
+    pairing_mode = 0;
+    color = PURPLE;
+    blink_on = 0;
+    led_on = 1;
+    BLE.stopAdvertise();
+  }
 }
 
 int get_ID() {
@@ -358,7 +438,7 @@ int get_ID() {
   }
   int ID = 0;
   for (int i = 0; i < 8; i++) {
-    ID += digitalRead(dipSwitchPins[i]) << i;
+    ID += digitalRead(dipSwitchPins[i]) << i; 
   }
   return ID;
 }
