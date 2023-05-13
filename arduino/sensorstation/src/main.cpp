@@ -6,6 +6,12 @@
 
 #define SEALEVELPRESSURE_HPA (1013.25)
 
+#define LIGHT_READING_INTERVAL 100 // 100 ms
+#define HYGROMETER_READING_INTERVAL 100 // 100 ms
+#define BME_READING_INTERVAL 500 // 500 ms
+#define SENDING_INTERVAL 10000 // 10 s
+#define BLE_PAIRING_TIME 300000 // 5 min
+
 BLEService airSensorService("181A");
 BLEIntCharacteristic temperatureCharacteristic("2A6E", BLERead | BLENotify);
 BLEUnsignedIntCharacteristic humidityCharacteristic("2A6F", BLERead | BLENotify);
@@ -21,6 +27,23 @@ BLEUnsignedIntCharacteristic moistureCharacteristic("29c1083c-5166-433c-9b7c-986
 Adafruit_BME680 bme;
 int dipSwitchPins[] = {D10, D9, D8, D7, D6, D5, D4, D3};
 
+int num_light_readings = 0;
+int num_hygrometer_readings = 0;
+int num_bme_readings = 0;
+
+unsigned int light_readings = 0;
+unsigned int hygrometer_readings = 0;
+int temperature_readings = 0;
+int humidity_readings = 0;
+int pressure_readings = 0;
+float gas_resistance_readings = 0.0;
+
+unsigned long current_millis = 0;
+unsigned long previous_light_reading_millis = 0;
+unsigned long previous_hygrometer_reading_millis = 0;
+unsigned long previous_bme_reading_millis = 0;
+unsigned long previous_writing_millis = 0;
+
 void blePeripheralConnectHandler(BLEDevice central);
 
 void blePeripheralDisconnectHandler(BLEDevice central);
@@ -29,11 +52,12 @@ void sensor_setup();
 
 void BLE_setup();
 
-void read_light_sensor(unsigned int *light);
+void read_sensors();
+void read_light_sensor();
+void read_hygrometer();
+void read_bme();
 
-void read_hygrometer(unsigned int *moisture);
-
-int read_air_sensor(int *temperature, int *humidity, int *pressure, int *gas_resistance);
+void write_sensor_data();
 
 int get_ID();
 
@@ -48,18 +72,13 @@ void setup() {
   
   sensor_setup();
 }
-int c = 0;
+
 // the loop function runs over and over again forever
 void loop() {
-  while (c++ < 3000) {
-    BLE.poll();
-    delay(10);
-  }
+  current_millis = millis();
   BLE.poll();
-  read_light_sensor();
-  read_hygrometer();
-  read_air_sensor();
-  delay(5000);
+  read_sensors();
+  write_sensor_data();
 }
 
 void sensor_setup() {
@@ -145,60 +164,112 @@ void BLE_setup() {
   */
 }
 
+void read_sensors() {
+  read_light_sensor();
+  read_hygrometer();
+  read_bme();
+}
+
 void read_light_sensor() {
-  unsigned int light = analogRead(A6);
-  lightIntensityCharacteristic.writeValue(light);
-  Serial.print("Light: ");
-  Serial.println(light);
+  if (current_millis - previous_light_reading_millis >= LIGHT_READING_INTERVAL) {
+    unsigned int light = analogRead(A6);
+    light_readings += light;
+    num_light_readings++;
+    previous_light_reading_millis = current_millis;
+  }
 }
 
 void read_hygrometer() {
-  unsigned int moisture = analogRead(A7);
-  moistureCharacteristic.writeValue(moisture);
-  Serial.print("Moisture: ");
-  Serial.println(moisture);
+  if (current_millis - previous_hygrometer_reading_millis >= HYGROMETER_READING_INTERVAL) {
+    unsigned int moisture = analogRead(A7);
+    hygrometer_readings += moisture;
+    num_hygrometer_readings++;
+    previous_hygrometer_reading_millis = current_millis;
+  }
 }
 
-int read_air_sensor() {
-  unsigned long endTime = bme.beginReading();
-  if (endTime == 0) {
-    Serial.println(F("Failed to begin reading :("));
-    return EXIT_FAILURE;
+void read_bme() {
+  if (current_millis - previous_bme_reading_millis >= BME_READING_INTERVAL) {
+    unsigned long endTime = bme.beginReading();
+    if (endTime == 0) {
+      Serial.println(F("Failed to begin reading :("));
+      return;
+    }
+
+    if (!bme.endReading()) {
+      Serial.println(F("Failed to complete reading :("));
+      return;
+    }
+
+    int temperature = bme.temperature;
+    int humidity = bme.humidity ;
+    int pressure = bme.pressure;
+    float gas_resistance = bme.gas_resistance / 1000.0;
+
+    temperature_readings += temperature;
+    humidity_readings += humidity;
+    pressure_readings += pressure;
+    gas_resistance_readings += gas_resistance;
+
+    num_bme_readings++;
+
+    previous_bme_reading_millis = current_millis;
   }
+}
 
-  if (!bme.endReading()) {
-    Serial.println(F("Failed to complete reading :("));
-    return EXIT_FAILURE;
+void write_sensor_data() {
+  if (current_millis - previous_writing_millis >= SENDING_INTERVAL) {
+    unsigned int light_value = light_readings / num_light_readings;
+    unsigned int moisture_value = hygrometer_readings / num_hygrometer_readings;
+    int temperature_value = temperature_readings / num_bme_readings;
+    int humidity_value = humidity_readings / num_bme_readings;
+    int pressure_value = pressure_readings / num_bme_readings;
+    float gas_resistance_value = gas_resistance_readings / num_bme_readings;
+    
+    lightIntensityCharacteristic.writeValue(light_value);
+    moistureCharacteristic.writeValue(moisture_value);
+    temperatureCharacteristic.writeValue(temperature_value);
+    humidityCharacteristic.writeValue(humidity_value);
+    pressureCharacteristic.writeValue(pressure_value);
+    vocCharacteristic.writeValue(gas_resistance_value);
+
+    Serial.print("Light: ");
+    Serial.println(light_value);
+
+    Serial.print("Number of light readings: ");
+    Serial.println(num_light_readings);
+
+    Serial.print("Moisture: ");
+    Serial.println(moisture_value);
+
+    Serial.print("Number of hygrometer readings: ");
+    Serial.println(num_hygrometer_readings);
+
+    Serial.print(F("Temperature = "));
+    Serial.print(temperature_value / 100.0);
+    Serial.println(F(" *C"));
+
+    Serial.print(F("Pressure = "));
+    Serial.print(pressure_value / 1000.0);
+    Serial.println(F(" hPa"));
+
+    Serial.print(F("Humidity = "));
+    Serial.print(humidity_value / 100.0);
+    Serial.println(F(" %"));
+
+    Serial.print(F("Gas = "));
+    Serial.print(gas_resistance_value);
+    Serial.println(F(" KOhms"));
+
+    Serial.print("Number of BME readings: ");
+    Serial.println(num_bme_readings);
+
+    previous_writing_millis = current_millis;
+
+    num_bme_readings = 0;
+    num_hygrometer_readings = 0;
+    num_light_readings = 0;
   }
-
-  int temperature = bme.temperature * 100;
-  int humidity = bme.humidity * 100;
-  int pressure = bme.pressure * 10;
-  float gas_resistance = bme.gas_resistance / 1000.0;
-
-  // Update the BLE characteristics with the sensor values
-  temperatureCharacteristic.writeValue(temperature);
-  humidityCharacteristic.writeValue(humidity);
-  pressureCharacteristic.writeValue(pressure);
-  vocCharacteristic.writeValue(gas_resistance);
-
-  Serial.print(F("Temperature = "));
-  Serial.print(temperature / 100.0);
-  Serial.println(F(" *C"));
-
-  Serial.print(F("Pressure = "));
-  Serial.print(pressure / 1000.0);
-  Serial.println(F(" hPa"));
-
-  Serial.print(F("Humidity = "));
-  Serial.print(humidity / 100.0);
-  Serial.println(F(" %"));
-
-  Serial.print(F("Gas = "));
-  Serial.print(gas_resistance);
-  Serial.println(F(" KOhms"));
-
-  return EXIT_SUCCESS;
 }
 
 int get_ID() {
