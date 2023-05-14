@@ -29,10 +29,9 @@ BLEUnsignedIntCharacteristic moistureCharacteristic("29c1083c-5166-433c-9b7c-986
 BLEService ledService("f5a38368-9851-41cc-b49e-6ad0bba76f9b");
 BLEByteCharacteristic ledFlagCharacteristic("eac630d2-9e86-4005-b7b9-6f6955f7ec10", BLERead | BLEWrite);
 
-BLEDevice central;
 Adafruit_BME680 bme;
 
-int dipSwitchPins[] = {D10, D9, D8, D7, D6, D5, D4, D3};
+int dipSwitchPins[] = {D12, D11, D10, D9, D8, D7, D6, D5};
 enum Color { YELLOW, RED, GREEN, PURPLE, BLUE, OFF };
 
 int num_light_readings = 0;
@@ -60,6 +59,7 @@ int num_blinks = 0;
 int current_blinks = 0;
 int blink_on = 0;
 int warning_on = 0;
+int connected = 0;
 
 unsigned long next_led_change_millis = 0;
 
@@ -132,7 +132,7 @@ void blePeripheralConnectHandler(BLEDevice central) {
   color = GREEN;
   blink_on = 0;
   led_on = 1;
-  BLE.stopAdvertise();
+  connected = 1;
   Serial.println("Connected event, central: ");
   Serial.println(central.address());
 }
@@ -141,13 +141,14 @@ void blePeripheralDisconnectHandler(BLEDevice central) {
   color = PURPLE;
   blink_on = 0;
   led_on = 1;
+  connected = 0;
   Serial.println("Disconnected event, central: ");
   Serial.println(central.address());
 }
 
 void button_setup() {
-  attachInterrupt(digitalPinToInterrupt(D11), stop_blink_handler, FALLING);
-  attachInterrupt(digitalPinToInterrupt(D12), pairing_mode_handler, FALLING);
+  attachInterrupt(digitalPinToInterrupt(D2), stop_blink_handler, FALLING);
+  attachInterrupt(digitalPinToInterrupt(D3), pairing_mode_handler, FALLING);
 }
 
 void BLE_setup() {
@@ -199,12 +200,7 @@ void BLE_setup() {
   BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
 
-  /*
-  BLEDevice central;
-  while(!central) {
-     central = BLE.central();
-  }
-  */
+  // BLE.advertise();
 }
 
 void read_sensors() {
@@ -329,6 +325,7 @@ void check_led_flag() {
     if (num_blinks == 0) {
       color = GREEN;
       blink_on = 0;
+      warning_on = 0;
     } else {
       color = flag >> 7;
       blink_on = 1;
@@ -409,17 +406,19 @@ void stop_blink_handler() {
   if (warning_on) {
     blink_on = 0;
     color = GREEN;
+    warning_on = 0;
   }
 }
 
 void pairing_mode_handler() {
-  Serial.println("Pairing Mode started.");
-  pairing_mode = 1;
-  pairing_mode_start = current_millis;
-  BLE.advertise();
-  color = BLUE;
-  num_blinks = 50000;
-  blink_on = 1;
+  if (!connected) {
+    pairing_mode = 1;
+    pairing_mode_start = current_millis;
+    // BLE.advertise();
+    color = BLUE;
+    num_blinks = 50000;
+    blink_on = 1;
+  }
 }
 
 void check_pairing_mode() {
@@ -428,6 +427,10 @@ void check_pairing_mode() {
     color = PURPLE;
     blink_on = 0;
     led_on = 1;
+  }
+  if (pairing_mode) {
+    BLE.advertise();
+  } else {
     BLE.stopAdvertise();
   }
 }
