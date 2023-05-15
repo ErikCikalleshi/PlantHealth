@@ -67,6 +67,17 @@ public class GreenhouseService {
         Userx gardener = userxService.loadUser(request.greenhouse().gardener().username());
         greenhouse.setOwner(gardener);
         greenhouse = saveGreenhouse(greenhouse);
+        Set<Sensor> sensors = getSensorsFromRequest(request, greenhouse);
+        greenhouse.setSensors(sensors);
+        greenhouse = saveGreenhouse(greenhouse);
+        auditLog.setTargetID(Long.toString(greenhouse.getUuid()));
+        auditLog.setSuccess(true);
+        auditLogService.saveAuditLog(auditLog);
+        return saveGreenhouse(greenhouse);
+
+    }
+
+    private Set<Sensor> getSensorsFromRequest(CreateNewGreenhouseRequest request, Greenhouse greenhouse) {
         Set<Sensor> sensors = new HashSet<>();
         for (SensorDTO sensorDTO : request.sensors()) {
             Sensor sensor = new Sensor();
@@ -76,18 +87,9 @@ public class GreenhouseService {
             sensor.setLimitThresholdMinutes(sensorDTO.limitThresholdMinutes());
             sensor.setGreenhouse(greenhouse);
             sensors.add(sensor);
-
             sensorService.saveSensor(sensor);
         }
-
-
-        greenhouse.setSensors(sensors);
-        greenhouse = saveGreenhouse(greenhouse);
-        auditLog.setTargetID(Long.toString(greenhouse.getUuid()));
-        auditLog.setSuccess(true);
-        auditLogService.saveAuditLog(auditLog);
-        return saveGreenhouse(greenhouse);
-
+        return sensors;
     }
 
 
