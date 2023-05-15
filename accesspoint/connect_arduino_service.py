@@ -15,6 +15,7 @@ INTERVAL = 30
 collection_deletion_event = asyncio.Event()
 global greenhouses
 
+
 # async def notification_handler(sender, value):
 #     from webserver import collection_deletion_event
 #     if collection_deletion_event.is_set():
@@ -70,12 +71,9 @@ async def read_sensor_data():
             if device is None:
                 logging.error("Could not find device with name {0}".format(name))
                 continue
-            # add for name the device.address to pandas dataframe
-            data = data.assign(address=lambda x: device.address)
+            # add for idx to the pandas dataframe
+            data = data.assign(idx=lambda x: idx)
             print("Found device with name {0}".format(name))
-
-            print(device.address)
-            print(device.name)
 
             async def read_single_sensor():
                 while True:
@@ -117,16 +115,15 @@ async def read_sensor_data():
                                                 val = struct.unpack(unpack_format, value[:2])[0] / scale_factor
                                                 print("{0}: {1}".format(sensor_type, val))
                                                 await collection_deletion_event.wait()
+                                                greenhouse_idx = greenhouses[greenhouses["idx"] == idx]
                                                 sensor_id = \
-                                                greenhouses[greenhouses["sensors"] == sensor_type]["id"].iloc[0]
+                                                    greenhouse_idx[greenhouse_idx["sensors"] == sensor_type]["id"].iloc[
+                                                        0]
                                                 db.write_to_document_sensor(val, sensor_type, sensor_id)
                                                 logging.info("Wrote {0} to the database.".format(val))
                                                 break
 
                                     await client.start_notify(characteristic.uuid, notification_handler)
-
-
-
 
                             while True:
                                 await asyncio.sleep(1)
@@ -147,9 +144,8 @@ async def read_sensor_data():
 
 
 # Start reading data from the sensor station
-#asyncio.run(read_sensor_data())
+# asyncio.run(read_sensor_data())
 
 if __name__ == "__main__":
     print("test")
     asyncio.run(read_sensor_data())
-
