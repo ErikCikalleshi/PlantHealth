@@ -209,3 +209,108 @@ Temperature: 26.68
 Humidity: 62.01%
 Pressure: 94663.0 Pa
 Gas Resistance: 53.215 kOhm
+Light Intensity: 54
+Moisture: 867
+Temperature: 0.28
+Humidity: 0.47%
+Pressure: 9456.9 Pa
+Gas Resistance: 42.1 kOhm
+Moisture: 878
+Temperature: 0.28
+Light Intensity: 82
+Pressure: 9456.6 Pa
+Humidity: 0.47%
+Gas Resistance: 55.915 kOhm
+Moisture: 877
+Humidity: 0.47%
+Light Intensity: 96
+Temperature: 0.28
+Pressure: 9456.6 Pa
+Gas Resistance: 46.706 kOhm
+Temperature: 0.29
+Moisture: 872
+Temperature: 0.29
+Pressure: 9454.2 Pa
+Humidity: 0.46%
+Light Intensity: 5
+Gas Resistance: 58.734 kOhm
+Light Intensity: 4
+Temperature: 0.29
+Humidity: 0.46%
+Moisture: 874
+Pressure: 9454.1 Pa
+Gas Resistance: 40.064 kOhm
+Moisture: 874
+Light Intensity: 6
+Humidity: 0.46%
+Temperature: 0.29
+Pressure: 9454.0 Pa
+Gas Resistance: 56.061 kOhm
+Light Intensity: 4
+Humidity: 0.46%
+Temperature: 0.29
+Moisture: 874
+Pressure: 9453.8 Pa
+Gas Resistance: 57.346 kOhm
+Light Intensity: 4
+Moisture: 874
+Temperature: 0.29
+Pressure: 9453.9 Pa
+Humidity: 0.46%
+Gas Resistance: 19.874 kOhm
+Light Intensity: 4
+Temperature: 0.29
+Humidity: 0.46%
+Pressure: 9454.1 Pa
+Moisture: 873
+Gas Resistance: 63.102 kOhm
+Moisture: 875
+Light Intensity: 5
+Temperature: 0.29
+Humidity: 0.46%
+Pressure: 9454.1 Pa
+Gas Resistance: 14.926 kOhm
+Moisture: 875
+Pressure: 9453.5 Pa
+Light Intensity: 4
+Temperature: 0.29
+Humidity: 0.46%
+Gas Resistance: 28.21 kOhm
+Moisture: 876
+Light Intensity: 4
+Temperature: 0.29
+Humidity: 0.46%
+Pressure: 9453.4 Pa
+Gas Resistance: 63.625 kOhm
+Humidity: 0.46%
+Moisture: 877
+Light Intensity: 3
+Pressure: 9453.4 Pa
+Temperature: 0.29
+Gas Resistance: 8.639 kOhm
+Moisture: 875
+Light Intensity: 3
+Temperature: 0.29
+Pressure: 9453.5 Pa
+Humidity: 0.46%
+Gas Resistance: 23.343 kOhm
+Light Intensity: 4
+Moisture: 875
+Humidity: 0.46%
+Pressure: 9453.5 Pa
+Temperature: 0.29
+Gas Resistance: 23.373 kOhm
+Temperature: 0.29
+Light Intensity: 4
+Humidity: 0.46%
+Pressure: 9453.5 Pa
+Moisture: 875
+Gas Resistance: 42.529 kOhm
+Moisture: 874
+Temperature: 0.29
+Light Intensity: 4
+Humidity: 0.46%
+Pressure: 9453.5 Pa
+Gas Resistance: 45.668 kOhm
+Temperature: 0.29
+Humidity: 0.46%

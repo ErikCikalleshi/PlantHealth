@@ -3,6 +3,7 @@ import struct
 
 from bleak import BleakClient, BleakScanner
 
+from accesspoint.control_services_arduino import send_flag
 from log_config import AuditLogger
 
 logging = AuditLogger()
@@ -14,6 +15,7 @@ async def notification_handler(sender, data):
     # You can perform your desired actions with the received data
     # For example, you can parse and print the data:
     # write into a file
+    print(sender.uuid)
     with open("data.txt", "a") as f:
         if sender.uuid == "00002a6e-0000-1000-8000-00805f9b34fb":
             temperature = struct.unpack("<h", data[:2])[0] / 100.0
@@ -41,7 +43,8 @@ async def notification_handler(sender, data):
             f.write("Moisture: {0}\n".format(moisture))
 
 
-async def main(device_name="SensorStation G2T4"):
+
+async def read_sensor(device_name="SensorStation G2T4"):
     device = await BleakScanner.find_device_by_name(device_name, timeout=120)
     if device is None:
         print("ERROR: Could not find device with name {0}".format(device_name))
@@ -61,10 +64,14 @@ async def main(device_name="SensorStation G2T4"):
 
                 if characteristic.uuid == "00002a00-0000-1000-8000-00805f9b34fb" or \
                         characteristic.uuid == "00002a01-0000-1000-8000-00805f9b34fb" or \
-                        characteristic.uuid == "00002a05-0000-1000-8000-00805f9b34fb":
+                        characteristic.uuid == "00002a05-0000-1000-8000-00805f9b34fb" or \
+                        characteristic.uuid == "00002a04-0000-1000-8000-00805f9b34fb":
                     continue
 
                 await client.start_notify(characteristic.uuid, notification_handler)
+
+
+
         while True:
             # The main code loop continues here
             # You can perform other tasks or wait for events while notifications are being received
@@ -81,4 +88,4 @@ async def main(device_name="SensorStation G2T4"):
     print("INFO: Disconnected from device {0}".format(device_name))
 
 
-asyncio.run(main())
+asyncio.run(read_sensor())

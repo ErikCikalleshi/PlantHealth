@@ -13,33 +13,33 @@ logging = AuditLogger()
 INTERVAL = 30
 
 collection_deletion_event = asyncio.Event()
+global greenhouses
 
-
-async def notification_handler(sender, value, greenhouses: pd.DataFrame):
-    from webserver import collection_deletion_event
-    if collection_deletion_event.is_set():
-        logging.warning("Collection deletion in progress. Skipping writing to the database.")
-        return
-
-    sensor_mappings = {
-        "00002a6e-0000-1000-8000-00805f9b34fb": ("TEMPERATURE", "<h", 100.0),
-        "00002a6f-0000-1000-8000-00805f9b34fb": ("HUMIDITY_AIR", "<H", 100.0),
-        "00002a6d-0000-1000-8000-00805f9b34fb": ("PRESSURE", "<I", 10.0),
-        "00002bd3-0000-1000-8000-00805f9b34fb": ("GAS_RESISTANCE", "<H", 1000.0),
-        "4ab3244f-d156-4e76-a329-6de917bdc8f9": ("LIGHT", "<H", 1.0),
-        "29c1083c-5166-433c-9b7c-98658c826968": ("HUMIDITY_DIRT", "<H", 1.0),
-    }
-
-    # sender.
-    for uuid, (sensor_type, unpack_format, scale_factor) in sensor_mappings.items():
-        if sender.uuid == uuid:
-            val = struct.unpack(unpack_format, value[:2])[0] / scale_factor
-            print("{0}: {1}".format(sensor_type, val))
-            await collection_deletion_event.wait()
-            sensor_id = greenhouses[greenhouses["sensors"] == sensor_type]["id"].iloc[0]
-            db.write_to_document_sensor(val, sensor_type, sensor_id)
-            logging.info("Wrote {0} to the database.".format(val))
-            break
+# async def notification_handler(sender, value):
+#     from webserver import collection_deletion_event
+#     if collection_deletion_event.is_set():
+#         logging.warning("Collection deletion in progress. Skipping writing to the database.")
+#
+#     print(sender.uuid)
+#     sensor_mappings = {
+#         "00002a6e-0000-1000-8000-00805f9b34fb": ("TEMPERATURE", "<h", 100.0),
+#         "00002a6f-0000-1000-8000-00805f9b34fb": ("HUMIDITY_AIR", "<H", 100.0),
+#         "00002a6d-0000-1000-8000-00805f9b34fb": ("PRESSURE", "<I", 10.0),
+#         "00002bd3-0000-1000-8000-00805f9b34fb": ("GAS_RESISTANCE", "<H", 1000.0),
+#         "4ab3244f-d156-4e76-a329-6de917bdc8f9": ("LIGHT", "<H", 1.0),
+#         "29c1083c-5166-433c-9b7c-98658c826968": ("HUMIDITY_DIRT", "<H", 1.0),
+#     }
+#
+#     # sender.
+#     for uuid, (sensor_type, unpack_format, scale_factor) in sensor_mappings.items():
+#         if sender.uuid == uuid:
+#             val = struct.unpack(unpack_format, value[:2])[0] / scale_factor
+#             print("{0}: {1}".format(sensor_type, val))
+#             await collection_deletion_event.wait()
+#             sensor_id = greenhouses[greenhouses["sensors"] == sensor_type]["id"].iloc[0]
+#             db.write_to_document_sensor(val, sensor_type, sensor_id)
+#             logging.info("Wrote {0} to the database.".format(val))
+#             break
 
 
 async def read_sensor_data():
@@ -52,6 +52,7 @@ async def read_sensor_data():
     """
     database = db.connect_to_db()
     config_collection = database["config"]
+    global greenhouses
 
     while True:
         # Retrieve the latest configuration from the database
@@ -59,15 +60,22 @@ async def read_sensor_data():
         data = pd.DataFrame(config["greenhouses"])
         data = data[data["published"] == True]
         data = data.assign(id=lambda x: "SensorStation " + x["id"].astype(str))
+        greenhouses = data
         sensor_stations: list = data["id"].unique()
         # TODO: make a name convention for the sensor stations
         sensor_stations = ["SensorStation G2T4"]
-        for name in sensor_stations:
+        for idx, name in enumerate(sensor_stations):
             logging.info("Looking for device with name {0}".format(name))
             device = await BleakScanner.find_device_by_name(name, timeout=120)
             if device is None:
                 logging.error("Could not find device with name {0}".format(name))
                 continue
+            # add for name the device.address to pandas dataframe
+            data = data.assign(address=lambda x: device.address)
+            print("Found device with name {0}".format(name))
+
+            print(device.address)
+            print(device.name)
 
             async def read_single_sensor():
                 while True:
@@ -87,12 +95,39 @@ async def read_sensor_data():
                                             characteristic.uuid == "00002a05-0000-1000-8000-00805f9b34fb":
                                         continue
 
-                                    await client.start_notify(characteristic.uuid,
-                                                              lambda sender, value,
-                                                                     greenhouses=data: notification_handler(sender,
-                                                                                                            value,
-                                                                                                            greenhouses)
-                                                              )
+                                    async def notification_handler(sender, value):
+                                        from webserver import collection_deletion_event
+                                        if collection_deletion_event.is_set():
+                                            logging.warning(
+                                                "Collection deletion in progress. Skipping writing to the database.")
+
+                                        print(sender.uuid)
+                                        sensor_mappings = {
+                                            "00002a6e-0000-1000-8000-00805f9b34fb": ("TEMPERATURE", "<h", 100.0),
+                                            "00002a6f-0000-1000-8000-00805f9b34fb": ("HUMIDITY_AIR", "<H", 100.0),
+                                            "00002a6d-0000-1000-8000-00805f9b34fb": ("PRESSURE", "<I", 10.0),
+                                            "00002bd3-0000-1000-8000-00805f9b34fb": ("GAS_RESISTANCE", "<H", 1000.0),
+                                            "4ab3244f-d156-4e76-a329-6de917bdc8f9": ("LIGHT", "<H", 1.0),
+                                            "29c1083c-5166-433c-9b7c-98658c826968": ("HUMIDITY_DIRT", "<H", 1.0),
+                                        }
+
+                                        # sender.
+                                        for uuid, (sensor_type, unpack_format, scale_factor) in sensor_mappings.items():
+                                            if sender.uuid == uuid:
+                                                val = struct.unpack(unpack_format, value[:2])[0] / scale_factor
+                                                print("{0}: {1}".format(sensor_type, val))
+                                                await collection_deletion_event.wait()
+                                                sensor_id = \
+                                                greenhouses[greenhouses["sensors"] == sensor_type]["id"].iloc[0]
+                                                db.write_to_document_sensor(val, sensor_type, sensor_id)
+                                                logging.info("Wrote {0} to the database.".format(val))
+                                                break
+
+                                    await client.start_notify(characteristic.uuid, notification_handler)
+
+
+
+
                             while True:
                                 await asyncio.sleep(1)
                     except BleakError:
@@ -112,4 +147,9 @@ async def read_sensor_data():
 
 
 # Start reading data from the sensor station
-asyncio.run(read_sensor_data())
+#asyncio.run(read_sensor_data())
+
+if __name__ == "__main__":
+    print("test")
+    asyncio.run(read_sensor_data())
+

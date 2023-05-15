@@ -12,7 +12,7 @@ import requests
 
 import db
 from Settings import Settings
-from control_services_arduino import send_flag
+from accesspoint.control_services_arduino import send_flag
 
 collection_deletion_event = asyncio.Event()
 
