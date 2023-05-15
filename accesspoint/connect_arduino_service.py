@@ -13,8 +13,6 @@ logging = AuditLogger()
 INTERVAL = 30
 
 collection_deletion_event = asyncio.Event()
-global greenhouses
-
 
 # async def notification_handler(sender, value):
 #     from webserver import collection_deletion_event
@@ -53,7 +51,6 @@ async def read_sensor_data():
     """
     database = db.connect_to_db()
     config_collection = database["config"]
-    global greenhouses
 
     while True:
         # Retrieve the latest configuration from the database
