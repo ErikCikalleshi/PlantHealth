@@ -16,6 +16,7 @@ import adminEditAccesspoint from "@/views/admin/AdminEditAccesspoint.vue";
 import adminAuditLog from "@/views/admin/AdminViewAuditLog.vue";
 import MyPlantsView from "@/views/MyPlantsView.vue";
 import Charts from "@/views/Charts.vue";
+import About from "@/views/About.vue";
 
 const routes = [
     {path: '/', component: landingpage},
@@ -32,6 +33,7 @@ const routes = [
     {path: '/admin/audit-log', name: 'view-audit-logs', component: adminAuditLog, meta: { roles: ['ADMIN'] }},
     {path: '/404', component: NotFound},
     {path: '/403', component: Forbidden},
+    {path: '/about', component: About},
     {path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound },
     {path: '/:pathMatch(.*)', name: 'bad-not-found', component: NotFound },
 ]
