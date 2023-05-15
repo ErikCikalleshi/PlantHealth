@@ -59,4 +59,11 @@ public class UploadImagesService {
         return imagesList.stream().map(UploadImages::getUploadLink).collect(Collectors.toList());
     }
 
+    public void deleteImageByUrl(String url) {
+        var greenHouseImage = uploadImagesRepository.findUploadImagesByUploadLink(url);
+        if(greenHouseImage == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid url.");
+        }
+        uploadImagesRepository.delete(greenHouseImage);
+    }
 }

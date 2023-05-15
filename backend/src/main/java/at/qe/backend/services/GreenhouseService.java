@@ -35,11 +35,9 @@ public class GreenhouseService {
             greenhouse.setCreateDate(new Date());
             greenhouse.setCreateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
             greenhouse.setIdInCluster(greenhouseRepository.countGreenhouseByAccesspoint(greenhouse.getAccesspoint()) + 1);
-            auditLogService.createNewAudit("create", Long.toString(greenhouse.getUuid()), "greenhouse", true);
         } else {
             greenhouse.setUpdateDate(new Date());
             greenhouse.setUpdateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-            auditLogService.createNewAudit("update", Long.toString(greenhouse.getUuid()), "greenhouse", true);
         }
         greenhouse = greenhouseRepository.save(greenhouse);
         return greenhouse;
@@ -57,6 +55,7 @@ public class GreenhouseService {
     }
 
     public Greenhouse createGreenhouse(CreateNewGreenhouseRequest request) {
+        AuditLog auditLog = auditLogService.createNewAudit("create", "NA", "greenhouse", false);
         Greenhouse greenhouse = new Greenhouse();
         greenhouse.setName(request.greenhouse().name());
         greenhouse.setLocation(request.greenhouse().location());
@@ -84,6 +83,9 @@ public class GreenhouseService {
 
         greenhouse.setSensors(sensors);
         greenhouse = saveGreenhouse(greenhouse);
+        auditLog.setTargetID(Long.toString(greenhouse.getUuid()));
+        auditLog.setSuccess(true);
+        auditLogService.saveAuditLog(auditLog);
         return saveGreenhouse(greenhouse);
 
     }
@@ -107,6 +109,7 @@ public class GreenhouseService {
     }
 
     public Greenhouse updateGreenhouse(GreenhouseDTO greenhouseDTO) {
+        AuditLog auditLog = auditLogService.createNewAudit("update", "NA", "greenhouse", false);
         Greenhouse greenhouse = loadGreenhouse(greenhouseDTO.uuid());
         greenhouse.setName(greenhouseDTO.name());
         greenhouse.setLocation(greenhouseDTO.location());
@@ -115,6 +118,9 @@ public class GreenhouseService {
         for (SensorDTO sensorDTO : greenhouseDTO.sensors()) {
             sensorService.updateSensor(sensorDTO);
         }
+        auditLog.setTargetID(Long.toString(greenhouse.getUuid()));
+        auditLog.setSuccess(true);
+        auditLogService.saveAuditLog(auditLog);
         return saveGreenhouse(greenhouse);
     }
 
