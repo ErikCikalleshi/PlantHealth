@@ -12,7 +12,7 @@ export default defineConfig({
     }
   },
   server: {
-    host: '127.0.0.1', // Set the desired host
+    host: '0.0.0.0', // Set the desired host
     port: 5173 // Set the desired port number
   }
 })
