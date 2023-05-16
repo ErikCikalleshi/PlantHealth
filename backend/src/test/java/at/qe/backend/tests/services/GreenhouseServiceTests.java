@@ -5,6 +5,7 @@ import at.qe.backend.models.dto.GreenhouseDTO;
 import at.qe.backend.models.dto.SensorDTO;
 import at.qe.backend.models.request.CreateNewGreenhouseRequest;
 import at.qe.backend.repositories.GreenhouseRepository;
+import at.qe.backend.repositories.UserxRepository;
 import at.qe.backend.services.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.server.ResponseStatusException;
@@ -37,6 +39,8 @@ public class GreenhouseServiceTests {
     AccessPointService accessPointService;
     @Mock
     UserxService userxService;
+    @Mock
+    private UserxRepository userxRepository;
     @Mock
     SensorService sensorService;
     @InjectMocks
@@ -100,7 +104,7 @@ public class GreenhouseServiceTests {
     }
 
     @DisplayName("Create new greenhouse")
-    @WithMockUser(username = "adminuser", authorities = { "ADMIN" })
+    @WithMockUser(username = "adminuser", authorities = {"ADMIN"})
     @Test
     void testCreateNewGreenhouse() {
         AccessPoint accessPoint = new AccessPoint();
@@ -180,7 +184,7 @@ public class GreenhouseServiceTests {
     }
 
     @Test
-    @WithMockUser(username = "user", authorities = { "ADMIN" })
+    @WithMockUser(username = "user", authorities = {"ADMIN"})
     public void testUpdateGreenhouse() {
         Greenhouse greenhouse = new Greenhouse();
         Userx user = new Userx();
@@ -191,20 +195,13 @@ public class GreenhouseServiceTests {
         greenhouse.setLocation("Test Location");
         greenhouse.setDescription("Test Description");
         greenhouse.setPublished(false);
-        Greenhouse oldGreenhouse = new Greenhouse();
-        oldGreenhouse.setOwner(user);
-        oldGreenhouse.setUuid(1L);
-        oldGreenhouse.setName("Old Greenhouse");
-        oldGreenhouse.setLocation("Old Location");
-        oldGreenhouse.setDescription("Old Description");
-        oldGreenhouse.setPublished(true);
-        GreenhouseDTO greenhouseDTOnew = new GreenhouseDTO(greenhouse);
-        List<SensorDTO> sensors = new ArrayList<>();
         Sensor sensor = new Sensor();
         sensor.setId(1);
         sensor.setSensorType(SensorType.TEMPERATURE);
         SensorDTO sensorDTO = new SensorDTO(sensor);
         greenhouse.getSensors().add(sensor);
+        GreenhouseDTO greenhouseDTOnew = new GreenhouseDTO(greenhouse);
+
 
         when(greenhouseRepository.findByUuid(greenhouseDTOnew.uuid())).thenReturn(Optional.of(greenhouse));
         when(sensorService.updateSensor(sensorDTO)).thenReturn(sensor);
@@ -218,7 +215,65 @@ public class GreenhouseServiceTests {
         assertEquals(greenhouse.getDescription(), result.getDescription());
         assertEquals(greenhouse.isPublished(), result.isPublished());
         assertEquals(greenhouse.getSensors().size(), result.getSensors().size());
+        assertEquals(greenhouse.getSensors().iterator().next().getId(), result.getSensors().iterator().next().getId());
+        assertEquals(greenhouse.getSensors().iterator().next().getSensorType(),
+                result.getSensors().iterator().next().getSensorType());
         verify(auditLogService).createNewAudit("update", "NA", "greenhouse", false);
+    }
 
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    public void testGetAllForCurrentUserAsAdmin() {
+        List<Greenhouse> greenhouses = new ArrayList<>();
+        Greenhouse greenhouse1 = new Greenhouse();
+        greenhouse1.setIdInCluster(1L);
+        Greenhouse greenhouse2 = new Greenhouse();
+        greenhouse2.setIdInCluster(2L);
+        greenhouses.add(greenhouse1);
+        greenhouses.add(greenhouse2);
+        when(greenhouseRepository.findAll()).thenReturn(greenhouses);
+
+        Userx currentUser = new Userx();
+        currentUser.setUsername("admin");
+        currentUser.setRoles(new HashSet<>());
+        currentUser.getRoles().add(UserRole.ADMIN);
+        when(userxService.loadUser("admin")).thenReturn(currentUser);
+        List<Greenhouse> result = greenhouseService.getAllForCurrentUser();
+        assertEquals(greenhouses, result);
+    }
+
+    @Test
+    @WithMockUser(username = "user", authorities = {"GARDENER"})
+    public void testGetAllForCurrentUserAsOwner() {
+        List<Greenhouse> greenhouses = new ArrayList<>();
+        Greenhouse greenhouse1 = new Greenhouse();
+        greenhouse1.setIdInCluster(1L);
+        greenhouse1.setOwner(new Userx());
+        greenhouse1.getOwner().setUsername("user");
+        Greenhouse greenhouse2 = new Greenhouse();
+        greenhouse2.setIdInCluster(2L);
+        greenhouse2.setOwner(new Userx());
+        greenhouse2.getOwner().setUsername("user");
+        greenhouses.add(greenhouse1);
+        greenhouses.add(greenhouse2);
+        when(greenhouseRepository.findAllByOwner_Username("user")).thenReturn(greenhouses);
+
+        Userx currentUser = new Userx();
+        currentUser.setUsername("user");
+        currentUser.setRoles(new HashSet<>());
+        when(userxService.loadUser("user")).thenReturn(currentUser);
+
+        List<Greenhouse> result = greenhouseService.getAllForCurrentUser();
+
+        assertEquals(greenhouses, result);
+    }
+
+    @Test
+    public void testGetAllForCurrentUserUnauthorized() {
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            greenhouseService.getAllForCurrentUser();
+        });
+
+        assertEquals("401 UNAUTHORIZED \"You are not logged in.\"", exception.getMessage());
     }
 }

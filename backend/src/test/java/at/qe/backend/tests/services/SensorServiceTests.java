@@ -66,6 +66,13 @@ public class SensorServiceTests {
         assertEquals(sensor, result);
         assertEquals(username, sensor.getCreateUserUsername());
         assertEquals(null, sensor.getUpdateUserUsername());
+
+        result = sensorService.saveSensor(result);
+        assertEquals(sensor, result);
+        assertEquals(username, sensor.getCreateUserUsername());
+        assertEquals(username, sensor.getUpdateUserUsername());
+
+
     }
 
     @Test
