@@ -137,7 +137,7 @@ public class GreenhouseService {
         }
         Userx currentUser = userxService.loadUser(SecurityContextHolder.getContext().getAuthentication().getName());
         if (currentUser == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not logged in.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not logged in. (invalid user)");
         }
         if (currentUser.getRoles().contains(UserRole.ADMIN)) {
             return getAll();

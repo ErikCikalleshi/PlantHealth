@@ -25,6 +25,8 @@ import java.util.Map;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestPropertySource("classpath:application-test.properties")
@@ -40,14 +42,14 @@ public class JWTTests {
         System.out.println(BaseURI);
     }
 
-    private String username = "admin";
-    private String password = "passwd";
+    private final String username = "admin";
+    private final String password = "passwd";
 
     @Autowired
     private RefreshTokenService refreshTokenService;
     @Test
-    public void testLoginSuccess() {
-        given().auth().none().
+    public void testLoginLogoutSuccess() {
+        String token = given().auth().none().
                 contentType(ContentType.JSON).
                 body("{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}").
                 when().
@@ -56,7 +58,17 @@ public class JWTTests {
                 statusCode(HttpStatus.SC_OK).
                 body("token", notNullValue()).
                 body("username", is(username)).
-                body("refreshToken", notNullValue());
+                body("refreshToken", notNullValue()).
+                body("token", notNullValue()).extract().path("refreshToken");
+        assertNotNull(token);
+        assertNotNull(refreshTokenService.findByToken(token));
+        given().auth().none().contentType(ContentType.JSON).
+                body("{\"refreshToken\":\"" + token + "\"}").
+                when().
+                post(BaseURI + "/logout-user").
+                then().
+                statusCode(HttpStatus.SC_OK).body("response", is("Logout successful!"));
+        assertNull(refreshTokenService.findByToken(token).orElse(null));
     }
 
     @Test

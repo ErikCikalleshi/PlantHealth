@@ -14,7 +14,7 @@ import java.util.List;
 public class UploadImagesController {
     @Autowired
     private UploadImagesService uploadImagesService;
-    record UploadImageData(String username, String uploadLink, Long plantId){};
+    record UploadImageData(String username, String uploadLink, Long plantId){}
 
     @PostMapping("/upload")
     public UploadImages upload(@RequestBody UploadImageData data) {

@@ -117,7 +117,7 @@ public class UserxService {
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
     public Userx updateUser(String username, String firstname, String lastname, String email, Collection<UserRole> roles) throws UserAlreadyExistsException {
         AuditLog auditLog = auditLogService.createNewAudit("update", username, "user", false);
-        if (userRepository.existsByEmail(email) && !userRepository.findByEmail(email).getUsername().equals(username)) {;
+        if (userRepository.existsByEmail(email) && !userRepository.findByEmail(email).getUsername().equals(username)) {
             throw new UserAlreadyExistsException();
         }
         Userx user = loadUser(username);

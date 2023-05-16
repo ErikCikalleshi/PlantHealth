@@ -22,8 +22,7 @@ import org.springframework.test.context.TestPropertySource;
 import java.util.Date;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -65,7 +64,14 @@ public class SensorServiceTests {
 
         assertEquals(sensor, result);
         assertEquals(username, sensor.getCreateUserUsername());
-        assertEquals(null, sensor.getUpdateUserUsername());
+        assertNull(sensor.getUpdateUserUsername());
+
+        result = sensorService.saveSensor(result);
+        assertEquals(sensor, result);
+        assertEquals(username, sensor.getCreateUserUsername());
+        assertEquals(username, sensor.getUpdateUserUsername());
+
+
     }
 
     @Test
