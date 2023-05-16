@@ -45,7 +45,7 @@ BLEService hygrometerService("f8cbfa9a-920e-4e31-ae5f-fca3b1cef4f7");
 BLEUnsignedIntCharacteristic moistureCharacteristic("29c1083c-5166-433c-9b7c-98658c826968", BLERead | BLENotify);
 
 BLEService ledService("f5a38368-9851-41cc-b49e-6ad0bba76f9b");
-BLEByteCharacteristic ledFlagCharacteristic("eac630d2-9e86-4005-b7b9-6f6955f7ec10", BLERead | BLEWrite);
+BLEByteCharacteristic ledFlagCharacteristic("eac630d2-9e86-4005-b7b9-6f6955f7ec10", BLERead | BLEWrite | BLENotify);
 // -----------------------------------------------------------------------------
 
 Adafruit_BME680 bme;
@@ -438,6 +438,7 @@ void stop_blink_handler() {
     blink_on = 0;
     color = GREEN;
     warning_on = 0;
+    ledFlagCharacteristic.writeValue(0x00);
   }
 }
 
