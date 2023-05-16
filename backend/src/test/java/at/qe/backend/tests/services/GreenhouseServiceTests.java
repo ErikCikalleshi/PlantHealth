@@ -5,14 +5,17 @@ import at.qe.backend.models.dto.GreenhouseDTO;
 import at.qe.backend.models.dto.SensorDTO;
 import at.qe.backend.models.request.CreateNewGreenhouseRequest;
 import at.qe.backend.repositories.GreenhouseRepository;
-import at.qe.backend.repositories.UserxRepository;
 import at.qe.backend.services.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
@@ -40,9 +43,8 @@ public class GreenhouseServiceTests {
     @Mock
     UserxService userxService;
     @Mock
-    private UserxRepository userxRepository;
-    @Mock
     SensorService sensorService;
+
     @InjectMocks
     GreenhouseService greenhouseService;
 
@@ -202,7 +204,6 @@ public class GreenhouseServiceTests {
         greenhouse.getSensors().add(sensor);
         GreenhouseDTO greenhouseDTOnew = new GreenhouseDTO(greenhouse);
 
-
         when(greenhouseRepository.findByUuid(greenhouseDTOnew.uuid())).thenReturn(Optional.of(greenhouse));
         when(sensorService.updateSensor(sensorDTO)).thenReturn(sensor);
         when(greenhouseRepository.save(greenhouse)).thenReturn(greenhouse);
@@ -269,11 +270,26 @@ public class GreenhouseServiceTests {
     }
 
     @Test
+    @WithMockUser(username = "user", authorities = {"GARDENER"})
     public void testGetAllForCurrentUserUnauthorized() {
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+
+        try (MockedStatic<SecurityContextHolder> securityContextHolderMockedStatic = mockStatic(SecurityContextHolder.class)
+        ) {
+            SecurityContext securityContext = mock(SecurityContext.class);
+            Authentication authentication = mock(Authentication.class);
+            securityContextHolderMockedStatic.when(SecurityContextHolder::getContext).thenReturn(securityContext);
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getName()).thenReturn(null);
+            ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+                greenhouseService.getAllForCurrentUser();});
+            assertEquals("401 UNAUTHORIZED \"You are not logged in.\"", exception.getMessage());
+        }
+
+        when(userxService.loadUser(any())).thenReturn(null);
+        assertThrows(ResponseStatusException.class, () -> {
             greenhouseService.getAllForCurrentUser();
         });
 
-        assertEquals("401 UNAUTHORIZED \"You are not logged in.\"", exception.getMessage());
+
     }
 }

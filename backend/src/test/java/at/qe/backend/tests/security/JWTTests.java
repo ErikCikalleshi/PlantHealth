@@ -40,8 +40,8 @@ public class JWTTests {
         System.out.println(BaseURI);
     }
 
-    private String username = "admin";
-    private String password = "passwd";
+    private final String username = "admin";
+    private final String password = "passwd";
 
     @Autowired
     private RefreshTokenService refreshTokenService;
