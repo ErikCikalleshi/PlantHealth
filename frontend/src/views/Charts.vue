@@ -29,38 +29,6 @@ export default defineComponent({
     return {
       revealedCardIndex: -1,
       expand: -1,
-      series: [{
-        name: "Desktops",
-        data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-      }],
-      chartOptions: {
-        chart: {
-          height: 350,
-          type: 'line',
-          zoom: {
-            enabled: false
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'straight'
-        },
-        title: {
-          text: 'Product Trends by Month',
-          align: 'left'
-        },
-        grid: {
-          row: {
-            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-            opacity: 0.5
-          },
-        },
-        xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-        }
-      },
       sensorTypes: [] as string[],
     };
   },
@@ -68,7 +36,7 @@ export default defineComponent({
     async getMeasurement() {
       let greenhouseUUID = this.$route.params.id;
       //TODO: put greenhouseUUID in function call
-      MeasurementsService.getMeasurementsByGreenhouseId(20).then((response) => {
+      MeasurementsService.getMeasurementsByGreenhouseId(35).then((response) => {
         if (response.status === 200) {
           console.log(response)
         }
@@ -103,20 +71,20 @@ export default defineComponent({
       // @ts-ignore
       const cardElement = this.$refs.cardRef[this.expand];
 
-      if (cardElement) {
-        // Find the chart element within the card
-        const chartElement = cardElement.querySelector(".chart-container");
-        if (chartElement) {
-          // Calculate the scroll position by adding 300 pixels to the current scroll position
-          const scrollPosition = chartElement.offsetTop + 300;
-
-          // Scroll to the chart element with auto-scrolling
-          window.scrollTo({
-            top: scrollPosition,
-            behavior: "smooth",
-          });
-        }
-      }
+      // if (cardElement) {
+      //   // Find the chart element within the card
+      //   const chartElement = cardElement.querySelector(".chart-container");
+      //   if (chartElement) {
+      //     // Calculate the scroll position by adding 300 pixels to the current scroll position
+      //     const scrollPosition = chartElement.offsetTop + 300;
+      //
+      //     // Scroll to the chart element with auto-scrolling
+      //     window.scrollTo({
+      //       top: scrollPosition,
+      //       behavior: "smooth",
+      //     });
+      //   }
+      // }
     },
     // Method to get the icon for a sensor type
     getSensorIcon(sensorType: string) {
@@ -220,7 +188,7 @@ export default defineComponent({
                 </v-list-item>
               </div>
               <v-expand-transition>
-                  <Custom_Chart v-if="expand === index"/>
+                  <Custom_Chart ref="chart"  v-if="expand === index"/>
               </v-expand-transition>
 
               <v-divider></v-divider>

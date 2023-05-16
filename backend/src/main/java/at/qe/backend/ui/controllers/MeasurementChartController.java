@@ -14,14 +14,14 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
-public class MeasurementController {
+public class MeasurementChartController {
 
     @Autowired
     private MeasurementServiceV2 measurementService;
 
     @GetMapping("measurements/get-measurements-by-greenhouse-id/{greenhouseId}")
     public List<MeasurementDTO> getMeasurements(@PathVariable String greenhouseId) {
-        Long greenhouseUUID = Long.parseLong(greenhouseId);
+        long greenhouseUUID = Long.parseLong(greenhouseId);
         System.out.println("getMeasurement" + greenhouseId);
         //get all measurements from the database
         List<Measurement> measurements = measurementService.getAllMeasurements();
@@ -29,7 +29,6 @@ public class MeasurementController {
         List<MeasurementDTO> greenhouseMeasurements = new ArrayList<>();
 
         for (Measurement measurement : measurements) {
-            System.out.println(measurement.getSensor().getGreenhouse().getUuid());
             //if the measurement is from the specified greenhouse
             if (measurement.getSensor().getGreenhouse().getUuid() == greenhouseUUID) {
                 //add the measurement to the list
@@ -37,6 +36,7 @@ public class MeasurementController {
                 greenhouseMeasurements.add(new MeasurementDTO(measurement));
             }
         }
+
         return greenhouseMeasurements;
     }
 }
