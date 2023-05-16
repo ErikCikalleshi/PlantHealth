@@ -4,16 +4,34 @@
 #include <Adafruit_Sensor.h>
 #include "Adafruit_BME680.h"
 
-#define SEALEVELPRESSURE_HPA (1013.25)
-
-#define LIGHT_READING_INTERVAL 100 // 100 ms
+// ----------------------------Interval Definitions-----------------------------
+#define LIGHT_READING_INTERVAL 100      // 100 ms
 #define HYGROMETER_READING_INTERVAL 100 // 100 ms
-#define BME_READING_INTERVAL 1000 // 500 ms
-#define SENDING_INTERVAL 10000 // 10 s
-#define BLE_PAIRING_TIME 300000 // 5 min
-#define BLINK_INTERVAL 500
-#define BLINK_PAUSE 3000
+#define BME_READING_INTERVAL 1000       // 500 ms
+#define SENDING_INTERVAL 10000          // 10 s
+#define BLE_PAIRING_TIME 300000         // 5 min
+#define BLINK_INTERVAL 500              // 500 ms
+#define BLINK_PAUSE 3000                // 3 s
+// -----------------------------------------------------------------------------
 
+
+// ------------------------------Pin Definitions--------------------------------
+#define GREEN_LED A0
+#define BLUE_LED A1
+#define RED_LED A2
+
+#define PHOTOTRANSISTOR A6
+#define HYGROMETER A7
+
+#define WARNING_BUTTON D2
+#define PAIRING_BUTTON D3
+#define PIEZZO_BUZZER D4
+
+int dipSwitchPins[] = {D12, D11, D10, D9, D8, D7, D6, D5};
+// -----------------------------------------------------------------------------
+
+
+// -----------------BLE Services + Characteristics Definitions------------------
 BLEService airSensorService("181A");
 BLEIntCharacteristic temperatureCharacteristic("2A6E", BLERead | BLENotify);
 BLEUnsignedIntCharacteristic humidityCharacteristic("2A6F", BLERead | BLENotify);
@@ -28,12 +46,13 @@ BLEUnsignedIntCharacteristic moistureCharacteristic("29c1083c-5166-433c-9b7c-986
 
 BLEService ledService("f5a38368-9851-41cc-b49e-6ad0bba76f9b");
 BLEByteCharacteristic ledFlagCharacteristic("eac630d2-9e86-4005-b7b9-6f6955f7ec10", BLERead | BLEWrite);
+// -----------------------------------------------------------------------------
 
 Adafruit_BME680 bme;
 
-int dipSwitchPins[] = {D12, D11, D10, D9, D8, D7, D6, D5};
 enum Color { YELLOW, RED, GREEN, PURPLE, BLUE, OFF };
 
+// ------------------------------Global Variables-------------------------------
 int num_light_readings = 0;
 int num_hygrometer_readings = 0;
 int num_bme_readings = 0;
@@ -50,9 +69,10 @@ unsigned long previous_light_reading_millis = 0;
 unsigned long previous_hygrometer_reading_millis = 0;
 unsigned long previous_bme_reading_millis = 0;
 unsigned long previous_writing_millis = 0;
+unsigned long pairing_mode_start_millis = 0;
+unsigned long next_led_change_millis = 0;
 
 int pairing_mode = 0;
-unsigned long pairing_mode_start = 0;
 int led_on = 0;
 int color = PURPLE;
 int num_blinks = 0;
@@ -60,9 +80,10 @@ int current_blinks = 0;
 int blink_on = 0;
 int warning_on = 0;
 int connected = 0;
+// -----------------------------------------------------------------------------
 
-unsigned long next_led_change_millis = 0;
 
+// ----------------------------Function Declarations----------------------------
 void blePeripheralConnectHandler(BLEDevice central);
 
 void blePeripheralDisconnectHandler(BLEDevice central);
@@ -85,14 +106,14 @@ void stop_blink_handler();
 void pairing_mode_handler();
 void check_pairing_mode();
 int get_ID();
+// -----------------------------------------------------------------------------
+
 
 // the setup function runs once when you press reset or power the board
 void setup() {
   Serial.begin(9600);
   while(!Serial);
   Serial.println("Serial started");
-  int ID = get_ID();
-  Serial.println(ID);
   
   button_setup();
   BLE_setup();
@@ -111,8 +132,8 @@ void loop() {
 }
 
 void sensor_setup() {
-  pinMode(A7, INPUT);
-  pinMode(A6, INPUT);
+  pinMode(HYGROMETER, INPUT);
+  pinMode(PHOTOTRANSISTOR, INPUT);
 
   if (!bme.begin()) {
     Serial.println(F("Could not find a valid BME680 sensor, check wiring!"));
@@ -147,8 +168,8 @@ void blePeripheralDisconnectHandler(BLEDevice central) {
 }
 
 void button_setup() {
-  attachInterrupt(digitalPinToInterrupt(D2), stop_blink_handler, FALLING);
-  attachInterrupt(digitalPinToInterrupt(D3), pairing_mode_handler, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WARNING_BUTTON), stop_blink_handler, FALLING);
+  attachInterrupt(digitalPinToInterrupt(PAIRING_BUTTON), pairing_mode_handler, FALLING);
 }
 
 void BLE_setup() {
@@ -157,10 +178,16 @@ void BLE_setup() {
 
     return;
   }
-  Serial.println("BLE started");
+  Serial.print("BLE started");
 
-  BLE.setLocalName("SensorStation G2T4");
-  BLE.setDeviceName("SensorStation G2T4");
+  char device_name[20];
+  sprintf(device_name, "SensorStation %d", get_ID());
+
+  BLE.setLocalName(device_name);
+  BLE.setDeviceName(device_name);
+  
+  Serial.print(", Device Name: ");
+  Serial.println(device_name);
 
   BLE.setAdvertisedService(airSensorService);
 
@@ -199,8 +226,6 @@ void BLE_setup() {
 
   BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
-
-  // BLE.advertise();
 }
 
 void read_sensors() {
@@ -211,7 +236,7 @@ void read_sensors() {
 
 void read_light_sensor() {
   if (current_millis - previous_light_reading_millis >= LIGHT_READING_INTERVAL) {
-    unsigned int light = analogRead(A6);
+    unsigned int light = analogRead(PHOTOTRANSISTOR);
     light_readings += light;
     num_light_readings++;
     previous_light_reading_millis = current_millis;
@@ -220,7 +245,7 @@ void read_light_sensor() {
 
 void read_hygrometer() {
   if (current_millis - previous_hygrometer_reading_millis >= HYGROMETER_READING_INTERVAL) {
-    unsigned int moisture = analogRead(A7);
+    unsigned int moisture = analogRead(HYGROMETER);
     hygrometer_readings += moisture;
     num_hygrometer_readings++;
     previous_hygrometer_reading_millis = current_millis;
@@ -272,6 +297,9 @@ void write_sensor_data() {
     pressureCharacteristic.writeValue(pressure_value);
     vocCharacteristic.writeValue(gas_resistance_value);
 
+    Serial.println();
+    Serial.println("--------Data Sent To Accesspoint--------");
+
     Serial.print("Light: ");
     Serial.println(light_value);
 
@@ -302,6 +330,9 @@ void write_sensor_data() {
 
     Serial.print("Number of BME readings: ");
     Serial.println(num_bme_readings);
+
+    Serial.println("----------------------------------------");
+    Serial.println();
 
     previous_writing_millis = current_millis;
 
@@ -397,9 +428,9 @@ void set_led(int color) {
       blue_val = 0;
   }
   
-  analogWrite(A2, red_val);
-  analogWrite(A0, green_val);
-  analogWrite(A1, blue_val);
+  analogWrite(RED_LED, red_val);
+  analogWrite(GREEN_LED, green_val);
+  analogWrite(BLUE_LED, blue_val);
 }
 
 void stop_blink_handler() {
@@ -413,8 +444,7 @@ void stop_blink_handler() {
 void pairing_mode_handler() {
   if (!connected) {
     pairing_mode = 1;
-    pairing_mode_start = current_millis;
-    // BLE.advertise();
+    pairing_mode_start_millis = current_millis;
     color = BLUE;
     num_blinks = 50000;
     blink_on = 1;
@@ -422,7 +452,7 @@ void pairing_mode_handler() {
 }
 
 void check_pairing_mode() {
-  if (pairing_mode && (current_millis - pairing_mode_start >= BLE_PAIRING_TIME)) {
+  if (pairing_mode && (current_millis - pairing_mode_start_millis >= BLE_PAIRING_TIME)) {
     pairing_mode = 0;
     color = PURPLE;
     blink_on = 0;
