@@ -30,18 +30,19 @@ export default defineComponent({
       revealedCardIndex: -1,
       expand: -1,
       sensorTypes: [] as string[],
+      rawSensorTypes: [] as string[],
     };
   },
   methods: {
-    async getMeasurement() {
-      let greenhouseUUID = this.$route.params.id;
-      //TODO: put greenhouseUUID in function call
-      MeasurementsService.getMeasurementsByGreenhouseId(35).then((response) => {
-        if (response.status === 200) {
-          console.log(response)
-        }
-      })
-    },
+    // async getMeasurement() {
+    //   let greenhouseUUID = this.$route.params.id;
+    //   //TODO: put greenhouseUUID in function call
+    //   MeasurementsService.getMeasurementsByGreenhouseId(35).then((response) => {
+    //     if (response.status === 200) {
+    //       console.log(response)
+    //     }
+    //   })
+    // },
     getSensorType() {
       let greenhouseUUID = this.$route.params.id;
 
@@ -52,6 +53,7 @@ export default defineComponent({
             words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
           }
           this.sensorTypes.push(words.join(" "));
+          this.rawSensorTypes.push(sensor.sensorType);
         });
       });
     },
@@ -88,7 +90,6 @@ export default defineComponent({
     },
     // Method to get the icon for a sensor type
     getSensorIcon(sensorType: string) {
-      console.log(sensorType)
       // Define the mapping of sensor types to icons
       const iconMapping: any = {
         "Air Quality": "mdi-air-filter",
@@ -136,7 +137,7 @@ export default defineComponent({
   },
   mounted() {
     this.getSensorType();
-    this.getMeasurement();
+    // this.getMeasurement();
   }
 
 
@@ -188,7 +189,7 @@ export default defineComponent({
                 </v-list-item>
               </div>
               <v-expand-transition>
-                  <Custom_Chart ref="chart"  v-if="expand === index"/>
+                  <Custom_Chart :sensor="rawSensorTypes[index]" ref="chart"  v-if="expand === index"/>
               </v-expand-transition>
 
               <v-divider></v-divider>
