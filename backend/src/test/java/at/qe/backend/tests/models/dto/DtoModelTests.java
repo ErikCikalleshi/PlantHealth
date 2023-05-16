@@ -6,6 +6,7 @@ import at.qe.backend.models.dto.GreenhouseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class DtoModelTests {
         accessPoint.setTransmissionIntervalSeconds(60);
         accessPoint.setPublished(true);
         accessPoint.setUuid(1);
+        accessPoint.setLastContact(new Date());
         HashSet<Greenhouse> greenhouses = new HashSet<>();
         for (int i = 0; i < 4; i++) {
             Greenhouse greenhouse = new Greenhouse();
@@ -45,10 +47,12 @@ public class DtoModelTests {
                 sensors.add(sensor);
             }
             greenhouse.setSensors(sensors);
+            greenhouse.setAccesspoint(accessPoint);
             greenhouses.add(greenhouse);
         }
         accessPoint.setGreenhouses(greenhouses);
         greenhouse = greenhouses.stream().filter(greenhouse1 -> greenhouse1.getUuid() == 0).findFirst().orElse(null);
+        greenhouse.setLastContact(new Date());
     }
 
     @Test
@@ -62,6 +66,7 @@ public class DtoModelTests {
         assertTrue(accessPointDTO.published());
         assertEquals(4, accessPointDTO.greenhouses().size());
         assertNotNull(accessPointDTO.lastContact());
+        assertEquals("ONLINE", accessPointDTO.status());
     }
 
     @Test
@@ -75,6 +80,7 @@ public class DtoModelTests {
         assertTrue(accessPointDTO.published());
         assertEquals(0, accessPointDTO.greenhouses().size());
         assertNotNull(accessPointDTO.lastContact());
+        assertEquals("ONLINE", accessPointDTO.status());
     }
 
     @Test
@@ -84,5 +90,9 @@ public class DtoModelTests {
         assertEquals("Greenhouse 0", greenhouseDTO.name());
         assertEquals("user", greenhouseDTO.gardener().username());
         assertEquals(SensorType.values().length, greenhouseDTO.sensors().size());
+        assertNotNull(greenhouseDTO.lastContact());
+        assertNotNull(greenhouseDTO.status());
+        assertNotNull(greenhouseDTO.lastContact());
+        assertEquals("ONLINE", greenhouseDTO.status());
     }
 }

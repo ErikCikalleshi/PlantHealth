@@ -2,6 +2,7 @@ package at.qe.backend.tests.services;
 
 
 import at.qe.backend.models.AccessPoint;
+import at.qe.backend.models.AuditLog;
 import at.qe.backend.models.Greenhouse;
 import at.qe.backend.repositories.AccessPointRepository;
 import at.qe.backend.repositories.GreenhouseRepository;
@@ -95,7 +96,7 @@ public class AccessPointServiceTests {
         accessPoint.setDescription("Test Description");
         accessPoint.setTransmissionIntervalSeconds(60);
         accessPoint.setPublished(true);
-        when(accessPointRepository.save(accessPoint)).thenReturn(accessPoint);
+        when(accessPointRepository.save(any(AccessPoint.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
@@ -155,7 +156,7 @@ public class AccessPointServiceTests {
         accessPoint.setDescription(description);
         accessPoint.setTransmissionIntervalSeconds(transmissionIntervalSeconds);
         accessPoint.setPublished(published);
-        when(accessPointRepository.save(any())).thenReturn(accessPoint);
+        when(accessPointRepository.save(any(AccessPoint.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         AccessPoint result = accessPointService.createNewAccessPoint(name, location, description, transmissionIntervalSeconds, published);
         assertEquals(accessPoint.getName(), result.getName());
@@ -183,7 +184,7 @@ public class AccessPointServiceTests {
         accessPoint.setTransmissionIntervalSeconds(30);
         accessPoint.setPublished(false);
         when(accessPointRepository.findFirstByUuid(accessPoint.getUuid())).thenReturn(accessPoint);
-        when(accessPointRepository.save(accessPoint)).thenReturn(accessPoint);
+        when(accessPointRepository.save(any(AccessPoint.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         AccessPoint result = accessPointService.updateAccessPoint(id, name, location, description, transmissionIntervalSeconds, published);
 

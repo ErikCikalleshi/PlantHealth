@@ -122,7 +122,7 @@ public class GreenhouseServiceTests {
         when(accessPointService.loadAccessPoint(anyLong())).thenReturn(accessPoint);
         when(userxService.loadUser(anyString())).thenReturn(gardener);
         when(sensorService.saveSensor(any(Sensor.class))).thenReturn(new Sensor());
-        when(greenhouseRepository.save(any(Greenhouse.class))).thenReturn(greenhouse);
+        when(greenhouseRepository.save(any(Greenhouse.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(accessPointService.loadAccessPoint(anyLong())).thenReturn(accessPoint);
 
         // when
@@ -177,7 +177,7 @@ public class GreenhouseServiceTests {
         Greenhouse greenhouse = new Greenhouse();
         AccessPoint accessPoint = new AccessPoint();
         greenhouse.setAccesspoint(accessPoint);
-        when(greenhouseRepository.save(greenhouse)).thenReturn(greenhouse);
+        when(greenhouseRepository.save(any(Greenhouse.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         greenhouseService.updateLastContact(greenhouse);
 
@@ -206,7 +206,7 @@ public class GreenhouseServiceTests {
 
         when(greenhouseRepository.findByUuid(greenhouseDTOnew.uuid())).thenReturn(Optional.of(greenhouse));
         when(sensorService.updateSensor(sensorDTO)).thenReturn(sensor);
-        when(greenhouseRepository.save(greenhouse)).thenReturn(greenhouse);
+        when(greenhouseRepository.save(any(Greenhouse.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(auditLogService.createNewAudit(anyString(), anyString(), anyString(), anyBoolean()))
                 .thenReturn(mock(AuditLog.class));
         Greenhouse result = greenhouseService.updateGreenhouse(greenhouseDTOnew);
@@ -272,24 +272,21 @@ public class GreenhouseServiceTests {
     @Test
     @WithMockUser(username = "user", authorities = {"GARDENER"})
     public void testGetAllForCurrentUserUnauthorized() {
-
-        try (MockedStatic<SecurityContextHolder> securityContextHolderMockedStatic = mockStatic(SecurityContextHolder.class)
-        ) {
-            SecurityContext securityContext = mock(SecurityContext.class);
-            Authentication authentication = mock(Authentication.class);
-            securityContextHolderMockedStatic.when(SecurityContextHolder::getContext).thenReturn(securityContext);
-            when(securityContext.getAuthentication()).thenReturn(authentication);
-            when(authentication.getName()).thenReturn(null);
-            ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-                greenhouseService.getAllForCurrentUser();});
-            assertEquals("401 UNAUTHORIZED \"You are not logged in.\"", exception.getMessage());
-        }
-
         when(userxService.loadUser(any())).thenReturn(null);
-        assertThrows(ResponseStatusException.class, () -> {
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
             greenhouseService.getAllForCurrentUser();
         });
+        assertEquals("401 UNAUTHORIZED \"You are not logged in. (invalid user)\"", exception.getMessage());
 
-
+                try (MockedStatic<SecurityContextHolder> securityContextHolderMockedStatic = mockStatic(SecurityContextHolder.class)
+        ) {
+            SecurityContext securityContext = mock(SecurityContext.class);
+            securityContextHolderMockedStatic.when(SecurityContextHolder::getContext).thenReturn(securityContext);
+            when(securityContext.getAuthentication()).thenReturn(null);
+            ResponseStatusException exception2 = assertThrows(ResponseStatusException.class, () -> {
+                greenhouseService.getAllForCurrentUser();
+            });
+            assertEquals("401 UNAUTHORIZED \"You are not logged in.\"", exception2.getMessage());
+        }
     }
 }

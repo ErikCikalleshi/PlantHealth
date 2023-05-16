@@ -25,27 +25,33 @@ public class UploadImagesService {
     @Autowired
     private AuditLogService auditLogService;
 
+    private UploadImages save(UploadImages uploadImages) {
+        if (uploadImages.isNew()) {
+            uploadImages.setUploadDate(new Date());
+        }
+        return uploadImagesRepository.save(uploadImages);
+    }
+
     public UploadImages create(Long plantId, String username, String uploadLink) {
         var greenHouse = greenhouseRepository.findByUuid(plantId).orElse(null);
         if(greenHouse == null) {
             auditLogService.createNewAudit("create", "NA", "image", false);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "GreenhouseId is invalid.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "GreenhouseId is invalid.");
         }
         var user = userxRepository.findByUsername(username).orElse(null);
         if(user == null) {
             auditLogService.createNewAudit("create", "NA", "image", false);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Username is invalid.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username is invalid.");
         }
         if(uploadLink.length() < 1) {
             auditLogService.createNewAudit("create", "NA", "image", false);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid upload link.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid upload link.");
         }
-        var newImage = new UploadImages();
-        newImage.setUploadDate(new Date());
+        UploadImages newImage = new UploadImages();
         newImage.setPlantId(plantId);
         newImage.setUserId(user.getId());
         newImage.setUploadLink(uploadLink);
-        uploadImagesRepository.save(newImage);
+        newImage = save(newImage);
         auditLogService.createNewAudit("create", Long.toString(newImage.getId()), "image", true);
         return newImage;
     }
@@ -53,7 +59,7 @@ public class UploadImagesService {
     public List<String> getAllById(Long id) {
         var greenHouse = greenhouseRepository.findByUuid(id).orElse(null);
         if(greenHouse == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "GreenhouseId is invalid.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "GreenhouseId is invalid.");
         }
         var imagesList = uploadImagesRepository.getAllUploadLinksByPlantId(id);
         return imagesList.stream().map(UploadImages::getUploadLink).collect(Collectors.toList());
@@ -62,7 +68,7 @@ public class UploadImagesService {
     public void deleteImageByUrl(String url) {
         var greenHouseImage = uploadImagesRepository.findUploadImagesByUploadLink(url);
         if(greenHouseImage == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid url.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid url.");
         }
         uploadImagesRepository.delete(greenHouseImage);
     }
