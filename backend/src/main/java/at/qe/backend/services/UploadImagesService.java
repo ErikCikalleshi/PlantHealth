@@ -70,6 +70,7 @@ public class UploadImagesService {
         if(greenHouseImage == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid url.");
         }
+        auditLogService.createNewAudit("delete", Long.toString(greenHouseImage.getId()), "image", true);
         uploadImagesRepository.delete(greenHouseImage);
     }
 }
