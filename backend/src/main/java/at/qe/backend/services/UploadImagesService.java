@@ -62,8 +62,10 @@ public class UploadImagesService {
     public void deleteImageByUrl(String url) {
         var greenHouseImage = uploadImagesRepository.findUploadImagesByUploadLink(url);
         if(greenHouseImage == null) {
+            auditLogService.createNewAudit("delete", "NA", "image", false);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid url.");
         }
+        auditLogService.createNewAudit("delete", Long.toString(greenHouseImage.getId()), "image", true);
         uploadImagesRepository.delete(greenHouseImage);
     }
 }
