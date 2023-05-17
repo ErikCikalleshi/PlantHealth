@@ -139,8 +139,14 @@ export default defineComponent({
                     ></v-file-input>
                 </div>
             </div>
-            <div class="flex justify-center">
-                <h1 class="font-primary text-[32px] text-white">Be the first one to upload a picture for this greenhouse.</h1>
+            <div class="flex justify-center container mx-auto pb-[40px]">
+<!--                <h1 class="font-primary text-[32px] text-white">Be the first one to upload a picture for this greenhouse.</h1>-->
+              <v-alert
+                  type="info"
+                  :title="greenHouseName"
+                  text="Be the first one to upload a picture for this greenhouse."
+                  variant="flat"
+              ></v-alert>
             </div>
         </header-view>
         <footer-view></footer-view>

@@ -26,10 +26,10 @@ export default defineComponent({
                     title: 'Dashboard',
                     route: '/dashboard',
                 },
-                {
-                    title: 'About',
-                    route: '/about',
-                },
+                // {
+                //     title: 'About',
+                //     route: '#about',
+                // },
                 {
                     title: 'Logout',
                     route: '/logout',
@@ -123,9 +123,10 @@ export default defineComponent({
                 <oh-icon name="pr-times" scale="2" @click="menu = false;"></oh-icon>
 
                 <div class="flex  gap-[20px] flex-col justify-between text-[24px]">
-                    <router-link v-for="(hyperLink, key) of hyperLinks" :key="key" :to="hyperLink.route">
+                    <router-link v-for="(hyperLink, key) of hyperLinks" :key="key" :to="hyperLink.route" @click="(hyperLink.title.toLowerCase() === 'logout') && logout()">
                         {{ hyperLink.title }}
                     </router-link>
+
                 </div>
                 <div class="text-[20px]">
                     <oh-icon class="fill-white" name="hi-solid-user" scale="1.5"></oh-icon>

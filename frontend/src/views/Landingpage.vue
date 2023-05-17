@@ -69,8 +69,8 @@
 <!--                        helps companies take care of their plants in a simple and hassle-free way. Contact us today to-->
 <!--                        learn more about how our service can benefit your company's plant management needs.-->
                     </p>
-                    <router-link class="text-primary font-primary text-[20px] underline hover:no-underline mt-[20px]" to="about">View
-                        More</router-link>
+<!--                    <router-link class="text-primary font-primary text-[20px] underline hover:no-underline mt-[20px]" to="about">View-->
+<!--                        More</router-link>-->
                 </div>
                 <img alt="projectPic" src="@/assets/projectExample.png"/>
             </div>
