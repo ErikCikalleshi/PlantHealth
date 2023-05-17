@@ -3,7 +3,7 @@ import struct
 
 from bleak import BleakClient, BleakScanner
 
-from accesspoint.control_services_arduino import send_flag
+from control_services_arduino import send_flag
 from log_config import AuditLogger
 
 logging = AuditLogger()
@@ -44,7 +44,7 @@ async def notification_handler(sender, data):
 
 
 
-async def read_sensor(device_name="SensorStation G2T4"):
+async def read_sensor(device_name="SensorStation 69"):
     device = await BleakScanner.find_device_by_name(device_name, timeout=120)
     if device is None:
         print("ERROR: Could not find device with name {0}".format(device_name))

@@ -59,12 +59,15 @@ async def read_sensor_data():
         data = pd.DataFrame(config["greenhouses"])
         data = data[data["published"] == True]
         data = data.assign(convention_name=lambda x: "SensorStation " + x["id"].astype(str))
-
+        data.at[data.index[0], "convention_name"] = "SensorStation 69"
+        data.at[data.index[0], "id"] = 69
+       
         sensor_stations: list = data["convention_name"].unique()
         # TODO: make a name convention for the sensor stations
         sensor_stations = ["SensorStation 69"]
         for idx, name in enumerate(sensor_stations):
-            
+            id = data[data["convention_name"] == name]["id"].iloc[0]                     
+            greenhouse_idx = pd.DataFrame(data[data["id"] == id]["sensors"].iloc[0])
             logging.info("Looking for device with name {0}".format(name))
             device = await BleakScanner.find_device_by_name(name, timeout=120)
             if device is None:
@@ -76,7 +79,7 @@ async def read_sensor_data():
             
             print("Found device with name {0}".format(name))
 
-            async def read_single_sensor():
+            async def read_from_device():
                 while True:
                     try:
                         async with BleakClient(device, timeout=120) as client:
@@ -103,30 +106,33 @@ async def read_sensor_data():
                                         sensor_mappings = {
                                             "00002a6e-0000-1000-8000-00805f9b34fb": ("TEMPERATURE", "<h", 100.0, 2),
                                             "00002a6f-0000-1000-8000-00805f9b34fb": ("HUMIDITY_AIR", "<H", 100.0, 2),
-                                            "00002a6d-0000-1000-8000-00805f9b34fb": ("PRESSURE", "<I", 10.0, 4),
-                                            "00002bd3-0000-1000-8000-00805f9b34fb": ("GAS_RESISTANCE", "<H", 1000.0, 2),
-                                            "4ab3244f-d156-4e76-a329-6de917bdc8f9": ("LIGHT", "<H", 1.0, 4),
-                                            "29c1083c-5166-433c-9b7c-98658c826968": ("HUMIDITY_DIRT", "<H", 1.0, 4),
-                                            "00002a05-0000-1000-8000-00805f9b34fb": ("LED", "<H", 1.0, 1),
+                                            "00002a6d-0000-1000-8000-00805f9b34fb": ("PRESSURE", "<L", 10.0, 4),
+                                            "00002bd3-0000-1000-8000-00805f9b34fb": ("AIR_QUALITY", "<f", 1000.0, 4),
+                                            "4ab3244f-d156-4e76-a329-6de917bdc8f9": ("LIGHT", "<I", 1.0, 4),
+                                            "29c1083c-5166-433c-9b7c-98658c826968": ("HUMIDITY_DIRT", "<I", 1.0, 4),
+                                            "00002a05-0000-1000-8000-00805f9b34fb": ("LED", "<c", 1.0, 1),
                                         }
                                         for uuid, (sensor_type, unpack_format, scale_factor, buffer) in sensor_mappings.items():
                                             if sender.uuid == uuid:
-                                                print(sensor_type)
+                                        
                                                 val = struct.unpack(unpack_format, value[:buffer])[0] / scale_factor
                                                 print("{0}: {1}".format(sensor_type, val))
                                                 if sensor_type == "LED":
+                                                    print("LED")
                                                     if val == 0:
                                                         print("LED")
+                                                    continue
                                                         #webserver.button_disabled_pressed(greenhouse_id=16)
 
                                                 #await collection_deletion_event.wait()
-                                                print(data[data["convention_name"] == name])
-                                                id = data[data["convention_name"] == name]["id"].iloc[0]
-                                                greenhouse_idx = data[data["id"] == id]
+                                                print(sensor_type)
+                                                print(greenhouse_idx)
+                                                if greenhouse_idx.empty:
+                                                   continue 
                                                 sensor_id = \
-                                                    greenhouse_idx[greenhouse_idx["sensors"] == sensor_type]["id"].iloc[
-                                                        0]
-                                                db.write_to_document_sensor(val, sensor_type, sensor_id)
+                                                    greenhouse_idx[greenhouse_idx["sensorType"] == sensor_type]["id"].iloc[0]
+                                                print(sensor_id)
+                                                db.write_to_document_sensor(val, sensor_type, int(sensor_id))
                                                 logging.info("Wrote {0} to the database.".format(val))
                                                 break
 
@@ -141,9 +147,9 @@ async def read_sensor_data():
                             "Disconnected from device {0}. Attempting to reconnect in 5 seconds.".format(name))
                         await asyncio.sleep(5)
                         # Cancel and close the task
-                        tasks.current_task().cancel()
+                        #tasks.current_task().cancel()
 
-            tasks.create_task(read_single_sensor())
+            tasks.create_task(read_from_device())
             logging.info("Started reading data from device {0}".format(name))
 
         logging.info("Finished reading data from all devices. Checking for updates in 30 seconds.")

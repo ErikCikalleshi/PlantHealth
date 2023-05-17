@@ -103,3 +103,458 @@
 2023-05-17 15:18:24,727 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
 2023-05-17 15:18:24,728 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
 2023-05-17 15:18:26,171 - INFO - (accesspoint/connect_arduino_service.py:83)Connected to device SensorStation 69
+2023-05-17 15:25:24,299 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 15:25:24,317 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:25:24,331 - INFO - (accesspoint/connect_arduino_service.py:69)Looking for device with name SensorStation 69
+2023-05-17 15:25:25,046 - INFO - (accesspoint/connect_arduino_service.py:148)Started reading data from device SensorStation 69
+2023-05-17 15:25:25,048 - INFO - (accesspoint/connect_arduino_service.py:150)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 15:25:25,322 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:25:25,330 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 15:25:25,331 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 15:25:26,625 - INFO - (accesspoint/connect_arduino_service.py:84)Connected to device SensorStation 69
+2023-05-17 15:28:35,243 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 15:28:35,272 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:28:35,291 - INFO - (accesspoint/connect_arduino_service.py:69)Looking for device with name SensorStation 69
+2023-05-17 15:28:36,258 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:28:36,267 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 15:28:36,268 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 15:31:29,036 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 15:31:29,053 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:31:29,067 - INFO - (accesspoint/connect_arduino_service.py:69)Looking for device with name SensorStation 69
+2023-05-17 15:31:29,297 - INFO - (accesspoint/connect_arduino_service.py:148)Started reading data from device SensorStation 69
+2023-05-17 15:31:29,299 - INFO - (accesspoint/connect_arduino_service.py:150)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 15:31:30,064 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:31:30,072 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 15:31:30,074 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 15:31:30,877 - INFO - (accesspoint/connect_arduino_service.py:84)Connected to device SensorStation 69
+2023-05-17 15:34:33,667 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 15:34:33,684 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:34:33,698 - INFO - (accesspoint/connect_arduino_service.py:69)Looking for device with name SensorStation 69
+2023-05-17 15:34:34,691 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:34:34,699 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 15:34:34,701 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 15:34:38,222 - INFO - (accesspoint/connect_arduino_service.py:148)Started reading data from device SensorStation 69
+2023-05-17 15:34:38,225 - INFO - (accesspoint/connect_arduino_service.py:150)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 15:34:39,769 - INFO - (accesspoint/connect_arduino_service.py:84)Connected to device SensorStation 69
+2023-05-17 15:35:58,289 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 15:35:58,317 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:35:58,336 - INFO - (accesspoint/connect_arduino_service.py:69)Looking for device with name SensorStation 69
+2023-05-17 15:35:59,308 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:35:59,316 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 15:35:59,318 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 15:36:10,592 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 69
+2023-05-17 15:36:10,594 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 15:36:12,173 - INFO - (accesspoint/connect_arduino_service.py:84)Connected to device SensorStation 69
+2023-05-17 15:38:12,346 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 15:38:12,364 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:38:12,378 - INFO - (accesspoint/connect_arduino_service.py:70)Looking for device with name SensorStation 69
+2023-05-17 15:38:13,059 - INFO - (accesspoint/connect_arduino_service.py:150)Started reading data from device SensorStation 69
+2023-05-17 15:38:13,061 - INFO - (accesspoint/connect_arduino_service.py:152)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 15:38:13,374 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:38:13,383 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 15:38:13,384 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 15:38:14,635 - INFO - (accesspoint/connect_arduino_service.py:85)Connected to device SensorStation 69
+2023-05-17 15:40:34,747 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 15:40:34,839 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:40:34,903 - INFO - (accesspoint/connect_arduino_service.py:70)Looking for device with name SensorStation 69
+2023-05-17 15:40:35,215 - INFO - (accesspoint/connect_arduino_service.py:151)Started reading data from device SensorStation 69
+2023-05-17 15:40:35,258 - INFO - (accesspoint/connect_arduino_service.py:153)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 15:40:37,261 - INFO - (accesspoint/connect_arduino_service.py:85)Connected to device SensorStation 69
+2023-05-17 15:48:02,275 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 15:48:02,358 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:48:02,418 - INFO - (accesspoint/connect_arduino_service.py:70)Looking for device with name SensorStation 69
+2023-05-17 15:48:02,884 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:48:02,901 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 15:48:02,905 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 15:48:03,090 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 69
+2023-05-17 15:48:03,108 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 15:48:05,069 - INFO - (accesspoint/connect_arduino_service.py:85)Connected to device SensorStation 69
+2023-05-17 15:48:23,931 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 15:48:23,949 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:48:23,964 - INFO - (accesspoint/connect_arduino_service.py:70)Looking for device with name SensorStation 69
+2023-05-17 15:48:24,955 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:48:24,963 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 15:48:24,964 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 15:49:59,980 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 15:49:59,997 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:50:00,012 - INFO - (accesspoint/connect_arduino_service.py:70)Looking for device with name SensorStation 69
+2023-05-17 15:50:00,130 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 69
+2023-05-17 15:50:00,133 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 15:50:01,009 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:50:01,017 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 15:50:01,018 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 15:50:01,934 - INFO - (accesspoint/connect_arduino_service.py:85)Connected to device SensorStation 69
+2023-05-17 15:52:23,436 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 15:52:23,454 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:52:23,468 - INFO - (accesspoint/connect_arduino_service.py:70)Looking for device with name SensorStation 69
+2023-05-17 15:52:24,460 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:52:24,469 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 15:52:24,471 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 15:52:25,503 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 69
+2023-05-17 15:52:25,506 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 15:52:27,068 - INFO - (accesspoint/connect_arduino_service.py:85)Connected to device SensorStation 69
+2023-05-17 15:53:07,669 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 15:53:07,758 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 15:53:07,825 - INFO - (accesspoint/connect_arduino_service.py:70)Looking for device with name SensorStation 69
+2023-05-17 15:53:09,830 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 69
+2023-05-17 15:53:09,847 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 15:53:11,762 - INFO - (accesspoint/connect_arduino_service.py:85)Connected to device SensorStation 69
+2023-05-17 16:05:12,624 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 16:05:12,649 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:05:12,666 - INFO - (accesspoint/connect_arduino_service.py:70)Looking for device with name SensorStation 69
+2023-05-17 16:05:13,053 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 69
+2023-05-17 16:05:13,056 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:05:13,643 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:05:13,651 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 16:05:13,652 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 16:05:14,652 - INFO - (accesspoint/connect_arduino_service.py:85)Connected to device SensorStation 69
+2023-05-17 16:05:20,799 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:05:20,805 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:05:20,832 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:05:20,838 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:05:20,864 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:05:20,871 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:05:20,920 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:05:20,928 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:06:05,735 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 16:06:05,761 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:06:05,779 - INFO - (accesspoint/connect_arduino_service.py:70)Looking for device with name SensorStation 69
+2023-05-17 16:06:06,032 - INFO - (accesspoint/connect_arduino_service.py:150)Started reading data from device SensorStation 69
+2023-05-17 16:06:06,034 - INFO - (accesspoint/connect_arduino_service.py:152)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:06:06,761 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:06:06,769 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 16:06:06,770 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 16:06:07,973 - INFO - (accesspoint/connect_arduino_service.py:85)Connected to device SensorStation 69
+2023-05-17 16:06:10,806 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:06:10,813 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:06:10,843 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:06:10,852 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:06:10,890 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:06:10,898 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:06:10,947 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:06:10,955 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:06:42,536 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 16:06:42,553 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:06:42,567 - INFO - (accesspoint/connect_arduino_service.py:70)Looking for device with name SensorStation 69
+2023-05-17 16:06:43,204 - INFO - (accesspoint/connect_arduino_service.py:150)Started reading data from device SensorStation 69
+2023-05-17 16:06:43,206 - INFO - (accesspoint/connect_arduino_service.py:152)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:06:43,560 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:06:43,568 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 16:06:43,570 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 16:06:44,770 - INFO - (accesspoint/connect_arduino_service.py:85)Connected to device SensorStation 69
+2023-05-17 16:06:51,412 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:06:51,419 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:06:51,423 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:06:51,425 - INFO - (accesspoint/connect_arduino_service.py:133)Wrote 2.0 to the database.
+2023-05-17 16:06:51,449 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:06:51,456 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:06:51,460 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:06:51,462 - INFO - (accesspoint/connect_arduino_service.py:133)Wrote 873.0 to the database.
+2023-05-17 16:06:51,486 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:06:51,494 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:06:51,499 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:06:51,502 - INFO - (accesspoint/connect_arduino_service.py:133)Wrote 26.59 to the database.
+2023-05-17 16:06:51,527 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:06:51,535 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:06:51,539 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:06:51,541 - INFO - (accesspoint/connect_arduino_service.py:133)Wrote 48.25 to the database.
+2023-05-17 16:09:24,654 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 16:09:24,680 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:09:24,699 - INFO - (accesspoint/connect_arduino_service.py:70)Looking for device with name SensorStation 69
+2023-05-17 16:09:25,669 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:09:25,678 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 16:09:25,680 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 16:09:25,852 - INFO - (accesspoint/connect_arduino_service.py:150)Started reading data from device SensorStation 69
+2023-05-17 16:09:25,854 - INFO - (accesspoint/connect_arduino_service.py:152)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:09:27,487 - INFO - (accesspoint/connect_arduino_service.py:85)Connected to device SensorStation 69
+2023-05-17 16:09:32,081 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:09:32,089 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:09:32,093 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:09:32,095 - INFO - (accesspoint/connect_arduino_service.py:133)Wrote 3.0 to the database.
+2023-05-17 16:09:32,118 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:09:32,125 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:09:32,130 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:09:32,132 - INFO - (accesspoint/connect_arduino_service.py:133)Wrote 873.0 to the database.
+2023-05-17 16:09:32,156 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:09:32,163 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:09:32,168 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:09:32,170 - INFO - (accesspoint/connect_arduino_service.py:133)Wrote 26.6 to the database.
+2023-05-17 16:09:32,196 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:09:32,203 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:09:32,207 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:09:32,209 - INFO - (accesspoint/connect_arduino_service.py:133)Wrote 48.28 to the database.
+2023-05-17 16:09:32,242 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:09:32,249 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:09:32,254 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:09:32,256 - INFO - (accesspoint/connect_arduino_service.py:133)Wrote 134.639 to the database.
+2023-05-17 16:11:54,735 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 16:11:54,753 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:11:54,766 - INFO - (accesspoint/connect_arduino_service.py:70)Looking for device with name SensorStation 69
+2023-05-17 16:11:55,754 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:11:55,763 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 16:11:55,764 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 16:12:06,906 - INFO - (accesspoint/connect_arduino_service.py:151)Started reading data from device SensorStation 69
+2023-05-17 16:12:06,908 - INFO - (accesspoint/connect_arduino_service.py:153)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:12:08,664 - INFO - (accesspoint/connect_arduino_service.py:85)Connected to device SensorStation 69
+2023-05-17 16:12:12,501 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:12:12,509 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:12:12,513 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:12:12,516 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 2.0 to the database.
+2023-05-17 16:12:12,539 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:12:12,545 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:12:12,549 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:12:12,552 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 873.0 to the database.
+2023-05-17 16:12:12,576 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:12:12,583 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:12:12,588 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:12:12,590 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 26.59 to the database.
+2023-05-17 16:12:12,614 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:12:12,621 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:12:12,625 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:12:12,627 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 48.33 to the database.
+2023-05-17 16:12:12,660 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:12:12,667 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:12:12,671 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:12:12,673 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 134.476 to the database.
+2023-05-17 16:12:53,574 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 16:12:53,592 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:12:53,605 - INFO - (accesspoint/connect_arduino_service.py:70)Looking for device with name SensorStation 69
+2023-05-17 16:12:54,517 - INFO - (accesspoint/connect_arduino_service.py:152)Started reading data from device SensorStation 69
+2023-05-17 16:12:54,519 - INFO - (accesspoint/connect_arduino_service.py:154)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:12:54,591 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:12:54,600 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 16:12:54,601 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 16:12:56,130 - INFO - (accesspoint/connect_arduino_service.py:85)Connected to device SensorStation 69
+2023-05-17 16:13:02,703 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:13:02,710 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:13:02,714 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:13:02,717 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 3.0 to the database.
+2023-05-17 16:13:02,744 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:13:02,751 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:13:02,755 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:13:02,757 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 874.0 to the database.
+2023-05-17 16:13:02,781 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:13:02,789 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:13:02,793 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:13:02,795 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 26.61 to the database.
+2023-05-17 16:13:02,819 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:13:02,826 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:13:02,830 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:13:02,833 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 48.26 to the database.
+2023-05-17 16:13:02,865 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:13:02,872 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:13:02,876 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:13:02,878 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 134.673 to the database.
+2023-05-17 16:14:46,538 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 16:14:46,621 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:14:46,682 - INFO - (accesspoint/connect_arduino_service.py:70)Looking for device with name SensorStation 69
+2023-05-17 16:14:47,121 - INFO - (accesspoint/connect_arduino_service.py:152)Started reading data from device SensorStation 69
+2023-05-17 16:14:47,139 - INFO - (accesspoint/connect_arduino_service.py:154)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:14:49,059 - INFO - (accesspoint/connect_arduino_service.py:85)Connected to device SensorStation 69
+2023-05-17 16:15:04,543 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:04,570 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:04,594 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:04,616 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 2.0 to the database.
+2023-05-17 16:15:08,427 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:08,453 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:08,475 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:08,494 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 873.0 to the database.
+2023-05-17 16:15:10,535 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:10,568 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:10,590 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:10,610 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 26.63 to the database.
+2023-05-17 16:15:13,203 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:13,231 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:13,253 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:13,273 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 48.22 to the database.
+2023-05-17 16:15:17,344 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:17,372 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:17,394 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:17,413 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 135.63 to the database.
+2023-05-17 16:15:33,249 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:33,277 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:33,300 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:33,318 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 2.0 to the database.
+2023-05-17 16:15:35,055 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:35,084 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:35,105 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:35,124 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 874.0 to the database.
+2023-05-17 16:15:35,952 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:35,980 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:36,003 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:36,022 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 26.64 to the database.
+2023-05-17 16:15:36,803 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:36,831 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:36,853 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:36,872 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 48.22 to the database.
+2023-05-17 16:15:51,484 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:51,510 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:51,532 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:51,551 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 135.792 to the database.
+2023-05-17 16:15:53,234 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:53,263 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:53,285 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:53,303 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 3.0 to the database.
+2023-05-17 16:15:53,845 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:53,872 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:53,896 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:53,915 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 873.0 to the database.
+2023-05-17 16:15:54,271 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:54,298 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:54,323 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:54,351 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 26.65 to the database.
+2023-05-17 16:15:54,728 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:54,769 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:54,791 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:54,810 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 48.21 to the database.
+2023-05-17 16:15:55,534 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:55,561 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:55,585 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:55,604 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 135.964 to the database.
+2023-05-17 16:15:55,956 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:15:55,984 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:15:56,010 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:15:56,039 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 3.0 to the database.
+2023-05-17 16:18:25,934 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:18:25,947 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:18:25,956 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:18:25,963 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 2.0 to the database.
+2023-05-17 16:18:26,006 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:18:26,021 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:18:26,033 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:18:26,042 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 873.0 to the database.
+2023-05-17 16:18:26,081 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:18:26,093 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:18:26,102 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:18:26,109 - INFO - (accesspoint/connect_arduino_service.py:135)Wrote 26.65 to the database.
+2023-05-17 16:18:26,151 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:18:26,162 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:18:33,837 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 16:18:33,854 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:18:33,874 - INFO - (accesspoint/connect_arduino_service.py:71)Looking for device with name SensorStation 69
+2023-05-17 16:18:34,362 - INFO - (accesspoint/connect_arduino_service.py:151)Started reading data from device SensorStation 69
+2023-05-17 16:18:34,364 - INFO - (accesspoint/connect_arduino_service.py:153)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:18:35,876 - INFO - (accesspoint/connect_arduino_service.py:86)Connected to device SensorStation 69
+2023-05-17 16:18:43,533 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:18:43,540 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:18:43,544 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:18:43,546 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 3.0 to the database.
+2023-05-17 16:18:43,563 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:18:43,570 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:18:43,574 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:18:43,576 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 874.0 to the database.
+2023-05-17 16:18:43,593 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:18:43,605 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:18:43,609 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:18:43,611 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 26.65 to the database.
+2023-05-17 16:18:43,631 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:18:43,638 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:18:43,642 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:18:43,644 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 48.25 to the database.
+2023-05-17 16:18:43,664 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:18:43,671 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:18:43,675 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:18:43,677 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 134.858 to the database.
+2023-05-17 16:21:10,535 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 16:21:10,552 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:21:10,573 - INFO - (accesspoint/connect_arduino_service.py:71)Looking for device with name SensorStation 69
+2023-05-17 16:21:23,543 - INFO - (accesspoint/connect_arduino_service.py:151)Started reading data from device SensorStation 69
+2023-05-17 16:21:23,545 - INFO - (accesspoint/connect_arduino_service.py:153)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:21:25,122 - INFO - (accesspoint/connect_arduino_service.py:86)Connected to device SensorStation 69
+2023-05-17 16:21:33,785 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:21:33,793 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:21:33,797 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:21:33,800 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 3.0 to the database.
+2023-05-17 16:21:33,841 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:21:33,848 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:21:33,853 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:21:33,855 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 876.0 to the database.
+2023-05-17 16:21:33,897 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:21:33,904 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:21:33,909 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:21:33,911 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 26.65 to the database.
+2023-05-17 16:21:33,952 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:21:33,960 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:21:33,964 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:21:33,966 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 48.29 to the database.
+2023-05-17 16:21:34,034 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:21:34,040 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:21:34,044 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:21:34,047 - INFO - (accesspoint/connect_arduino_service.py:134)Wrote 134.679 to the database.
+2023-05-17 16:27:37,537 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 16:27:37,554 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:27:37,574 - INFO - (accesspoint/connect_arduino_service.py:71)Looking for device with name SensorStation 69
+2023-05-17 16:27:38,055 - INFO - (accesspoint/connect_arduino_service.py:153)Started reading data from device SensorStation 69
+2023-05-17 16:27:38,058 - INFO - (accesspoint/connect_arduino_service.py:155)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:27:39,608 - INFO - (accesspoint/connect_arduino_service.py:86)Connected to device SensorStation 69
+2023-05-17 16:27:45,297 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:27:45,304 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:27:45,308 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:27:45,310 - INFO - (accesspoint/connect_arduino_service.py:136)Wrote 3.0 to the database.
+2023-05-17 16:27:45,355 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:27:45,361 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:27:45,365 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:27:45,367 - INFO - (accesspoint/connect_arduino_service.py:136)Wrote 875.0 to the database.
+2023-05-17 16:27:45,411 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:27:45,417 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:27:45,422 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:27:45,424 - INFO - (accesspoint/connect_arduino_service.py:136)Wrote 26.67 to the database.
+2023-05-17 16:27:45,467 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:27:45,475 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:27:45,479 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:27:45,481 - INFO - (accesspoint/connect_arduino_service.py:136)Wrote 48.41 to the database.
+2023-05-17 16:27:45,546 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:27:45,553 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:27:45,557 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:27:45,559 - INFO - (accesspoint/connect_arduino_service.py:136)Wrote 133.645 to the database.
+2023-05-17 16:28:56,965 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 16:28:56,981 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:28:57,001 - INFO - (accesspoint/connect_arduino_service.py:71)Looking for device with name SensorStation 69
+2023-05-17 16:29:00,708 - INFO - (accesspoint/connect_arduino_service.py:153)Started reading data from device SensorStation 69
+2023-05-17 16:29:00,711 - INFO - (accesspoint/connect_arduino_service.py:155)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:29:02,245 - INFO - (accesspoint/connect_arduino_service.py:86)Connected to device SensorStation 69
+2023-05-17 16:29:05,501 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:29:05,509 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:29:05,513 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:29:05,515 - INFO - (accesspoint/connect_arduino_service.py:136)Wrote 2.0 to the database.
+2023-05-17 16:29:05,555 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:29:05,562 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:29:05,566 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:29:05,568 - INFO - (accesspoint/connect_arduino_service.py:136)Wrote 874.0 to the database.
+2023-05-17 16:29:05,614 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:29:05,621 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:29:05,624 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:29:05,626 - INFO - (accesspoint/connect_arduino_service.py:136)Wrote 26.68 to the database.
+2023-05-17 16:29:05,671 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:29:05,678 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:29:05,682 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:29:05,684 - INFO - (accesspoint/connect_arduino_service.py:136)Wrote 48.4 to the database.
+2023-05-17 16:29:05,751 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:29:05,757 - INFO - (accesspoint/db.py:44)Writing to database...
+2023-05-17 16:29:05,761 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 16:29:05,764 - INFO - (accesspoint/connect_arduino_service.py:136)Wrote 133.799 to the database.
+2023-05-17 16:44:02,060 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 16:44:02,077 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:44:02,097 - INFO - (accesspoint/connect_arduino_service.py:71)Looking for device with name SensorStation 69
+2023-05-17 16:44:11,773 - INFO - (accesspoint/connect_arduino_service.py:154)Started reading data from device SensorStation 69
+2023-05-17 16:44:11,775 - INFO - (accesspoint/connect_arduino_service.py:156)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:45:10,892 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 16:45:10,909 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:45:10,928 - INFO - (accesspoint/connect_arduino_service.py:71)Looking for device with name SensorStation 69
+2023-05-17 16:45:11,058 - INFO - (accesspoint/connect_arduino_service.py:154)Started reading data from device SensorStation 69
+2023-05-17 16:45:11,060 - INFO - (accesspoint/connect_arduino_service.py:156)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:45:41,112 - INFO - (accesspoint/connect_arduino_service.py:71)Looking for device with name SensorStation 69
+2023-05-17 16:45:41,299 - INFO - (accesspoint/connect_arduino_service.py:154)Started reading data from device SensorStation 69
+2023-05-17 16:45:41,301 - INFO - (accesspoint/connect_arduino_service.py:156)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:46:11,350 - INFO - (accesspoint/connect_arduino_service.py:71)Looking for device with name SensorStation 69
+2023-05-17 16:46:12,095 - INFO - (accesspoint/connect_arduino_service.py:154)Started reading data from device SensorStation 69
+2023-05-17 16:46:12,098 - INFO - (accesspoint/connect_arduino_service.py:156)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:46:20,411 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 16:46:20,429 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 16:46:20,448 - INFO - (accesspoint/connect_arduino_service.py:71)Looking for device with name SensorStation 69
+2023-05-17 16:46:21,086 - INFO - (accesspoint/connect_arduino_service.py:153)Started reading data from device SensorStation 69
+2023-05-17 16:46:21,088 - INFO - (accesspoint/connect_arduino_service.py:155)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 16:46:22,691 - INFO - (accesspoint/connect_arduino_service.py:86)Connected to device SensorStation 69
+2023-05-17 16:46:51,118 - INFO - (accesspoint/connect_arduino_service.py:71)Looking for device with name SensorStation 69
+2023-05-17 16:48:51,154 - ERROR - (accesspoint/connect_arduino_service.py:74)Could not find device with name SensorStation 69
+2023-05-17 16:48:51,156 - INFO - (accesspoint/connect_arduino_service.py:155)Finished reading data from all devices. Checking for updates in 30 seconds.
