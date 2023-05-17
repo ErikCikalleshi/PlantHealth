@@ -81,9 +81,8 @@ def get_avg_measurements(database):
 
 
 def send_measurements():
-    url = "http://localhost:9000/api/measurements"
     settings = Settings()
-
+    url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{1}"
     database = db.connect_to_db()
     # get transmissionIntervalSeconds from config
     config_collection = database["config"]
@@ -124,8 +123,8 @@ def send_measurements():
 
 
 def button_disabled_pressed(greenhouse_id: int):
-    url = "http://localhost:9000/api/disabled"
     settings = Settings()
+    url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{1}"
     auth = settings.auth
     headers = {"Content-Type": "application/json"}
     response = requests.post(url, headers=headers, auth=auth, data=json.dumps({"greenhouseID": greenhouse_id}))
