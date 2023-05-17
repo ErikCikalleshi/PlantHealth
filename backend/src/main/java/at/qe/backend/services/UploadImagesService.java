@@ -39,7 +39,7 @@ public class UploadImagesService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "GreenhouseId is invalid.");
         }
         var user = userxRepository.findByUsername(username).orElse(null);
-        if(user == null) {
+        if(user == null && !username.equals("guest")) {
             auditLogService.createNewAudit("create", "NA", "image", false);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username is invalid.");
         }
@@ -49,7 +49,8 @@ public class UploadImagesService {
         }
         UploadImages newImage = new UploadImages();
         newImage.setPlantId(plantId);
-        newImage.setUserId(user.getId());
+
+        newImage.setUserId((user != null) ? user.getId() : Long.valueOf(1L));
         newImage.setUploadLink(uploadLink);
         newImage = save(newImage);
         auditLogService.createNewAudit("create", Long.toString(newImage.getId()), "image", true);

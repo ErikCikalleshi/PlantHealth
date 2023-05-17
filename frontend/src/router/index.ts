@@ -22,7 +22,7 @@ const routes = [
     {path: '/', component: landingpage},
     {path: '/dashboard', component: dashboard, meta: { roles: ['ADMIN', 'GARDENER', 'USER']}},
     {path: '/login', name: 'login', component: login},
-    {path: '/gallery/:id', component: gallery, meta: { roles: ['ADMIN', 'GARDENER', 'USER']}},
+    {path: '/gallery/:id', component: gallery},
     {path: '/charts/:id', component: Charts, meta: { roles: ['ADMIN', 'GARDENER']}},
     {path: '/admin/users', name: 'manage-users', component: adminManageUsers, meta: { roles: ['ADMIN'] }},
     {path: '/admin/users/edit/:username', props: true, name: 'admin-edit-user', component: adminEditUser, meta: { roles: ['ADMIN'] }},

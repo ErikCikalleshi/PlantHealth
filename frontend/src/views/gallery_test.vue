@@ -52,7 +52,7 @@ export default defineComponent({
                 const data = await response.json();
                 this.imageUrl = data.data.link;
                 await axios.post(API_BASE_URL + "upload", {
-                    username: userStore().username,
+                    username: (userStore().username.length <= 0) ? "guest" : userStore().username,
                     uploadLink: this.imageUrl,
                     plantId: this.plantId,
                 }).then(() => {
