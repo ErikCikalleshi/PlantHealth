@@ -44,6 +44,7 @@ def write_to_document_sensor(value, sensor_type, greenhouse_id):
     logging.warning("Writing to database...")
 
     date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    print(greenhouse_id)
     collection.insert_one({"greenhouseID": greenhouse_id, "accesspointID": config["accessPointId"],
                            "value": value, "sensorType": sensor_type, "date": date})
     logging.info("Successfully written to database")

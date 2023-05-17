@@ -3282,3 +3282,1047 @@
 2023-05-17 19:55:44,097 - INFO - (accesspoint/db.py:23)Connected to database
 2023-05-17 19:55:44,105 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
 2023-05-17 19:55:44,107 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 19:57:16,465 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 19:57:16,712 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:16,719 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 19:57:16,721 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 19:57:20,249 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:20,257 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 19:57:20,259 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 19:57:20,279 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:20,297 - INFO - (accesspoint/connect_arduino_service.py:74)Looking for device with name SensorStation 16
+2023-05-17 19:57:21,211 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 16
+2023-05-17 19:57:21,214 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 19:57:22,890 - INFO - (accesspoint/connect_arduino_service.py:86)Connected to device SensorStation 9
+2023-05-17 19:57:29,467 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:29,475 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 19:57:29,479 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 19:57:29,482 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 19:57:29,499 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:29,507 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 19:57:29,511 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 19:57:29,513 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 867.0 to the database.
+2023-05-17 19:57:29,531 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:29,538 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 19:57:29,543 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 19:57:29,546 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.18 to the database.
+2023-05-17 19:57:29,564 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:29,572 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 19:57:29,576 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 19:57:29,579 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.63 to the database.
+2023-05-17 19:57:29,596 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:29,603 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 19:57:29,608 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 19:57:29,610 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95227.3 to the database.
+2023-05-17 19:57:29,627 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:29,634 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 19:57:29,639 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 19:57:29,641 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 147.236 to the database.
+2023-05-17 19:57:31,278 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:31,309 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 2.4200000000000017
+2023-05-17 19:57:31,317 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 19:57:31,574 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 19:57:39,504 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:39,512 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 19:57:39,516 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 19:57:39,519 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 19:57:39,536 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:39,543 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 19:57:39,547 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 19:57:39,550 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 868.0 to the database.
+2023-05-17 19:57:39,567 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:39,575 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 19:57:39,579 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 19:57:39,582 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.2 to the database.
+2023-05-17 19:57:39,600 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:39,607 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 19:57:39,611 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 19:57:39,613 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.62 to the database.
+2023-05-17 19:57:39,629 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:39,637 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 19:57:39,641 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 19:57:39,644 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95226.7 to the database.
+2023-05-17 19:57:39,660 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:39,668 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 19:57:39,672 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 19:57:39,675 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 147.338 to the database.
+2023-05-17 19:57:42,593 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:42,624 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 2.400000000000002
+2023-05-17 19:57:42,632 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 19:57:42,891 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 19:57:51,238 - INFO - (accesspoint/connect_arduino_service.py:74)Looking for device with name SensorStation 16
+2023-05-17 19:57:53,911 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:57:53,920 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 19:57:53,921 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 19:58:04,942 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:58:04,951 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 19:58:04,953 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 19:58:15,974 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:58:15,982 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 19:58:15,984 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 19:58:27,004 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:58:27,012 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 19:58:27,014 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 19:58:38,030 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:58:38,038 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 19:58:38,040 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 19:58:49,060 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:58:49,068 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 19:58:49,069 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 19:59:00,088 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:59:00,097 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 19:59:00,098 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 19:59:11,119 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:59:11,128 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 19:59:11,129 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 19:59:28,859 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 19:59:29,112 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:59:29,121 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 19:59:29,122 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 19:59:32,641 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:59:32,650 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 19:59:32,652 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 19:59:32,671 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:59:32,689 - INFO - (accesspoint/connect_arduino_service.py:74)Looking for device with name SensorStation 16
+2023-05-17 19:59:43,672 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:59:43,680 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 19:59:43,681 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 19:59:54,703 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 19:59:54,711 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 19:59:54,713 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 19:59:56,248 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 16
+2023-05-17 19:59:56,250 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 19:59:57,839 - INFO - (accesspoint/connect_arduino_service.py:86)Connected to device SensorStation 5
+2023-05-17 20:00:03,629 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:03,637 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:03,642 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:03,644 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:00:03,661 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:03,667 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:03,672 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:03,674 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 869.0 to the database.
+2023-05-17 20:00:03,691 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:03,699 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:03,704 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:03,706 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 33.36 to the database.
+2023-05-17 20:00:03,725 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:03,732 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:03,736 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:03,738 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 100.0 to the database.
+2023-05-17 20:00:03,756 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:03,764 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:03,768 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:03,770 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 68130.0 to the database.
+2023-05-17 20:00:03,787 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:03,794 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:03,798 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:03,801 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 0.0 to the database.
+2023-05-17 20:00:05,739 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:05,775 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 5.759999999999998
+2023-05-17 20:00:05,786 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:00:06,048 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:00:13,619 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:13,626 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:13,631 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:13,633 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:00:13,651 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:13,657 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:13,662 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:13,665 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 869.0 to the database.
+2023-05-17 20:00:13,681 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:13,688 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:13,692 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:13,695 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 33.36 to the database.
+2023-05-17 20:00:13,713 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:13,720 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:13,725 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:13,728 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 100.0 to the database.
+2023-05-17 20:00:13,744 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:13,751 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:13,756 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:13,758 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 68130.0 to the database.
+2023-05-17 20:00:13,776 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:13,783 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:13,788 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:13,790 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 0.0 to the database.
+2023-05-17 20:00:17,067 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:17,098 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 5.759999999999998
+2023-05-17 20:00:17,106 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:00:17,372 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:00:23,613 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:23,620 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:23,624 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:23,626 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:00:23,643 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:23,650 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:23,655 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:23,657 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 869.0 to the database.
+2023-05-17 20:00:23,674 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:23,681 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:23,686 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:23,688 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 33.36 to the database.
+2023-05-17 20:00:23,705 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:23,712 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:23,717 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:23,719 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 100.0 to the database.
+2023-05-17 20:00:23,736 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:23,743 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:23,751 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:23,753 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 68130.0 to the database.
+2023-05-17 20:00:23,770 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:23,777 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:23,782 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:23,784 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 0.0 to the database.
+2023-05-17 20:00:26,273 - INFO - (accesspoint/connect_arduino_service.py:74)Looking for device with name SensorStation 16
+2023-05-17 20:00:28,393 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:28,426 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 5.759999999999998
+2023-05-17 20:00:28,434 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:00:28,694 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:00:33,655 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:33,662 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:33,667 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:33,669 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:00:33,685 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:33,692 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:33,697 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:33,700 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 868.0 to the database.
+2023-05-17 20:00:33,717 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:33,724 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:33,729 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:33,732 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 33.36 to the database.
+2023-05-17 20:00:33,749 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:33,756 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:33,761 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:33,763 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 100.0 to the database.
+2023-05-17 20:00:33,780 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:33,787 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:33,791 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:33,794 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 68130.0 to the database.
+2023-05-17 20:00:33,810 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:33,817 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:33,822 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:33,825 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 0.0 to the database.
+2023-05-17 20:00:39,712 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:39,744 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 5.759999999999998
+2023-05-17 20:00:39,751 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:00:40,016 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:00:43,649 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:43,656 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:43,661 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:43,663 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:00:43,681 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:43,688 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:43,692 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:43,694 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 869.0 to the database.
+2023-05-17 20:00:43,711 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:43,719 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:43,723 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:43,725 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 33.36 to the database.
+2023-05-17 20:00:43,744 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:43,751 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:43,755 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:43,758 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 100.0 to the database.
+2023-05-17 20:00:43,774 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:43,782 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:43,791 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:43,793 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 68130.0 to the database.
+2023-05-17 20:00:43,812 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:43,820 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:43,825 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:43,828 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 0.0 to the database.
+2023-05-17 20:00:51,034 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:51,086 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 5.759999999999998
+2023-05-17 20:00:51,101 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:00:51,358 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:00:53,655 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:53,668 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:53,674 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:53,678 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 0.0 to the database.
+2023-05-17 20:00:53,702 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:53,711 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:53,716 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:53,719 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 868.0 to the database.
+2023-05-17 20:00:53,741 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:53,749 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:53,754 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:53,761 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 33.36 to the database.
+2023-05-17 20:00:53,783 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:53,790 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:53,795 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:53,798 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 100.0 to the database.
+2023-05-17 20:00:53,817 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:53,824 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:53,829 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:53,831 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 68130.0 to the database.
+2023-05-17 20:00:53,853 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:00:53,861 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:00:53,865 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:00:53,868 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 0.0 to the database.
+2023-05-17 20:01:02,378 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:01:02,410 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 5.759999999999998
+2023-05-17 20:01:02,417 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:01:02,672 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:01:03,711 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:01:03,737 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:01:03,748 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:01:03,762 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:01:03,822 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:01:03,850 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:01:03,870 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:01:03,879 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 869.0 to the database.
+2023-05-17 20:01:03,950 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:01:03,969 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:01:03,978 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:01:03,999 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 33.36 to the database.
+2023-05-17 20:01:04,046 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:01:04,066 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:01:04,079 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:01:04,082 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 100.0 to the database.
+2023-05-17 20:01:04,201 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:01:04,214 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:01:04,231 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:01:04,243 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 68130.0 to the database.
+2023-05-17 20:01:04,306 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:01:04,318 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:01:04,342 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:01:04,348 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 0.0 to the database.
+2023-05-17 20:01:17,125 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 20:01:17,385 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:01:17,393 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 20:01:17,394 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 20:01:20,906 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:01:20,939 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 5.759999999999998
+2023-05-17 20:01:20,947 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:01:36,169 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 20:01:36,185 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:01:36,220 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 5.759999999999998
+2023-05-17 20:01:36,227 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:01:36,483 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:01:47,504 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:01:47,513 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:01:47,514 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:01:58,534 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:01:58,542 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:01:58,544 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:02:11,969 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 20:02:11,986 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:02:11,994 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:02:11,995 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:02:23,014 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:02:23,023 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:02:23,024 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:02:34,043 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:02:34,051 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:02:34,053 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:02:52,230 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 20:02:52,246 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:02:52,255 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:02:52,257 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:03:03,277 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:03,285 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:03:03,286 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:03:14,308 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:14,316 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:03:14,318 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:03:36,532 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 20:03:36,786 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:36,794 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 20:03:36,796 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 20:03:40,296 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:40,305 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:03:40,306 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:03:40,325 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:40,344 - INFO - (accesspoint/connect_arduino_service.py:74)Looking for device with name SensorStation 16
+2023-05-17 20:03:41,043 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 16
+2023-05-17 20:03:41,046 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 20:03:42,623 - INFO - (accesspoint/connect_arduino_service.py:86)Connected to device SensorStation 4
+2023-05-17 20:03:47,695 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:47,702 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:03:47,707 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:03:47,710 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 0.0 to the database.
+2023-05-17 20:03:47,727 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:47,733 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:03:47,738 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:03:47,740 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 869.0 to the database.
+2023-05-17 20:03:47,757 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:47,764 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:03:47,769 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:03:47,771 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.31 to the database.
+2023-05-17 20:03:47,791 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:47,798 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:03:47,802 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:03:47,805 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.99 to the database.
+2023-05-17 20:03:47,822 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:47,829 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:03:47,834 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:03:47,836 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95232.6 to the database.
+2023-05-17 20:03:47,853 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:47,859 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:03:47,864 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:03:47,866 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 107.641 to the database.
+2023-05-17 20:03:51,325 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:51,357 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 2.2900000000000027
+2023-05-17 20:03:51,366 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:03:51,631 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:03:57,685 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:57,692 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:03:57,697 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:03:57,699 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:03:57,717 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:57,724 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:03:57,729 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:03:57,731 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 869.0 to the database.
+2023-05-17 20:03:57,748 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:57,756 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:03:57,761 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:03:57,763 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.32 to the database.
+2023-05-17 20:03:57,782 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:57,789 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:03:57,793 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:03:57,796 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.91 to the database.
+2023-05-17 20:03:57,813 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:57,820 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:03:57,825 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:03:57,827 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95232.8 to the database.
+2023-05-17 20:03:57,844 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:03:57,851 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:03:57,856 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:03:57,858 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 115.39 to the database.
+2023-05-17 20:04:02,649 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:04:02,679 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 2.280000000000001
+2023-05-17 20:04:02,688 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:04:02,947 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:04:07,728 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:04:07,735 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:04:07,740 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:04:07,742 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 0.0 to the database.
+2023-05-17 20:04:07,760 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:04:07,767 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:04:07,771 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:04:07,774 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 870.0 to the database.
+2023-05-17 20:04:07,791 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:04:07,798 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:04:07,802 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:04:07,805 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.34 to the database.
+2023-05-17 20:04:07,823 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:04:07,829 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:04:07,834 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:04:07,836 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.84 to the database.
+2023-05-17 20:04:07,853 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:04:07,860 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:04:07,865 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:04:07,867 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95233.4 to the database.
+2023-05-17 20:04:07,884 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:04:07,891 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:04:07,895 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:04:07,898 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 120.864 to the database.
+2023-05-17 20:04:29,777 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 20:04:30,110 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:04:30,128 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 20:04:30,132 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 20:04:33,125 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:04:46,882 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 2.2600000000000016
+2023-05-17 20:04:46,915 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:04:47,217 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:04:47,284 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:04:47,341 - INFO - (accesspoint/connect_arduino_service.py:74)Looking for device with name SensorStation 16
+2023-05-17 20:04:48,130 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 16
+2023-05-17 20:04:48,149 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 20:04:49,796 - INFO - (accesspoint/connect_arduino_service.py:86)Connected to device SensorStation 5
+2023-05-17 20:05:02,490 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:22,571 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:51,907 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:51,927 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:05:51,937 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:05:51,958 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:51,977 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:05:52,040 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:52,073 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:52,096 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:52,118 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 869.0 to the database.
+2023-05-17 20:05:52,178 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:52,206 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:52,228 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:52,249 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.38 to the database.
+2023-05-17 20:05:52,314 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:52,341 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:52,364 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:52,386 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.79 to the database.
+2023-05-17 20:05:52,456 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:52,484 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:52,514 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:52,542 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95232.1 to the database.
+2023-05-17 20:05:52,605 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:52,633 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:52,661 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:52,687 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 130.467 to the database.
+2023-05-17 20:05:52,750 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:52,781 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:52,810 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:52,834 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:05:52,895 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:52,925 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:52,957 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:52,980 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 871.0 to the database.
+2023-05-17 20:05:53,045 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:53,073 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:53,100 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:53,122 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.42 to the database.
+2023-05-17 20:05:53,183 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:53,212 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:53,240 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:53,262 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.73 to the database.
+2023-05-17 20:05:53,323 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:53,351 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:53,381 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:53,401 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95232.1 to the database.
+2023-05-17 20:05:53,467 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:53,495 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:53,521 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:53,548 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 133.062 to the database.
+2023-05-17 20:05:53,607 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:53,635 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:53,663 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:53,685 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:05:53,745 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:53,773 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:53,800 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:53,825 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 870.0 to the database.
+2023-05-17 20:05:53,887 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:53,915 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:53,941 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:53,965 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.43 to the database.
+2023-05-17 20:05:54,028 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:54,056 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:54,083 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:54,106 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.69 to the database.
+2023-05-17 20:05:54,167 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:54,196 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:54,222 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:54,243 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95232.4 to the database.
+2023-05-17 20:05:54,307 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:54,335 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:54,362 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:54,387 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 134.232 to the database.
+2023-05-17 20:05:54,447 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:54,474 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:54,500 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:54,524 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:05:54,588 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:54,616 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:54,642 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:54,664 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 870.0 to the database.
+2023-05-17 20:05:54,727 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:54,754 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:54,780 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:54,802 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.45 to the database.
+2023-05-17 20:05:54,865 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:54,893 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:54,920 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:54,943 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.65 to the database.
+2023-05-17 20:05:55,004 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:55,033 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:55,059 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:55,081 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95231.3 to the database.
+2023-05-17 20:05:55,145 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:55,173 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:55,201 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:55,226 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 135.414 to the database.
+2023-05-17 20:05:55,288 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:55,315 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:55,341 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:55,365 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:05:55,425 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:55,454 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:55,481 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:55,503 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 870.0 to the database.
+2023-05-17 20:05:55,567 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:55,595 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:55,621 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:55,645 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.46 to the database.
+2023-05-17 20:05:55,705 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:55,733 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:55,756 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:55,783 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.62 to the database.
+2023-05-17 20:05:55,844 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:55,872 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:55,898 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:55,920 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95231.7 to the database.
+2023-05-17 20:05:55,984 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:56,013 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:56,039 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:56,064 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 136.029 to the database.
+2023-05-17 20:05:56,124 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:56,152 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:56,180 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:56,206 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 0.0 to the database.
+2023-05-17 20:05:56,265 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:56,295 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:56,322 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:56,345 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 870.0 to the database.
+2023-05-17 20:05:56,406 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:56,433 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:56,460 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:56,485 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.47 to the database.
+2023-05-17 20:05:56,546 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:56,573 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:56,599 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:56,621 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.6 to the database.
+2023-05-17 20:05:56,685 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:56,714 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:56,740 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:56,761 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95231.2 to the database.
+2023-05-17 20:05:56,827 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:56,853 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:56,879 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:56,904 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 136.65 to the database.
+2023-05-17 20:05:56,956 - INFO - (accesspoint/connect_arduino_service.py:74)Looking for device with name SensorStation 16
+2023-05-17 20:05:57,822 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:57,850 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:57,872 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:57,891 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:05:57,959 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:57,990 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:58,015 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:58,034 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 870.0 to the database.
+2023-05-17 20:05:58,096 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:58,124 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:58,146 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:58,165 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.48 to the database.
+2023-05-17 20:05:58,228 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:58,257 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:58,280 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:58,306 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.59 to the database.
+2023-05-17 20:05:58,368 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:58,396 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:58,418 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:58,442 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95230.4 to the database.
+2023-05-17 20:05:58,505 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:05:58,532 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:05:58,556 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:05:58,582 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 137.298 to the database.
+2023-05-17 20:06:02,986 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:07:24,526 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:08:25,622 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:08:25,634 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:08:25,644 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:08:25,652 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 0.0 to the database.
+2023-05-17 20:08:25,687 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:08:25,699 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:08:25,711 - INFO - (accesspoint/db.py:49)Successfully written to database
+2023-05-17 20:08:25,719 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 869.0 to the database.
+2023-05-17 20:08:26,455 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 2.1585714285714346
+2023-05-17 20:08:26,473 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:08:26,748 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:08:39,398 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 20:08:39,648 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:08:39,657 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 20:08:39,659 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 20:08:43,179 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:08:43,189 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:08:43,190 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:08:43,211 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:08:43,230 - INFO - (accesspoint/connect_arduino_service.py:74)Looking for device with name SensorStation 16
+2023-05-17 20:09:06,840 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 20:09:07,107 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:07,115 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 20:09:07,116 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 20:09:10,624 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:10,632 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:09:10,634 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:09:10,653 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:10,671 - INFO - (accesspoint/connect_arduino_service.py:74)Looking for device with name SensorStation 16
+2023-05-17 20:09:11,028 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 16
+2023-05-17 20:09:11,031 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 20:09:12,736 - INFO - (accesspoint/connect_arduino_service.py:86)Connected to device SensorStation 12
+2023-05-17 20:09:18,882 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:18,890 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:09:18,896 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:09:18,898 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:09:18,915 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:18,922 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:09:18,926 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:09:18,929 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 869.0 to the database.
+2023-05-17 20:09:18,945 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:18,952 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:09:18,957 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:09:18,959 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.67 to the database.
+2023-05-17 20:09:18,979 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:18,986 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:09:18,991 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:09:18,993 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.3 to the database.
+2023-05-17 20:09:19,010 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:19,017 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:09:19,022 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:09:19,024 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95232.8 to the database.
+2023-05-17 20:09:19,041 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:19,048 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:09:19,053 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:09:19,055 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 141.007 to the database.
+2023-05-17 20:09:21,653 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:21,686 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 1.9299999999999997
+2023-05-17 20:09:21,694 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:09:21,950 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:09:28,871 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:28,878 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:09:28,883 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:09:28,885 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:09:28,902 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:28,910 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:09:28,914 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:09:28,917 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 870.0 to the database.
+2023-05-17 20:09:28,933 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:28,940 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:09:28,945 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:09:28,947 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.68 to the database.
+2023-05-17 20:09:28,966 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:28,973 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:09:28,977 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:09:28,979 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.29 to the database.
+2023-05-17 20:09:28,995 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:29,002 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:09:29,007 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:09:29,009 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95234.3 to the database.
+2023-05-17 20:09:29,027 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:09:29,034 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:09:29,038 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:09:29,041 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 141.194 to the database.
+2023-05-17 20:11:25,640 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 20:11:25,985 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:11:26,002 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 20:11:26,006 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 20:11:28,990 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:11:29,102 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 1.9200000000000017
+2023-05-17 20:11:29,134 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:11:29,433 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:11:29,504 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:11:29,562 - INFO - (accesspoint/connect_arduino_service.py:74)Looking for device with name SensorStation 16
+2023-05-17 20:11:35,903 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 16
+2023-05-17 20:11:35,922 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 20:11:37,699 - INFO - (accesspoint/connect_arduino_service.py:86)Connected to device SensorStation 14
+2023-05-17 20:13:52,418 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:13:52,430 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:13:52,439 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:13:52,447 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95235.6 to the database.
+2023-05-17 20:13:52,482 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:13:52,494 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:13:52,506 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:13:52,514 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 140.738 to the database.
+2023-05-17 20:13:52,550 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:13:52,564 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:13:52,573 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:13:53,084 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:13:53,116 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:13:53,125 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:13:57,738 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 20:13:57,991 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:13:57,999 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 20:13:58,000 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 20:14:01,520 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:01,529 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:14:01,530 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:14:01,550 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:01,568 - INFO - (accesspoint/connect_arduino_service.py:74)Looking for device with name SensorStation 16
+2023-05-17 20:14:04,211 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 16
+2023-05-17 20:14:04,213 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 20:14:05,740 - INFO - (accesspoint/connect_arduino_service.py:86)Connected to device SensorStation 5
+2023-05-17 20:14:09,677 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:09,689 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:09,695 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:09,698 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:14:09,728 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:09,737 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:09,744 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:09,747 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 870.0 to the database.
+2023-05-17 20:14:09,773 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:09,782 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:09,789 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:09,792 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.84 to the database.
+2023-05-17 20:14:09,815 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:09,822 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:09,827 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:09,829 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.17 to the database.
+2023-05-17 20:14:09,849 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:09,857 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:09,861 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:09,864 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95235.4 to the database.
+2023-05-17 20:14:09,881 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:09,887 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:09,892 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:09,894 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 140.152 to the database.
+2023-05-17 20:14:12,551 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:12,580 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 205.9
+2023-05-17 20:14:12,599 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 751.4
+2023-05-17 20:14:12,617 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 1.7600000000000016
+2023-05-17 20:14:12,637 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 0.4299999999999997
+2023-05-17 20:14:12,656 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 94324.59999999999
+2023-05-17 20:14:12,675 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 109.55199999999999
+2023-05-17 20:14:12,677 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:14:14,204 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:14:19,666 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:19,673 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:19,677 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:19,680 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 0.0 to the database.
+2023-05-17 20:14:19,697 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:19,703 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:19,708 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:19,710 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 871.0 to the database.
+2023-05-17 20:14:19,727 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:19,734 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:19,738 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:19,741 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.86 to the database.
+2023-05-17 20:14:19,759 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:19,766 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:19,771 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:19,773 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.13 to the database.
+2023-05-17 20:14:19,790 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:19,797 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:19,805 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:19,808 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95235.0 to the database.
+2023-05-17 20:14:19,825 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:19,833 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:19,838 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:19,840 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 140.845 to the database.
+2023-05-17 20:14:25,222 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:25,251 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 206.9
+2023-05-17 20:14:25,269 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 752.4
+2023-05-17 20:14:25,288 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 1.740000000000002
+2023-05-17 20:14:25,308 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 0.46999999999999886
+2023-05-17 20:14:25,327 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 94324.2
+2023-05-17 20:14:25,346 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 110.245
+2023-05-17 20:14:25,348 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:14:26,897 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:14:29,709 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:29,717 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:29,722 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:29,724 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:14:29,741 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:29,748 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:29,753 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:29,755 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 870.0 to the database.
+2023-05-17 20:14:29,772 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:29,780 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:29,784 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:29,786 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.87 to the database.
+2023-05-17 20:14:29,805 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:29,812 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:29,817 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:29,819 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.11 to the database.
+2023-05-17 20:14:29,836 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:29,843 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:29,847 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:29,850 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95235.1 to the database.
+2023-05-17 20:14:29,867 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:29,875 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:29,879 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:29,881 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 141.136 to the database.
+2023-05-17 20:14:34,236 - INFO - (accesspoint/connect_arduino_service.py:74)Looking for device with name SensorStation 16
+2023-05-17 20:14:37,917 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:37,946 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 205.9
+2023-05-17 20:14:37,965 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 751.4
+2023-05-17 20:14:37,984 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 1.7300000000000004
+2023-05-17 20:14:38,006 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 0.490000000000002
+2023-05-17 20:14:38,025 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 94324.3
+2023-05-17 20:14:38,044 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 110.536
+2023-05-17 20:14:38,046 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:14:39,596 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:14:39,702 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:39,708 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:39,712 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:39,715 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:14:39,733 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:39,740 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:39,744 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:39,746 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 871.0 to the database.
+2023-05-17 20:14:39,764 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:39,771 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:39,776 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:39,778 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.87 to the database.
+2023-05-17 20:14:39,796 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:39,803 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:39,808 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:39,810 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.1 to the database.
+2023-05-17 20:14:39,827 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:39,834 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:39,839 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:39,841 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95234.2 to the database.
+2023-05-17 20:14:39,859 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:39,867 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:39,872 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:39,875 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 141.253 to the database.
+2023-05-17 20:14:49,697 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:49,704 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:49,709 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:49,712 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:14:49,731 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:49,738 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:49,744 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:49,746 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 870.0 to the database.
+2023-05-17 20:14:49,767 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:49,775 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:49,780 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:49,783 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.88 to the database.
+2023-05-17 20:14:49,803 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:49,812 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:49,818 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:49,821 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.09 to the database.
+2023-05-17 20:14:49,848 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:49,857 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:49,865 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:49,868 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95235.1 to the database.
+2023-05-17 20:14:49,892 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:49,900 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:14:49,905 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:14:49,908 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 141.288 to the database.
+2023-05-17 20:14:50,613 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:14:50,646 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 205.9
+2023-05-17 20:14:50,668 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 751.9
+2023-05-17 20:14:50,686 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 1.7250000000000014
+2023-05-17 20:14:50,706 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 0.5050000000000026
+2023-05-17 20:14:50,733 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 94323.84999999999
+2023-05-17 20:14:50,756 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 110.6705
+2023-05-17 20:14:50,758 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:15:22,227 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 20:15:22,527 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:15:22,535 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 20:15:22,536 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 20:15:26,013 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:15:26,042 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 205.9
+2023-05-17 20:15:26,061 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 751.9
+2023-05-17 20:15:26,080 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 1.7250000000000014
+2023-05-17 20:15:26,100 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 0.5050000000000026
+2023-05-17 20:15:26,118 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 94323.84999999999
+2023-05-17 20:15:26,137 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 110.6705
+2023-05-17 20:15:26,139 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:15:28,004 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:15:28,025 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:15:28,042 - INFO - (accesspoint/connect_arduino_service.py:74)Looking for device with name SensorStation 16
+2023-05-17 20:15:28,323 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 16
+2023-05-17 20:15:28,325 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 20:15:29,923 - INFO - (accesspoint/connect_arduino_service.py:86)Connected to device SensorStation 7
+2023-05-17 20:15:39,023 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:15:39,031 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:15:39,033 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:15:39,703 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:15:39,710 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:15:39,728 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:15:39,736 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:15:39,753 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:15:39,760 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:15:39,788 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:15:39,795 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:15:39,816 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:15:39,822 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:15:39,839 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:15:39,846 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:15:52,732 - INFO - (accesspoint/Settings.py:61)Settings file read
+2023-05-17 20:15:53,035 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:15:53,043 - INFO - (accesspoint/config.py:31)Database cleared and config inserted successfully
+2023-05-17 20:15:53,044 - INFO - (accesspoint/config.py:32)api/setting/ API call successful
+2023-05-17 20:15:56,514 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:15:56,522 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:15:56,524 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:15:56,544 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:15:56,563 - INFO - (accesspoint/connect_arduino_service.py:74)Looking for device with name SensorStation 16
+2023-05-17 20:16:07,545 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:07,555 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:16:07,556 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:16:18,578 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:18,586 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:16:18,588 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:16:29,607 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:29,616 - WARNING - (accesspoint/webserver.py:34)Collection is empty. Nothing to make average from.
+2023-05-17 20:16:29,617 - WARNING - (accesspoint/webserver.py:97)Could not get average measurements
+2023-05-17 20:16:35,666 - INFO - (accesspoint/connect_arduino_service.py:149)Started reading data from device SensorStation 16
+2023-05-17 20:16:35,668 - INFO - (accesspoint/connect_arduino_service.py:151)Finished reading data from all devices. Checking for updates in 30 seconds.
+2023-05-17 20:16:37,210 - INFO - (accesspoint/connect_arduino_service.py:86)Connected to device SensorStation 16
+2023-05-17 20:16:39,827 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:39,834 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:39,839 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:39,841 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:16:39,856 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:39,863 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:39,868 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:39,870 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 870.0 to the database.
+2023-05-17 20:16:39,886 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:39,893 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:39,898 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:39,900 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.93 to the database.
+2023-05-17 20:16:39,918 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:39,926 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:39,931 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:39,933 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.02 to the database.
+2023-05-17 20:16:39,948 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:39,955 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:39,960 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:39,962 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95236.5 to the database.
+2023-05-17 20:16:39,977 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:39,984 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:39,989 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:39,991 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 139.89 to the database.
+2023-05-17 20:16:40,639 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:40,674 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 205.9
+2023-05-17 20:16:40,699 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 751.4
+2023-05-17 20:16:40,721 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 1.6700000000000017
+2023-05-17 20:16:40,740 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 0.5799999999999983
+2023-05-17 20:16:40,759 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 94325.7
+2023-05-17 20:16:40,778 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 109.28999999999999
+2023-05-17 20:16:40,781 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:16:42,639 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:16:49,868 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:49,875 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:49,880 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:49,882 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:16:49,896 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:49,904 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:49,908 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:49,911 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 870.0 to the database.
+2023-05-17 20:16:49,925 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:49,933 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:49,937 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:49,940 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.93 to the database.
+2023-05-17 20:16:49,955 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:49,962 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:49,967 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:49,970 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.05 to the database.
+2023-05-17 20:16:49,988 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:49,996 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:50,001 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:50,004 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95237.3 to the database.
+2023-05-17 20:16:50,018 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:50,026 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:50,031 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:50,033 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 140.024 to the database.
+2023-05-17 20:16:53,660 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:53,689 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 205.9
+2023-05-17 20:16:53,708 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 751.4
+2023-05-17 20:16:53,726 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 1.6700000000000017
+2023-05-17 20:16:53,747 - ERROR - (accesspoint/webserver.py:69)Lower Limit exceeded by: 0.5500000000000043
+2023-05-17 20:16:53,765 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 94326.5
+2023-05-17 20:16:53,784 - ERROR - (accesspoint/webserver.py:64)Upper Limit exceeded by: 109.424
+2023-05-17 20:16:53,786 - INFO - (accesspoint/webserver.py:81)Average measurements created successfully
+2023-05-17 20:16:55,661 - WARNING - (accesspoint/webserver.py:126)Collection with measurements deleted successfully
+2023-05-17 20:16:59,911 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:59,918 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:59,922 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:59,925 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 1.0 to the database.
+2023-05-17 20:16:59,939 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:59,947 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:59,951 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:59,954 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 870.0 to the database.
+2023-05-17 20:16:59,969 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:16:59,976 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:16:59,981 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:16:59,983 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 25.95 to the database.
+2023-05-17 20:17:00,002 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:17:00,009 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:17:00,014 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:17:00,016 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 48.01 to the database.
+2023-05-17 20:17:00,031 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:17:00,038 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:17:00,043 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:17:00,045 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 95238.0 to the database.
+2023-05-17 20:17:00,060 - INFO - (accesspoint/db.py:23)Connected to database
+2023-05-17 20:17:00,067 - WARNING - (accesspoint/db.py:44)Writing to database...
+2023-05-17 20:17:00,072 - INFO - (accesspoint/db.py:50)Successfully written to database
+2023-05-17 20:17:00,074 - INFO - (accesspoint/connect_arduino_service.py:132)Wrote 140.613 to the database.

@@ -125,10 +125,10 @@ async def read_sensor_data():
                                                 #await collection_deletion_event.wait()
             
                                                 
-                                                sensor_id = \
-                                                    greenhouse_idx[greenhouse_idx["sensorType"] == sensor_type]["id"].iloc[0]
+                                                # sensor_id = \
+                                                #     greenhouse_idx[greenhouse_idx["sensorType"] == sensor_type]["id"].iloc[0]
                                                 
-                                                db.write_to_document_sensor(val, sensor_type, int(sensor_id))
+                                                db.write_to_document_sensor(val, sensor_type, int(id))
                                                 logging.info("Wrote {0} to the database.".format(val))
                                                 break
 

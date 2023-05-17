@@ -90,7 +90,7 @@ def send_measurements():
     config_collection = database["config"]
     config = config_collection.find_one()
     # DEBUGGING: change transmissionIntervalSeconds to 4
-    config["transmissionIntervalSeconds"] = 4
+    config["transmissionIntervalSeconds"] = 11
 
     avg_measurements = get_avg_measurements(database)
     if avg_measurements is None:
@@ -101,11 +101,10 @@ def send_measurements():
     auth = settings.auth
 
     headers = {"Content-Type": "application/json"}
-    print(avg_measurements)
     for avg_measurement in avg_measurements:
-        logging.warning(avg_measurement)
+        print(avg_measurement)
         response = requests.post(url, headers=headers, auth=auth, data=avg_measurement)
-        print(response)
+        print(response.text)
         if response.status_code == 200:
             print("Measurements sent successfully")
 
