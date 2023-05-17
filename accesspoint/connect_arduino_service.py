@@ -73,13 +73,9 @@ async def read_sensor_data():
             greenhouse_idx = pd.DataFrame(data[data["id"] == id]["sensors"].iloc[0])
             logging.info("Looking for device with name {0}".format(name))
             device = await BleakScanner.find_device_by_name(name, timeout=120)
-            print(name)
             if device is None:
                 logging.error("Could not find device with name {0}".format(name))
                 continue
-
-
-            print("Test")
             
             print("Found device with name {0}".format(name))
 
@@ -90,11 +86,11 @@ async def read_sensor_data():
                             logging.info("Connected to device {0}".format(name))
 
                             for service in client.services:
-                                print("Service: {0}".format(service))
+                                #print("Service: {0}".format(service))
 
                                 for characteristic in service.characteristics:
-                                    print("Characteristic: {0} \n\twith properties: {1}".format(
-                                        characteristic, ", ".join(characteristic.properties)))
+                                    #print("Characteristic: {0} \n\twith properties: {1}".format(
+                                        #characteristic, ", ".join(characteristic.properties)))
 
                                     if characteristic.uuid == "00002a00-0000-1000-8000-00805f9b34fb" or \
                                             characteristic.uuid == "00002a01-0000-1000-8000-00805f9b34fb":
@@ -119,11 +115,11 @@ async def read_sensor_data():
                                             if sender.uuid == uuid:
                                         
                                                 val = struct.unpack(unpack_format, value[:buffer])[0] / scale_factor
-                                                print("{0}: {1}".format(sensor_type, val))
+                                                #print("{0}: {1}".format(sensor_type, val))
                                                 if sensor_type == "LED":
-                                                    print("LED")
+                                                    #print("LED")
                                                     if val == 0:
-                                                        print("LED")
+                                                        #print("LED")
                                                         webserver.button_disabled_pressed(greenhouse_id=16)
 
                                                 #await collection_deletion_event.wait()
@@ -160,5 +156,4 @@ async def read_sensor_data():
 # asyncio.run(read_sensor_data())
 
 if __name__ == "__main__":
-    print("test")
     asyncio.run(read_sensor_data())

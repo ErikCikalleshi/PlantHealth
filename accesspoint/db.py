@@ -31,22 +31,22 @@ def write_to_document_sensor(value, sensor_type, greenhouse_id):
         logging.error("Could not connect to database")
         return
     if settings.mongo_collection not in db.list_collection_names():
-        print("Collection does not exist. Creating...")
+        logging.warning("Collection does not exist. Creating...")
         db.create_collection(settings.mongo_collection)
-        print("Collection created successfully")
+        logging.warning("Collection created successfully")
     collection = db[settings.mongo_collection]
     # get from config/config.json
     config_collection = db["config"]
     config = config_collection.find_one()
     if config is None:
-        print("Could not find config in database")
+        logging.warning("Could not find config in database")
         return
-    print("Writing to database...")
+    logging.warning("Writing to database...")
 
     date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     collection.insert_one({"greenhouseID": greenhouse_id, "accesspointID": config["accessPointId"],
                            "value": value, "sensorType": sensor_type, "date": date})
-    print("Successfully written to database")
+    logging.info("Successfully written to database")
 
 
 if __name__ == "__main__":

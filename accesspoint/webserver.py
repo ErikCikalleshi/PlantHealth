@@ -28,7 +28,7 @@ def get_avg_measurements(database):
         return
 
     collection = database[settings.mongo_collection]
-
+    
     data = list(collection.find())
     if len(data) == 0:
         logging.warning("Collection is empty. Nothing to make average from.")
@@ -59,12 +59,12 @@ def get_avg_measurements(database):
             limit_exceeded_by = 0
             if avg > limit[0]:
                 limit_exceeded_by = avg - limit[0]
-                loop = asyncio.get_event_loop()  # returns the event loop object associated with the current thread
+                #loop = asyncio.get_event_loop()  # returns the event loop object associated with the current thread
                 #loop.run_until_complete(send_flag(greenhouse, 1))  # pause send_data() until flag is sent
                 logging.error("Upper Limit exceeded by: " + str(limit_exceeded_by))
             elif avg < limit[1]:
                 limit_exceeded_by = limit[1] - avg
-                loop = asyncio.get_event_loop()
+                #loop = asyncio.get_event_loop()
                 #loop.run_until_complete(send_flag(greenhouse, 2))
                 logging.error("Lower Limit exceeded by: " + str(limit_exceeded_by))
 
@@ -83,7 +83,6 @@ def get_avg_measurements(database):
 
 
 def send_measurements():
-    print("Sending Measuremennnnnnnnnnnnnnnnnttttttttttttttttttttttttttttt")
     settings = Settings()
     url = f"http://{settings.server_host}:{settings.server_port}/api/measurements"
     database = db.connect_to_db()
@@ -96,11 +95,13 @@ def send_measurements():
     avg_measurements = get_avg_measurements(database)
     if avg_measurements is None:
         logging.warning("Could not get average measurements")
+        threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
         return
 
     auth = settings.auth
 
     headers = {"Content-Type": "application/json"}
+    print(avg_measurements)
     for avg_measurement in avg_measurements:
         logging.warning(avg_measurement)
         response = requests.post(url, headers=headers, auth=auth, data=avg_measurement)
@@ -111,9 +112,11 @@ def send_measurements():
     # delete collection from db
     if database is None:
         logging.error("Could not connect to database")
+        threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
         return
     if settings.mongo_collection not in database.list_collection_names():
         logging.warning("Collection does not exist. Nothing to delete.")
+        threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
         return
     collection = database[settings.mongo_collection]
 
@@ -123,7 +126,7 @@ def send_measurements():
     collection_deletion_event.clear()
     logging.warning("Collection with measurements deleted successfully")
     threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
-    logging.warning("Collection deleted successfully. Timer started.")
+    print("Collection deleted successfully. Timer started.")
 
 
 def button_disabled_pressed(greenhouse_id: int):
@@ -135,22 +138,4 @@ def button_disabled_pressed(greenhouse_id: int):
 
 
 if __name__ == "__main__":
-    #send_measurements()
-    url = "http://10.0.0.62:9000/api/measurements"
-    settings = Settings()
-    payload = json.dumps({
-        "greenhouseID": 27,
-        "accesspointUUID": 1,
-        "value": 23,
-        "sensorType": "TEMPERATURE",
-        "date": "2023-03-20 12:00"
-    })
-    headers = {
-        'Content-Type': 'application/json',
-    }
-    auth = settings.auth
-    response = requests.request("POST", url, headers=headers, auth=auth, data=payload)
-
-    print(response.text)
-
-''
+    send_measurements()
