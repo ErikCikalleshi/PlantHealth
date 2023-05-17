@@ -45,13 +45,14 @@ def get_avg_measurements(database):
         # iterate over all greenhouses
         greenhouses = subset['greenhouseID'].unique()
         for greenhouse in greenhouses:
+            if greenhouse != 16:
+                continue
             subset = df[(df['sensorType'] == sensor_type) & (df['greenhouseID'] == greenhouse)]
             avg = float(subset['value'].mean())
             config = database["config"].find_one()
             data = pd.DataFrame(config["greenhouses"])
-            data.at[data.index[0], "id"] = 69
             sensors_greenhouse = pd.DataFrame(
-                pd.DataFrame(data[data["id"] == 69]["sensors"]).iloc[0]['sensors'])
+                pd.DataFrame(data[data["id"] == greenhouse]["sensors"]).iloc[0]['sensors'])
             limit = (sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitUpper"].iloc[0],
                      sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitLower"].iloc[0])
 
@@ -59,12 +60,12 @@ def get_avg_measurements(database):
             if avg > limit[0]:
                 limit_exceeded_by = avg - limit[0]
                 loop = asyncio.get_event_loop()  # returns the event loop object associated with the current thread
-                loop.run_until_complete(send_flag(greenhouse, 1))  # pause send_data() until flag is sent
+                #loop.run_until_complete(send_flag(greenhouse, 1))  # pause send_data() until flag is sent
                 logging.error("Upper Limit exceeded by: " + str(limit_exceeded_by))
             elif avg < limit[1]:
                 limit_exceeded_by = limit[1] - avg
                 loop = asyncio.get_event_loop()
-                loop.run_until_complete(send_flag(greenhouse, 2))
+                #loop.run_until_complete(send_flag(greenhouse, 2))
                 logging.error("Lower Limit exceeded by: " + str(limit_exceeded_by))
 
             date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -84,7 +85,7 @@ def get_avg_measurements(database):
 def send_measurements():
     print("Sending Measuremennnnnnnnnnnnnnnnnttttttttttttttttttttttttttttt")
     settings = Settings()
-    url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{1}"
+    url = f"http://{settings.server_host}:{settings.server_port}/api/measurements"
     database = db.connect_to_db()
     # get transmissionIntervalSeconds from config
     config_collection = database["config"]
@@ -103,8 +104,9 @@ def send_measurements():
     for avg_measurement in avg_measurements:
         logging.warning(avg_measurement)
         response = requests.post(url, headers=headers, auth=auth, data=avg_measurement)
+        print(response)
         if response.status_code == 200:
-            logging.warning("Measurements sent successfully")
+            print("Measurements sent successfully")
 
     # delete collection from db
     if database is None:
@@ -133,4 +135,22 @@ def button_disabled_pressed(greenhouse_id: int):
 
 
 if __name__ == "__main__":
-    send_measurements()
+    #send_measurements()
+    url = "http://10.0.0.62:9000/api/measurements"
+    settings = Settings()
+    payload = json.dumps({
+        "greenhouseID": 27,
+        "accesspointUUID": 1,
+        "value": 23,
+        "sensorType": "TEMPERATURE",
+        "date": "2023-03-20 12:00"
+    })
+    headers = {
+        'Content-Type': 'application/json',
+    }
+    auth = settings.auth
+    response = requests.request("POST", url, headers=headers, auth=auth, data=payload)
+
+    print(response.text)
+
+''

@@ -59,17 +59,21 @@ async def read_sensor_data():
         data = pd.DataFrame(config["greenhouses"])
         data = data[data["published"] == True]
         data = data.assign(convention_name=lambda x: "SensorStation " + x["id"].astype(str))
-        data.at[data.index[0], "convention_name"] = "SensorStation 69"
-        data.at[data.index[0], "id"] = 69
+        # data.at[data.index[0], "convention_name"] = "SensorStation 69"
+        # data.at[data.index[0], "id"] = 69
        
         sensor_stations: list = data["convention_name"].unique()
+       
         # TODO: make a name convention for the sensor stations
-        sensor_stations = ["SensorStation 69"]
+        # sensor_stations = ["SensorStation 69"]
         for idx, name in enumerate(sensor_stations):
+            if name != "SensorStation 16":
+                continue
             id = data[data["convention_name"] == name]["id"].iloc[0]                     
             greenhouse_idx = pd.DataFrame(data[data["id"] == id]["sensors"].iloc[0])
             logging.info("Looking for device with name {0}".format(name))
             device = await BleakScanner.find_device_by_name(name, timeout=120)
+            print(name)
             if device is None:
                 logging.error("Could not find device with name {0}".format(name))
                 continue

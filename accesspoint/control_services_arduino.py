@@ -9,10 +9,10 @@ async def send_flag(device_name, UUID, flag_value):
     :param flag_value: the value of the flag
     :return: boolean
     '''
-    device = await bleak.BleakScanner.find_device_by_name(device_name, timeout=120)
-    if device is None:
-        print("ERROR: Could not find device with name {0}".format(device_name))
-        return
+    # device = await bleak.BleakScanner.find_device_by_name(device_name, timeout=120)
+    # if device is None:
+    #     print("ERROR: Could not find device with name {0}".format(device_name))
+    #     return
     async with bleak.BleakClient(device, timeout=120) as client:
         for service in client.services:
             # print("Service: {0}".format(service))
