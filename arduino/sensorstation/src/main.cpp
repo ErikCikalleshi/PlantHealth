@@ -33,9 +33,9 @@ int dipSwitchPins[] = {D12, D11, D10, D9, D8, D7, D6, D5};
 
 // -----------------BLE Services + Characteristics Definitions------------------
 BLEService airSensorService("181A");
-BLEIntCharacteristic temperatureCharacteristic("2A6E", BLERead | BLENotify);
-BLEUnsignedIntCharacteristic humidityCharacteristic("2A6F", BLERead | BLENotify);
-BLEUnsignedIntCharacteristic pressureCharacteristic("2A6D", BLERead | BLENotify);
+BLEShortCharacteristic temperatureCharacteristic("2A6E", BLERead | BLENotify);
+BLEUnsignedShortCharacteristic humidityCharacteristic("2A6F", BLERead | BLENotify);
+BLEUnsignedLongCharacteristic pressureCharacteristic("2A6D", BLERead | BLENotify);
 BLEFloatCharacteristic vocCharacteristic("2BD3", BLERead | BLENotify);
 
 BLEService lightSensorService("8444401e-ffb9-424d-9dc1-c2bc273b47b5");
@@ -59,10 +59,10 @@ int num_bme_readings = 0;
 
 unsigned int light_readings = 0;
 unsigned int hygrometer_readings = 0;
-int temperature_readings = 0;
-int humidity_readings = 0;
-int pressure_readings = 0;
-float gas_resistance_readings = 0.0;
+float temperature_readings = 0.0;
+float humidity_readings = 0.0;
+unsigned long pressure_readings = 0;
+unsigned long gas_resistance_readings = 0;
 
 unsigned long current_millis = 0;
 unsigned long previous_light_reading_millis = 0;
@@ -299,10 +299,10 @@ void read_bme() {
       return;
     }
 
-    int temperature = bme.temperature;
-    int humidity = bme.humidity ;
-    int pressure = bme.pressure;
-    float gas_resistance = bme.gas_resistance / 1000.0;
+    float temperature = bme.temperature;
+    float humidity = bme.humidity ;
+    unsigned long pressure = bme.pressure;
+    unsigned long gas_resistance = bme.gas_resistance;
 
     temperature_readings += temperature;
     humidity_readings += humidity;
@@ -319,9 +319,9 @@ void write_sensor_data() {
   if (current_millis - previous_writing_millis >= SENDING_INTERVAL) {
     unsigned int light_value = light_readings / num_light_readings;
     unsigned int moisture_value = hygrometer_readings / num_hygrometer_readings;
-    int temperature_value = temperature_readings / num_bme_readings;
-    int humidity_value = humidity_readings / num_bme_readings;
-    int pressure_value = pressure_readings / num_bme_readings;
+    short temperature_value = temperature_readings * 100 / num_bme_readings;
+    unsigned short humidity_value = humidity_readings * 100 / num_bme_readings;
+    unsigned long pressure_value = pressure_readings * 10 / num_bme_readings;
     float gas_resistance_value = gas_resistance_readings / num_bme_readings;
     
     lightIntensityCharacteristic.writeValue(light_value);
@@ -348,15 +348,15 @@ void write_sensor_data() {
 
     Serial.print(F("Temperature = "));
     Serial.print(temperature_value);
-    Serial.println(F(" *C"));
+    Serial.println(F("  *0.01 *C"));
 
     Serial.print(F("Pressure = "));
-    Serial.print(pressure_value / 100.0);
-    Serial.println(F(" hPa"));
+    Serial.print(pressure_value);
+    Serial.println(F(" * 0.1 Pa"));
 
     Serial.print(F("Humidity = "));
     Serial.print(humidity_value);
-    Serial.println(F(" %"));
+    Serial.println(F(" *0.01 %"));
 
     Serial.print(F("Gas = "));
     Serial.print(gas_resistance_value);
