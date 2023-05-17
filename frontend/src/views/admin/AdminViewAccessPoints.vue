@@ -2,7 +2,7 @@
     <v-app>
         <header-component/>
         <main-container negative class="mb-10">
-            <div class="flex center justify-space-between mb-10">
+            <div class="flex-wrap gap-2 flex center justify-space-between mb-10">
                 <page-heading class="text-white">Access Points</page-heading>
                 <div class="flex items-center">
                     <div class="ml-auto">
