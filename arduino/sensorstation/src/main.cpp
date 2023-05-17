@@ -73,24 +73,24 @@ unsigned long pairing_mode_start_millis = 0;
 unsigned long next_led_change_millis = 0;
 
 int pairing_mode = 0;
-int led_on = 0;
+int connected = 0;
+int warning_on = 0;
+
 int color = PURPLE;
+
+int led_on = 0;
+int blink_on = 0;
 int num_blinks = 0;
 int current_blinks = 0;
-int blink_on = 0;
-int warning_on = 0;
-int connected = 0;
 // -----------------------------------------------------------------------------
 
 
 // ----------------------------Function Declarations----------------------------
-void blePeripheralConnectHandler(BLEDevice central);
-
-void blePeripheralDisconnectHandler(BLEDevice central);
-
 void button_setup();
 void sensor_setup();
 void BLE_setup();
+
+int get_ID();
 
 void read_sensors();
 void read_light_sensor();
@@ -101,11 +101,13 @@ void write_sensor_data();
 
 void check_led_flag();
 void update_led();
+void set_led(int color);
+void check_pairing_mode();
 
+void BLE_connect_handler(BLEDevice central);
+void BLE_disconnect_handler(BLEDevice central);
 void stop_blink_handler();
 void pairing_mode_handler();
-void check_pairing_mode();
-int get_ID();
 // -----------------------------------------------------------------------------
 
 
@@ -131,6 +133,11 @@ void loop() {
   check_pairing_mode();
 }
 
+/**
+ * setup function for Hygrometer, Phototransistor and BME688 Air Sensor
+ * 
+ * For the BME688, oversampling and filtering is set
+*/
 void sensor_setup() {
   pinMode(HYGROMETER, INPUT);
   pinMode(PHOTOTRANSISTOR, INPUT);
@@ -140,7 +147,6 @@ void sensor_setup() {
     return;
   }
 
-  // Set up oversampling and filter initialization
   bme.setTemperatureOversampling(BME680_OS_8X);
   bme.setHumidityOversampling(BME680_OS_2X);
   bme.setPressureOversampling(BME680_OS_4X);
@@ -148,30 +154,25 @@ void sensor_setup() {
   bme.setGasHeater(320, 150); // 320*C for 150 ms
 }
 
-void blePeripheralConnectHandler(BLEDevice central) {
-  pairing_mode = 0;
-  color = GREEN;
-  blink_on = 0;
-  led_on = 1;
-  connected = 1;
-  Serial.println("Connected event, central: ");
-  Serial.println(central.address());
-}
-
-void blePeripheralDisconnectHandler(BLEDevice central) {
-  color = PURPLE;
-  blink_on = 0;
-  led_on = 1;
-  connected = 0;
-  Serial.println("Disconnected event, central: ");
-  Serial.println(central.address());
-}
-
+ /**
+  * setup function for the two buttons
+  * 
+  * It attaches interrupts to the buttons, meaning the 'handler' functions are
+  * automatically called when the buttons are pressed.
+ */
 void button_setup() {
   attachInterrupt(digitalPinToInterrupt(WARNING_BUTTON), stop_blink_handler, FALLING);
   attachInterrupt(digitalPinToInterrupt(PAIRING_BUTTON), pairing_mode_handler, FALLING);
 }
 
+/**
+ * setup function for Bluetooth LE functionalities
+ * 
+ * Name of device is set to "SensorStation <ID>", where ID is the binary value
+ * of the DIP switch converted to decimal.
+ * 
+ * Connect and Disconnect handlers are attached to Connect and Dsiconnect events
+*/
 void BLE_setup() {
   if (!BLE.begin()) {
     Serial.println("Starting BLE failed!");
@@ -224,16 +225,39 @@ void BLE_setup() {
   ledService.addCharacteristic(ledFlagCharacteristic);
   BLE.addService(ledService);
 
-  BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
-  BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
+  BLE.setEventHandler(BLEConnected, BLE_connect_handler);
+  BLE.setEventHandler(BLEDisconnected, BLE_disconnect_handler);
 }
 
+/**
+ * Getter Function for Device ID
+ * 
+ * returns the binary value of the DIP switch converted to decimal.
+*/
+int get_ID() {
+  for (int i = 0; i < 8; i++) {
+    pinMode(dipSwitchPins[i], INPUT_PULLDOWN);
+  }
+  int ID = 0;
+  for (int i = 0; i < 8; i++) {
+    ID += digitalRead(dipSwitchPins[i]) << i; 
+  }
+  return ID;
+}
+
+/**
+ * function that calls the read functions of all sensors
+*/
 void read_sensors() {
   read_light_sensor();
   read_hygrometer();
   read_bme();
 }
 
+/**
+ * function that reads light sensor value, if the last time it has been read was
+ * more than LIGHT_READING_INTERVAL milliseconds ago.
+*/
 void read_light_sensor() {
   if (current_millis - previous_light_reading_millis >= LIGHT_READING_INTERVAL) {
     unsigned int light = analogRead(PHOTOTRANSISTOR);
@@ -243,6 +267,10 @@ void read_light_sensor() {
   }
 }
 
+/**
+ * function that reads hygrometer value, if the last time it has been read was
+ * more than HYGROMETER_READING_INTERVAL milliseconds ago.
+*/
 void read_hygrometer() {
   if (current_millis - previous_hygrometer_reading_millis >= HYGROMETER_READING_INTERVAL) {
     unsigned int moisture = analogRead(HYGROMETER);
@@ -433,6 +461,39 @@ void set_led(int color) {
   analogWrite(BLUE_LED, blue_val);
 }
 
+void check_pairing_mode() {
+  if (pairing_mode && (current_millis - pairing_mode_start_millis >= BLE_PAIRING_TIME)) {
+    pairing_mode = 0;
+    color = PURPLE;
+    blink_on = 0;
+    led_on = 1;
+  }
+  if (pairing_mode) {
+    BLE.advertise();
+  } else {
+    BLE.stopAdvertise();
+  }
+}
+
+void BLE_connect_handler(BLEDevice central) {
+  pairing_mode = 0;
+  color = GREEN;
+  blink_on = 0;
+  led_on = 1;
+  connected = 1;
+  Serial.println("Connected event, central: ");
+  Serial.println(central.address());
+}
+
+void BLE_disconnect_handler(BLEDevice central) {
+  color = PURPLE;
+  blink_on = 0;
+  led_on = 1;
+  connected = 0;
+  Serial.println("Disconnected event, central: ");
+  Serial.println(central.address());
+}
+
 void stop_blink_handler() {
   if (warning_on) {
     blink_on = 0;
@@ -450,29 +511,4 @@ void pairing_mode_handler() {
     num_blinks = 50000;
     blink_on = 1;
   }
-}
-
-void check_pairing_mode() {
-  if (pairing_mode && (current_millis - pairing_mode_start_millis >= BLE_PAIRING_TIME)) {
-    pairing_mode = 0;
-    color = PURPLE;
-    blink_on = 0;
-    led_on = 1;
-  }
-  if (pairing_mode) {
-    BLE.advertise();
-  } else {
-    BLE.stopAdvertise();
-  }
-}
-
-int get_ID() {
-  for (int i = 0; i < 8; i++) {
-    pinMode(dipSwitchPins[i], INPUT_PULLDOWN);
-  }
-  int ID = 0;
-  for (int i = 0; i < 8; i++) {
-    ID += digitalRead(dipSwitchPins[i]) << i; 
-  }
-  return ID;
 }
