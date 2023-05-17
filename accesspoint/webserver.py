@@ -49,8 +49,9 @@ def get_avg_measurements(database):
             avg = float(subset['value'].mean())
             config = database["config"].find_one()
             data = pd.DataFrame(config["greenhouses"])
+            data.at[data.index[0], "id"] = 69
             sensors_greenhouse = pd.DataFrame(
-                pd.DataFrame(data[data["id"] == greenhouse]["sensors"]).iloc[0]['sensors'])
+                pd.DataFrame(data[data["id"] == 69]["sensors"]).iloc[0]['sensors'])
             limit = (sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitUpper"].iloc[0],
                      sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitLower"].iloc[0])
 
@@ -81,6 +82,7 @@ def get_avg_measurements(database):
 
 
 def send_measurements():
+    print("Sending Measuremennnnnnnnnnnnnnnnnttttttttttttttttttttttttttttt")
     settings = Settings()
     url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{1}"
     database = db.connect_to_db()

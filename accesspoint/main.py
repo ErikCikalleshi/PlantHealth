@@ -11,8 +11,12 @@ logging = AuditLogger()
 
 def main():
     threading.Timer(1, get_config).start()  # starts the read config thread
-    asyncio.run(read_sensor_data())  # starts the read sensor data thread
     send_measurements()  # starts the send measurements and inside it starts the thread
+
+    asyncio.run(read_sensor_data())  # starts the read sensor data thread
+    print("TEssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssst")
+   
+    print("TEsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssst")
     logging.info("Access point started all functions")
 
 

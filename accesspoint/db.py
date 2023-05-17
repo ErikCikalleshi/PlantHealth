@@ -39,14 +39,14 @@ def write_to_document_sensor(value, sensor_type, greenhouse_id):
     config_collection = db["config"]
     config = config_collection.find_one()
     if config is None:
-        logging.error("Could not find config in database")
+        print("Could not find config in database")
         return
-    logging.info("Writing to database...")
+    print("Writing to database...")
 
     date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     collection.insert_one({"greenhouseID": greenhouse_id, "accesspointID": config["accessPointId"],
                            "value": value, "sensorType": sensor_type, "date": date})
-    logging.info("Successfully written to database")
+    print("Successfully written to database")
 
 
 if __name__ == "__main__":

@@ -102,11 +102,10 @@ async def read_sensor_data():
                                             logging.warning(
                                                 "Collection deletion in progress. Skipping writing to the database.")
                                         # characteristic.uuid == "00002a05-0000-1000-8000-00805f9b34fb":
-                                        print(sender.uuid)
                                         sensor_mappings = {
                                             "00002a6e-0000-1000-8000-00805f9b34fb": ("TEMPERATURE", "<h", 100.0, 2),
                                             "00002a6f-0000-1000-8000-00805f9b34fb": ("HUMIDITY_AIR", "<H", 100.0, 2),
-                                            "00002a6d-0000-1000-8000-00805f9b34fb": ("PRESSURE", "<L", 10.0, 4),
+                                            "00002a6d-0000-1000-8000-00805f9b34fb": ("AIR_PRESSURE", "<L", 10.0, 4),
                                             "00002bd3-0000-1000-8000-00805f9b34fb": ("AIR_QUALITY", "<f", 1000.0, 4),
                                             "4ab3244f-d156-4e76-a329-6de917bdc8f9": ("LIGHT", "<I", 1.0, 4),
                                             "29c1083c-5166-433c-9b7c-98658c826968": ("HUMIDITY_DIRT", "<I", 1.0, 4),
@@ -121,17 +120,14 @@ async def read_sensor_data():
                                                     print("LED")
                                                     if val == 0:
                                                         print("LED")
-                                                    continue
-                                                        #webserver.button_disabled_pressed(greenhouse_id=16)
+                                                        webserver.button_disabled_pressed(greenhouse_id=16)
 
                                                 #await collection_deletion_event.wait()
-                                                print(sensor_type)
-                                                print(greenhouse_idx)
-                                                if greenhouse_idx.empty:
-                                                   continue 
+            
+                                                
                                                 sensor_id = \
                                                     greenhouse_idx[greenhouse_idx["sensorType"] == sensor_type]["id"].iloc[0]
-                                                print(sensor_id)
+                                                
                                                 db.write_to_document_sensor(val, sensor_type, int(sensor_id))
                                                 logging.info("Wrote {0} to the database.".format(val))
                                                 break
