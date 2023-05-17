@@ -25,7 +25,7 @@
 
 #define WARNING_BUTTON D2
 #define PAIRING_BUTTON D3
-#define PIEZZO_BUZZER D4
+#define PIEZO_BUZZER D4
 
 int dipSwitchPins[] = {D12, D11, D10, D9, D8, D7, D6, D5};
 // -----------------------------------------------------------------------------
@@ -104,6 +104,10 @@ void update_led();
 void set_led(int color);
 void check_pairing_mode();
 
+void startup_sound();
+void connect_sound();
+void disconnect_sound();
+
 void BLE_connect_handler(BLEDevice central);
 void BLE_disconnect_handler(BLEDevice central);
 void stop_blink_handler();
@@ -120,6 +124,8 @@ void setup() {
   button_setup();
   BLE_setup();
   sensor_setup();
+
+  startup_sound();
 }
 
 // the loop function runs over and over again forever
@@ -467,12 +473,36 @@ void check_pairing_mode() {
     color = PURPLE;
     blink_on = 0;
     led_on = 1;
+    disconnect_sound();
   }
   if (pairing_mode) {
     BLE.advertise();
   } else {
     BLE.stopAdvertise();
   }
+}
+
+void startup_sound() {
+  tone(PIEZO_BUZZER, 220, 300);
+  delay(350);
+  tone(PIEZO_BUZZER, 440, 300);
+  delay(350);
+  tone(PIEZO_BUZZER, 880, 300);
+  delay(350);
+}
+
+void connect_sound() {
+  tone(PIEZO_BUZZER, 440, 200);
+  delay(240);
+  tone(PIEZO_BUZZER, 880, 350);
+  delay(400);
+}
+
+void disconnect_sound() {
+  tone(PIEZO_BUZZER, 880, 200);
+  delay(240);
+  tone(PIEZO_BUZZER, 440, 350);
+  delay(400);
 }
 
 void BLE_connect_handler(BLEDevice central) {
@@ -483,6 +513,7 @@ void BLE_connect_handler(BLEDevice central) {
   connected = 1;
   Serial.println("Connected event, central: ");
   Serial.println(central.address());
+  connect_sound();
 }
 
 void BLE_disconnect_handler(BLEDevice central) {
@@ -492,6 +523,7 @@ void BLE_disconnect_handler(BLEDevice central) {
   connected = 0;
   Serial.println("Disconnected event, central: ");
   Serial.println(central.address());
+  disconnect_sound();
 }
 
 void stop_blink_handler() {
