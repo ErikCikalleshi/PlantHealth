@@ -1,7 +1,7 @@
 import asyncio
 import struct
 from asyncio import tasks
-
+import numpy as np
 import pandas as pd
 from bleak import BleakClient, BleakScanner, BleakError
 
@@ -13,6 +13,7 @@ logging = AuditLogger()
 INTERVAL = 30
 
 collection_deletion_event = asyncio.Event()
+
 
 # async def notification_handler(sender, value):
 #     from webserver import collection_deletion_event
@@ -51,24 +52,27 @@ async def read_sensor_data():
     """
     database = db.connect_to_db()
     config_collection = database["config"]
-
+    print("Started reading sensor data")
     while True:
         # Retrieve the latest configuration from the database
         config = config_collection.find_one()
         data = pd.DataFrame(config["greenhouses"])
         data = data[data["published"] == True]
-        data = data.assign(id=lambda x: "SensorStation " + x["id"].astype(str))
-        greenhouses = data
-        sensor_stations: list = data["id"].unique()
+        data = data.assign(convention_name=lambda x: "SensorStation " + x["id"].astype(str))
+
+        sensor_stations: list = data["convention_name"].unique()
         # TODO: make a name convention for the sensor stations
         sensor_stations = ["SensorStation G2T4"]
         for idx, name in enumerate(sensor_stations):
+            data = data.assign(idx=lambda x: idx)
             logging.info("Looking for device with name {0}".format(name))
             device = await BleakScanner.find_device_by_name(name, timeout=120)
             if device is None:
                 logging.error("Could not find device with name {0}".format(name))
                 continue
-            # add for idx to the pandas dataframe
+
+
+
             data = data.assign(idx=lambda x: idx)
             print("Found device with name {0}".format(name))
 
@@ -86,8 +90,7 @@ async def read_sensor_data():
                                         characteristic, ", ".join(characteristic.properties)))
 
                                     if characteristic.uuid == "00002a00-0000-1000-8000-00805f9b34fb" or \
-                                            characteristic.uuid == "00002a01-0000-1000-8000-00805f9b34fb" or \
-                                            characteristic.uuid == "00002a05-0000-1000-8000-00805f9b34fb":
+                                            characteristic.uuid == "00002a01-0000-1000-8000-00805f9b34fb":
                                         continue
 
                                     async def notification_handler(sender, value):
@@ -95,7 +98,7 @@ async def read_sensor_data():
                                         if collection_deletion_event.is_set():
                                             logging.warning(
                                                 "Collection deletion in progress. Skipping writing to the database.")
-
+                                        # characteristic.uuid == "00002a05-0000-1000-8000-00805f9b34fb":
                                         print(sender.uuid)
                                         sensor_mappings = {
                                             "00002a6e-0000-1000-8000-00805f9b34fb": ("TEMPERATURE", "<h", 100.0),
@@ -104,15 +107,19 @@ async def read_sensor_data():
                                             "00002bd3-0000-1000-8000-00805f9b34fb": ("GAS_RESISTANCE", "<H", 1000.0),
                                             "4ab3244f-d156-4e76-a329-6de917bdc8f9": ("LIGHT", "<H", 1.0),
                                             "29c1083c-5166-433c-9b7c-98658c826968": ("HUMIDITY_DIRT", "<H", 1.0),
+                                            "00002a05-0000-1000-8000-00805f9b34fb": ("LED", "<H", 1.0),
                                         }
-
-                                        # sender.
                                         for uuid, (sensor_type, unpack_format, scale_factor) in sensor_mappings.items():
                                             if sender.uuid == uuid:
                                                 val = struct.unpack(unpack_format, value[:2])[0] / scale_factor
                                                 print("{0}: {1}".format(sensor_type, val))
+                                                if sensor_type == "LED":
+                                                    print("LED")
+                                                    # webserver.button_disabled_pressed(greenhouse_id=)
+
                                                 await collection_deletion_event.wait()
-                                                greenhouse_idx = greenhouses[greenhouses["idx"] == idx]
+                                                id = data[data["convention_name"] == name]["id"].iloc[0]
+                                                greenhouse_idx = data[data["id"] == id]
                                                 sensor_id = \
                                                     greenhouse_idx[greenhouse_idx["sensors"] == sensor_type]["id"].iloc[
                                                         0]

@@ -123,5 +123,13 @@ def send_measurements():
     logging.warning("Collection deleted successfully. Timer started.")
 
 
+def button_disabled_pressed(greenhouse_id: int):
+    url = "http://localhost:9000/api/disabled"
+    settings = Settings()
+    auth = settings.auth
+    headers = {"Content-Type": "application/json"}
+    response = requests.post(url, headers=headers, auth=auth, data=json.dumps({"greenhouseID": greenhouse_id}))
+
+
 if __name__ == "__main__":
     send_measurements()

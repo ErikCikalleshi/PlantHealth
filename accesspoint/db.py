@@ -52,7 +52,6 @@ def write_to_document_sensor(value, sensor_type, greenhouse_id):
 if __name__ == "__main__":
     # generate random data
     import random
-
     for i in range(100):
         write_to_document_sensor(random.randint(20, 36), "LIGHT", 27)
         write_to_document_sensor(random.randint(20, 21), "TEMPERATURE", 27)

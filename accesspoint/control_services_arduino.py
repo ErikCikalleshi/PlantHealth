@@ -31,7 +31,7 @@ BLEService ledService("f5a38368-9851-41cc-b49e-6ad0bba76f9b");
 BLEByteCharacteristic ledFlagCharacteristic("eac630d2-9e86-4005-b7b9-6f6955f7ec10", BLERead | BLEWrite);
 '''
 
-async def main():
-    await send_flag("SensorStation G2T4", "eac630d2-9e86-4005-b7b9-6f6955f7ec10", 3)
+# async def main():
+#     await send_flag("SensorStation G2T4", "eac630d2-9e86-4005-b7b9-6f6955f7ec10", 3)
 
-asyncio.run(main())
+# asyncio.run(main())
