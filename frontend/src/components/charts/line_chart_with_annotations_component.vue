@@ -68,8 +68,7 @@ export default {
                 console.log(this.sensor);
                 for (let i = 0; i < this.measurements.length; i++) {
 
-                    if(this.measurements[i].sensorType != this.sensor){
-
+                    if(this.measurements[i].sensorType !== this.sensor){
                         continue;
                     }
                     console.log(this.measurements[i].sensorType);
