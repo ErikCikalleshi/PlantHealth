@@ -14,11 +14,11 @@ def connect_to_db():
     client = pymongo.MongoClient(settings.mongo_host, settings.mongo_port)
     db = client[settings.mongo_database]
     if settings.mongo_database not in client.list_database_names():
-        logging.warning("Database does not exist. Creating...")
+        print("Database does not exist. Creating...")
         db = client[settings.mongo_database]
         db.create_collection(settings.mongo_collection)
     if settings.mongo_collection not in db.list_collection_names():
-        logging.warning("Collection does not exist. Creating...")
+        print("Collection does not exist. Creating...")
         db.create_collection(settings.mongo_collection)
     logging.info("Connected to database")
     return db
@@ -31,9 +31,9 @@ def write_to_document_sensor(value, sensor_type, greenhouse_id):
         logging.error("Could not connect to database")
         return
     if settings.mongo_collection not in db.list_collection_names():
-        logging.warning("Collection does not exist. Creating...")
+        print("Collection does not exist. Creating...")
         db.create_collection(settings.mongo_collection)
-        logging.info("Collection created successfully")
+        print("Collection created successfully")
     collection = db[settings.mongo_collection]
     # get from config/config.json
     config_collection = db["config"]

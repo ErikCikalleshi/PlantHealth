@@ -9,3 +9,4 @@ backend/src/main/resources/public/index.html
 /target/sonar/report-task.txt
 /git-stats.sh
 /log/app.log
+*.pyc
