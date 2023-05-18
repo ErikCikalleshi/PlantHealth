@@ -133,9 +133,9 @@ SELECT ROUND(RAND() * 20 + 30, 1), ROUND(RAND() * 50 + 70, 1), 60, 'HUMIDITY_DIR
 UNION ALL
 SELECT ROUND(RAND() * 100 + 900, 1), ROUND(RAND() * 200 + 900, 1), 120, 'AIR_PRESSURE', uuid, 'admin', NOW() FROM greenhouse
 UNION ALL
-SELECT ROUND(RAND() * 20, 1), ROUND(RAND() * 30 + 20, 1), 60, 'AIR_QUALITY', uuid, 'admin', NOW() FROM greenhouse
+SELECT ROUND(RAND() * 20, 1), ROUND(RAND() * 30 + 20, 1), 60, 'AIR_QUALITY', uuid, 'admin', NOW() FROM greenhouse;
 
-    INSERT INTO db_planthealth.measurement (id, limit_exceeded_by, create_date, measurement_date, value, sensor_id) VALUES (1, 412, '2023-05-18 13:28:27.051000', '2023-05-18 13:28:00.000000', 4, 77);
+INSERT INTO db_planthealth.measurement (id, limit_exceeded_by, create_date, measurement_date, value, sensor_id) VALUES (1, 412, '2023-05-18 13:28:27.051000', '2023-05-18 13:28:00.000000', 4, 77);
 INSERT INTO db_planthealth.measurement (id, limit_exceeded_by, create_date, measurement_date, value, sensor_id) VALUES (2, 768.4, '2023-05-18 13:28:27.317000', '2023-05-18 13:28:00.000000', 868, 199);
 INSERT INTO db_planthealth.measurement (id, limit_exceeded_by, create_date, measurement_date, value, sensor_id) VALUES (3, 0, '2023-05-18 13:28:27.577000', '2023-05-18 13:28:00.000000', 26.74, 16);
 INSERT INTO db_planthealth.measurement (id, limit_exceeded_by, create_date, measurement_date, value, sensor_id) VALUES (4, 15.799999999999997, '2023-05-18 13:28:27.838000', '2023-05-18 13:28:00.000000', 46.6, 138);
