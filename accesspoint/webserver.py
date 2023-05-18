@@ -28,7 +28,7 @@ async def get_avg_measurements(database):
         return
 
     collection = database[settings.mongo_collection]
-    
+
     data = list(collection.find())
     if len(data) == 0:
         logging.warning("Collection is empty. Nothing to make average from.")
@@ -55,17 +55,26 @@ async def get_avg_measurements(database):
                      sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitLower"].iloc[0])
 
             limit_exceeded_by = 0
+            sensor_blink_mappings = {
+                "TEMPERATURE": 3,
+                "HUMIDITY_AIR": 4,
+                "AIR_PRESSURE": 5,
+                "AIR_QUALITY": 6,
+                "LIGHT": 1,
+                "HUMIDITY_DIRT": 2,
+            }
             if avg > limit[0]:
                 print("Test" + sensor_type)
                 limit_exceeded_by = avg - limit[0]
-                #loop = asyncio.get_event_loop()  # returns the event loop object associated with the current thread
-                await send_flag("SensorStation " + str(greenhouse), 128 + 1)
-                
+                # loop = asyncio.get_event_loop()  # returns the event loop object associated with the current thread
+
+                await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type])
+
                 logging.error("Upper Limit exceeded by: " + str(limit_exceeded_by))
             elif avg < limit[1]:
                 print("Test" + sensor_type)
                 limit_exceeded_by = limit[1] - avg
-                await send_flag("SensorStation " + str(greenhouse), 2)
+                await send_flag("SensorStation " + str(greenhouse),  sensor_blink_mappings[sensor_type])
                 logging.error("Lower Limit exceeded by: " + str(limit_exceeded_by))
 
             date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -96,7 +105,7 @@ async def send_measurements():
     avg_measurements = await get_avg_measurements(database)
     if avg_measurements is None:
         logging.warning("Could not get average measurements")
-        #threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
+        # threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
         return
 
     auth = settings.auth
@@ -111,11 +120,11 @@ async def send_measurements():
     # delete collection from db
     if database is None:
         logging.error("Could not connect to database")
-        #threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
+        # threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
         return
     if settings.mongo_collection not in database.list_collection_names():
         logging.warning("Collection does not exist. Nothing to delete.")
-        #threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
+        # threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
         return
     collection = database[settings.mongo_collection]
 
@@ -124,7 +133,7 @@ async def send_measurements():
     collection.delete_many({})
     collection_deletion_event.clear()
     logging.warning("Collection with measurements deleted successfully")
-    #threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
+    # threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
     print("Collection deleted successfully. Timer started.")
 
 

@@ -69,7 +69,6 @@ async def read_sensor_data():
         devices = await BleakScanner.discover(timeout=10.0, return_adv=True)
         print(devices)
         for k, v in devices.items():
-            print("Device id: {0}\nLocal name: {1}\n\n".format(k, v[1].local_name))
             # if local_name == (one of the sensor stations):
             if v[1].local_name in sensor_stations:
                 available_sensor_stations.append(v[1].local_name)
@@ -117,10 +116,10 @@ async def read_sensor_data():
                                         sensor_mappings = {
                                             "00002a6e-0000-1000-8000-00805f9b34fb": ("TEMPERATURE", "<h", 100.0, 2),
                                             "00002a6f-0000-1000-8000-00805f9b34fb": ("HUMIDITY_AIR", "<H", 100.0, 2),
-                                            "00002a6d-0000-1000-8000-00805f9b34fb": ("AIR_PRESSURE", "<L", 10.0, 4),
-                                            "00002bd3-0000-1000-8000-00805f9b34fb": ("AIR_QUALITY", "<f", 1000.0, 4),
+                                            "00002a6d-0000-1000-8000-00805f9b34fb": ("AIR_PRESSURE", "<L", 1000.0, 4),
+                                            "00002bd3-0000-1000-8000-00805f9b34fb": ("AIR_QUALITY", "<f", 10000.0, 4),
                                             "4ab3244f-d156-4e76-a329-6de917bdc8f9": ("LIGHT", "<I", 1.0, 4),
-                                            "29c1083c-5166-433c-9b7c-98658c826968": ("HUMIDITY_DIRT", "<I", 1.0, 4),
+                                            "29c1083c-5166-433c-9b7c-98658c826968": ("HUMIDITY_DIRT", "<I", 10.24, 4),
                                             "eac630d2-9e86-4005-b7b9-6f6955f7ec10": ("LED", "<c", 1.0, 1),
                                         }
 
@@ -140,7 +139,8 @@ async def read_sensor_data():
 
                                                 # sensor_id = \
                                                 #     greenhouse_idx[greenhouse_idx["sensorType"] == sensor_type]["id"].iloc[0]
-
+                                                if sensor_type == "AIR_QUALITY":
+                                                    val = 100 - val
                                                 await db.write_to_document_sensor(val, sensor_type, int(id))
                                                 logging.info("Wrote {0} to the database.".format(val))
                                                 break

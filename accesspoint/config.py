@@ -30,6 +30,7 @@ async def get_config():
     collection.insert_one(data)
     logging.info("Database cleared and config inserted successfully")
     logging.info("api/setting/ API call successful")
+    
     #threading.Timer(1, lambda: get_config).start()
 
 
