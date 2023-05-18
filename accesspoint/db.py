@@ -9,7 +9,7 @@ from log_config import AuditLogger
 logging = AuditLogger()
 
 
-def connect_to_db():
+async def connect_to_db():
     settings = Settings()
     client = pymongo.MongoClient(settings.mongo_host, settings.mongo_port)
     db = client[settings.mongo_database]
@@ -24,9 +24,9 @@ def connect_to_db():
     return db
 
 
-def write_to_document_sensor(value, sensor_type, greenhouse_id):
+async def write_to_document_sensor(value, sensor_type, greenhouse_id):
     settings = Settings()
-    db = connect_to_db()
+    db = await connect_to_db()
     if db is None:
         logging.error("Could not connect to database")
         return

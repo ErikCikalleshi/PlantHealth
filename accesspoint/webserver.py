@@ -17,7 +17,7 @@ from control_services_arduino import send_flag
 collection_deletion_event = asyncio.Event()
 
 
-def get_avg_measurements(database):
+async def get_avg_measurements(database):
     settings = Settings()
     if database is None:
         logging.error("Could not connect to database")
@@ -61,22 +61,13 @@ def get_avg_measurements(database):
                 print("Test" + sensor_type)
                 limit_exceeded_by = avg - limit[0]
                 #loop = asyncio.get_event_loop()  # returns the event loop object associated with the current thread
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-                print(greenhouse)
-                greenhouse_str = str(greenhouse)
-                loop.run_until_complete(send_flag("SensorStation " + greenhouse_str, 128+1))
-                loop.close()
+                await send_flag("SensorStation " + str(greenhouse), 128 + 1)
+                
                 logging.error("Upper Limit exceeded by: " + str(limit_exceeded_by))
             elif avg < limit[1]:
                 print("Test" + sensor_type)
                 limit_exceeded_by = limit[1] - avg
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-                print(greenhouse)
-                greenhouse_str = str(greenhouse)
-                loop.run_until_complete(send_flag("SensorStation " + greenhouse_str, 2))
-                loop.close()
+                await send_flag("SensorStation " + str(greenhouse), 2)
                 logging.error("Lower Limit exceeded by: " + str(limit_exceeded_by))
 
             date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -93,20 +84,21 @@ def get_avg_measurements(database):
     return json_arrays
 
 
-def send_measurements():
+async def send_measurements():
     settings = Settings()
     url = f"http://{settings.server_host}:{settings.server_port}/api/measurements"
-    database = db.connect_to_db()
+    database = await db.connect_to_db()
+    print("dataBaseeeeeeeeeeeeeeeeeeeeeee")
     # get transmissionIntervalSeconds from config
     config_collection = database["config"]
     config = config_collection.find_one()
     # DEBUGGING: change transmissionIntervalSeconds to 4
     config["transmissionIntervalSeconds"] = 11
 
-    avg_measurements = get_avg_measurements(database)
+    avg_measurements = await get_avg_measurements(database)
     if avg_measurements is None:
         logging.warning("Could not get average measurements")
-        threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
+        #threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
         return
 
     auth = settings.auth
@@ -121,11 +113,11 @@ def send_measurements():
     # delete collection from db
     if database is None:
         logging.error("Could not connect to database")
-        threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
+        #threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
         return
     if settings.mongo_collection not in database.list_collection_names():
         logging.warning("Collection does not exist. Nothing to delete.")
-        threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
+        #threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
         return
     collection = database[settings.mongo_collection]
 
@@ -134,11 +126,11 @@ def send_measurements():
     collection.delete_many({})
     collection_deletion_event.clear()
     logging.warning("Collection with measurements deleted successfully")
-    threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
+    #threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
     print("Collection deleted successfully. Timer started.")
 
 
-def button_disabled_pressed(greenhouse_id: int):
+async def button_disabled_pressed(greenhouse_id: int):
     settings = Settings()
     url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{1}"
     auth = settings.auth

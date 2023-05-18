@@ -34,7 +34,7 @@ async def send_flag(device_name, flag_value):
                 # print("Characteristic: {0}".format(characteristic))
                 if characteristic.uuid == "eac630d2-9e86-4005-b7b9-6f6955f7ec10":
                     print("Found characteristic")
-                    await client.write_gatt_char(characteristic, bytearray([flag_value, flag_value, flag_value, flag_value]), True)
+                    await client.write_gatt_char(characteristic, bytearray([flag_value]), True)
                     print("Wrote value")
                     return True
 

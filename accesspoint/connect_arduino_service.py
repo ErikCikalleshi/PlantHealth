@@ -51,7 +51,7 @@ async def read_sensor_data():
     It periodically checks the configuration document in the database for updates.
 
     """
-    database = db.connect_to_db()
+    database = await db.connect_to_db()
     config_collection = database["config"]
 
     while True:
@@ -134,7 +134,7 @@ async def read_sensor_data():
                                                 # sensor_id = \
                                                 #     greenhouse_idx[greenhouse_idx["sensorType"] == sensor_type]["id"].iloc[0]
                                                 
-                                                db.write_to_document_sensor(val, sensor_type, int(id))
+                                                await db.write_to_document_sensor(val, sensor_type, int(id))
                                                 logging.info("Wrote {0} to the database.".format(val))
                                                 break
                                     print("Starting notifications for {0}".format(characteristic.uuid))

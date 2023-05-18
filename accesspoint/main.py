@@ -1,5 +1,5 @@
 import asyncio
-import threading
+
 
 from config import get_config
 from connect_arduino_service import read_sensor_data
@@ -9,13 +9,19 @@ import time
 logging = AuditLogger()
 
 
-def main():
-    threading.Timer(1, get_config).start()  # starts the read config thread
-    time.sleep(5)
-    send_measurements()  # starts the send measurements and inside it starts the thread
+async def main():
+    asyncio.create_task(read_sensor_data())  # Starts the read sensor data task
+    print("Testtttttt")
+    while True:
+        try:
+            await get_config()  # Starts the read config task
+            await asyncio.sleep(5)  # Pause for 5 seconds using asyncio.sleep
+            await send_measurements()  # Starts the send measurements task
+        except:
+            logging.error("An error occurred, restarting tasks...")
 
-    asyncio.run(read_sensor_data())  # starts the read sensor data thread
+    
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
