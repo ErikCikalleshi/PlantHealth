@@ -16,6 +16,7 @@ collection_deletion_event = asyncio.Event()
 global client
 global_client = []
 
+
 # async def notification_handler(sender, value):
 #     from webserver import collection_deletion_event
 #     if collection_deletion_event.is_set():
@@ -62,38 +63,45 @@ async def read_sensor_data():
         data = data.assign(convention_name=lambda x: "SensorStation " + x["id"].astype(str))
         # data.at[data.index[0], "convention_name"] = "SensorStation 69"
         # data.at[data.index[0], "id"] = 69
-       
+
         sensor_stations: list = data["convention_name"].unique()
-       
+        available_sensor_stations = []
+        devices = await BleakScanner.discover(timeout=10.0, return_adv=True)
+        print(devices)
+        for k, v in devices.items():
+            print("Device id: {0}\nLocal name: {1}\n\n".format(k, v[1].local_name))
+            # if local_name == (one of the sensor stations):
+            if v[1].local_name in sensor_stations:
+                available_sensor_stations.append(v[1].local_name)
+
+
         # TODO: make a name convention for the sensor stations
         # sensor_stations = ["SensorStation 69"]
-        for idx, name in enumerate(sensor_stations):
-            if name != "SensorStation 16":
-                continue
-            id = data[data["convention_name"] == name]["id"].iloc[0]                     
+        for idx, name in enumerate(available_sensor_stations):
+            id = data[data["convention_name"] == name]["id"].iloc[0]
             greenhouse_idx = pd.DataFrame(data[data["id"] == id]["sensors"].iloc[0])
             logging.info("Looking for device with name {0}".format(name))
             device = await BleakScanner.find_device_by_name(name, timeout=120)
             if device is None:
                 logging.error("Could not find device with name {0}".format(name))
                 continue
-            
+
             print("Found device with name {0}".format(name))
 
             async def read_from_device(device, name):
                 while True:
                     try:
                         async with BleakClient(device, timeout=120) as client:
-                            print("CLLLLLLLLLLLLLLLLIIIIIIIIIEEEENNNNNNT " + name)
+
                             global_client.append({"client": client, "name": name})
                             logging.info("Connected to device {0}".format(name))
 
                             for service in client.services:
-                                #print("Service: {0}".format(service))
+                                # print("Service: {0}".format(service))
 
                                 for characteristic in service.characteristics:
-                                    #print("Characteristic: {0} \n\twith properties: {1}".format(
-                                        #characteristic, ", ".join(characteristic.properties)))
+                                    # print("Characteristic: {0} \n\twith properties: {1}".format(
+                                    # characteristic, ", ".join(characteristic.properties)))
 
                                     if characteristic.uuid == "00002a00-0000-1000-8000-00805f9b34fb" or \
                                             characteristic.uuid == "00002a01-0000-1000-8000-00805f9b34fb" or \
@@ -116,27 +124,27 @@ async def read_sensor_data():
                                             "eac630d2-9e86-4005-b7b9-6f6955f7ec10": ("LED", "<c", 1.0, 1),
                                         }
 
-                                        for uuid, (sensor_type, unpack_format, scale_factor, buffer) in sensor_mappings.items():
+                                        for uuid, (
+                                        sensor_type, unpack_format, scale_factor, buffer) in sensor_mappings.items():
                                             if sender.uuid == uuid:
                                                 if sensor_type == "LED":
                                                     val = struct.unpack(unpack_format, value[:buffer])[0]
                                                     print("LED")
                                                     if val == 0:
-                                                        webserver.button_disabled_pressed(greenhouse_id=16)
+                                                        webserver.button_disabled_pressed(greenhouse_id=int(id))
                                                     continue
                                                 val = struct.unpack(unpack_format, value[:buffer])[0] / scale_factor
-                                                #print("{0}: {1}".format(sensor_type, val))
+                                                # print("{0}: {1}".format(sensor_type, val))
 
+                                                # await collection_deletion_event.wait()
 
-                                                #await collection_deletion_event.wait()
-            
-                                                
                                                 # sensor_id = \
                                                 #     greenhouse_idx[greenhouse_idx["sensorType"] == sensor_type]["id"].iloc[0]
-                                                
+
                                                 await db.write_to_document_sensor(val, sensor_type, int(id))
                                                 logging.info("Wrote {0} to the database.".format(val))
                                                 break
+
                                     print("Starting notifications for {0}".format(characteristic.uuid))
                                     await client.start_notify(characteristic.uuid, notification_handler)
 
@@ -149,7 +157,7 @@ async def read_sensor_data():
                             "Disconnected from device {0}. Attempting to reconnect in 5 seconds.".format(name))
                         await asyncio.sleep(5)
                         # Cancel and close the task
-                        #tasks.current_task().cancel()
+                        # tasks.current_task().cancel()
 
             tasks.create_task(read_from_device(device, name))
             logging.info("Started reading data from device {0}".format(name))

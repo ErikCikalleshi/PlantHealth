@@ -45,8 +45,6 @@ async def get_avg_measurements(database):
         # iterate over all greenhouses
         greenhouses = subset['greenhouseID'].unique()
         for greenhouse in greenhouses:
-            if greenhouse != 16:
-                continue
             subset = df[(df['sensorType'] == sensor_type) & (df['greenhouseID'] == greenhouse)]
             avg = float(subset['value'].mean())
             config = database["config"].find_one()
