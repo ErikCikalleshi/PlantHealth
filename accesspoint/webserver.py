@@ -58,14 +58,25 @@ def get_avg_measurements(database):
 
             limit_exceeded_by = 0
             if avg > limit[0]:
+                print("Test" + sensor_type)
                 limit_exceeded_by = avg - limit[0]
                 #loop = asyncio.get_event_loop()  # returns the event loop object associated with the current thread
-                #loop.run_until_complete(send_flag(greenhouse, 1))  # pause send_data() until flag is sent
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                print(greenhouse)
+                greenhouse_str = str(greenhouse)
+                loop.run_until_complete(send_flag("SensorStation " + greenhouse_str, 128+1))
+                loop.close()
                 logging.error("Upper Limit exceeded by: " + str(limit_exceeded_by))
             elif avg < limit[1]:
+                print("Test" + sensor_type)
                 limit_exceeded_by = limit[1] - avg
-                #loop = asyncio.get_event_loop()
-                #loop.run_until_complete(send_flag(greenhouse, 2))
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                print(greenhouse)
+                greenhouse_str = str(greenhouse)
+                loop.run_until_complete(send_flag("SensorStation " + greenhouse_str, 2))
+                loop.close()
                 logging.error("Lower Limit exceeded by: " + str(limit_exceeded_by))
 
             date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -104,7 +115,6 @@ def send_measurements():
     for avg_measurement in avg_measurements:
         print(avg_measurement)
         response = requests.post(url, headers=headers, auth=auth, data=avg_measurement)
-        print(response.text)
         if response.status_code == 200:
             print("Measurements sent successfully")
 

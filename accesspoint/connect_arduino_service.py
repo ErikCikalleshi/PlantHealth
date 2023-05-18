@@ -13,7 +13,8 @@ logging = AuditLogger()
 INTERVAL = 30
 
 collection_deletion_event = asyncio.Event()
-
+global client
+global_client = []
 
 # async def notification_handler(sender, value):
 #     from webserver import collection_deletion_event
@@ -52,7 +53,7 @@ async def read_sensor_data():
     """
     database = db.connect_to_db()
     config_collection = database["config"]
-    
+
     while True:
         # Retrieve the latest configuration from the database
         config = config_collection.find_one()
@@ -79,10 +80,12 @@ async def read_sensor_data():
             
             print("Found device with name {0}".format(name))
 
-            async def read_from_device():
+            async def read_from_device(device, name):
                 while True:
                     try:
                         async with BleakClient(device, timeout=120) as client:
+                            print("CLLLLLLLLLLLLLLLLIIIIIIIIIEEEENNNNNNT " + name)
+                            global_client.append({"client": client, "name": name})
                             logging.info("Connected to device {0}".format(name))
 
                             for service in client.services:
@@ -93,7 +96,8 @@ async def read_sensor_data():
                                         #characteristic, ", ".join(characteristic.properties)))
 
                                     if characteristic.uuid == "00002a00-0000-1000-8000-00805f9b34fb" or \
-                                            characteristic.uuid == "00002a01-0000-1000-8000-00805f9b34fb":
+                                            characteristic.uuid == "00002a01-0000-1000-8000-00805f9b34fb" or \
+                                            characteristic.uuid == "00002a05-0000-1000-8000-00805f9b34fb":
                                         continue
 
                                     async def notification_handler(sender, value):
@@ -109,18 +113,20 @@ async def read_sensor_data():
                                             "00002bd3-0000-1000-8000-00805f9b34fb": ("AIR_QUALITY", "<f", 1000.0, 4),
                                             "4ab3244f-d156-4e76-a329-6de917bdc8f9": ("LIGHT", "<I", 1.0, 4),
                                             "29c1083c-5166-433c-9b7c-98658c826968": ("HUMIDITY_DIRT", "<I", 1.0, 4),
-                                            "00002a05-0000-1000-8000-00805f9b34fb": ("LED", "<c", 1.0, 1),
+                                            "eac630d2-9e86-4005-b7b9-6f6955f7ec10": ("LED", "<c", 1.0, 1),
                                         }
+
                                         for uuid, (sensor_type, unpack_format, scale_factor, buffer) in sensor_mappings.items():
                                             if sender.uuid == uuid:
-                                        
+                                                if sensor_type == "LED":
+                                                    val = struct.unpack(unpack_format, value[:buffer])[0]
+                                                    print("LED")
+                                                    if val == 0:
+                                                        webserver.button_disabled_pressed(greenhouse_id=16)
+                                                    continue
                                                 val = struct.unpack(unpack_format, value[:buffer])[0] / scale_factor
                                                 #print("{0}: {1}".format(sensor_type, val))
-                                                if sensor_type == "LED":
-                                                    #print("LED")
-                                                    if val == 0:
-                                                        #print("LED")
-                                                        webserver.button_disabled_pressed(greenhouse_id=16)
+
 
                                                 #await collection_deletion_event.wait()
             
@@ -131,7 +137,7 @@ async def read_sensor_data():
                                                 db.write_to_document_sensor(val, sensor_type, int(id))
                                                 logging.info("Wrote {0} to the database.".format(val))
                                                 break
-
+                                    print("Starting notifications for {0}".format(characteristic.uuid))
                                     await client.start_notify(characteristic.uuid, notification_handler)
 
                             while True:
@@ -145,7 +151,7 @@ async def read_sensor_data():
                         # Cancel and close the task
                         #tasks.current_task().cancel()
 
-            tasks.create_task(read_from_device())
+            tasks.create_task(read_from_device(device, name))
             logging.info("Started reading data from device {0}".format(name))
 
         logging.info("Finished reading data from all devices. Checking for updates in 30 seconds.")

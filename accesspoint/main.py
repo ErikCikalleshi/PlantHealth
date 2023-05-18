@@ -15,10 +15,6 @@ def main():
     send_measurements()  # starts the send measurements and inside it starts the thread
 
     asyncio.run(read_sensor_data())  # starts the read sensor data thread
-    print("TEssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssst")
-   
-    print("TEsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssst")
-    logging.info("Access point started all functions")
 
 
 if __name__ == "__main__":
