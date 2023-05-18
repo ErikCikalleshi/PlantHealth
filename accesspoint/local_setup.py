@@ -54,7 +54,11 @@ def main():
             "collection": prompt_config_value("mongo.collection")
         }
 
-    print(json.dumps(config, indent=2))
+    with open('settings.json', 'w') as file:
+        json.dump(config, file, indent=2)
+
+    print("Configuration saved as settings.json")
+
 
 
 if __name__ == "__main__":
