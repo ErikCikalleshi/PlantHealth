@@ -61,11 +61,12 @@ export default {
 
         async getMeasurements() {
             try {
-                const response = await MeasurementsService.getMeasurementsByGreenhouseId(2);
+                const response = await MeasurementsService.getMeasurementsByGreenhouseId(1);
                 console.log(response.data)
                 this.measurements = response.data;
                 this.series[0].data = []; // Clear the existing data array
                 console.log(this.sensor);
+                console.log(this.measurements.length)
                 for (let i = 0; i < this.measurements.length; i++) {
 
                     if(this.measurements[i].sensorType !== this.sensor){
