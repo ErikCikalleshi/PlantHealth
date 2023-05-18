@@ -40,8 +40,6 @@ async def send_data(data, greenhouse_uuid):
                 # Add the greenhouse to the offline list if the request fails (e.g. greenhouse/access point is disabled)
                 offlineGreenhouses.append(greenhouse_uuid)
 
-            print(response_text)
-
 
 # Infinite loop to send data continuously
 while True:

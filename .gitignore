@@ -15,3 +15,4 @@ backend/src/main/resources/public/index.html
 /backend/src/main/java/at/qe/backend/configs/WebMvcConfig.java
 /frontend/src/services/index.ts
 *.pyc
+/accesspoint/audit.log

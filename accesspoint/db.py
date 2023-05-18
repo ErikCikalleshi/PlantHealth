@@ -14,11 +14,11 @@ async def connect_to_db():
     client = pymongo.MongoClient(settings.mongo_host, settings.mongo_port)
     db = client[settings.mongo_database]
     if settings.mongo_database not in client.list_database_names():
-        print("Database does not exist. Creating...")
+        logging.warning("Database does not exist. Creating...")
         db = client[settings.mongo_database]
         db.create_collection(settings.mongo_collection)
     if settings.mongo_collection not in db.list_collection_names():
-        print("Collection does not exist. Creating...")
+        logging.warning("Collection does not exist. Creating...")
         db.create_collection(settings.mongo_collection)
     logging.info("Connected to database")
     return db
@@ -39,7 +39,7 @@ async def write_to_document_sensor(value, sensor_type, greenhouse_id):
     config_collection = db["config"]
     config = config_collection.find_one()
     if config is None:
-        logging.warning("Could not find config in database")
+        logging.error("Could not find config in database")
         return
     logging.warning("Writing to database...")
 

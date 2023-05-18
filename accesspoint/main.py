@@ -11,7 +11,6 @@ logging = AuditLogger()
 
 async def main():
     asyncio.create_task(read_sensor_data())  # Starts the read sensor data task
-    print("Testtttttt")
     while True:
         try:
             await get_config()  # Starts the read config task

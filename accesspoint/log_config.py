@@ -6,7 +6,7 @@ import inspect
 class AuditLogger:
     _instance = None
 
-    def __new__(cls, log_file='audit.log'):
+    def __new__(cls, log_file='accesspoint/audit.log'):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             # Set up the logger

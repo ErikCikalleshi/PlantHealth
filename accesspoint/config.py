@@ -34,20 +34,16 @@ async def get_config():
 
     logging.info("Database cleared and config inserted successfully")
     logging.info("api/setting/ API call successful")
-
     # check for every published
     for entry in connect_arduino_service.global_client:
-        
         for greenhouse in data["greenhouses"]:
-            print(greenhouse)
             id = greenhouse["id"]
             if entry["name"] == ("SensorStation " + str(id)) and not greenhouse["published"]:
                 client = entry["client"]
                 await client.disconnect()   
+                logging.info("BLE Connection disabled")
                 break
             
-            # print
-    # threading.Timer(1, lambda: get_config).start()
 
 
 # for debug purposes only

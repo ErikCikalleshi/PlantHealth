@@ -17,33 +17,6 @@ global client
 global_client = []
 
 
-# async def notification_handler(sender, value):
-#     from webserver import collection_deletion_event
-#     if collection_deletion_event.is_set():
-#         logging.warning("Collection deletion in progress. Skipping writing to the database.")
-#
-#     print(sender.uuid)
-#     sensor_mappings = {
-#         "00002a6e-0000-1000-8000-00805f9b34fb": ("TEMPERATURE", "<h", 100.0),
-#         "00002a6f-0000-1000-8000-00805f9b34fb": ("HUMIDITY_AIR", "<H", 100.0),
-#         "00002a6d-0000-1000-8000-00805f9b34fb": ("PRESSURE", "<I", 10.0),
-#         "00002bd3-0000-1000-8000-00805f9b34fb": ("GAS_RESISTANCE", "<H", 1000.0),
-#         "4ab3244f-d156-4e76-a329-6de917bdc8f9": ("LIGHT", "<H", 1.0),
-#         "29c1083c-5166-433c-9b7c-98658c826968": ("HUMIDITY_DIRT", "<H", 1.0),
-#     }
-#
-#     # sender.
-#     for uuid, (sensor_type, unpack_format, scale_factor) in sensor_mappings.items():
-#         if sender.uuid == uuid:
-#             val = struct.unpack(unpack_format, value[:2])[0] / scale_factor
-#             print("{0}: {1}".format(sensor_type, val))
-#             await collection_deletion_event.wait()
-#             sensor_id = greenhouses[greenhouses["sensors"] == sensor_type]["id"].iloc[0]
-#             db.write_to_document_sensor(val, sensor_type, sensor_id)
-#             logging.info("Wrote {0} to the database.".format(val))
-#             break
-
-
 async def read_sensor_data():
     """
     Continuously reads data from sensor stations based on the latest configuration.
@@ -67,7 +40,7 @@ async def read_sensor_data():
         sensor_stations: list = data["convention_name"].unique()
         available_sensor_stations = []
         devices = await BleakScanner.discover(timeout=10.0, return_adv=True)
-        print(devices)
+
         for k, v in devices.items():
             # if local_name == (one of the sensor stations):
             if v[1].local_name in sensor_stations:
@@ -85,7 +58,7 @@ async def read_sensor_data():
                 logging.error("Could not find device with name {0}".format(name))
                 continue
 
-            print("Found device with name {0}".format(name))
+            logging.info("Found device with name {0}".format(name))
 
             async def read_from_device(device, name):
                 while True:
@@ -96,11 +69,8 @@ async def read_sensor_data():
                             logging.info("Connected to device {0}".format(name))
 
                             for service in client.services:
-                                # print("Service: {0}".format(service))
 
                                 for characteristic in service.characteristics:
-                                    # print("Characteristic: {0} \n\twith properties: {1}".format(
-                                    # characteristic, ", ".join(characteristic.properties)))
 
                                     if characteristic.uuid == "00002a00-0000-1000-8000-00805f9b34fb" or \
                                             characteristic.uuid == "00002a01-0000-1000-8000-00805f9b34fb" or \
@@ -112,7 +82,7 @@ async def read_sensor_data():
                                         if collection_deletion_event.is_set():
                                             logging.warning(
                                                 "Collection deletion in progress. Skipping writing to the database.")
-                                        # characteristic.uuid == "00002a05-0000-1000-8000-00805f9b34fb":
+                                       
                                         sensor_mappings = {
                                             "00002a6e-0000-1000-8000-00805f9b34fb": ("TEMPERATURE", "<h", 100.0, 2),
                                             "00002a6f-0000-1000-8000-00805f9b34fb": ("HUMIDITY_AIR", "<H", 100.0, 2),
@@ -128,24 +98,18 @@ async def read_sensor_data():
                                             if sender.uuid == uuid:
                                                 if sensor_type == "LED":
                                                     val = struct.unpack(unpack_format, value[:buffer])[0]
-                                                    print("LED")
                                                     if val == 0:
                                                         webserver.button_disabled_pressed(greenhouse_id=int(id))
                                                     continue
                                                 val = struct.unpack(unpack_format, value[:buffer])[0] / scale_factor
-                                                # print("{0}: {1}".format(sensor_type, val))
-
-                                                # await collection_deletion_event.wait()
-
-                                                # sensor_id = \
-                                                #     greenhouse_idx[greenhouse_idx["sensorType"] == sensor_type]["id"].iloc[0]
+                                                
                                                 if sensor_type == "AIR_QUALITY":
                                                     val = 100 - val
                                                 await db.write_to_document_sensor(val, sensor_type, int(id))
                                                 logging.info("Wrote {0} to the database.".format(val))
                                                 break
 
-                                    print("Starting notifications for {0}".format(characteristic.uuid))
+                                    logging.info("Starting notifications for {0}".format(characteristic.uuid))
                                     await client.start_notify(characteristic.uuid, notification_handler)
 
                             while True:

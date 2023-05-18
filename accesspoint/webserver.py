@@ -64,15 +64,10 @@ async def get_avg_measurements(database):
                 "HUMIDITY_DIRT": 2,
             }
             if avg > limit[0]:
-                print("Test" + sensor_type)
                 limit_exceeded_by = avg - limit[0]
-                # loop = asyncio.get_event_loop()  # returns the event loop object associated with the current thread
-
                 await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type])
-
                 logging.error("Upper Limit exceeded by: " + str(limit_exceeded_by))
             elif avg < limit[1]:
-                print("Test" + sensor_type)
                 limit_exceeded_by = limit[1] - avg
                 await send_flag("SensorStation " + str(greenhouse),  sensor_blink_mappings[sensor_type])
                 logging.error("Lower Limit exceeded by: " + str(limit_exceeded_by))
@@ -95,7 +90,6 @@ async def send_measurements():
     settings = Settings()
     url = f"http://{settings.server_host}:{settings.server_port}/api/measurements"
     database = await db.connect_to_db()
-    print("dataBaseeeeeeeeeeeeeeeeeeeeeee")
     # get transmissionIntervalSeconds from config
     config_collection = database["config"]
     config = config_collection.find_one()
@@ -105,26 +99,22 @@ async def send_measurements():
     avg_measurements = await get_avg_measurements(database)
     if avg_measurements is None:
         logging.warning("Could not get average measurements")
-        # threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
         return
 
     auth = settings.auth
 
     headers = {"Content-Type": "application/json"}
     for avg_measurement in avg_measurements:
-        print(avg_measurement)
         response = requests.post(url, headers=headers, auth=auth, data=avg_measurement)
         if response.status_code == 200:
-            print("Measurements sent successfully")
+            logging.info("Measurements sent successfully to backend")
 
     # delete collection from db
     if database is None:
         logging.error("Could not connect to database")
-        # threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
         return
     if settings.mongo_collection not in database.list_collection_names():
         logging.warning("Collection does not exist. Nothing to delete.")
-        # threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
         return
     collection = database[settings.mongo_collection]
 
@@ -132,9 +122,7 @@ async def send_measurements():
     collection_deletion_event.set()
     collection.delete_many({})
     collection_deletion_event.clear()
-    logging.warning("Collection with measurements deleted successfully")
-    # threading.Timer(config["transmissionIntervalSeconds"], send_measurements).start()
-    print("Collection deleted successfully. Timer started.")
+    logging.info("Collection with measurements deleted successfully")
 
 
 async def button_disabled_pressed(greenhouse_id: int):
