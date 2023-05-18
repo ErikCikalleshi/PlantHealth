@@ -180,7 +180,7 @@ export default {
                                 color: '#333',
                                 background: '#FEB019',
                             },
-                            text: 'Y-axis range',
+                            text: 'Limits',
                         }
                     }],
                 }
