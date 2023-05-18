@@ -32,7 +32,7 @@ async def get_config():
     collection.delete_many({})
     collection.insert_one(data)
 
-    logging.info("Database cleared and config inserted successfully")
+    logging.info("Database updated and config inserted successfully")
     logging.info("api/setting/ API call successful")
     # check for every published
     for entry in connect_arduino_service.global_client:
