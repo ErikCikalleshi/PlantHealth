@@ -9,6 +9,8 @@ import at.qe.backend.api.services.MeasurementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * REST Interface for the measurement API
  */
@@ -25,7 +27,7 @@ public class MeasurementController {
      * @param measurementDTO measurement in JSON format.
      *                       Required parameters:
      *                       "greenhouseID": int,
-     *                       "value": double,
+     *                       "value": double,Ah
      *                       "sensorType": SensorType enum as String
      *                       "date": "yyyy-MM-dd HH:mm",
      *                       "limitExceededBy": double

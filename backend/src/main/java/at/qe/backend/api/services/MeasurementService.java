@@ -1,22 +1,22 @@
 package at.qe.backend.api.services;
 
+import at.qe.backend.api.model.dto.MeasurementDTO;
 import at.qe.backend.exceptions.AccessPoint.AccessPointNotPublishedException;
 import at.qe.backend.exceptions.Greenhouse.GreenhouseNotPublishedException;
 import at.qe.backend.exceptions.Greenhouse.GreenhouseNotRegisteredException;
 import at.qe.backend.exceptions.SensorNotFoundException;
-import at.qe.backend.api.model.dto.MeasurementDTO;
 import at.qe.backend.models.Greenhouse;
 import at.qe.backend.models.Measurement;
 import at.qe.backend.models.Sensor;
-import at.qe.backend.repositories.GreenhouseRepository;
 import at.qe.backend.repositories.MeasurementRepository;
-import at.qe.backend.repositories.SensorRepository;
 import at.qe.backend.services.GreenhouseService;
 import at.qe.backend.services.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * This Service is responsible for saving the Measurements provided by the AccessPoints
@@ -64,4 +64,5 @@ public class MeasurementService {
         sensor.addMeasurement(measurement);
         return new MeasurementDTO(measurement);
     }
+
 }

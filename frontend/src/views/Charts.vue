@@ -1,21 +1,22 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import footerComponent from "@/components/general/footer.vue";
-import headerComponent from "@/components/general/header.vue";
-import mainContainer from "@/components/general/main_container.vue";
-import axios from "axios";
-import {API_BASE_URL} from "@/services";
-import {useStore as userStore} from "@/stores/user/user";
-import PageHeading from "@/components/general/PageHeading.vue";
-import HeaderView from "@/components/general/header.vue";
 import FooterView from "@/components/general/footer.vue";
-import VueApexCharts from "vue3-apexcharts";
+import headerComponent from "@/components/general/header.vue";
+import HeaderView from "@/components/general/header.vue";
+import mainContainer from "@/components/general/main_container.vue";
+import PageHeading from "@/components/general/PageHeading.vue";
 import api from "@/services/api";
-import {th} from "vuetify/locale";
+import MeasurementsService from "@/services/MeasurementsService";
+import AdminGreenhouseService from "@/services/admin/AdminGreenhouseService";
+import Custom_Chart from '@/components/charts/line_chart_with_annotations_component.vue';
+import Chart from "@/components/charts/line_chart_with_annotations_component.vue";
 
 export default defineComponent({
   name: "ChartsView",
   components: {
+    Chart,
+    Custom_Chart,
     FooterView,
     HeaderView,
     PageHeading,
@@ -28,35 +29,31 @@ export default defineComponent({
     return {
       revealedCardIndex: -1,
       expand: -1,
-      chartOptions: {
-        chart: {
-          id: "vuechart-example",
-        },
-        xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
-        },
-      },
-      series: [
-        {
-          name: "series-1",
-          data: [30, 40, 35, 50, 49, 60, 70, 91],
-        },
-      ],
       sensorTypes: [] as string[],
+      rawSensorTypes: [] as string[],
     };
   },
   methods: {
+    // async getMeasurement() {
+    //   let greenhouseUUID = this.$route.params.id;
+    //   //TODO: put greenhouseUUID in function call
+    //   MeasurementsService.getMeasurementsByGreenhouseId(35).then((response) => {
+    //     if (response.status === 200) {
+    //       console.log(response)
+    //     }
+    //   })
+    // },
     getSensorType() {
       let greenhouseUUID = this.$route.params.id;
-      console.log(this.$route.params.id)
 
-      api.get(`greenhouse/get/${greenhouseUUID}`).then((response) => {
+      AdminGreenhouseService.getGreenhouse(+greenhouseUUID).then((response) => {
         response.data.sensors.forEach((sensor: { sensorType: string; }) => {
           const words: any = sensor.sensorType.toLowerCase().split("_");
           for (let i = 0; i < words.length; i++) {
             words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
           }
           this.sensorTypes.push(words.join(" "));
+          this.rawSensorTypes.push(sensor.sensorType);
         });
       });
     },
@@ -76,24 +73,23 @@ export default defineComponent({
       // @ts-ignore
       const cardElement = this.$refs.cardRef[this.expand];
 
-      if (cardElement) {
-        // Find the chart element within the card
-        const chartElement = cardElement.querySelector(".chart-container");
-        if (chartElement) {
-          // Calculate the scroll position by adding 300 pixels to the current scroll position
-          const scrollPosition = chartElement.offsetTop + 300;
-
-          // Scroll to the chart element with auto-scrolling
-          window.scrollTo({
-            top: scrollPosition,
-            behavior: "smooth",
-          });
-        }
-      }
+      // if (cardElement) {
+      //   // Find the chart element within the card
+      //   const chartElement = cardElement.querySelector(".chart-container");
+      //   if (chartElement) {
+      //     // Calculate the scroll position by adding 300 pixels to the current scroll position
+      //     const scrollPosition = chartElement.offsetTop + 300;
+      //
+      //     // Scroll to the chart element with auto-scrolling
+      //     window.scrollTo({
+      //       top: scrollPosition,
+      //       behavior: "smooth",
+      //     });
+      //   }
+      // }
     },
     // Method to get the icon for a sensor type
     getSensorIcon(sensorType: string) {
-      console.log(sensorType)
       // Define the mapping of sensor types to icons
       const iconMapping: any = {
         "Air Quality": "mdi-air-filter",
@@ -117,6 +113,7 @@ export default defineComponent({
         "Humidity Dirt": "blue",
         "Humidity Air": "teal",
         "Temperature": "red",
+
       };
 
       // Return the corresponding color for the sensor type
@@ -141,6 +138,7 @@ export default defineComponent({
   },
   mounted() {
     this.getSensorType();
+    // this.getMeasurement();
   }
 
 
@@ -149,7 +147,7 @@ export default defineComponent({
 </script>
 <template>
   <v-app>
-    <header-component />
+    <header-component/>
     <main-container negative>
       <div class="container mx-auto">
         <v-row>
@@ -161,14 +159,16 @@ export default defineComponent({
           >
             <v-card ref="cardRef" class="card-item">
               <v-card-item :title="sensorType">
-                <template v-slot:subtitle>
-                  Extreme Weather Alert
-                </template>
+<!--                <template v-slot:subtitle>-->
+<!--                  Extreme Weather Alert-->
+<!--                </template>-->
               </v-card-item>
               <v-card-text class="py-0">
                 <v-row align="center" no-gutters>
                   <v-col class="text-h2" cols="6">
-                    64&deg;F
+<!--                    get last measurement as String-->
+
+
                   </v-col>
 
                   <v-col cols="6" class="text-right">
@@ -183,24 +183,22 @@ export default defineComponent({
               </v-card-text>
 
               <div class="d-flex py-3 justify-space-between">
-                <v-list-item density="compact" prepend-icon="mdi-weather-windy">
-                  <v-list-item-subtitle>123 km/h</v-list-item-subtitle>
-                </v-list-item>
+<!--                <v-list-item density="compact" prepend-icon="mdi-weather-windy">-->
+<!--                  <v-list-item-subtitle>123 km/h</v-list-item-subtitle>-->
+<!--                </v-list-item>-->
 
-                <v-list-item density="compact" prepend-icon="mdi-weather-pouring">
-                  <v-list-item-subtitle>48%</v-list-item-subtitle>
-                </v-list-item>
+<!--                <v-list-item density="compact" prepend-icon="mdi-weather-pouring">-->
+<!--                  <v-list-item-subtitle>48%</v-list-item-subtitle>-->
+<!--                </v-list-item>-->
               </div>
               <v-expand-transition>
-                <template v-if="expand === index">
-                  <apexchart width="100%" type="bar" :options="chartOptions" :series="series" />
-                </template>
+                  <Custom_Chart :color="getSensorIconColor(sensorType)" :sensor="rawSensorTypes[index]" ref="chart"  v-if="expand === index"/>
               </v-expand-transition>
 
               <v-divider></v-divider>
 
               <v-card-actions>
-                <v-btn @click="revealCard(index, true)">
+                <v-btn @click="revealCard(index, true)" variant="outlined">
                   {{ expand === index ? "Hide Report" : "Full Report" }}
                 </v-btn>
               </v-card-actions>
@@ -209,7 +207,7 @@ export default defineComponent({
         </v-row>
       </div>
     </main-container>
-    <footer-component />
+    <footer-component/>
   </v-app>
 </template>
 
