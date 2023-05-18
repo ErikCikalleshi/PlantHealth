@@ -91,7 +91,7 @@ async def read_sensor_data():
                 while True:
                     try:
                         async with BleakClient(device, timeout=120) as client:
-
+                            
                             global_client.append({"client": client, "name": name})
                             logging.info("Connected to device {0}".format(name))
 
