@@ -23,6 +23,7 @@ class Settings:
         self.auth = (self.auth_user, self.auth_password)
         self.server_host = setting["server"]["host"]
         self.server_port = setting["server"]["port"]
+        self.access_point_id = setting["access_point_id"]
         self.mongo_port = setting["mongo"]["port"]
         self.mongo_host = setting["mongo"]["host"]
         self.mongo_database = setting["mongo"]["database"]

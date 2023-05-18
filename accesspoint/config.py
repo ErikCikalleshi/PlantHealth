@@ -13,7 +13,7 @@ INTERVAL: int = 5  # seconds
 async def get_config():
     settings = Settings()
 
-    url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{1}"
+    url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{settings.access_point_id}"
     try:
         response = requests.get(url, auth=settings.auth)
     except requests.exceptions.ConnectionError:
