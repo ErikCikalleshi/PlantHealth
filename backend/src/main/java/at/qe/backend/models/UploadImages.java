@@ -9,10 +9,11 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+@Table(name = "uploaded_images")
 public class UploadImages implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    Long id;
+    private long id;
 
     @Column(nullable = false)
     private Long userId;
@@ -26,4 +27,8 @@ public class UploadImages implements Serializable {
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date uploadDate;
+
+    public boolean isNew() {
+        return uploadDate == null;
+    }
 }

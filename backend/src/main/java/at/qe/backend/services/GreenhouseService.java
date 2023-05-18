@@ -1,6 +1,6 @@
 package at.qe.backend.services;
 
-import at.qe.backend.models.Greenhouse;
+import at.qe.backend.models.*;
 import at.qe.backend.models.dto.GreenhouseDTO;
 import at.qe.backend.repositories.GreenhouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +10,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import at.qe.backend.models.dto.SensorDTO;
-import at.qe.backend.models.AccessPoint;
-import at.qe.backend.models.Sensor;
-import at.qe.backend.models.Userx;
 import at.qe.backend.models.request.CreateNewGreenhouseRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -38,11 +35,9 @@ public class GreenhouseService {
             greenhouse.setCreateDate(new Date());
             greenhouse.setCreateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
             greenhouse.setIdInCluster(greenhouseRepository.countGreenhouseByAccesspoint(greenhouse.getAccesspoint()) + 1);
-            auditLogService.createNewAudit("create", Long.toString(greenhouse.getUuid()), "greenhouse", true);
         } else {
             greenhouse.setUpdateDate(new Date());
             greenhouse.setUpdateUserUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-            auditLogService.createNewAudit("update", Long.toString(greenhouse.getUuid()), "greenhouse", true);
         }
         greenhouse = greenhouseRepository.save(greenhouse);
         return greenhouse;
@@ -60,6 +55,7 @@ public class GreenhouseService {
     }
 
     public Greenhouse createGreenhouse(CreateNewGreenhouseRequest request) {
+        AuditLog auditLog = auditLogService.createNewAudit("create", "NA", "greenhouse", false);
         Greenhouse greenhouse = new Greenhouse();
         greenhouse.setName(request.greenhouse().name());
         greenhouse.setLocation(request.greenhouse().location());
@@ -71,6 +67,17 @@ public class GreenhouseService {
         Userx gardener = userxService.loadUser(request.greenhouse().gardener().username());
         greenhouse.setOwner(gardener);
         greenhouse = saveGreenhouse(greenhouse);
+        Set<Sensor> sensors = getSensorsFromRequest(request, greenhouse);
+        greenhouse.setSensors(sensors);
+        greenhouse = saveGreenhouse(greenhouse);
+        auditLog.setTargetID(Long.toString(greenhouse.getUuid()));
+        auditLog.setSuccess(true);
+        auditLogService.saveAuditLog(auditLog);
+        return saveGreenhouse(greenhouse);
+
+    }
+
+    private Set<Sensor> getSensorsFromRequest(CreateNewGreenhouseRequest request, Greenhouse greenhouse) {
         Set<Sensor> sensors = new HashSet<>();
         for (SensorDTO sensorDTO : request.sensors()) {
             Sensor sensor = new Sensor();
@@ -80,15 +87,9 @@ public class GreenhouseService {
             sensor.setLimitThresholdMinutes(sensorDTO.limitThresholdMinutes());
             sensor.setGreenhouse(greenhouse);
             sensors.add(sensor);
-
             sensorService.saveSensor(sensor);
         }
-
-
-        greenhouse.setSensors(sensors);
-        greenhouse = saveGreenhouse(greenhouse);
-        return saveGreenhouse(greenhouse);
-
+        return sensors;
     }
 
 
@@ -110,6 +111,7 @@ public class GreenhouseService {
     }
 
     public Greenhouse updateGreenhouse(GreenhouseDTO greenhouseDTO) {
+        AuditLog auditLog = auditLogService.createNewAudit("update", "NA", "greenhouse", false);
         Greenhouse greenhouse = loadGreenhouse(greenhouseDTO.uuid());
         greenhouse.setName(greenhouseDTO.name());
         greenhouse.setLocation(greenhouseDTO.location());
@@ -118,6 +120,28 @@ public class GreenhouseService {
         for (SensorDTO sensorDTO : greenhouseDTO.sensors()) {
             sensorService.updateSensor(sensorDTO);
         }
+        auditLog.setTargetID(Long.toString(greenhouse.getUuid()));
+        auditLog.setSuccess(true);
+        auditLogService.saveAuditLog(auditLog);
         return saveGreenhouse(greenhouse);
+    }
+
+
+    /**
+     * @return all greenhouses for the current user (Owner=currentUser) or all greenhouses if the current user is an admin
+     * @throws ResponseStatusException if the current user is not logged in
+     */
+    public List<Greenhouse> getAllForCurrentUser() {
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not logged in.");
+        }
+        Userx currentUser = userxService.loadUser(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (currentUser == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not logged in. (invalid user)");
+        }
+        if (currentUser.getRoles().contains(UserRole.ADMIN)) {
+            return getAll();
+        }
+        return greenhouseRepository.findAllByOwner_Username(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 }

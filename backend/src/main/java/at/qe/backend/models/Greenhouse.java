@@ -11,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -51,7 +52,7 @@ public class Greenhouse implements Serializable {
     @JoinColumn(nullable = false)
     private AccessPoint accesspoint;
     @OneToMany(mappedBy = "greenhouse", orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<Sensor> sensors;
+    private Set<Sensor> sensors = new HashSet<>();
 
     private boolean published = false;
     private Date lastContact;

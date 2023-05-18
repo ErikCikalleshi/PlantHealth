@@ -28,7 +28,9 @@
                                     :item-title="getDisplayName"
                                     :rules="[v => !!v || 'Item is required']"
                                     label="Gardener"
-                                    return-object/>
+                                    return-object
+                                    :disabled="!userStore.roles.includes('ADMIN')"
+                            />
                         </v-col>
                     </v-row>
                     <v-row no-gutters>
@@ -38,7 +40,7 @@
                     </v-row>
                     <v-row no-gutters class="-my-5">
                         <v-col cols="12">
-                            <v-checkbox label="Published" required v-model="greenhouse.published"/>
+                            <v-checkbox label="Published" required v-model="greenhouse.published" :disabled="!userStore.roles.includes('ADMIN')"/>
                         </v-col>
                     </v-row>
                 </v-card-text>
@@ -80,6 +82,7 @@ import AdminUserService from "@/services/admin/AdminUserService";
 import AdminGreenhouseService from "@/services/admin/AdminGreenhouseService";
 import type {Item} from "vue3-easy-data-table";
 import LoadingOverlay from "@/components/general/loadingOverlay.vue";
+import {useStore as userStore} from "@/stores/user/user";
 
 export default defineComponent({
     name: "editGreenhouseDialogForm",
@@ -89,13 +92,18 @@ export default defineComponent({
             type: Number,
             required: true
         },
-        greenhouses: {
+        greenhouseItems: {
             type: Array<Item>,
-            required: true
+            required: false
         },
+        greenhouses: {
+            type: Array<IGreenhouse>,
+            required: false
+        }
     },
     data() {
         return {
+            userStore: userStore(),
             loading: false,
             editGreenhouseDialog: false,
             gardeners: [] as IUser[],
@@ -107,12 +115,17 @@ export default defineComponent({
             return `${item.firstname} ${item.lastname}`;
         },
         async getAllGardeners() {
-            await AdminUserService.getAllUsers().then((response) => {
-                if (response.status === 200) {
-                    const tmp: IUser[] = response.data;
-                    this.gardeners = tmp.filter((user) => user.roles.includes('GARDENER'));
-                }
-            })
+            if (this.userStore.roles.includes('ADMIN')){
+                await AdminUserService.getAllUsers().then((response) => {
+                    if (response.status === 200) {
+                        const tmp: IUser[] = response.data;
+                        this.gardeners = tmp.filter((user) => user.roles.includes('GARDENER'));
+                    }
+                })
+            }else {
+                this.gardeners = [this.userStore];
+            }
+
         },
         async loadGreenhouse() {
             await AdminGreenhouseService.getGreenhouse(this.greenhouseUUID).then((response) => {
@@ -123,7 +136,6 @@ export default defineComponent({
             })
         },
         async init() {
-            await new Promise(f => setTimeout(f, 1000));
             await this.getAllGardeners();
             await this.loadGreenhouse();
             this.loading = false;
@@ -156,24 +168,35 @@ export default defineComponent({
                 AdminGreenhouseService.updateGreenhouse(this.greenhouse).then((response) => {
                     if (response.status === 200) {
                         const greenhouse: IGreenhouse = response.data;
-                        const item = {
-                            greenhouseName: greenhouse.name,
-                            greenhouseId: greenhouse.id,
-                            greenhouseUUID: greenhouse.uuid,
-                            greenhouseDescription: greenhouse.description,
-                            greenhouseLocation: greenhouse.location,
-                            greenhouseGardener: greenhouse.gardener.firstname + " " + greenhouse.gardener.lastname,
-                            greenhousePublished: greenhouse.published,
-                            greenhouseStatus: greenhouse.status,
-                            greenhouseLastContact: greenhouse.lastContact,
-                            greenhouseActions: ""
-                        } as Item;
-                        //replace item in greenhouses
-                        const itemInGreenhouses = this.greenhouses.find((item) => item.greenhouseUUID === this.greenhouseUUID);
-                        if (itemInGreenhouses !== undefined) {
-                            this.greenhouses.splice(this.greenhouses.indexOf(itemInGreenhouses), 1, item);
-                            this.editGreenhouseDialog = false;
+                        //TODO if greenhouses is of type Array<Item> then replace item in greenhouses
+                        if (this.greenhouseItems != undefined) {
+                            const item = {
+                                greenhouseName: greenhouse.name,
+                                greenhouseId: greenhouse.id,
+                                greenhouseUUID: greenhouse.uuid,
+                                greenhouseDescription: greenhouse.description,
+                                greenhouseLocation: greenhouse.location,
+                                greenhouseGardener: greenhouse.gardener.firstname + " " + greenhouse.gardener.lastname,
+                                greenhousePublished: greenhouse.published,
+                                greenhouseStatus: greenhouse.status,
+                                greenhouseLastContact: greenhouse.lastContact,
+                                greenhouseActions: ""
+                            } as Item;
+                            //replace item in greenhouses
+                            let itemInGreenhouses = this.greenhouseItems.find((x) => x.greenhouseUUID === this.greenhouseUUID);
+                            if (itemInGreenhouses !== undefined) {
+                                this.greenhouseItems.splice(this.greenhouseItems.indexOf(itemInGreenhouses), 1, item);
+                            }
+                        } else if (this.greenhouses != undefined) {
+                            let oldGreenhouse = this.greenhouses.find((x) => x.uuid === this.greenhouseUUID);
+                            if (oldGreenhouse !== undefined) {
+                                this.greenhouses.splice(this.greenhouses.indexOf(oldGreenhouse), 1, greenhouse);
+
+                            }
                         }
+                        this.editGreenhouseDialog = false;
+
+
                     }
                 })
             }

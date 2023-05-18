@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface UploadImagesRepository extends AbstractRepository<UploadImages, Long>{
     List<UploadImages> getAllUploadLinksByPlantId(Long id);
+    UploadImages findUploadImagesByUploadLink(String url);
 }

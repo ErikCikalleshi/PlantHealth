@@ -3,6 +3,9 @@ import at.qe.backend.configs.WebSecurityConfig;
 import at.qe.backend.exceptions.Userx.LastAdminException;
 import at.qe.backend.exceptions.Userx.UserAlreadyExistsException;
 import at.qe.backend.exceptions.Userx.UserDoesNotExistException;
+import at.qe.backend.exceptions.Userx.UserStillHasGreenhousesException;
+import at.qe.backend.models.AuditLog;
+import at.qe.backend.models.Greenhouse;
 import at.qe.backend.models.UserRole;
 import at.qe.backend.models.Userx;
 import at.qe.backend.repositories.UserxRepository;
@@ -23,7 +26,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
@@ -39,8 +43,8 @@ class UserxServiceTests {
     @Mock
     AuditLogService auditLogService;
 
-
     private Userx testUser;
+    private Userx adminUser;
     private List<Userx> testUsers;
 
     @BeforeEach
@@ -53,7 +57,7 @@ class UserxServiceTests {
         testUser.setEmail("testuser@example.com");
         testUser.setRoles(Set.of(UserRole.USER));
 
-        Userx adminUser = new Userx();
+        adminUser = new Userx();
         adminUser.setUsername("adminuser");
         adminUser.setFirstName("Admin");
         adminUser.setLastName("User");
@@ -72,6 +76,8 @@ class UserxServiceTests {
     void testCreateNewUser() throws UserAlreadyExistsException {
         //this line is needed to get a return value in the tests otherwise the save method just returns null instead of a Userx object
         when(userRepository.save(any(Userx.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        AuditLog auditLog = mock(AuditLog.class);
+        when(auditLogService.createNewAudit(anyString(), anyString(), anyString(), anyBoolean())).thenReturn(auditLog);
         Userx savedUser = userxService.createUser(testUser.getUsername(), testUser.getFirstName(), testUser.getLastName(), testUser.getEmail(), testUser.getRoles(), testUser.getPassword());
         assertNotNull(savedUser);
         assertNotNull(savedUser.getCreateDate());
@@ -82,6 +88,13 @@ class UserxServiceTests {
         assertTrue(savedUser.getRoles().contains(UserRole.USER));
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
         assertThrows(UserAlreadyExistsException.class, () -> userxService.createUser(testUser.getUsername(), testUser.getFirstName(), testUser.getLastName(), testUser.getEmail(), testUser.getRoles(), testUser.getPassword()));
+        when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
+        when(userRepository.existsByEmail(testUser.getEmail())).thenReturn(true);
+        assertThrows(UserAlreadyExistsException.class, () -> userxService.createUser(testUser.getUsername(), testUser.getFirstName(), testUser.getLastName(), testUser.getEmail(), testUser.getRoles(), testUser.getPassword()));
+        when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
+        when(userRepository.existsByEmail(testUser.getEmail())).thenReturn(false);
+        Userx result = userxService.createUser(testUser.getUsername(), testUser.getFirstName(), testUser.getLastName(), testUser.getEmail(), testUser.getRoles(), testUser.getPassword());
+        assertEquals(testUser, result);
     }
 
     @Test
@@ -108,6 +121,8 @@ class UserxServiceTests {
     @WithMockUser(username = "adminuser", authorities = {"ADMIN"})
     void testUpdateUser() throws UserAlreadyExistsException {
         when(userRepository.save(any(Userx.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        AuditLog auditLog = mock(AuditLog.class);
+        when(auditLogService.createNewAudit(anyString(), anyString(), anyString(), anyBoolean())).thenReturn(auditLog);
         Userx savedUser = userxService.createUser(testUser.getUsername(), testUser.getFirstName(), testUser.getLastName(), testUser.getEmail(), testUser.getRoles(), testUser.getPassword());
         String firstname = "Test2";
         String lastname = "User2";
@@ -131,6 +146,8 @@ class UserxServiceTests {
     @WithMockUser(username = "adminuser", authorities = {"ADMIN"})
     void testUpdateEmailAlreadyInUse() throws UserAlreadyExistsException {
         when(userRepository.save(any(Userx.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        AuditLog auditLog = mock(AuditLog.class);
+        when(auditLogService.createNewAudit(anyString(), anyString(), anyString(), anyBoolean())).thenReturn(auditLog);
         Userx savedUser = userxService.createUser(testUser.getUsername(), testUser.getFirstName(), testUser.getLastName(), testUser.getEmail(), testUser.getRoles(), testUser.getPassword());
         Userx secondUser = userxService.createUser("seconduser", "Second", "User", "secondemail", Set.of(UserRole.USER), "password");
         Set<UserRole> roles = Set.of(UserRole.USER, UserRole.ADMIN);
@@ -140,16 +157,28 @@ class UserxServiceTests {
         when(userRepository.findByEmail(savedUser.getEmail())).thenReturn(savedUser);
         when(userRepository.findByEmail(secondUser.getEmail())).thenReturn(secondUser);
         assertThrows(UserAlreadyExistsException.class, () -> userxService.updateUser(secondUser.getUsername(), "Second", "User", savedUser.getEmail(), roles));
+        assertDoesNotThrow(() -> userxService.updateUser(savedUser.getUsername(), "NewFirstname", "User", savedUser.getEmail(), roles));
     }
 
     @Test
     @DisplayName("Delete user")
     @WithMockUser(username = "adminuser", authorities = {"ADMIN"})
     void testDeleteUser() throws LastAdminException, UserDoesNotExistException {
-        testUser.setId(25L);
+        testUser.getGreenhouses().add(new Greenhouse());
+
+
+        AuditLog auditLog = mock(AuditLog.class);
+        when(auditLogService.createNewAudit(anyString(), anyString(), anyString(), anyBoolean())).thenReturn(auditLog);
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(false);
+        when(userRepository.findFirstByUsername(testUser.getUsername())).thenReturn(testUser);
         assertThrows(UserDoesNotExistException.class,() -> userxService.deleteUser(testUser));
         when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
+        when(userRepository.existsByUsername(adminUser.getUsername())).thenReturn(true);
+        when(userRepository.countUserxByRolesContaining(UserRole.ADMIN)).thenReturn(1);
+        assertThrows(LastAdminException.class, () -> userxService.deleteUser(adminUser));
+        when(userRepository.existsByUsername(testUser.getUsername())).thenReturn(true);
+        assertThrows(UserStillHasGreenhousesException.class, () -> userxService.deleteUser(testUser));
+        testUser.getGreenhouses().clear();
         assertDoesNotThrow(() -> userxService.deleteUser(testUser));
     }
 

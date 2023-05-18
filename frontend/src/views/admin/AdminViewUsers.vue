@@ -28,8 +28,15 @@
                 <user_card v-for="user in userList" :key="user.username" :user="user"
                            class="w-full" @confirm="deleteUser(user)"/>
             </div>
+            <v-snackbar color="error" v-model="snackbar">{{ snackbarMessage }}
+                <template v-slot:actions>
+                    <v-btn color="white" variant="text" @click="snackbar = false">
+                        Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
         </main-container>
-      <footer-component class="mt-auto"/>
+        <footer-component class="mt-auto"/>
     </v-app>
 </template>
 
@@ -61,6 +68,8 @@ export default defineComponent({
             isOpen: false,
             selectedRoles: [],
             loading: false,
+            snackbar: false,
+            snackbarMessage: '',
         }
     },
     methods: {
@@ -73,25 +82,34 @@ export default defineComponent({
             if (user == null) {
                 return;
             }
-            AdminUserService.deleteUser(user.username).then(() => {
-                this.users.splice(this.users.indexOf(user), 1);
-            })
-        },
-    },
-    computed: {
-        userList() {
-            if (this.searchValue.trim().length > 0) {
-                return this.users.filter((user) => {
-                    return user.firstname.toLowerCase().includes(this.searchValue.toLowerCase()) ||
-                        user.lastname.toLowerCase().includes(this.searchValue.toLowerCase()) ||
-                        user.username.toLowerCase().includes(this.searchValue.toLowerCase())
+            AdminUserService.deleteUser(user.username).then((response) => {
+                if (response.status === 200) {
+                    this.users.splice(this.users.indexOf(user), 1);
+                }
+                console.log(response.status)
+            }).catch((error) => {
+                    if (error.response.status === 400) {
+                        console.log(error)
+                        this.snackbar = true;
+                        this.snackbarMessage=error.response.data.message;
+                    }
                 })
+            },
+        },
+        computed: {
+            userList() {
+                if (this.searchValue.trim().length > 0) {
+                    return this.users.filter((user) => {
+                        return user.firstname.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+                            user.lastname.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+                            user.username.toLowerCase().includes(this.searchValue.toLowerCase())
+                    })
+                }
+                return this.users;
             }
-            return this.users;
+        },
+        created() {
+            this.getAllUsers()
         }
-    },
-    created() {
-        this.getAllUsers()
-    }
-})
+    })
 </script>
