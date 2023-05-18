@@ -1,7 +1,9 @@
 <template>
-    <apexchart color="color" :sensor="sensor" type="line" height="350" :options="chartOptions"
-               :series="series"></apexchart>
+    <apexchart ref="chart" color="color" :sensor="sensor" type="line" height="350" :options="chartOptions"
+               :series="series" :annotations="chartOptions.annotations.yaxis"></apexchart>
 </template>
+
+
 
 <script>
 import MeasurementsService from "@/services/MeasurementsService";
@@ -27,10 +29,10 @@ export default {
         console.log(this.color)
         colors = {
             'red': '#FF0000',
-            'blue': '#0000FF',
+            'blue': '#0088ff',
             'teal': '#008080',
             'purple': '#800080',
-            'yellow': '#FFFF00',
+            'yellow': '#ffE600',
         }
         if (colors[this.color] === undefined) {
             // black is the default color
@@ -43,30 +45,7 @@ export default {
                 },
                 colors: [colors[this.color]],
                 annotations: {
-                    xaxis: [{
-                        x: 1995,
-                        strokeDashArray: 0,
-                        borderColor: '#775DD0',
-                        label: {
-                            borderColor: '#775DD0',
-                            style: {
-                                color: '#fff',
-                                background: '#775DD0',
-                            },
-                            text: 'Anno Test',
-                        }
-                    }, {
-                        x: 1996,
-                        borderColor: '#FEB019',
-                        label: {
-                            borderColor: '#FEB019',
-                            style: {
-                                color: '#fff',
-                                background: '#FEB019',
-                            },
-                            text: 'New Beginning',
-                        }
-                    }],
+                    yaxis: [],
                 },
             },
             series: [{
@@ -79,75 +58,147 @@ export default {
     methods: {
 
         async getMeasurements() {
+            let bool_test = true;
+            let upperLimit = 0;
+            let lowerLimit = 0;
             try {
                 const response = await MeasurementsService.getMeasurementsByGreenhouseId(1);
-                console.log(response.data)
+
                 this.measurements = response.data;
                 this.series[0].data = []; // Clear the existing data array
-                console.log(this.sensor);
-                console.log(this.measurements.length)
+
+
                 for (let i = 0; i < this.measurements.length; i++) {
 
                     if (this.measurements[i].sensorType !== this.sensor) {
                         continue;
                     }
-                    console.log(this.measurements[i].sensorType);
+
                     let date_cu;
                     // format the date to be displayed on the chart to be HH:MM:SS
                     date_cu = this.measurements[i].date.substring(11, 19);
 
                     this.series[0].data.push({
-
                         x: date_cu,
                         y: this.measurements[i].value
                     });
+                    // clear annotations
+                    this.chartOptions.annotations.yaxis = [];
+
+                    if(this.chartOptions.annotations.yaxis.length === 0 && bool_test) {
+                        console.log("In chartoptions")
+                        console.log(this.measurements[i])
+                        bool_test = false;
+                        upperLimit = this.measurements[i].upperLimit;
+                        lowerLimit = this.measurements[i].lowerLimit;
+                        //this.updateAnnotations(this.measurements[i].upperLimit, this.measurements[i].lowerLimit)
+                    }
+
+                    // this.chartOptions.annotations.yaxis.push({
+                    //     y: this.measurements[i].lowerLimit,
+                    //     y2: this.measurements[i].upperLimit,
+                    //     borderColor: '#000',
+                    //     fillColor: '#FEB019',
+                    //     opacity: 0.2,
+                    //     label: {
+                    //         borderColor: '#333',
+                    //         style: {
+                    //             fontSize: '10px',
+                    //             color: '#333',
+                    //             background: '#FEB019',
+                    //         },
+                    //         text: 'Y-axis range',
+                    //     }
+                    // });
                 }
-                console.log(this.series);
+
             } catch (error) {
                 console.log(error);
             }
+            return [upperLimit, lowerLimit];
         },
 
-        updateAnnotations() {
+        updateAnnotations(upper, lower) {
+            console.log(upper, lower)
             this.chartOptions.annotations = {
-                xaxis: [{
-                    x: 1996,
-                    borderColor: '#002563',
+                yaxis: [{
+                    y: lower,
+                    y2: upper,
+                    borderColor: '#000',
+                    fillColor: '#FEB019',
+                    opacity: 0.2,
                     label: {
-                        borderColor: '#002563',
+                        borderColor: '#333',
                         style: {
-                            color: '#fff',
-                            background: '#002563',
+                            fontSize: '10px',
+                            color: '#333',
+                            background: '#FEB019',
                         },
-                        text: 'New Annotation',
+                        text: 'Y-axis range',
                     }
                 }],
             }
             console.log(this.chartOptions);
+            // remount the chart
+            // this.$refs.chart.updateOptions({
+            //     annotations: {
+            //         yaxis: [{
+            //             y: 20,
+            //             y2: 30,
+            //             borderColor: '#000',
+            //             fillColor: '#FEB019',
+            //             opacity: 0.2,
+            //             label: {
+            //                 borderColor: '#333',
+            //                 style: {
+            //                     fontSize: '10px',
+            //                     color: '#333',
+            //                     background: '#FEB019',
+            //                 },
+            //                 text: 'Y-axis range',
+            //             }
+            //         }],
+            //     }
+            // })
         },
 
-        forceUpdateAnnotations() {
+
+        forceUpdateAnnotations(upper, lower) {
+            console.log(upper, lower)
             this.$refs.chart.updateOptions({
                 annotations: {
-                    xaxis: [{
-                        x: 1996,
-                        borderColor: '#002563',
+                    yaxis: [{
+                        y: lower,
+                        y2: upper,
+                        borderColor: '#000',
+                        fillColor: '#FEB019',
+                        opacity: 0.2,
                         label: {
-                            borderColor: '#002563',
+                            borderColor: '#333',
                             style: {
-                                color: '#fff',
-                                background: '#002563',
+                                fontSize: '10px',
+                                color: '#333',
+                                background: '#FEB019',
                             },
-                            text: 'New Annotation',
+                            text: 'Y-axis range',
                         }
                     }],
                 }
             })
+            console.log(this.$refs.chart.options);
         },
+
+
     },
 
-    mounted: function () {
-        this.getMeasurements();
+    mounted: async function () {
+        let limits = await this.getMeasurements();
+
+        this.$nextTick(() => {
+            // Use nextTick to ensure that the chart component is mounted
+            // this.updateAnnotations(limits[1], limits[0]);
+            this.forceUpdateAnnotations(limits[0], limits[1]);
+        });
     }
 };
 </script>
