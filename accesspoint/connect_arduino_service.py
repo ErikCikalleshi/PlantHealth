@@ -99,6 +99,7 @@ async def read_sensor_data():
                                                 if sensor_type == "LED":
                                                     val = struct.unpack(unpack_format, value[:buffer])[0]
                                                     if val == 0:
+                                                        logging.info("Warnings disabled")
                                                         webserver.button_disabled_pressed(greenhouse_id=int(id))
                                                     continue
                                                 val = struct.unpack(unpack_format, value[:buffer])[0] / scale_factor

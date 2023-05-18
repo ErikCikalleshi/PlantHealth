@@ -66,11 +66,11 @@ async def get_avg_measurements(database):
             if avg > limit[0]:
                 limit_exceeded_by = avg - limit[0]
                 await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type])
-                logging.error("Upper Limit exceeded by: " + str(limit_exceeded_by))
+                logging.info(sensor_type + ": Upper Limit exceeded by: " + str(limit_exceeded_by))
             elif avg < limit[1]:
                 limit_exceeded_by = limit[1] - avg
                 await send_flag("SensorStation " + str(greenhouse),  sensor_blink_mappings[sensor_type])
-                logging.error("Lower Limit exceeded by: " + str(limit_exceeded_by))
+                logging.info(sensor_type + ": Lower Limit exceeded by: " + str(limit_exceeded_by))
 
             date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
             data = {"greenhouseID": int(subset["greenhouseID"].iloc[0]),
@@ -88,6 +88,7 @@ async def get_avg_measurements(database):
 
 async def send_measurements():
     settings = Settings()
+    print("send measurements")
     url = f"http://{settings.server_host}:{settings.server_port}/api/measurements"
     database = await db.connect_to_db()
     # get transmissionIntervalSeconds from config
@@ -131,6 +132,7 @@ async def button_disabled_pressed(greenhouse_id: int):
     auth = settings.auth
     headers = {"Content-Type": "application/json"}
     response = requests.post(url, headers=headers, auth=auth, data=json.dumps({"greenhouseID": greenhouse_id}))
+
 
 
 if __name__ == "__main__":

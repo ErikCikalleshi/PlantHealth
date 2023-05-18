@@ -41,7 +41,7 @@ async def write_to_document_sensor(value, sensor_type, greenhouse_id):
     if config is None:
         logging.error("Could not find config in database")
         return
-    logging.warning("Writing to database...")
+    logging.info("Writing to database...")
 
     date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
