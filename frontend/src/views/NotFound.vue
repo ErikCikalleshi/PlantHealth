@@ -13,7 +13,7 @@ export default defineComponent({
             <div class="h-[100vh] w-[100vw] grid items-center">
                 <div class="flex flex-col h-screen justify-between items-center">
                     <img alt="Plant Health LOGO" src="@/assets/logo.svg" class="p-[31px]"/>
-                    <p class="text-white font-primary font-normal text-h2 leading-[15.52px] mx-auto">The page you were trying to access could not be found!</p>
+                    <p class="text-white font-primary font-normal text-h2 text-center mx-auto">The page you were trying to access could not be found!</p>
                     <p class="text-white font-primary font-normal text-[16px] leading-[15.52px]  p-[31px]">
                         Copyright ⓒ 2023. PlantHealth. All rights reserved.
                     </p>

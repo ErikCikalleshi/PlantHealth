@@ -51,7 +51,8 @@
                         </v-card-title>
                         <v-divider></v-divider>
                         <v-card-text>
-                            Are you sure you want to delete this Access Point? This cannot be undone.
+                            Are you sure you want to delete this Access Point? All connected greenhouses will also be removed!<br>
+                            This cannot be undone.
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>

@@ -24,6 +24,9 @@ public class AccessPointService {
     @Autowired
     private GreenhouseRepository greenhouseRepository;
 
+    @Autowired
+    private AuditLogService auditLogService;
+
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<AccessPoint> getAllAccessPoints() {
         return accessPointRepository.findAll();
@@ -32,6 +35,7 @@ public class AccessPointService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteAccessPoint(AccessPoint accessPoint) {
         accessPointRepository.delete(accessPoint);
+        auditLogService.createNewAudit("delete", Integer.toString(accessPoint.getUuid()), "accesspoint", true);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -60,7 +64,9 @@ public class AccessPointService {
             accessPoint.getGreenhouses().remove(greenhouse);
             greenhouseRepository.delete(greenhouse);
             accessPointRepository.save(accessPoint);
+            auditLogService.createNewAudit("delete", Long.toString(greenhouseId), "greenhouse", true);
         }else {
+            auditLogService.createNewAudit("delete", Long.toString(greenhouseId), "greenhouse", false);
             throw new IllegalArgumentException("Greenhouse with id " + greenhouseId + " not found in access point with uuid " + accessPointUuid);
         }
     }
@@ -73,6 +79,7 @@ public class AccessPointService {
         accessPoint.setDescription(description);
         accessPoint.setTransmissionIntervalSeconds(i);
         accessPoint.setPublished(published);
+        auditLogService.createNewAudit("create", Integer.toString(accessPoint.getUuid()), "accesspoint", true);
         return saveAccessPoint(accessPoint);
     }
 
@@ -83,6 +90,7 @@ public class AccessPointService {
         accessPoint.setDescription(description);
         accessPoint.setTransmissionIntervalSeconds(i);
         accessPoint.setPublished(published);
+        auditLogService.createNewAudit("update", Integer.toString(accessPoint.getUuid()), "accesspoint", true);
         return saveAccessPoint(accessPoint);
     }
 }

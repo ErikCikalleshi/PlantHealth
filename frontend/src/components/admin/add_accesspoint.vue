@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="addAccessPointDialog" persistent width="1024">
         <template v-slot:activator="{ props }">
-            <v-btn icon="mdi-plus" v-bind="props" class="mx-5"></v-btn>
+            <v-btn icon="mdi-plus" v-bind="props" class="mr-5"></v-btn>
         </template>
         <v-card>
             <v-card-title>

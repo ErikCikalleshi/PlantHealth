@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -35,8 +36,6 @@ public class WebSecurityConfig {
     DataSource dataSource;
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -49,7 +48,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
+    public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
@@ -58,7 +57,7 @@ public class WebSecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
         try {
             http.cors().and().csrf().disable()
 //                    .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
@@ -73,8 +72,11 @@ public class WebSecurityConfig {
                             .requestMatchers("/user/**").permitAll()
                             .requestMatchers("/refreshtoken/**").permitAll()
                             .requestMatchers("/admin/**").permitAll()
+                            .requestMatchers("/gardener/**").permitAll()
+                            .requestMatchers("/upload/**").permitAll()
+                            .requestMatchers("/greenhouse/**").permitAll()
                             .anyRequest().authenticated());
-            http.authenticationProvider(authenticationProvider());
+            http.authenticationProvider(authenticationProvider(userDetailsService));
             http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
             return http.build();
         } catch (Exception ex) {

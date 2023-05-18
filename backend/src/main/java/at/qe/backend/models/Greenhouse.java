@@ -1,4 +1,5 @@
 package at.qe.backend.models;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -43,16 +45,16 @@ public class Greenhouse implements Serializable {
     private Date updateDate;
 
     @ManyToOne
-    @JoinColumn(name="owner_id")
+    @JoinColumn(name = "owner_id")
     private Userx owner;
 
     @ManyToOne
     @JoinColumn(nullable = false)
     private AccessPoint accesspoint;
     @OneToMany(mappedBy = "greenhouse", orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<Sensor> sensors;
+    private Set<Sensor> sensors = new HashSet<>();
 
-    private boolean published=false;
+    private boolean published = false;
     private Date lastContact;
 
     public String getStatus() {
@@ -60,10 +62,14 @@ public class Greenhouse implements Serializable {
             return "OFFLINE";
         }
         long diff = new Date().getTime() - lastContact.getTime();
-        if (diff > 1000L * accesspoint.getTransmissionIntervalSeconds()*2) {
+        if (diff > 1000L * accesspoint.getTransmissionIntervalSeconds() * 2) {
             //If last contact is more than 2x the transmission interval ago, we consider it offline
             return "OFFLINE";
         }
         return "ONLINE";
+    }
+
+    public boolean isNew() {
+        return (createDate == null);
     }
 }
