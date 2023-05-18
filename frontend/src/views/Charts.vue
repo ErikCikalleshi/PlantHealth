@@ -113,6 +113,7 @@ export default defineComponent({
         "Humidity Dirt": "blue",
         "Humidity Air": "teal",
         "Temperature": "red",
+
       };
 
       // Return the corresponding color for the sensor type
@@ -158,14 +159,16 @@ export default defineComponent({
           >
             <v-card ref="cardRef" class="card-item">
               <v-card-item :title="sensorType">
-                <template v-slot:subtitle>
-                  Extreme Weather Alert
-                </template>
+<!--                <template v-slot:subtitle>-->
+<!--                  Extreme Weather Alert-->
+<!--                </template>-->
               </v-card-item>
               <v-card-text class="py-0">
                 <v-row align="center" no-gutters>
                   <v-col class="text-h2" cols="6">
-                    64&deg;F
+<!--                    get last measurement as String-->
+
+
                   </v-col>
 
                   <v-col cols="6" class="text-right">
@@ -180,16 +183,16 @@ export default defineComponent({
               </v-card-text>
 
               <div class="d-flex py-3 justify-space-between">
-                <v-list-item density="compact" prepend-icon="mdi-weather-windy">
-                  <v-list-item-subtitle>123 km/h</v-list-item-subtitle>
-                </v-list-item>
+<!--                <v-list-item density="compact" prepend-icon="mdi-weather-windy">-->
+<!--                  <v-list-item-subtitle>123 km/h</v-list-item-subtitle>-->
+<!--                </v-list-item>-->
 
-                <v-list-item density="compact" prepend-icon="mdi-weather-pouring">
-                  <v-list-item-subtitle>48%</v-list-item-subtitle>
-                </v-list-item>
+<!--                <v-list-item density="compact" prepend-icon="mdi-weather-pouring">-->
+<!--                  <v-list-item-subtitle>48%</v-list-item-subtitle>-->
+<!--                </v-list-item>-->
               </div>
               <v-expand-transition>
-                  <Custom_Chart :sensor="rawSensorTypes[index]" ref="chart"  v-if="expand === index"/>
+                  <Custom_Chart :color="getSensorIconColor(sensorType)" :sensor="rawSensorTypes[index]" ref="chart"  v-if="expand === index"/>
               </v-expand-transition>
 
               <v-divider></v-divider>

@@ -1,5 +1,6 @@
 <template>
-    <apexchart :sensor="sensor" type="line" height="350" :options="chartOptions" :series="series"></apexchart>
+    <apexchart color="color" :sensor="sensor" type="line" height="350" :options="chartOptions"
+               :series="series"></apexchart>
 </template>
 
 <script>
@@ -16,13 +17,31 @@ export default {
             type: String,
             required: true,
         },
+        color: {
+            type: String,
+            required: true,
+        },
     },
-    data: function() {
+    data: function () {
+        let colors = {};
+        console.log(this.color)
+        colors = {
+            'red': '#FF0000',
+            'blue': '#0000FF',
+            'teal': '#008080',
+            'purple': '#800080',
+            'yellow': '#FFFF00',
+        }
+        if (colors[this.color] === undefined) {
+            // black is the default color
+            colors[this.color] = '#000000';
+        }
         return {
             chartOptions: {
                 chart: {
                     id: 'vuechart-example'
                 },
+                colors: [colors[this.color]],
                 annotations: {
                     xaxis: [{
                         x: 1995,
@@ -69,12 +88,17 @@ export default {
                 console.log(this.measurements.length)
                 for (let i = 0; i < this.measurements.length; i++) {
 
-                    if(this.measurements[i].sensorType !== this.sensor){
+                    if (this.measurements[i].sensorType !== this.sensor) {
                         continue;
                     }
                     console.log(this.measurements[i].sensorType);
+                    let date_cu;
+                    // format the date to be displayed on the chart to be HH:MM:SS
+                    date_cu = this.measurements[i].date.substring(11, 19);
+
                     this.series[0].data.push({
-                        x:i,
+
+                        x: date_cu,
                         y: this.measurements[i].value
                     });
                 }

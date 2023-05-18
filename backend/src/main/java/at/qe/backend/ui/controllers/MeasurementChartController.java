@@ -30,9 +30,9 @@ public class MeasurementChartController {
 
         for (Measurement measurement : measurements) {
             //if the measurement is from the specified greenhouse
-            if (measurement.getSensor().getGreenhouse().getUuid() == greenhouseUUID) {
+            if (measurement.getSensor().getGreenhouse().getIdInCluster() == greenhouseUUID) {
                 //add the measurement to the list
-                System.out.println(measurement.getSensor().getId());
+                System.out.println(new MeasurementDTO(measurement).getDate());
                 //System.out.println("measurement added" + measurement.getId());
                 greenhouseMeasurements.add(new MeasurementDTO(measurement));
             }
