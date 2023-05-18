@@ -1,7 +1,7 @@
 <template>
     <article class="cursor-pointer hover:text-primary overflow-hidden rounded-md shadow-xl border border-primary bg-white pa-5 h-full">
         <div class="flex align-center">
-            <div class="block rounded-full bg-gray-100 h-24 w-24 flex items-center justify-center circle-icon">
+            <div class="rounded-full bg-gray-100 h-24 w-24 flex items-center justify-center circle-icon flex-shrink-0">
                 <v-icon :icon="icon" size="60" class="text-primary"></v-icon>
             </div>
             <div class="mx-10">

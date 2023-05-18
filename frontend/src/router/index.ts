@@ -9,23 +9,31 @@ import Forbidden from "@/views/Forbidden.vue";
 import {createRouter, createWebHistory} from 'vue-router'
 import {useStore as userStore} from "@/stores/user/user";
 import dashboard from "@/views/Dashboard.vue";
+import PlantsView from "@/views/PlantsView.vue";
 import authService from "@/services/auth.service";
 import TokenService from "@/services/token.service";
 import adminEditAccesspoint from "@/views/admin/AdminEditAccesspoint.vue";
-
-
+import adminAuditLog from "@/views/admin/AdminViewAuditLog.vue";
+import MyPlantsView from "@/views/MyPlantsView.vue";
+import Charts from "@/views/Charts.vue";
+import About from "@/views/About.vue";
 
 const routes = [
     {path: '/', component: landingpage},
     {path: '/dashboard', component: dashboard, meta: { roles: ['ADMIN', 'GARDENER', 'USER']}},
     {path: '/login', name: 'login', component: login},
-    {path: '/gallery', component: gallery, meta: { roles: ['ADMIN', 'GARDENER', 'USER']}},
+    {path: '/gallery/:id', component: gallery},
+    {path: '/charts/:id', component: Charts, meta: { roles: ['ADMIN', 'GARDENER']}},
     {path: '/admin/users', name: 'manage-users', component: adminManageUsers, meta: { roles: ['ADMIN'] }},
     {path: '/admin/users/edit/:username', props: true, name: 'admin-edit-user', component: adminEditUser, meta: { roles: ['ADMIN'] }},
+    {path: '/dashboard/plants', component: PlantsView},
+    {path: '/dashboard/my_plants', component: MyPlantsView},
     {path: '/admin/access-points', name: 'manage-accessPoints', component: adminManageAccessPoints, meta: { roles: ['ADMIN'] }},
     {path: '/admin/access-points/edit/:apId', props: true, name: 'admin-edit-access-point', component: adminEditAccesspoint, meta: { roles: ['ADMIN'] }},
+    {path: '/admin/audit-log', name: 'view-audit-logs', component: adminAuditLog, meta: { roles: ['ADMIN'] }},
     {path: '/404', component: NotFound},
     {path: '/403', component: Forbidden},
+    {path: '/about', component: About},
     {path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound },
     {path: '/:pathMatch(.*)', name: 'bad-not-found', component: NotFound },
 ]

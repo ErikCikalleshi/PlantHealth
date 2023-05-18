@@ -75,7 +75,7 @@ public class MeasurementsTests {
     public void AccessPointNotPublished() {
         MeasurementDTO measurement = new MeasurementDTO();
         measurement.setGreenhouseID(1);
-        measurement.setAccesspointUUID(1);
+        measurement.setAccesspointUUID(2);
         measurement.setValue(23.0);
         measurement.setSensorType(SensorType.TEMPERATURE);
         measurement.setDate(new Date());
@@ -88,7 +88,7 @@ public class MeasurementsTests {
                 then().
                 statusCode(HttpStatus.SC_FORBIDDEN).
                 body(
-                        "message", is("The greenhouse is not published")
+                        "message", is("The access-point is not published")
                 );
     }
 

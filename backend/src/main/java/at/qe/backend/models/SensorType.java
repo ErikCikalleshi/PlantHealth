@@ -7,4 +7,6 @@ public enum SensorType {
     AIR_PRESSURE,
     AIR_QUALITY,
     TEMPERATURE,
+    PRESSURE,
+    GAS_RESISTANCE,
 }

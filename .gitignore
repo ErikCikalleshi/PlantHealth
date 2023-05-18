@@ -9,4 +9,9 @@ backend/src/main/resources/public/index.html
 /target/sonar/report-task.txt
 /git-stats.sh
 /log/app.log
+/log/warn.log
+/backend/log/warn.log
+/backend/log/app.log
+/backend/src/main/java/at/qe/backend/configs/WebMvcConfig.java
+/frontend/src/services/index.ts
 *.pyc

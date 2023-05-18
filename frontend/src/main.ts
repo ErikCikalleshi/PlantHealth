@@ -17,12 +17,12 @@ import * as directives from 'vuetify/directives'
 
 //OhVueIcons
 import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { FaUserCircle, HiSolidUser, HiMenuAlt3, PrTimes } from "oh-vue-icons/icons";
+import { FaUserCircle, HiSolidUser, HiMenuAlt3, PrTimes, FaArrowRight, IoCloseSharp} from "oh-vue-icons/icons";
+import VueApexCharts from "vue3-apexcharts";
 
 
 
-
-addIcons(FaUserCircle, HiSolidUser, HiMenuAlt3, PrTimes);
+addIcons(FaUserCircle, HiSolidUser, HiMenuAlt3, PrTimes, FaArrowRight, IoCloseSharp);
 
 const themeConfigs = {
     dark: false,
@@ -56,3 +56,4 @@ app.use(pinia)
 app.use(VueCookies)
 app.use(router)
 app.use(vuetify).mount('#app')
+app.use(VueApexCharts);

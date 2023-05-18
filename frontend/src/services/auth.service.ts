@@ -13,6 +13,8 @@ class AuthService {
                     TokenService.setUser(response.data);
                 }
                 return response;
+            }).catch((reason) => {
+                return reason;
             });
     }
 
