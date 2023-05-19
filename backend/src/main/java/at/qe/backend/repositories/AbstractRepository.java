@@ -12,7 +12,7 @@ import org.springframework.data.repository.Repository;
  * course "Software Architecture" offered by Innsbruck University.
  *
  * @param <T> The domain type this repository manages.
- * @param <ID> The type of the id of the entity this repository manages.
+ * @param <ID> The type of the idInCluster of the entity this repository manages.
  */
 @NoRepositoryBean
 public interface AbstractRepository<T, ID extends Serializable> extends Repository<T, ID> {
@@ -33,11 +33,11 @@ public interface AbstractRepository<T, ID extends Serializable> extends Reposito
     List<T> findAll();
 
     /**
-     * Retrieves an entity by its id.
+     * Retrieves an entity by its idInCluster.
      *
      * @param id must not be {@literal null}.
-     * @return The entity with the given id or {@literal null} if none found.
-     * @throws IllegalArgumentException If {@code id} is {@literal null}.
+     * @return The entity with the given idInCluster or {@literal null} if none found.
+     * @throws IllegalArgumentException If {@code idInCluster} is {@literal null}.
      */
     T findById(ID id);
 
