@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <ArduinoBLE.h>
+#include <stdio.h>
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include "Adafruit_BME680.h"
@@ -24,7 +25,11 @@
 #define HYGROMETER A7
 
 #define WARNING_BUTTON D2
+#define WARNING_BUTTON_MODE FALLING
+
 #define PAIRING_BUTTON D3
+#define PAIRING_BUTTON_MODE FALLING
+
 #define PIEZO_BUZZER D4
 
 int dipSwitchPins[] = {D12, D11, D10, D9, D8, D7, D6, D5};
@@ -167,8 +172,8 @@ void sensor_setup() {
   * automatically called when the buttons are pressed.
  */
 void button_setup() {
-  attachInterrupt(digitalPinToInterrupt(WARNING_BUTTON), stop_blink_handler, FALLING);
-  attachInterrupt(digitalPinToInterrupt(PAIRING_BUTTON), pairing_mode_handler, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WARNING_BUTTON), stop_blink_handler, WARNING_BUTTON_MODE);
+  attachInterrupt(digitalPinToInterrupt(PAIRING_BUTTON), pairing_mode_handler, PAIRING_BUTTON_MODE);
 }
 
 /**
@@ -186,12 +191,20 @@ void BLE_setup() {
     return;
   }
   Serial.print("BLE started");
-
-  char device_name[20];
+  
+  char device_name[18];
+  
   sprintf(device_name, "SensorStation %d", get_ID());
 
   BLE.setLocalName(device_name);
   BLE.setDeviceName(device_name);
+  
+  // If the Accesspoint cannot find the SensorStation even if the dip Switch is
+  // set to the right ID, uncomment this section to set it manually
+  // ---------------------------------------------------------------------------
+  // BLE.setLocalName("SensorStation 1");
+  // BLE.setDeviceName("SensorStation 1");
+  // ---------------------------------------------------------------------------
   
   Serial.print(", Device Name: ");
   Serial.println(device_name);
