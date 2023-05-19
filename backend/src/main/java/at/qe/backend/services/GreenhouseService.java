@@ -68,7 +68,8 @@ public class GreenhouseService {
         greenhouse.setOwner(gardener);
         greenhouse = saveGreenhouse(greenhouse);
         Set<Sensor> sensors = getSensorsFromRequest(request, greenhouse);
-        greenhouse.setSensors(sensors);
+        greenhouse.getSensors().clear();
+        greenhouse.getSensors().addAll(sensors);
         greenhouse = saveGreenhouse(greenhouse);
         auditLog.setTargetID(Long.toString(greenhouse.getUuid()));
         auditLog.setSuccess(true);
@@ -86,8 +87,8 @@ public class GreenhouseService {
             sensor.setLimitLower(sensorDTO.limitLower());
             sensor.setLimitThresholdMinutes(sensorDTO.limitThresholdMinutes());
             sensor.setGreenhouse(greenhouse);
+            sensor = sensorService.saveSensor(sensor);
             sensors.add(sensor);
-            sensorService.saveSensor(sensor);
         }
         return sensors;
     }
