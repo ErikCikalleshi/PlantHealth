@@ -114,6 +114,16 @@ public class UserxService {
         return auth.getName();
     }
 
+
+    /**
+     * @param username the username of the user to update
+     * @param firstname the new firstname
+     * @param lastname the new lastname
+     * @param email the new email
+     * @param roles the new roles
+     * @return the updated user
+     * @throws UserAlreadyExistsException if the new email is already used by another user
+     */
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
     public Userx updateUser(String username, String firstname, String lastname, String email, Collection<UserRole> roles) throws UserAlreadyExistsException {
         AuditLog auditLog = auditLogService.createNewAudit("update", username, "user", false);
@@ -130,6 +140,17 @@ public class UserxService {
         return saveUser(user);
     }
 
+
+    /**
+     * @param username the username of the user to create
+     * @param firstname the firstname
+     * @param lastname the lastname
+     * @param email the email
+     * @param roles the roles
+     * @param password the password as plaintext (will be hashed)
+     * @return the created user
+     * @throws UserAlreadyExistsException if the username or email is already used by another user
+     */
     @PreAuthorize("hasAuthority('ADMIN')")
     public Userx createUser(String username, String firstname, String lastname, String email, Collection<UserRole> roles, String password) throws UserAlreadyExistsException {
         AuditLog auditLog = auditLogService.createNewAudit("create", "NA", "user", false);
