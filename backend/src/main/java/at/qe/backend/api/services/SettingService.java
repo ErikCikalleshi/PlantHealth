@@ -27,10 +27,7 @@ public class SettingService {
      * @throws AccessPointNotFoundException if no AccessPoint with a given UUID could be found.
      */
     public AccessPointSettingDTO getSetting(long accessPointId) throws AccessPointNotFoundException, AccessPointNotPublishedException {
-        AccessPoint accessPoint = accessPointRepository.findFirstByUuid(accessPointId);
-        if (accessPoint==null){
-            throw new AccessPointNotFoundException();
-        }
+        AccessPoint accessPoint = accessPointRepository.findFirstByUuid(accessPointId).orElseThrow(AccessPointNotFoundException::new);
         if (!accessPoint.isPublished()){
             throw new AccessPointNotPublishedException();
         }
