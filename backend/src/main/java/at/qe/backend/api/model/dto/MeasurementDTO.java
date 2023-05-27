@@ -40,9 +40,7 @@ public class MeasurementDTO {
     private SensorType sensorType;
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date date;
-
     private double limitExceededBy;
     private double upperLimit;
     private double lowerLimit;
-
 }

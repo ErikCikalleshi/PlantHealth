@@ -13,4 +13,5 @@ export default interface IGreenhouse {
     published: boolean;
     sensors: ISensor[];
     accessPointName: string;
+    displayLimitExceeded: boolean;
 }

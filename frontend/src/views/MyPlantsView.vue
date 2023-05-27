@@ -19,10 +19,10 @@
                 </div>
             </div>
             <div class="flex flex-wrap gap-3 ">
-                <div v-for="(greenhouse, index) in greenhousesList" :key="index"
-                     class="w-[360px] bg-white h-[200px] flex shadow rounded-[5px]">
-                    <img src="@/assets/plant-pic-example.png" alt="not loaded" class="p-[14px]"/>
-                    <div class="p-[15px] flex justify-space-between flex-col w-full">
+                <div v-for="(greenhouse, index) in greenhousesList" :key="index" class="w-[360px] bg-white h-[200px] flex shadow rounded-[5px] p-[14px]">
+                   <div class="w-[200px] h-full bg-cover bg-center mr-[14px] rounded relative" :class="greenhouse.status.toLowerCase()"
+                         :style="{ background: `linear-gradient(337.44deg, ${greenhouse.status.toLowerCase() === 'offline' ? '#FF6161 0%, rgba(255, 97, 97, 0) 100%)' : (greenhouse.displayLimitExceeded ? '#D4790C 0%, rgba(240, 240, 15, 0) 100%)' : '#449A8B 0%, rgba(68, 154, 139, 0) 100%)')}, url('/src/assets/plant-pic-example.png')` }"></div>
+                    <div class="flex justify-space-between flex-col w-full">
                         <div>
                             <p class="text-[16px] text-primary font-primary">{{ greenhouse.accessPointName }}</p>
                             <h1 class="text-[20px] font-[600] font-primary">{{ greenhouse.name }}</h1>
@@ -96,6 +96,9 @@ export default defineComponent({
         adminGreenhouseService.getAllGreenhousesForCurrentUser().then((response => {
             this.greenhouses = response.data;
             this.greenhouses.forEach((greenhouse) => {
+                if (greenhouse.displayLimitExceeded){
+                    console.log("xd")
+                }
                 adminAccessPointService.getAccesPointByGreenhouseUuid(greenhouse.uuid).then((response) => {
                     greenhouse.accessPointName = response.data.name;
                 })

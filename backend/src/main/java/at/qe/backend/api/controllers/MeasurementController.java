@@ -37,7 +37,6 @@ public class MeasurementController {
      */
     @PostMapping("/measurements")
     public MeasurementDTO createMeasurement(@RequestBody MeasurementDTO measurementDTO) throws SensorNotFoundException, GreenhouseNotRegisteredException, AccessPointNotPublishedException, GreenhouseNotPublishedException {
-        System.out.println("Measurement received: " + measurementDTO.getDate());
         return measurementService.addMeasurement(measurementDTO);
     }
 }
