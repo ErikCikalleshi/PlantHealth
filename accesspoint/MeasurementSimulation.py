@@ -33,9 +33,10 @@ offlineGreenhouses = random.sample(range(1, max_uuid_greenhouse), 10)
 # Define an asynchronous function to send requests
 async def send_data(data, greenhouse_uuid):
     async with aiohttp.ClientSession() as session:
-        async with session.post("http://localhost:9000/api/measurements", auth=aiohttp.BasicAuth("admin", "passwd"),
+        async with session.post("http://172.16.1.125:9000/api/measurements", auth=aiohttp.BasicAuth("admin", "passwd"),
                                 json=data) as response:
             response_text = await response.text()
+            print(response_text)
             if response.status != 200:
                 # Add the greenhouse to the offline list if the request fails (e.g. greenhouse/access point is disabled)
                 offlineGreenhouses.append(greenhouse_uuid)
@@ -86,7 +87,7 @@ while True:
             "accesspointUUID": access_point_uuid,
             "value": value,
             "sensorType": sensorType,
-            "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "date": datetime.datetime.now().isoformat(),
             "limitExceededBy": limitExceededBy
         }
         tasks.append(asyncio.ensure_future(send_data(measurement_data, row[6])))

@@ -29,7 +29,7 @@
             </div>
               <div class="flex justify-start items-center">
                    <edit-greenhouse-dialog-form :greenhouseUUID="greenhouse.uuid" :greenhouses="greenhousesList"/>
-               <v-btn variant="plain" icon="mdi-chart-bar" color="#449a8b" @click="navigateToCharts(greenhouse.id)"/>
+               <v-btn variant="plain" icon="mdi-chart-bar" color="#449a8b" @click="navigateToCharts(greenhouse.uuid)"/>
               </div>
 
 <!--            <div tabindex="1" role="button" @click="navigateToCharts(greenhouse.id)" class="w-full flex justify-end ">-->
