@@ -12,4 +12,5 @@ export default interface IGreenhouse {
     status: string;
     published: boolean;
     sensors: ISensor[];
+    accessPointName: string;
 }

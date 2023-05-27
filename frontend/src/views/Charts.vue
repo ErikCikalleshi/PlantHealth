@@ -4,6 +4,7 @@ import footerComponent from "@/components/general/footer.vue";
 import headerComponent from "@/components/general/header.vue";
 import mainContainer from "@/components/general/main_container.vue";
 import AdminGreenhouseService from "@/services/admin/AdminGreenhouseService";
+import AdminAccessPointService from "@/services/admin/AdminAccessPointService";
 import Custom_Chart from '@/components/charts/line_chart_with_annotations_component.vue';
 import PageHeading from "@/components/general/PageHeading.vue";
 import type IGreenhouse from "@/interfaces/IGreenhouse";
@@ -104,9 +105,18 @@ export default defineComponent({
             // Return the corresponding size for the sensor type
             return sizeMapping[sensorType] || "";
         },
+
+        getAccesspoint() {
+            const greenhouseUUID = this.$route.params.id;
+            AdminAccessPointService.getAccesPointByGreenhouseUuid(+greenhouseUUID).then((response) => {
+                this.accesspoint = response.data;
+            });
+        }
     },
     mounted() {
         this.getSensorType();
+        this.getAccesspoint();
+
         // this.getMeasurement();
     }
 });
@@ -117,6 +127,7 @@ export default defineComponent({
         <header-component/>
         <main-container negative>
             <PageHeading>Stats for {{ greenhouse.name }} ({{ greenhouse.location }})</PageHeading>
+            <v-label class="mt-2">Accesspoint: {{accesspoint.name}}</v-label>
             <div class="container my-10">
                 <v-row>
                     <v-col

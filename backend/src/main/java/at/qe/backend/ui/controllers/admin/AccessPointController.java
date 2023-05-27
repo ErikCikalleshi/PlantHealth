@@ -57,6 +57,11 @@ public class AccessPointController {
         return new AccessPointDTO(accessPointService.loadAccessPoint(Long.parseLong(uuid)), true);
     }
 
+    @GetMapping("/admin/get-access-point-by-greenhouse/{uuid}")
+    public AccessPointDTO getAccessPointByGreenhouseUuid(@PathVariable String uuid) {
+        return new AccessPointDTO(accessPointService.getAccesspointByGreenhouseUuid(Long.parseLong(uuid)));
+    }
+
     /**
      * Deletes a greenhouse by ID and access point UUID.
      *

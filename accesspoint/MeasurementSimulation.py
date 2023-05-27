@@ -21,7 +21,13 @@ interval_seconds = 10
 # Set the maximum percentage change allowed for sensor data
 max_change_percent = 10.0
 
+# Simulate accesspoint transmission interval
+accesspointtransmissionintervalSeconds = 300
+
 previous_sensor_values = {}
+
+iteration = 0
+max_iteration = 10000
 
 # Select random greenhouses to be offline
 max_uuid_access_points = max(row[2] for row in sensor_data)
@@ -36,14 +42,16 @@ async def send_data(data, greenhouse_uuid):
         async with session.post("http://172.16.1.125:9000/api/measurements", auth=aiohttp.BasicAuth("admin", "passwd"),
                                 json=data) as response:
             response_text = await response.text()
-            print(response_text)
+            # print(response_text)
             if response.status != 200:
                 # Add the greenhouse to the offline list if the request fails (e.g. greenhouse/access point is disabled)
                 offlineGreenhouses.append(greenhouse_uuid)
 
+measurement_date = datetime.datetime.now()
+
 
 # Infinite loop to send data continuously
-while True:
+while iteration < max_iteration:
     # Loop through all the sensor data
     tasks = []
 
@@ -81,13 +89,14 @@ while True:
         elif value < limit_min:
             limitExceededBy = value - limit_min
 
+        new_measurement_date = (measurement_date + datetime.timedelta(seconds=accesspointtransmissionintervalSeconds * iteration)).isoformat()
         # Send the data to the API
         measurement_data = {
             "greenhouseID": greenhouse_id,
             "accesspointUUID": access_point_uuid,
             "value": value,
             "sensorType": sensorType,
-            "date": datetime.datetime.now().isoformat(),
+            "date": new_measurement_date,
             "limitExceededBy": limitExceededBy
         }
         tasks.append(asyncio.ensure_future(send_data(measurement_data, row[6])))
@@ -96,4 +105,5 @@ while True:
     loop.run_until_complete(asyncio.gather(*tasks))
 
     # Wait for the specified interval before sending the next set of data
-    time.sleep(interval_seconds)
+    iteration += 1
+    # time.sleep(interval_seconds)

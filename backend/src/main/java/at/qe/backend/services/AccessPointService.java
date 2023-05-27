@@ -144,4 +144,9 @@ public class AccessPointService {
         auditLogService.createNewAudit("update", Integer.toString(accessPoint.getUuid()), "accesspoint", true);
         return saveAccessPoint(accessPoint);
     }
+
+    @PreAuthorize("hasAuthority('GARDENER')")
+    public AccessPoint getAccesspointByGreenhouseUuid(long greenhouseId) {
+    	return accessPointRepository.findFirstByGreenhouseUuid(greenhouseId);
+    }
 }
