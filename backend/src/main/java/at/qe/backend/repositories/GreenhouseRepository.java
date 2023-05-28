@@ -13,4 +13,6 @@ public interface GreenhouseRepository extends AbstractRepository<Greenhouse, Lon
     int countGreenhouseByAccesspoint(AccessPoint accesspoint);
 
     List<Greenhouse> findAllByOwner_Username(String name);
+
+    boolean existsByIdInClusterAndAccesspoint_Uuid(long idInCluster, long accessPointUUID);
 }

@@ -1,9 +1,10 @@
 # This script sends random measurements for all sensors in the database until the user quits it
+import time
+
 import aiohttp
 import mysql.connector
 import datetime
 import random
-import time
 import asyncio
 
 # Connect to the MySQL database
@@ -26,30 +27,31 @@ accesspointtransmissionintervalSeconds = 300
 
 previous_sensor_values = {}
 
-iteration = 0
 max_iteration = 10000
 
 # Select random greenhouses to be offline
 max_uuid_access_points = max(row[2] for row in sensor_data)
 max_uuid_greenhouse = max(row[6] for row in sensor_data)
-offlineAccessPoints = random.sample(range(1, max_uuid_access_points), 2)
-offlineGreenhouses = random.sample(range(1, max_uuid_greenhouse), 10)
+offlineAccessPoints = random.sample(range(1, max_uuid_access_points), 1)
+offlineGreenhouses = random.sample(range(1, max_uuid_greenhouse), 5)
+exceedLimitsSensor = random.sample(range(1, len(sensor_data)), 5)
+
+measurement_date = datetime.datetime.now()
 
 
-# Define an asynchronous function to send requests
-async def send_data(data, greenhouse_uuid):
+async def send_data(measurement_data, greenhouse_uuid):
     async with aiohttp.ClientSession() as session:
         async with session.post("http://172.16.1.125:9000/api/measurements", auth=aiohttp.BasicAuth("admin", "passwd"),
-                                json=data) as response:
+                                json=measurement_data) as response:
+            # print("Sending data: " + str(measurement_data))
             response_text = await response.text()
             # print(response_text)
             if response.status != 200:
                 # Add the greenhouse to the offline list if the request fails (e.g. greenhouse/access point is disabled)
                 offlineGreenhouses.append(greenhouse_uuid)
 
-measurement_date = datetime.datetime.now()
 
-
+iteration = 0
 # Infinite loop to send data continuously
 while iteration < max_iteration:
     # Loop through all the sensor data
@@ -75,12 +77,17 @@ while iteration < max_iteration:
         # Save the value in a dictionary to calculate the maximum change allowed on the next iteration
         if sensor_id in previous_sensor_values:
             prev_value = previous_sensor_values[sensor_id]
-            max_change = prev_value * max_change_percent / 100
-            min_value = max(prev_value - max_change, limit_min_random)
-            max_value = min(prev_value + max_change, limit_max_random)
+            max_change = prev_value / 100 * max_change_percent
+            if sensor_id in exceedLimitsSensor:
+                min_value = max(prev_value - max_change, limit_min_random)
+                max_value = min(prev_value + max_change, limit_max_random)
+            else:
+                min_value = max(prev_value - max_change, limit_min)
+                max_value = min(prev_value + max_change, limit_max)
             value = random.uniform(min_value, max_value)
         else:
-            value = random.uniform(limit_min_random, limit_max_random)
+            value = random.uniform(limit_min, limit_max)
+            # print("First value: " + str(value) + " for sensor: " + str(sensor_id) + "(limit_min: " + str(limit_min) + ", limit_max: " + str(limit_max) + ")" )
 
         previous_sensor_values[sensor_id] = value
 
@@ -89,7 +96,11 @@ while iteration < max_iteration:
         elif value < limit_min:
             limitExceededBy = value - limit_min
 
-        new_measurement_date = (measurement_date + datetime.timedelta(seconds=accesspointtransmissionintervalSeconds * iteration)).isoformat()
+        if limitExceededBy > 0:
+            print("Limit exceeded by: " + str(limitExceededBy) + " for sensor: " + str(sensor_id))
+
+        new_measurement_date = (measurement_date + datetime.timedelta(
+            seconds=accesspointtransmissionintervalSeconds * iteration)).isoformat()
         # Send the data to the API
         measurement_data = {
             "greenhouseID": greenhouse_id,
@@ -99,11 +110,22 @@ while iteration < max_iteration:
             "date": new_measurement_date,
             "limitExceededBy": limitExceededBy
         }
+        # await send_data(measurement_data)
+
         tasks.append(asyncio.ensure_future(send_data(measurement_data, row[6])))
+        time.sleep(0.01)
+        # while iteration>1 and len(tasks) > 40:
+        #     print(len(tasks))
+        #     time.sleep(0.1)
+        #     asyncio.get_event_loop().run_until_complete(asyncio.gather(*tasks))
 
+    start_time = datetime.datetime.now()
     loop = asyncio.get_event_loop()
+    end_time = datetime.datetime.now()
+    print("Time to get loop: " + str(end_time - start_time))
     loop.run_until_complete(asyncio.gather(*tasks))
+    end_time2 = datetime.datetime.now()
 
-    # Wait for the specified interval before sending the next set of data
+    print("Time to send data: " + str(end_time2 - end_time))
+
     iteration += 1
-    # time.sleep(interval_seconds)

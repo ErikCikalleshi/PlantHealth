@@ -9,6 +9,7 @@ import at.qe.backend.models.Greenhouse;
 import at.qe.backend.models.Measurement;
 import at.qe.backend.models.Sensor;
 import at.qe.backend.repositories.MeasurementRepository;
+import at.qe.backend.services.AccessPointService;
 import at.qe.backend.services.GreenhouseService;
 import at.qe.backend.services.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;

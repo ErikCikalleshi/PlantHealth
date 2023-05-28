@@ -42,7 +42,7 @@ export default defineComponent({
             required: true,
         },
         greenhouseUUID: {
-            type: String,
+            type: Number,
             required: true,
         },
         color: {
@@ -133,6 +133,7 @@ export default defineComponent({
                     }
                 },
                 selection: '',
+                colors: [''],
             },
         };
     },

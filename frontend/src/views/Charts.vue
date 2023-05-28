@@ -151,7 +151,7 @@ export default defineComponent({
 
 
                             <Custom_Chart :color="getSensorIconColor(sensorType)" :sensor-name="sensorType"
-                                          :sensor-type="rawSensorTypes[index]" :greenhouse-u-u-i-d="$route.params.id"/>
+                                          :sensor-type="rawSensorTypes[index]" :greenhouse-u-u-i-d="greenhouse.uuid"/>
 
                             <v-divider></v-divider>
                         </v-card>

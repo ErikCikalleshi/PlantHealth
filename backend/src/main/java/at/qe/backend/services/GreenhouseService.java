@@ -180,6 +180,7 @@ public class GreenhouseService {
      * @return all greenhouses for the current user (Owner=currentUser) or all greenhouses if the current user is an admin
      * @throws ResponseStatusException if the current user is not logged in
      */
+    @PreAuthorize("hasAuthority('GARDENER') or hasAuthority('ADMIN')")
     public List<Greenhouse> getAllForCurrentUser() {
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not logged in.");
