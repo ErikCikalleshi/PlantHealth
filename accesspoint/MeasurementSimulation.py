@@ -15,6 +15,17 @@ cursor = db.cursor()
 cursor.execute(
     "SELECT sensor.id, greenhouse.id_in_cluster, access_point.uuid, sensor.limit_upper, sensor.limit_lower, sensor.sensor_type, greenhouse_uuid FROM sensor JOIN greenhouse ON sensor.greenhouse_uuid = greenhouse.uuid JOIN access_point ON greenhouse.accesspoint_uuid = access_point.uuid")
 sensor_data = cursor.fetchall()
+cursor.reset()
+
+cursor.execute("SELECT MAX(measurement_date) FROM measurement")
+result = cursor.fetchone()
+if result is not None:
+
+    measurement_date = result[0]
+    if measurement_date is None:
+        measurement_date = datetime.datetime.now()
+else:
+    measurement_date = datetime.datetime.now()
 
 # Set the time interval between data sending in seconds
 interval_seconds = 10
@@ -35,8 +46,6 @@ max_uuid_greenhouse = max(row[6] for row in sensor_data)
 offlineAccessPoints = random.sample(range(1, max_uuid_access_points), 1)
 offlineGreenhouses = random.sample(range(1, max_uuid_greenhouse), 5)
 exceedLimitsSensor = random.sample(range(1, len(sensor_data)), 5)
-
-measurement_date = datetime.datetime.now()
 
 
 async def send_data(measurement_data, greenhouse_uuid):
@@ -119,13 +128,9 @@ while iteration < max_iteration:
         #     time.sleep(0.1)
         #     asyncio.get_event_loop().run_until_complete(asyncio.gather(*tasks))
 
-    start_time = datetime.datetime.now()
     loop = asyncio.get_event_loop()
-    end_time = datetime.datetime.now()
-    print("Time to get loop: " + str(end_time - start_time))
     loop.run_until_complete(asyncio.gather(*tasks))
-    end_time2 = datetime.datetime.now()
 
-    print("Time to send data: " + str(end_time2 - end_time))
+    print("Iteration: " + str(iteration) + " finished")
 
     iteration += 1

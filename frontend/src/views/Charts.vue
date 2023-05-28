@@ -9,10 +9,12 @@ import Custom_Chart from '@/components/charts/line_chart_with_annotations_compon
 import PageHeading from "@/components/general/PageHeading.vue";
 import type IGreenhouse from "@/interfaces/IGreenhouse";
 import type IAccesspoint from "@/interfaces/IAccessPoint";
+import EditGreenhouseDialogForm from "@/components/gardener/edit_greenhouse.vue";
 
 export default defineComponent({
     name: "ChartsView",
     components: {
+        EditGreenhouseDialogForm,
         PageHeading,
         Custom_Chart,
         headerComponent,
@@ -127,9 +129,11 @@ export default defineComponent({
         <header-component/>
         <main-container negative>
             <PageHeading>Stats for {{ greenhouse.name }} ({{ greenhouse.location }})</PageHeading>
-            <v-label class="mt-2">Accesspoint: {{accesspoint.name}}</v-label>
+            <v-label class="mt-2">Accesspoint: {{ accesspoint.name }}</v-label>
+            <edit-greenhouse-dialog-form :greenhouseUUID="greenhouse.uuid"/>
             <div class="container my-10">
                 <v-row>
+
                     <v-col
                             v-for="(sensorType, index) in sensorTypes"
                             :key="sensorType"
@@ -138,7 +142,7 @@ export default defineComponent({
 
                     >
                         <v-card class="card-item">
-                            <div class="flex justify-start align-center p-2r">
+                            <div class="flex justify-start align-center p-2">
                                 <v-icon :color="getSensorIconColor(sensorType)"
                                         size="35"
                                         :icon="getSensorIcon(sensorType)"
