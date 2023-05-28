@@ -27,7 +27,7 @@ public class MeasurementDTO {
         this.value = measurement.getValue();
         this.sensorType = measurement.getSensor().getSensorType();
         this.measurementId = measurement.getId();
-        this.date = measurement.getCreateDate();
+        this.date = measurement.getMeasurementDate();
         this.limitExceededBy =measurement.getLimitExceededBy();
         this.upperLimit = measurement.getSensor().getLimitUpper();
         this.lowerLimit = measurement.getSensor().getLimitLower();
@@ -40,9 +40,7 @@ public class MeasurementDTO {
     private SensorType sensorType;
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date date;
-
     private double limitExceededBy;
     private double upperLimit;
     private double lowerLimit;
-
 }

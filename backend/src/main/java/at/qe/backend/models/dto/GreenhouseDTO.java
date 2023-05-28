@@ -15,9 +15,11 @@ public record GreenhouseDTO(
         String lastContact,
         String status,
         boolean published,
-        Collection<SensorDTO> sensors
+        Collection<SensorDTO> sensors,
+
+        boolean displayLimitExceeded
 ) {
-    public GreenhouseDTO(Greenhouse greenhouse){
+    public GreenhouseDTO(Greenhouse greenhouse) {
         this(greenhouse.getUuid(),
                 greenhouse.getIdInCluster(),
                 greenhouse.getName(),
@@ -27,6 +29,7 @@ public record GreenhouseDTO(
                 JSONDateFormatHelper.format(greenhouse.getLastContact()),
                 greenhouse.getStatus(),
                 greenhouse.isPublished(),
-                greenhouse.getSensors().stream().map(SensorDTO::new).toList());
+                greenhouse.getSensors().stream().map(SensorDTO::new).toList(),
+                greenhouse.getLastLimitExceeded() != null && greenhouse.getLastLimitExceeded().getTime() > System.currentTimeMillis() - 1000 * 60 * 60); // 1 hour
     }
 }

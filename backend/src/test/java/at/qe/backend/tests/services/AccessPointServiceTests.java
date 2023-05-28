@@ -81,7 +81,7 @@ public class AccessPointServiceTests {
     public void testLoadAccessPoint() {
         long uuid = 1L;
         AccessPoint accessPoint = new AccessPoint();
-        when(accessPointRepository.findFirstByUuid(uuid)).thenReturn(accessPoint);
+        when(accessPointRepository.findFirstByUuid(uuid)).thenReturn(Optional.of(accessPoint));
         AccessPoint result = accessPointService.loadAccessPoint(uuid);
         assertEquals(accessPoint, result);
     }
@@ -117,7 +117,7 @@ public class AccessPointServiceTests {
         Greenhouse greenhouse = new Greenhouse();
         greenhouse.setIdInCluster(greenhouseId);
         accessPoint.getGreenhouses().add(greenhouse);
-        when(accessPointRepository.findFirstByUuid(accessPointUuid)).thenReturn(accessPoint);
+        when(accessPointRepository.findFirstByUuid(accessPointUuid)).thenReturn(Optional.of(accessPoint));
 
         accessPointService.deleteGreenhouseByIdAndAccessPointUuid(greenhouseId, accessPointUuid);
 
@@ -132,7 +132,7 @@ public class AccessPointServiceTests {
         int accessPointUuid = 1;
         AccessPoint accessPoint = new AccessPoint();
         accessPoint.setUuid(accessPointUuid);
-        when(accessPointRepository.findFirstByUuid(accessPointUuid)).thenReturn(accessPoint);
+        when(accessPointRepository.findFirstByUuid(accessPointUuid)).thenReturn(Optional.of(accessPoint));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             accessPointService.deleteGreenhouseByIdAndAccessPointUuid(greenhouseId, accessPointUuid);
@@ -183,7 +183,7 @@ public class AccessPointServiceTests {
         accessPoint.setDescription("Old Description");
         accessPoint.setTransmissionIntervalSeconds(30);
         accessPoint.setPublished(false);
-        when(accessPointRepository.findFirstByUuid(accessPoint.getUuid())).thenReturn(accessPoint);
+        when(accessPointRepository.findFirstByUuid(accessPoint.getUuid())).thenReturn(Optional.of(accessPoint));
         when(accessPointRepository.save(any(AccessPoint.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         AccessPoint result = accessPointService.updateAccessPoint(id, name, location, description, transmissionIntervalSeconds, published);

@@ -131,6 +131,7 @@ export default defineComponent({
             await AdminGreenhouseService.getGreenhouse(this.greenhouseUUID).then((response) => {
                 if (response.status === 200) {
                     this.greenhouse = response.data;
+                    this.greenhouse.sensors.sort((a, b) => a.sensorType.localeCompare(b.sensorType));
 
                 }
             })
