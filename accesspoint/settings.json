@@ -7,7 +7,7 @@
     "host": "10.0.0.62",
     "port": 9000
   },
-  "access_point_id": "2",
+  "access_point_id": "1",
   "mongo": {
     "port": 27017,
     "host": "localhost",

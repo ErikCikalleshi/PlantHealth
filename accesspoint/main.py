@@ -1,20 +1,10 @@
 import asyncio
-from config import get_config
+from config import start_config_thread
 from connect_arduino_service import read_sensor_data
 from log_config import AuditLogger
 from webserver import send_measurements
 
 logging = AuditLogger()
-
-
-async def read_config_task():
-    while True:
-        try:
-            await get_config()  # Starts the read config task
-            await asyncio.sleep(10)  # Pause for 10 seconds using asyncio.sleep
-        except Exception as e:
-            logging.error(f"An error occurred while reading config: {e}, restarting task...")
-            await asyncio.sleep(10)  # Wait for 10 seconds before restarting the task
 
 
 async def send_measurements_task():
@@ -29,7 +19,7 @@ async def send_measurements_task():
 
 async def main():
     asyncio.create_task(read_sensor_data())  # Starts the read sensor data task
-    asyncio.create_task(read_config_task())  # Starts the read config task
+    asyncio.create_task(start_config_thread())  # Starts the read config task
     asyncio.create_task(send_measurements_task())  # Starts the send measurements task
 
     while True:
