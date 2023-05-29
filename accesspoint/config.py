@@ -7,10 +7,19 @@ import connect_arduino_service
 import asyncio
 logging = AuditLogger()
 
-INTERVAL: int = 5  # seconds
-
+INTERVAL: int = 10
+async def start_config_thread():
+    global INTERVAL
+    while True:
+        try:
+            await get_config()  # Starts the read config task
+            await asyncio.sleep(INTERVAL)  # Pause for 10 seconds using asyncio.sleep
+        except Exception as e:
+            logging.error(f"An error occurred while reading config: {e}, restarting task...")
+            await asyncio.sleep(INTERVAL)  # Wait for 10 seconds before restarting the task
 
 async def get_config():
+    global INTERVAL
     settings = Settings()
 
     url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{settings.access_point_id}"
@@ -25,6 +34,8 @@ async def get_config():
         return
 
     data = response.json()
+
+    INTERVAL = data["interval"]
     # write to db the config
     database = await db.connect_to_db()
     # clear collection config and insert new config
