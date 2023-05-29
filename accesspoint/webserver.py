@@ -18,6 +18,7 @@ collection_deletion_event = asyncio.Event()
 
 
 async def get_avg_measurements(database):
+    print("get_avg_measurements")
     settings = Settings()
     if database is None:
         logging.error("Could not connect to database")
@@ -63,13 +64,51 @@ async def get_avg_measurements(database):
                 "LIGHT": 1,
                 "HUMIDITY_DIRT": 2,
             }
+            tresholdSeconds = \
+                sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitThresholdMinutes"].iloc[
+                    0] * 60
             if avg > limit[0]:
-                limit_exceeded_by = avg - limit[0]
-                await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type])
+                # Start timer
+                async def timer_callback():
+                    await asyncio.sleep(5) # TODO: Change to tresholdSeconds
+                    # Re-check the limit after the timer is finished
+                    avg_measurements = await get_avg_measurements(database)
+                    if avg_measurements is not None:
+                        for avg_measurement in avg_measurements:
+                            if avg_measurement["sensorType"] == sensor_type and avg_measurement["greenhouseID"] == int(
+                                    subset["greenhouseID"].iloc[0]):
+                                avg2 = avg_measurement["avg"]
+                                break
+                        # Check if limit is still exceeded
+                        if avg2 > limit[0]:
+                            logging.info(
+                                "Limit still exceeded. Sending " + (128 + sensor_blink_mappings[sensor_type]) + " flag")
+                            await send_flag("SensorStation " + str(greenhouse),
+                                            128 + sensor_blink_mappings[sensor_type])
+
+                asyncio.create_task(timer_callback())
                 logging.info(sensor_type + ": Upper Limit exceeded by: " + str(limit_exceeded_by))
+                limit_exceeded_by = avg - limit[0]
+
             elif avg < limit[1]:
+                async def timer_callback2():
+                    await asyncio.sleep(5) # TODO: Change to tresholdSeconds
+                    # Re-check the limit after the timer is finished
+                    avg_measurements = await get_avg_measurements(database)
+                    if avg_measurements is not None:
+                        # Check if limit is still exceeded
+                        for avg_measurement in avg_measurements:
+                            if avg_measurement["sensorType"] == sensor_type and avg_measurement["greenhouseID"] == int(
+                                    subset["greenhouseID"].iloc[0]):
+                                avg2 = avg_measurement["avg"]
+                                break
+                        if avg2 > limit[0]:
+                            logging.info(
+                                "Limit still exceeded. Sending " + (128 + sensor_blink_mappings[sensor_type]) + " flag")
+                            await send_flag("SensorStation " + str(greenhouse), sensor_blink_mappings[sensor_type])
+
+                asyncio.create_task(timer_callback2())
                 limit_exceeded_by = limit[1] - avg
-                await send_flag("SensorStation " + str(greenhouse),  sensor_blink_mappings[sensor_type])
                 logging.info(sensor_type + ": Lower Limit exceeded by: " + str(limit_exceeded_by))
 
             date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -132,7 +171,6 @@ async def button_disabled_pressed(greenhouse_id: int):
     auth = settings.auth
     headers = {"Content-Type": "application/json"}
     response = requests.post(url, headers=headers, auth=auth, data=json.dumps({"greenhouseID": greenhouse_id}))
-
 
 
 if __name__ == "__main__":

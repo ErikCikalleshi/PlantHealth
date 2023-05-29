@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import sys
 
@@ -49,11 +50,12 @@ async def write_to_document_sensor(value, sensor_type, greenhouse_id):
                            "value": value, "sensorType": sensor_type, "date": date})
     logging.info("Successfully written to database")
 
-
-if __name__ == "__main__":
-    # generate random data
+async def main():
     import random
     for i in range(100):
-        write_to_document_sensor(random.randint(20, 36), "LIGHT", 27)
-        write_to_document_sensor(random.randint(20, 21), "TEMPERATURE", 27)
+        await write_to_document_sensor(random.randint(20, 36), "LIGHT", 27)
+        await write_to_document_sensor(random.randint(20, 21), "TEMPERATURE", 27)
+
+
+asyncio.run(main())
 

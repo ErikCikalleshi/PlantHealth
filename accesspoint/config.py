@@ -5,9 +5,12 @@ from log_config import AuditLogger
 import threading
 import connect_arduino_service
 import asyncio
+
 logging = AuditLogger()
 
 INTERVAL: int = 10
+
+
 async def start_config_thread():
     global INTERVAL
     while True:
@@ -15,11 +18,13 @@ async def start_config_thread():
             await get_config()  # Starts the read config task
             await asyncio.sleep(INTERVAL)  # Pause for 10 seconds using asyncio.sleep
         except Exception as e:
+            print(e)
             logging.error(f"An error occurred while reading config: {e}, restarting task...")
             await asyncio.sleep(INTERVAL)  # Wait for 10 seconds before restarting the task
 
+
 async def get_config():
-    global INTERVAL
+
     settings = Settings()
 
     url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{settings.access_point_id}"
@@ -35,7 +40,8 @@ async def get_config():
 
     data = response.json()
 
-    INTERVAL = data["interval"]
+    global INTERVAL
+    INTERVAL = data["transmissionIntervalSeconds"]
     # write to db the config
     database = await db.connect_to_db()
     # clear collection config and insert new config
@@ -51,10 +57,9 @@ async def get_config():
             id = greenhouse["id"]
             if entry["name"] == ("SensorStation " + str(id)) and not greenhouse["published"]:
                 client = entry["client"]
-                await client.disconnect()   
+                await client.disconnect()
                 logging.info("BLE Connection disabled")
                 break
-            
 
 
 # for debug purposes only
