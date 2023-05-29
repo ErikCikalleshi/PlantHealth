@@ -16,6 +16,8 @@ from control_services_arduino import send_flag
 
 collection_deletion_event = asyncio.Event()
 
+INTERVAL: int = 10
+
 
 async def get_avg_measurements(database):
     print("get_avg_measurements")
@@ -70,7 +72,7 @@ async def get_avg_measurements(database):
             if avg > limit[0]:
                 # Start timer
                 async def timer_callback():
-                    await asyncio.sleep(5) # TODO: Change to tresholdSeconds
+                    await asyncio.sleep(5)  # TODO: Change to tresholdSeconds
                     # Re-check the limit after the timer is finished
                     avg_measurements = await get_avg_measurements(database)
                     if avg_measurements is not None:
@@ -92,7 +94,7 @@ async def get_avg_measurements(database):
 
             elif avg < limit[1]:
                 async def timer_callback2():
-                    await asyncio.sleep(5) # TODO: Change to tresholdSeconds
+                    await asyncio.sleep(5)  # TODO: Change to tresholdSeconds
                     # Re-check the limit after the timer is finished
                     avg_measurements = await get_avg_measurements(database)
                     if avg_measurements is not None:
@@ -133,8 +135,8 @@ async def send_measurements():
     # get transmissionIntervalSeconds from config
     config_collection = database["config"]
     config = config_collection.find_one()
-    # DEBUGGING: change transmissionIntervalSeconds to 4
-    config["transmissionIntervalSeconds"] = 11
+    global INTERVAL
+    INTERVAL = config["transmissionIntervalSeconds"]
 
     avg_measurements = await get_avg_measurements(database)
     if avg_measurements is None:
@@ -163,6 +165,18 @@ async def send_measurements():
     collection.delete_many({})
     collection_deletion_event.clear()
     logging.info("Collection with measurements deleted successfully")
+
+
+async def send_measurements_task():
+    global INTERVAL
+    while True:
+        try:
+            await send_measurements()  # Starts the read config task
+            await asyncio.sleep(INTERVAL)  # Pause for 10 seconds using asyncio.sleep
+        except Exception as e:
+            print(e)
+            logging.error(f"An error occurred while reading config: {e}, restarting task...")
+            await asyncio.sleep(INTERVAL)  # Wait for 10 seconds before restarting the task
 
 
 async def button_disabled_pressed(greenhouse_id: int):

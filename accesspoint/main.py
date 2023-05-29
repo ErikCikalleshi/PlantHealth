@@ -2,19 +2,9 @@ import asyncio
 from config import start_config_thread
 from connect_arduino_service import read_sensor_data
 from log_config import AuditLogger
-from webserver import send_measurements
+from webserver import send_measurements_task
 
 logging = AuditLogger()
-
-
-async def send_measurements_task():
-    while True:
-        try:
-            await send_measurements()  # Starts the send measurements task
-            await asyncio.sleep(20)  # Pause for 60 seconds using asyncio.sleep
-        except Exception as e:
-            logging.error(f"An error occurred while sending measurements: {e}, restarting task...")
-            await asyncio.sleep(20)  # Wait for 60 seconds before restarting the task
 
 
 async def main():
