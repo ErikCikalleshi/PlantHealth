@@ -51,6 +51,7 @@ async def get_avg_measurements(database):
             data = pd.DataFrame(config["greenhouses"])
             sensors_greenhouse = pd.DataFrame(
                 pd.DataFrame(data[data["id"] == greenhouse]["sensors"]).iloc[0]['sensors'])
+            
             limit = (sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitUpper"].iloc[0],
                      sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitLower"].iloc[0])
 
@@ -64,6 +65,7 @@ async def get_avg_measurements(database):
                 "HUMIDITY_DIRT": 2,
             }
             if avg > limit[0]:
+                
                 limit_exceeded_by = avg - limit[0]
                 await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type])
                 logging.info(sensor_type + ": Upper Limit exceeded by: " + str(limit_exceeded_by))
@@ -94,8 +96,7 @@ async def send_measurements():
     # get transmissionIntervalSeconds from config
     config_collection = database["config"]
     config = config_collection.find_one()
-    # DEBUGGING: change transmissionIntervalSeconds to 4
-    config["transmissionIntervalSeconds"] = 11
+  
 
     avg_measurements = await get_avg_measurements(database)
     if avg_measurements is None:
@@ -128,12 +129,8 @@ async def send_measurements():
 
 async def button_disabled_pressed(greenhouse_id: int):
     settings = Settings()
-    url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{1}"
+    url = f"http://{settings.server_host}:{settings.server_port}/api/disabled"
     auth = settings.auth
     headers = {"Content-Type": "application/json"}
     response = requests.post(url, headers=headers, auth=auth, data=json.dumps({"greenhouseID": greenhouse_id}))
 
-
-
-if __name__ == "__main__":
-    send_measurements()
