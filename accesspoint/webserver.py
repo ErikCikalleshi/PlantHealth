@@ -66,13 +66,13 @@ async def get_avg_measurements(database):
                 "LIGHT": 1,
                 "HUMIDITY_DIRT": 2,
             }
-            tresholdSeconds = \
+            thresholdSeconds = \
                 sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitThresholdMinutes"].iloc[
                     0] * 60
             if avg > limit[0]:
                 # Start timer
                 async def timer_callback():
-                    await asyncio.sleep(5)  # TODO: Change to tresholdSeconds
+                    await asyncio.sleep(5)  # TODO: Change to thresholdSeconds
                     # Re-check the limit after the timer is finished
                     avg_measurements = await get_avg_measurements(database)
                     if avg_measurements is not None:
@@ -86,7 +86,7 @@ async def get_avg_measurements(database):
                             logging.info(
                                 "Limit still exceeded. Sending " + (128 + sensor_blink_mappings[sensor_type]) + " flag")
                             await send_flag("SensorStation " + str(greenhouse),
-                                            128 + sensor_blink_mappings[sensor_type])
+                                            128 + sensor_blink_mappings[sensor_type], "led_flag")
 
                 asyncio.create_task(timer_callback())
                 logging.info(sensor_type + ": Upper Limit exceeded by: " + str(limit_exceeded_by))
@@ -107,7 +107,8 @@ async def get_avg_measurements(database):
                         if avg2 > limit[0]:
                             logging.info(
                                 "Limit still exceeded. Sending " + (128 + sensor_blink_mappings[sensor_type]) + " flag")
-                            await send_flag("SensorStation " + str(greenhouse), sensor_blink_mappings[sensor_type])
+                            await send_flag("SensorStation " + str(greenhouse), sensor_blink_mappings[sensor_type],
+                                            "led_flag")
 
                 asyncio.create_task(timer_callback2())
                 limit_exceeded_by = limit[1] - avg

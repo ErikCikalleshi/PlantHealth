@@ -32,7 +32,7 @@ async def read_sensor_data():
         # Retrieve the latest configuration from the database
         config = config_collection.find_one()
         data = pd.DataFrame(config["greenhouses"])
-        data = data[data["published"] == True]
+        data = data[data["published"]]
         data = data.assign(convention_name=lambda x: "SensorStation " + x["id"].astype(str))
         # data.at[data.index[0], "convention_name"] = "SensorStation 69"
         # data.at[data.index[0], "id"] = 69
@@ -45,7 +45,6 @@ async def read_sensor_data():
             # if local_name == (one of the sensor stations):
             if v[1].local_name in sensor_stations:
                 available_sensor_stations.append(v[1].local_name)
-
 
         # TODO: make a name convention for the sensor stations
         # sensor_stations = ["SensorStation 69"]
@@ -82,7 +81,7 @@ async def read_sensor_data():
                                         if collection_deletion_event.is_set():
                                             logging.warning(
                                                 "Collection deletion in progress. Skipping writing to the database.")
-                                       
+
                                         sensor_mappings = {
                                             "00002a6e-0000-1000-8000-00805f9b34fb": ("TEMPERATURE", "<h", 100.0, 2),
                                             "00002a6f-0000-1000-8000-00805f9b34fb": ("HUMIDITY_AIR", "<H", 100.0, 2),
@@ -94,16 +93,17 @@ async def read_sensor_data():
                                         }
 
                                         for uuid, (
-                                        sensor_type, unpack_format, scale_factor, buffer) in sensor_mappings.items():
+                                                sensor_type, unpack_format, scale_factor,
+                                                buffer) in sensor_mappings.items():
                                             if sender.uuid == uuid:
                                                 if sensor_type == "LED":
                                                     val = struct.unpack(unpack_format, value[:buffer])[0]
                                                     if val == 0:
                                                         logging.info("Warnings disabled")
-                                                        webserver.button_disabled_pressed(greenhouse_id=int(id))
+                                                        await webserver.button_disabled_pressed(greenhouse_id=int(id))
                                                     continue
                                                 val = struct.unpack(unpack_format, value[:buffer])[0] / scale_factor
-                                                
+
                                                 if sensor_type == "AIR_QUALITY":
                                                     val = 100 - val
                                                 await db.write_to_document_sensor(val, sensor_type, int(id))

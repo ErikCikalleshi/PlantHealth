@@ -5,6 +5,7 @@ from log_config import AuditLogger
 import threading
 import connect_arduino_service
 import asyncio
+from control_services_arduino import send_flag
 
 logging = AuditLogger()
 
@@ -57,6 +58,7 @@ async def get_config():
             id = greenhouse["id"]
             if entry["name"] == ("SensorStation " + str(id)) and not greenhouse["published"]:
                 client = entry["client"]
+                await send_flag(entry["name"], 1, "ble_disconnect")
                 await client.disconnect()
                 logging.info("BLE Connection disabled")
                 break
