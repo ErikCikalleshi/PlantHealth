@@ -62,6 +62,9 @@ public class AuthController {
     }
 
 
+    /**
+     * Endpoint '/refreshtoken' that will refresh the access token and return it to the user
+     */
     @PostMapping("/refreshtoken")
     public ResponseEntity<?> refreshtoken(@RequestBody TokenRefreshRequest request) {
         String requestRefreshToken = request.getRefreshToken();
@@ -76,7 +79,6 @@ public class AuthController {
 
     /**
      * Endpoint '/logout-user' that will remove the refresh token (JWT token) saved in Cookies and database
-     * TODO: figure out what Spring Security does with '/logout' endpoint
      */
     @PostMapping("/logout-user")
     public ResponseEntity<?> logout(@RequestBody TokenRefreshRequest request) {

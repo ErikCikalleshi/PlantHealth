@@ -17,6 +17,7 @@ import adminAuditLog from "@/views/admin/AdminViewAuditLog.vue";
 import MyPlantsView from "@/views/MyPlantsView.vue";
 import Charts from "@/views/Charts.vue";
 import About from "@/views/About.vue";
+import test from "@/views/test.vue";
 
 const routes = [
     {path: '/', component: landingpage},
@@ -24,6 +25,7 @@ const routes = [
     {path: '/login', name: 'login', component: login},
     {path: '/gallery/:id', component: gallery},
     {path: '/charts/:id', component: Charts, meta: { roles: ['ADMIN', 'GARDENER']}},
+    {path: '/test/', component: test, meta: { roles: ['ADMIN', 'GARDENER']}},
     {path: '/admin/users', name: 'manage-users', component: adminManageUsers, meta: { roles: ['ADMIN'] }},
     {path: '/admin/users/edit/:username', props: true, name: 'admin-edit-user', component: adminEditUser, meta: { roles: ['ADMIN'] }},
     {path: '/dashboard/plants', component: PlantsView},

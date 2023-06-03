@@ -57,6 +57,8 @@ public class Greenhouse implements Serializable {
     private boolean published = false;
     private Date lastContact;
 
+    private Date lastLimitExceeded;
+
     public String getStatus() {
         if (lastContact == null) {
             return "OFFLINE";

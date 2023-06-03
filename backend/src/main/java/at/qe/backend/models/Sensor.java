@@ -38,6 +38,8 @@ public class Sensor implements Serializable {
     @LastModifiedDate
     private Date updateDate;
 
+    private Date lastLimitExceeded;
+
     @ManyToOne
     @JoinColumn(name = "greenhouse_uuid", nullable = false)
     @JsonBackReference // exclude greenhouse from serialization

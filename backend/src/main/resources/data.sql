@@ -123,17 +123,21 @@ INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_u
 
 --Sensors for all greenhouses
 INSERT INTO sensor(limit_lower, limit_upper, limit_threshold_minutes, sensor_type, greenhouse_uuid, create_user_username, create_date)
-SELECT ROUND(RAND() * 10 + 20, 1), ROUND(RAND() * 10 + 25, 1), 60, 'TEMPERATURE', uuid, 'admin', NOW() FROM greenhouse
+SELECT ROUND(RAND() * 10 + 18, 1), ROUND(RAND() * 10 + 30, 1), 60, 'TEMPERATURE', uuid, 'admin', NOW() FROM greenhouse
 UNION ALL
-SELECT ROUND(RAND() * 400 + 100, 1), ROUND(RAND() * 1000 + 400, 1), 120, 'LIGHT', uuid, 'admin', NOW() FROM greenhouse
+SELECT ROUND(RAND() * 400 + 100, 1), ROUND(RAND() * 1000 + 450, 1), 120, 'LIGHT', uuid, 'admin', NOW() FROM greenhouse
 UNION ALL
 SELECT ROUND(RAND() * 30 + 40, 1), ROUND(RAND() * 50 + 70, 1), 60, 'HUMIDITY_AIR', uuid, 'admin', NOW() FROM greenhouse
 UNION ALL
 SELECT ROUND(RAND() * 20 + 30, 1), ROUND(RAND() * 50 + 70, 1), 60, 'HUMIDITY_DIRT', uuid, 'admin', NOW() FROM greenhouse
 UNION ALL
-SELECT ROUND(RAND() * 100 + 900, 1), ROUND(RAND() * 200 + 900, 1), 120, 'AIR_PRESSURE', uuid, 'admin', NOW() FROM greenhouse
+SELECT ROUND(RAND() * 80 + 900, 1), ROUND(RAND() * 220 + 1100, 1), 120, 'AIR_PRESSURE', uuid, 'admin', NOW() FROM greenhouse
 UNION ALL
 SELECT ROUND(RAND() * 20, 1), ROUND(RAND() * 30 + 20, 1), 60, 'AIR_QUALITY', uuid, 'admin', NOW() FROM greenhouse;
+
+
+
+
 
 INSERT INTO db_planthealth.measurement (id, limit_exceeded_by, create_date, measurement_date, value, sensor_id) VALUES (980, 0, '2023-05-18 18:55:20.283000', '2023-05-18 20:55:00.000000', 25, 22);
 INSERT INTO db_planthealth.measurement (id, limit_exceeded_by, create_date, measurement_date, value, sensor_id) VALUES (986, 0, '2023-05-18 18:55:42.063000', '2023-05-18 20:55:00.000000', 25.04, 22);

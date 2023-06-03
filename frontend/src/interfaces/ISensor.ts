@@ -4,4 +4,5 @@ export default interface ISensor {
     limitLower: number|null;
     limitUpper: number|null;
     limitThresholdMinutes: number|null;
+    displayLimitExceeded: boolean;
 }
