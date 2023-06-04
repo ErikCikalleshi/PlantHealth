@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,7 +18,8 @@ public class Measurement implements Serializable {
     Long id;
     private Double value;
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+
+    @CreatedDate
     private Date createDate = new Date();
 
     @Column(nullable = false)
@@ -26,4 +28,6 @@ public class Measurement implements Serializable {
     @ManyToOne
     @JsonBackReference // exclude sensor from serialization
     private Sensor sensor;
+
+    private double LimitExceededBy;
 }

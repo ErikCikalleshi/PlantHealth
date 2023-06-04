@@ -1,13 +1,15 @@
 package at.qe.backend.api.controllers;
 
-import at.qe.backend.api.exceptions.GreenhouseNotRegisteredException;
-import at.qe.backend.api.exceptions.SensorNotFoundException;
-import at.qe.backend.api.model.MeasurementDTO;
-import at.qe.backend.models.Measurement;
+import at.qe.backend.exceptions.AccessPoint.AccessPointNotPublishedException;
+import at.qe.backend.exceptions.Greenhouse.GreenhouseNotPublishedException;
+import at.qe.backend.exceptions.Greenhouse.GreenhouseNotRegisteredException;
+import at.qe.backend.exceptions.SensorNotFoundException;
+import at.qe.backend.api.model.dto.MeasurementDTO;
 import at.qe.backend.api.services.MeasurementService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * REST Interface for the measurement API
@@ -25,15 +27,16 @@ public class MeasurementController {
      * @param measurementDTO measurement in JSON format.
      *                       Required parameters:
      *                       "greenhouseID": int,
-     *                       "value": double,
+     *                       "value": double,Ah
      *                       "sensorType": SensorType enum as String
-     *                       "date": "yyyy-MM-dd HH:mm"
-     * @return returns the MeasurementDTO with the id if it was saved successfully. Otherwise, an exception is thrown.
+     *                       "date": "yyyy-MM-dd HH:mm",
+     *                       "limitExceededBy": double
+     * @return returns the MeasurementDTO with the idInCluster if it was saved successfully. Otherwise, an exception is thrown.
      * @throws SensorNotFoundException The sensor of SensorType could not be found for the specified Greenhouse
      * @throws GreenhouseNotRegisteredException The specified Greenhouse does not yet exist in the database
      */
     @PostMapping("/measurements")
-    private MeasurementDTO createMeasurement(@RequestBody MeasurementDTO measurementDTO) throws SensorNotFoundException, GreenhouseNotRegisteredException {
+    public MeasurementDTO createMeasurement(@RequestBody MeasurementDTO measurementDTO) throws SensorNotFoundException, GreenhouseNotRegisteredException, AccessPointNotPublishedException, GreenhouseNotPublishedException {
         return measurementService.addMeasurement(measurementDTO);
     }
 }

@@ -3,11 +3,14 @@ package at.qe.backend.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,17 +25,38 @@ public class AccessPoint implements Serializable {
     private String name;
     private String location;
     private String description;
-    @ManyToOne(optional = false)
-    private Userx createUser;
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createDate = new Date();
-    @ManyToOne(optional = true)
-    private Userx updateUser;
-    @Temporal(TemporalType.TIMESTAMP)
+
+    @CreatedBy
+    private String createUserUsername;
+    @CreatedDate
+    private Date createDate;
+    @LastModifiedBy
+    private String updateUserUsername;
+    @LastModifiedDate
     private Date updateDate;
+
     @Column(nullable = false)
     private int transmissionIntervalSeconds;
     @OneToMany(mappedBy = "accesspoint", orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<Greenhouse> greenhouses;
+    private Set<Greenhouse> greenhouses= new HashSet<>();
+
+    private boolean published = false;
+    private Date lastContact;
+
+
+    public String getStatus() {
+        if (lastContact == null) {
+            return "OFFLINE";
+        }
+        long diff = new Date().getTime() - lastContact.getTime();
+        if (diff > 1000L * getTransmissionIntervalSeconds()*2) {
+            //If last contact is more than 2x the transmission interval ago, we consider it offline
+            return "OFFLINE";
+        }
+        return "ONLINE";
+    }
+    public boolean isNew() {
+        return (null == createDate);
+    }
+
 }
