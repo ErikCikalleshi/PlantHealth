@@ -8,8 +8,9 @@ logging = AuditLogger()
 
 
 async def main():
-    asyncio.create_task(read_sensor_data())  # Starts the read sensor data task
     asyncio.create_task(start_config_thread())  # Starts the read config task
+    asyncio.create_task(read_sensor_data())  # Starts the read sensor data task
+
     asyncio.create_task(send_measurements_task())  # Starts the send measurements task
 
     while True:

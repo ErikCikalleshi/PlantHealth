@@ -9,7 +9,7 @@ from control_services_arduino import send_flag
 
 logging = AuditLogger()
 
-INTERVAL: int = 10
+INTERVAL: int = 5
 
 
 async def start_config_thread():
@@ -31,6 +31,7 @@ async def get_config():
     url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{settings.access_point_id}"
     try:
         response = requests.get(url, auth=settings.auth)
+        print(response)
     except requests.exceptions.ConnectionError:
         logging.error("api/setting/ API call failed")
         return
@@ -41,8 +42,8 @@ async def get_config():
 
     data = response.json()
 
-    global INTERVAL
-    INTERVAL = data["transmissionIntervalSeconds"]
+    # global INTERVAL
+    # INTERVAL = data["transmissionIntervalSeconds"]
     # write to db the config
     database = await db.connect_to_db()
     # clear collection config and insert new config
@@ -56,10 +57,13 @@ async def get_config():
     for entry in connect_arduino_service.global_client:
         for greenhouse in data["greenhouses"]:
             id = greenhouse["id"]
+
             if entry["name"] == ("SensorStation " + str(id)) and not greenhouse["published"]:
                 client = entry["client"]
                 await send_flag(entry["name"], 1, "ble_disconnect")
-                await client.disconnect()
+                await asyncio.sleep(1)
+                #await client.disconnect()
+                connect_arduino_service.global_client.remove(entry)
                 logging.info("BLE Connection disabled")
                 break
 
