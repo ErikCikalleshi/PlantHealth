@@ -16,11 +16,8 @@ from control_services_arduino import send_flag
 
 collection_deletion_event = asyncio.Event()
 
-INTERVAL: int = 10
-
 
 async def get_avg_measurements(database):
-    print("get_avg_measurements")
     settings = Settings()
     if database is None:
         logging.error("Could not connect to database")
@@ -112,6 +109,7 @@ async def get_avg_measurements(database):
 
                 asyncio.create_task(timer_callback2())
                 limit_exceeded_by = limit[1] - avg
+                await send_flag("SensorStation " + str(greenhouse),  sensor_blink_mappings[sensor_type])
                 logging.info(sensor_type + ": Lower Limit exceeded by: " + str(limit_exceeded_by))
 
             date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -182,10 +180,16 @@ async def send_measurements_task():
 
 async def button_disabled_pressed(greenhouse_id: int):
     settings = Settings()
-    url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{1}"
+    url = f"http://{settings.server_host}:{settings.server_port}/api/disabled"
     auth = settings.auth
     headers = {"Content-Type": "application/json"}
-    response = requests.post(url, headers=headers, auth=auth, data=json.dumps({"greenhouseID": greenhouse_id}))
+    payload = {"greenhouse": greenhouse_id}
+    response = requests.post(url, headers=headers, auth=auth, json=payload)
+    if response.status_code == 200:
+        logging.info("Button disabled pressed successfully")
+    else:
+        logging.error("Button disabled pressed failed")
+
 
 
 if __name__ == "__main__":
