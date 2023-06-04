@@ -92,6 +92,8 @@ int led_on = 0;
 int blink_on = 0;
 int num_blinks = 0;
 int current_blinks = 0;
+
+char device_name[18];
 // -----------------------------------------------------------------------------
 
 
@@ -197,21 +199,12 @@ void BLE_setup() {
     return;
   }
   Serial.print("BLE started");
-  
-  char device_name[18];
-  
+
   sprintf(device_name, "SensorStation %d", get_ID());
 
-  // BLE.setLocalName(device_name);
-  // BLE.setDeviceName(device_name);
-  
-  // If the Accesspoint cannot find the SensorStation even if the dip Switch is
-  // set to the right ID, uncomment this section to set it manually
-  // ---------------------------------------------------------------------------
-  BLE.setLocalName("SensorStation 1");
-  BLE.setDeviceName("SensorStation 1");
-  // ---------------------------------------------------------------------------
-  
+  BLE.setLocalName(device_name);
+  BLE.setDeviceName(device_name);
+
   Serial.print(", Device Name: ");
   Serial.println(device_name);
 
