@@ -51,6 +51,9 @@ BLEUnsignedIntCharacteristic moistureCharacteristic("29c1083c-5166-433c-9b7c-986
 
 BLEService ledService("f5a38368-9851-41cc-b49e-6ad0bba76f9b");
 BLEByteCharacteristic ledFlagCharacteristic("eac630d2-9e86-4005-b7b9-6f6955f7ec10", BLERead | BLEWrite | BLENotify);
+
+BLEService disconnectService("8b038794-1cfa-472c-a1f7-4e2d7b6ad2a4");
+BLEByteCharacteristic disconnectFlagCharacteristic("5434aa28-4300-4d09-9ab2-79b70ba8ef5d", BLERead | BLEWrite | BLENotify);
 // -----------------------------------------------------------------------------
 
 Adafruit_BME680 bme;
@@ -80,6 +83,8 @@ unsigned long next_led_change_millis = 0;
 int pairing_mode = 0;
 int connected = 0;
 int warning_on = 0;
+int unclean_disconnect = 0;
+String last_connected;
 
 int color = PURPLE;
 
@@ -117,6 +122,7 @@ void BLE_connect_handler(BLEDevice central);
 void BLE_disconnect_handler(BLEDevice central);
 void stop_blink_handler();
 void pairing_mode_handler();
+void clean_disconnect_handler(BLEDevice central, BLECharacteristic characteristic);
 // -----------------------------------------------------------------------------
 
 
@@ -196,14 +202,14 @@ void BLE_setup() {
   
   sprintf(device_name, "SensorStation %d", get_ID());
 
-  BLE.setLocalName(device_name);
-  BLE.setDeviceName(device_name);
+  // BLE.setLocalName(device_name);
+  // BLE.setDeviceName(device_name);
   
   // If the Accesspoint cannot find the SensorStation even if the dip Switch is
   // set to the right ID, uncomment this section to set it manually
   // ---------------------------------------------------------------------------
-  // BLE.setLocalName("SensorStation 1");
-  // BLE.setDeviceName("SensorStation 1");
+  BLE.setLocalName("SensorStation 1");
+  BLE.setDeviceName("SensorStation 1");
   // ---------------------------------------------------------------------------
   
   Serial.print(", Device Name: ");
@@ -243,6 +249,10 @@ void BLE_setup() {
 
   ledService.addCharacteristic(ledFlagCharacteristic);
   BLE.addService(ledService);
+
+  disconnectService.addCharacteristic(disconnectFlagCharacteristic);
+  BLE.addService(disconnectService);
+  disconnectFlagCharacteristic.setEventHandler(BLEWritten, clean_disconnect_handler);
 
   BLE.setEventHandler(BLEConnected, BLE_connect_handler);
   BLE.setEventHandler(BLEDisconnected, BLE_disconnect_handler);
@@ -488,7 +498,7 @@ void check_pairing_mode() {
     led_on = 1;
     disconnect_sound();
   }
-  if (pairing_mode) {
+  if (pairing_mode || unclean_disconnect) {
     BLE.advertise();
   } else {
     BLE.stopAdvertise();
@@ -519,13 +529,19 @@ void disconnect_sound() {
 }
 
 void BLE_connect_handler(BLEDevice central) {
+  if (!pairing_mode && unclean_disconnect && (central.address() != last_connected)) {
+    BLE.disconnect();
+    return;
+  }
   pairing_mode = 0;
   color = GREEN;
   blink_on = 0;
   led_on = 1;
   connected = 1;
+  unclean_disconnect = 1;
   Serial.println("Connected event, central: ");
   Serial.println(central.address());
+  last_connected = central.address();
   connect_sound();
 }
 
@@ -537,6 +553,9 @@ void BLE_disconnect_handler(BLEDevice central) {
   Serial.println("Disconnected event, central: ");
   Serial.println(central.address());
   disconnect_sound();
+  if (unclean_disconnect) {
+    BLE.advertise();
+  }
 }
 
 void stop_blink_handler() {
@@ -555,5 +574,14 @@ void pairing_mode_handler() {
     color = BLUE;
     num_blinks = 50000;
     blink_on = 1;
+  }
+}
+
+void clean_disconnect_handler(BLEDevice central, BLECharacteristic characteristic) {
+  if (*characteristic.value() == 1) {
+    Serial.println("Clean disconnect.");
+    unclean_disconnect = 0;
+    last_connected = "";
+    disconnectFlagCharacteristic.writeValue(0x00);
   }
 }
