@@ -5,7 +5,6 @@ import json
 from log_config import AuditLogger
 
 logging = AuditLogger()
-import threading
 
 import pandas as pd
 import requests
@@ -13,22 +12,10 @@ import requests
 import db
 from Settings import Settings
 from control_services_arduino import send_flag
-from threading import Timer
 
 collection_deletion_event = asyncio.Event()
 
 INTERVAL = None
-# t = None  # Initialize the 't' variable
-#
-#
-# def api_call():
-#     global t
-#     t = None  # Reset the timer variable
-#
-#
-# def newTimer():
-#     global t
-#     t = Timer(10.0, api_call)
 
 
 async def get_avg_measurements(database):
@@ -80,42 +67,41 @@ async def get_avg_measurements(database):
                 "HUMIDITY_DIRT": 2,
             }
             if avg > limit[0]:
-                # if t is None:  # Check if t is None before calling cancel()
-                #     newTimer()
-                # else:
-                #     t.cancel()  # Cancel the existing timer
-                #     newTimer()
-                # t.start()
-                # print("start" + sensor_type)
-                # t.join()  # Block until the timer has completed
-
-                # Check if the timer is still None, indicating no limit was exceeded during the block
-                # if t is not None:
+                # check if seconds_timer_upper is not None
+                if subset["seconds_timer_upper"].iloc[0] is not None:
+                    # get thresholdMinutes from sensors_greenhouse
+                    threshold_minutes = \
+                    sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitThresholdMinutes"].iloc[0]
+                    # check if the time from the minutues of seconds_timer_upper is bigger than threshold_minutes
+                    if (datetime.datetime.now() - datetime.datetime.strptime(
+                            subset["seconds_timer_upper"].iloc[0], "%Y-%m-%d %H:%M:%S")).total_seconds() / 60 > threshold_minutes:
+                        await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type],
+                                        "led_flag")
+                        subset.loc[:, "seconds_timer_upper"] = None
+                # add new column to df on the sensor_type based on the id with the time now
+                subset.loc[:, "seconds_timer_upper"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 limit_exceeded_by = avg - limit[0]
-                await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type],
-                                "led_flag")
                 logging.error("Upper Limit exceeded by: " + str(limit_exceeded_by))
                 logging.info(sensor_type + ": Upper Limit exceeded by: " + str(limit_exceeded_by))
             elif avg < limit[1]:
-                # if t is None:  # Check if t is None before calling cancel()
-                #     newTimer()
-                # else:
-                #     t.cancel()  # Cancel the existing timer
-                #     newTimer()
-                # t.start()
-                # print("start" + sensor_type)
-                # t.join()  # Block until the timer has completed
-                #
-                # # Check if the timer is still None, indicating no limit was exceeded during the block
-                # if t is not None:
+                # check if seconds_timer_upper is not None
+                if subset["seconds_timer_lower"].iloc[0] is not None:
+                    # get thresholdMinutes from sensors_greenhouse
+                    threshold_minutes = \
+                        sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type][
+                            "limitThresholdMinutes"].iloc[0]
+                    # check if the time from the minutues of seconds_timer_upper is bigger than threshold_minutes
+                    if (datetime.datetime.now() - datetime.datetime.strptime(
+                            subset["seconds_timer_upper"].iloc[0],
+                            "%Y-%m-%d %H:%M:%S")).total_seconds() / 60 > threshold_minutes:
+                        await send_flag("SensorStation " + str(greenhouse), sensor_blink_mappings[sensor_type],
+                                        "led_flag")
+                        subset.loc[:, "seconds_timer_lower"] = None
+                # add new column to df on the sensor_type based on the id with the time now
+                subset.loc[:, "seconds_timer_lower"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 limit_exceeded_by = limit[1] - avg
-                await send_flag("SensorStation " + str(greenhouse), sensor_blink_mappings[sensor_type], "led_flag")
                 logging.error("Lower Limit exceeded by: " + str(limit_exceeded_by))
                 logging.info(sensor_type + ": Lower Limit exceeded by: " + str(limit_exceeded_by))
-
-            # if t is not None:
-            #     t.cancel()
-            #     print("cancel" + sensor_type)
 
             date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
             data = {"greenhouseID": int(subset["greenhouseID"].iloc[0]),
@@ -140,7 +126,7 @@ async def send_measurements():
     config_collection = database["config"]
     config = config_collection.find_one()
     global INTERVAL
-    #INTERVAL = config["transmissionIntervalSeconds"]
+    # INTERVAL = config["transmissionIntervalSeconds"]
     INTERVAL = 10
     avg_measurements = await get_avg_measurements(database)
     if avg_measurements is None:

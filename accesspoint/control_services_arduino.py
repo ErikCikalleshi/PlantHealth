@@ -39,7 +39,6 @@ async def send_flag(device_name, flag_value, operation):
                 if characteristic.uuid == characteristic_uuid:
                     await client.write_gatt_char(characteristic, bytearray([flag_value]), True)
                     logging.info("Wrote " + operation + " flag to arduino")
-                    print("Wrote " + operation + " flag to arduino")
                     if operation == "ble_disconnect":
                         await client.disconnect()
                     return True
