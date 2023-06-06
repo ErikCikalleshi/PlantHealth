@@ -38,7 +38,7 @@ public class MeasurementDTO {
     private long greenhouseID;
     private Double value;
     private SensorType sensorType;
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date date;
     private double limitExceededBy;
     private double upperLimit;

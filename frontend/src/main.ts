@@ -1,6 +1,6 @@
-import { createApp, watch } from 'vue'
-import { createPinia } from 'pinia'
-import { router } from "@/router";
+import {createApp, watch} from 'vue'
+import {createPinia} from 'pinia'
+import {router} from "@/router";
 import App from './App.vue'
 import VueCookies from "vue-cookies";
 import setupInterceptors from './services/setupInterceptors';
@@ -8,17 +8,31 @@ import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 import './assets/main.css'
+import { EventSourcePolyfill } from 'event-source-polyfill';
 
 // Vuetify
 import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
+import {createVuetify} from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
 //OhVueIcons
-import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { FaUserCircle, HiSolidUser, HiMenuAlt3, PrTimes, FaArrowRight, IoCloseSharp} from "oh-vue-icons/icons";
+import {OhVueIcon, addIcons} from "oh-vue-icons";
+import {FaUserCircle, HiSolidUser, HiMenuAlt3, PrTimes, FaArrowRight, IoCloseSharp} from "oh-vue-icons/icons";
 import VueApexCharts from "vue3-apexcharts";
+import Snackbar from "@/components/general/snackbar.vue";
+
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "Basic YWRtaW46cGFzc3dk");
+
+
+
+
+new EventSourcePolyfill('http://localhost:9000/time', {
+    headers: {
+        Authorization: 'Basic YWRtaW46cGFzc3dk'
+    },
+});
 
 
 
@@ -44,11 +58,10 @@ const vuetify = createVuetify({
 setupInterceptors();
 
 
-
 const app = createApp(App);
 app.component("oh-icon", OhVueIcon);
 app.component('EasyDataTable', Vue3EasyDataTable);
-
+app.component('snackbar', Snackbar);
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
@@ -57,3 +70,8 @@ app.use(VueCookies)
 app.use(router)
 app.use(vuetify).mount('#app')
 app.use(VueApexCharts);
+
+// let socket = new WebSocket("ws://localhost:9000/socket-registry");
+// socket.onopen = function() {
+//     console.log("Connected to WebSocket server.");
+// };
