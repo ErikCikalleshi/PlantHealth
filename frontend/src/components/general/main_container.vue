@@ -9,10 +9,8 @@ export default defineComponent({
 </script>
 
 <template>
-    <snackbar></snackbar>
   <div class="container mx-auto px-6 text-white font-primary text-[16px]" :class="{negative}">
     <slot></slot>
-
   </div>
 </template>
 
