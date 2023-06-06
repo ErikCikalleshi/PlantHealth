@@ -8,7 +8,6 @@ import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 import './assets/main.css'
-import { EventSourcePolyfill } from 'event-source-polyfill';
 
 // Vuetify
 import 'vuetify/styles'
@@ -22,17 +21,9 @@ import {FaUserCircle, HiSolidUser, HiMenuAlt3, PrTimes, FaArrowRight, IoCloseSha
 import VueApexCharts from "vue3-apexcharts";
 import Snackbar from "@/components/general/snackbar.vue";
 
-var myHeaders = new Headers();
-myHeaders.append("Authorization", "Basic YWRtaW46cGFzc3dk");
 
 
 
-
-new EventSourcePolyfill('http://localhost:9000/time', {
-    headers: {
-        Authorization: 'Basic YWRtaW46cGFzc3dk'
-    },
-});
 
 
 

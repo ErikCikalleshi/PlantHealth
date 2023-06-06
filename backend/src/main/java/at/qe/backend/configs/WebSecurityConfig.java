@@ -61,6 +61,7 @@ public class WebSecurityConfig {
         try {
             http.cors().and().csrf().disable()
 //                    .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                    .authorizeHttpRequests(authorize -> authorize.requestMatchers("/emitter").permitAll()).httpBasic().and()
                     .authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/**").authenticated()).httpBasic().and()
                     .authorizeHttpRequests(authorize -> authorize
                             .requestMatchers("/").permitAll()
