@@ -12,6 +12,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import adminGreenhouseService from "@/services/admin/AdminGreenhouseService";
 
 
 export default defineComponent({
@@ -26,16 +27,37 @@ export default defineComponent({
             },
         };
     },
-    mounted() {
+    mounted: async function() {
+        const response = await adminGreenhouseService.getAllGreenhousesForCurrentUser();
+        const greenhouses = response.data;
+        let storedDisplayIcons = JSON.parse(localStorage.getItem('displayIcons') || '{}');
+
+        // Loop through the greenhouses and set the displayIcon property
+        for (const greenhouse of greenhouses) {
+            if (storedDisplayIcons.hasOwnProperty(greenhouse.uuid)) {
+                // Set the displayIcon value from localStorage
+                greenhouse.displayIcon = storedDisplayIcons[greenhouse.uuid];
+            }
+        }
         let eventSource = new EventSource('http://localhost:9000/emitter');
 
         eventSource.onmessage = (event) => {
 
             // Check if event.data is an integer
             const data = parseInt(event.data);
+
             if (!isNaN(data)) {
                 // Display the snackbar
                 this.showSnackbar(data);
+                const selectedGreenhouse = greenhouses.find((greenhouse: any) => greenhouse.uuid === data);
+                if (selectedGreenhouse) {
+                    selectedGreenhouse.displayIcon = true;
+
+                    // Update the stored displayIcon value in localStorage
+                    storedDisplayIcons[selectedGreenhouse.uuid] = true;
+                    localStorage.setItem('displayIcons', JSON.stringify(storedDisplayIcons));
+                    console.log(JSON.parse(localStorage.getItem('displayIcons') || '{}'));
+                }
             }
         };
 
