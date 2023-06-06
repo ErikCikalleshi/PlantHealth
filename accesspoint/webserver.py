@@ -5,14 +5,13 @@ import json
 from log_config import AuditLogger
 
 logging = AuditLogger()
-import threading
 
 import pandas as pd
 import requests
 
 import db
 from Settings import Settings
-from control_services_arduino import send_flag
+# from control_services_arduino import send_flag
 
 collection_deletion_event = asyncio.Event()
 
@@ -51,7 +50,7 @@ async def get_avg_measurements(database):
             data = pd.DataFrame(config["greenhouses"])
             sensors_greenhouse = pd.DataFrame(
                 pd.DataFrame(data[data["id"] == greenhouse]["sensors"]).iloc[0]['sensors'])
-            
+
             limit = (sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitUpper"].iloc[0],
                      sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitLower"].iloc[0])
 
@@ -65,13 +64,13 @@ async def get_avg_measurements(database):
                 "HUMIDITY_DIRT": 2,
             }
             if avg > limit[0]:
-                
+
                 limit_exceeded_by = avg - limit[0]
-                await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type])
+                #await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type])
                 logging.info(sensor_type + ": Upper Limit exceeded by: " + str(limit_exceeded_by))
             elif avg < limit[1]:
                 limit_exceeded_by = limit[1] - avg
-                await send_flag("SensorStation " + str(greenhouse),  sensor_blink_mappings[sensor_type])
+                #await send_flag("SensorStation " + str(greenhouse), sensor_blink_mappings[sensor_type])
                 logging.info(sensor_type + ": Lower Limit exceeded by: " + str(limit_exceeded_by))
 
             date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -96,7 +95,6 @@ async def send_measurements():
     # get transmissionIntervalSeconds from config
     config_collection = database["config"]
     config = config_collection.find_one()
-  
 
     avg_measurements = await get_avg_measurements(database)
     if avg_measurements is None:
@@ -132,5 +130,13 @@ async def button_disabled_pressed(greenhouse_id: int):
     url = f"http://{settings.server_host}:{settings.server_port}/api/disabled"
     auth = settings.auth
     headers = {"Content-Type": "application/json"}
-    response = requests.post(url, headers=headers, auth=auth, data=json.dumps({"greenhouseID": greenhouse_id}))
+    payload = {"greenhouse": greenhouse_id}
+    response = requests.post(url, headers=headers, auth=auth, json=payload)
+    if response.status_code == 200:
+        logging.info("Button disabled pressed successfully")
+    else:
+        logging.error("Button disabled pressed failed")
 
+
+if __name__ == '__main__':
+    asyncio.run(button_disabled_pressed(2))
