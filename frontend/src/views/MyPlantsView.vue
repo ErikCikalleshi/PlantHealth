@@ -26,8 +26,8 @@
                          :style="{ background: `linear-gradient(337.44deg, ${greenhouse.status.toLowerCase() === 'offline' ? '#FF6161 0%, rgba(255, 97, 97, 0) 100%)' : (greenhouse.displayLimitExceeded ? '#D4790C 0%, rgba(240, 240, 15, 0) 100%)' : '#449A8B 0%, rgba(68, 154, 139, 0) 100%)')}, url('/src/assets/plant-pic-example.png')` }"></div>
                     <div class="flex justify-space-between flex-col w-full">
                         <div>
-                            <img src="/src/assets/alert-remove-outline.svg" class="w-[50px] h-full bg-cover bg-center mr-[10px] mt-[-20px] rounded relative"
-                                 :style="{float: `right`, display: `${greenhouse.displayIcon ? 'block' : 'none'}`}"/>
+                            <img src="/src/assets/alert-remove-outline.svg" class="w-[50px] h-full bg-cover bg-center mr-[2px] mt-[-30px] rounded relative"
+                                 :style="{float: `right`, display: `${!greenhouse.displayIcon ? 'block' : 'none'}`}"/>
                             <p class="text-[16px] text-primary font-primary">{{ greenhouse.accessPointName }}</p>
                             <h1 class="text-[20px] font-[600] font-primary">{{ greenhouse.name }}</h1>
                             <p class="text-[14px] text-gray-500 font-primary">{{ greenhouse.location }}</p>
@@ -118,6 +118,25 @@ export default defineComponent({
                     greenhouse.displayIcon = storedDisplayIcons[greenhouse.uuid];
                 }
             }
+
+            let eventSource = new EventSource('http://localhost:9000/emitter2');
+            eventSource.onmessage = (event) => {
+                // Check if event.data is an integer
+                const data = parseInt(event.data);
+                if (!isNaN(data)) {
+                    // Show a warning icon for the corresponding greenhouse_id
+                    console.log(data);
+                    const selectedGreenhouse = this.greenhouses.find((greenhouse) => greenhouse.uuid === data);
+                    if (selectedGreenhouse) {
+                        selectedGreenhouse.displayIcon = true;
+
+                        // Update the stored displayIcon value in localStorage
+                        storedDisplayIcons[selectedGreenhouse.uuid] = true;
+                        localStorage.setItem('displayIcons', JSON.stringify(storedDisplayIcons));
+                        console.log(JSON.parse(localStorage.getItem('displayIcons') || '{}'));
+                    }
+                }
+            };
 
 
         } catch (error) {
