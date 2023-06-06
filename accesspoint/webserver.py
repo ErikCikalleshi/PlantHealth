@@ -11,7 +11,7 @@ import requests
 
 import db
 from Settings import Settings
-from control_services_arduino import send_flag
+#from control_services_arduino import send_flag
 
 collection_deletion_event = asyncio.Event()
 
@@ -171,11 +171,12 @@ async def send_measurements_task():
 
 async def button_disabled_pressed(greenhouse_id: int):
     settings = Settings()
-    url = f"http://{settings.server_host}:{settings.server_port}/api/disabled"
+    url = f"http://{settings.server_host}:{settings.server_port}/disabled"
     auth = settings.auth
     headers = {"Content-Type": "application/json"}
     payload = {"greenhouse": greenhouse_id}
     response = requests.post(url, headers=headers, auth=auth, json=payload)
+    print(payload)
     if response.status_code == 200:
         logging.info("Button disabled pressed successfully")
     else:
@@ -183,4 +184,5 @@ async def button_disabled_pressed(greenhouse_id: int):
 
 
 if __name__ == "__main__":
-    asyncio.run(send_measurements())
+    asyncio.run(button_disabled_pressed(1))
+    # asyncio.run(send_measurements())
