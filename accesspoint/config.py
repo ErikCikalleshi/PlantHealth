@@ -9,7 +9,7 @@ from control_services_arduino import send_flag
 
 logging = AuditLogger()
 
-INTERVAL: int = 5
+INTERVAL: int = 3
 
 
 async def start_config_thread():
