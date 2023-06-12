@@ -12,8 +12,6 @@ logging = AuditLogger()
 import pandas as pd
 import requests
 
-
-
 collection_deletion_event = asyncio.Event()
 
 INTERVAL = None
@@ -69,13 +67,15 @@ async def get_avg_measurements(database):
             }
             if avg > limit[0]:
                 # check if seconds_timer_upper is not None
-                if subset["seconds_timer_upper"].iloc[0] is not None:
+                if "seconds_timer_upper" in subset.columns and subset["seconds_timer_upper"].iloc[0] is not None:
                     # get thresholdMinutes from sensors_greenhouse
                     threshold_minutes = \
-                    sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type]["limitThresholdMinutes"].iloc[0]
+                        sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type][
+                            "limitThresholdMinutes"].iloc[0]
                     # check if the time from the minutues of seconds_timer_upper is bigger than threshold_minutes
                     if (datetime.datetime.now() - datetime.datetime.strptime(
-                            subset["seconds_timer_upper"].iloc[0], "%Y-%m-%d %H:%M:%S")).total_seconds() / 60 > threshold_minutes:
+                            subset["seconds_timer_upper"].iloc[0],
+                            "%Y-%m-%d %H:%M:%S")).total_seconds() / 60 > threshold_minutes:
                         await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type],
                                         "led_flag")
                         subset.loc[:, "seconds_timer_upper"] = None
@@ -85,15 +85,15 @@ async def get_avg_measurements(database):
                 logging.error("Upper Limit exceeded by: " + str(limit_exceeded_by))
                 logging.info(sensor_type + ": Upper Limit exceeded by: " + str(limit_exceeded_by))
             elif avg < limit[1]:
-                # check if seconds_timer_upper is not None
-                if subset["seconds_timer_lower"].iloc[0] is not None:
+                # check if seconds_timer_lower is not None
+                if "seconds_timer_lower" in subset.columns and subset["seconds_timer_lower"].iloc[0] is not None:
                     # get thresholdMinutes from sensors_greenhouse
                     threshold_minutes = \
                         sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type][
                             "limitThresholdMinutes"].iloc[0]
-                    # check if the time from the minutues of seconds_timer_upper is bigger than threshold_minutes
+                    # check if the time from the minutues of seconds_timer_lower is bigger than threshold_minutes
                     if (datetime.datetime.now() - datetime.datetime.strptime(
-                            subset["seconds_timer_upper"].iloc[0],
+                            subset["seconds_timer_lower"].iloc[0],
                             "%Y-%m-%d %H:%M:%S")).total_seconds() / 60 > threshold_minutes:
                         await send_flag("SensorStation " + str(greenhouse), sensor_blink_mappings[sensor_type],
                                         "led_flag")
@@ -104,13 +104,15 @@ async def get_avg_measurements(database):
                 logging.error("Lower Limit exceeded by: " + str(limit_exceeded_by))
                 logging.info(sensor_type + ": Lower Limit exceeded by: " + str(limit_exceeded_by))
 
-            date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            date = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
             data = {"greenhouseID": int(subset["greenhouseID"].iloc[0]),
                     "accesspointUUID": int(subset["accesspointID"].iloc[0]),
                     "value": avg,
                     "sensorType": sensor_type,
                     "date": date,
                     "limitExceededBy": limit_exceeded_by,
+                    "upperLimit": 34.8,
+                    "lowerLimit": 25.8,
                     }
 
             json_arrays.append(json.dumps(data))
@@ -119,36 +121,44 @@ async def get_avg_measurements(database):
     return json_arrays
 
 
-async def send_measurements():
+async def send_post_request(data):
     settings = Settings()
+    auth = settings.auth
+    headers = {"Content-Type": "application/json"}
     url = f"http://{settings.server_host}:{settings.server_port}/api/measurements"
+    response = requests.post(url, headers=headers, auth=auth, data=data)
+    if response.status_code == 200:
+        logging.info("Measurements sent successfully to backend")
+    else:
+        logging.warning("Could not send measurements to backend")
+    return response.status_code
+
+
+async def send_measurements() -> int:
+    settings = Settings()
+
     database = await db.connect_to_db()
 
     config_collection = database["config"]
-    config = config_collection.find_one()
+
     global INTERVAL
     # INTERVAL = config["transmissionIntervalSeconds"]
     INTERVAL = 10
     avg_measurements = await get_avg_measurements(database)
     if avg_measurements is None:
         logging.warning("Could not get average measurements")
-        return
+        return -1
 
-    auth = settings.auth
-
-    headers = {"Content-Type": "application/json"}
     for avg_measurement in avg_measurements:
-        response = requests.post(url, headers=headers, auth=auth, data=avg_measurement)
-        if response.status_code == 200:
-            logging.info("Measurements sent successfully to backend")
+        await send_post_request(avg_measurement)
 
     # delete collection from db
     if database is None:
         logging.error("Could not connect to database")
-        return
+        return -1
     if settings.mongo_collection not in database.list_collection_names():
         logging.warning("Collection does not exist. Nothing to delete.")
-        return
+        return -1
     collection = database[settings.mongo_collection]
 
     # empty collection

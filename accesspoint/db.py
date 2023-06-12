@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 import sys
+import time
 
 import pymongo
 
@@ -34,8 +35,14 @@ async def get_config(db):
     return config
 
 
-async def insert_document(db, collection_name, document):
-    collection = db[collection_name]
+async def insert_document(db, document):
+    settings = Settings()
+    collection = db[settings.mongo_collection]
+    if collection is None:
+        logging.error("Could not find collection in database")
+        # create collection
+        db.create_collection(settings.mongo_collection)
+        return
     date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     document["date"] = date
     collection.insert_one(document)
@@ -57,15 +64,21 @@ async def write_to_document_sensor(value, sensor_type, greenhouse_id):
         "sensorType": sensor_type,
     }
     logging.info("Writing to database...")
-    await insert_document(db, config.mongo_collection, document)
+    await insert_document(db, document)
     logging.info("Successfully written to database")
 
-# async def main():
+
+# async def generate_random_data():
 #     import random
-#     for i in range(100):
-#         await write_to_document_sensor(random.randint(20, 36), "LIGHT", 27)
-#         await write_to_document_sensor(random.randint(20, 21), "TEMPERATURE", 27)
+#     for i in range(10):
+#         await write_to_document_sensor(i, "LIGHT", 27)
+#         await write_to_document_sensor(i, "TEMPERATURE", 27)
+#         time.sleep(0.5)
 
 
-# asyncio.run(main())
+# async def main():
+#     await generate_random_data()
 
+
+# if __name__ == "__main__":
+#     asyncio.run(main())
