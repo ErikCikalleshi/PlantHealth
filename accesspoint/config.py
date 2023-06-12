@@ -1,51 +1,56 @@
 import requests
-from Settings import Settings
-import db
-from log_config import AuditLogger
+
+from accesspoint import db
+from accesspoint.Settings import Settings
+from accesspoint.connect_arduino_service import check_ble_connection
+
 import threading
-import connect_arduino_service
+
 import asyncio
-from control_services_arduino import send_flag
+
+from accesspoint.log_config import AuditLogger
 
 logging = AuditLogger()
 
-INTERVAL: int = 3
+INTERVAL: int = 5
 
 
 async def start_config_thread():
     global INTERVAL
     while True:
         try:
-            await get_config()  # Starts the read config task
+            await get_settings_backend()  # Starts the read config task
             await asyncio.sleep(INTERVAL)  # Pause for 10 seconds using asyncio.sleep
         except Exception as e:
-            print(e)
             logging.error(f"An error occurred while reading config: {e}, restarting task...")
             await asyncio.sleep(INTERVAL)  # Wait for 10 seconds before restarting the task
 
 
-async def get_config():
-
+async def get_settings_backend() -> int:
     settings = Settings()
 
     url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{settings.access_point_id}"
+    
     try:
         response = requests.get(url, auth=settings.auth)
-        print(response)
     except requests.exceptions.ConnectionError:
         logging.error("api/setting/ API call failed")
-        return
+        return response.status_code
 
     if response.status_code != 200:
         logging.error("api/setting/ API call failed")
-        return
+        return response.status_code
+    
+    logging.info("api/setting/ API call successful")
 
     data = response.json()
 
     # global INTERVAL
     # INTERVAL = data["transmissionIntervalSeconds"]
+    
     # write to db the config
     database = await db.connect_to_db()
+
     # clear collection config and insert new config
     collection = database["config"]
     collection.delete_many({})
@@ -53,21 +58,10 @@ async def get_config():
 
     logging.info("Database updated and config inserted successfully")
     logging.info("api/setting/ API call successful")
-    # check for every published
-    for entry in connect_arduino_service.global_client:
-        for greenhouse in data["greenhouses"]:
-            id = greenhouse["id"]
-
-            if entry["name"] == ("SensorStation " + str(id)) and not greenhouse["published"]:
-                client = entry["client"]
-                await send_flag(entry["name"], 1, "ble_disconnect")
-                await asyncio.sleep(1)
-                #await client.disconnect()
-                connect_arduino_service.global_client.remove(entry)
-                logging.info("BLE Connection disabled")
-                break
+    await check_ble_connection(data)
+    return response.status_code
 
 
 # for debug purposes only
 if __name__ == "__main__":
-    asyncio.run(get_config())
+    asyncio.run(get_settings_backend())

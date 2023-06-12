@@ -1,7 +1,7 @@
 import json
 import os
 
-from log_config import AuditLogger
+from accesspoint.log_config import AuditLogger
 
 logging = AuditLogger()
 
@@ -29,6 +29,18 @@ class Settings:
         self.mongo_database = setting["mongo"]["database"]
         self.mongo_collection = setting["mongo"]["collection"]
 
+    def set_settings(self, custom_settings: dict):
+        self.auth_user = custom_settings["auth"]["user"]
+        self.auth_password = custom_settings["auth"]["password"]
+        self.auth = (self.auth_user, self.auth_password)
+        self.server_host = custom_settings["server"]["host"]
+        self.server_port = custom_settings["server"]["port"]
+        self.access_point_id = custom_settings["access_point_id"]
+        self.mongo_port = custom_settings["mongo"]["port"]
+        self.mongo_host = custom_settings["mongo"]["host"]
+        self.mongo_database = custom_settings["mongo"]["database"]
+        self.mongo_collection = custom_settings["mongo"]["collection"]
+
     @staticmethod
     def read_settings() -> dict:
         current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -45,7 +57,7 @@ class Settings:
                         "password": "passwd"
                     },
                     "server": {
-                        "host": "10.0.0.62",
+                        "host": "10.0.0.153",
                         "port": 9000
                     },
                     "access_point_id": "1",

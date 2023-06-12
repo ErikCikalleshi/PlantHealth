@@ -1,7 +1,8 @@
 import asyncio
 import bleak
-import connect_arduino_service
-from log_config import AuditLogger
+
+from accesspoint import connect_arduino_service
+from accesspoint.log_config import AuditLogger
 
 logging = AuditLogger()
 

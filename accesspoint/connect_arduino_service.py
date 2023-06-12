@@ -5,10 +5,10 @@ import numpy as np
 import pandas as pd
 from bleak import BleakClient, BleakScanner, BleakError
 
-import db
-import webserver
-from config import get_config
-from log_config import AuditLogger
+from accesspoint import db
+from accesspoint.control_services_arduino import send_flag
+from accesspoint.log_config import AuditLogger
+from accesspoint.webserver import button_disabled_pressed
 
 logging = AuditLogger()
 INTERVAL = 5
@@ -32,7 +32,7 @@ async def read_sensor_data():
     while True:
         # Retrieve the latest configuration from the database
         config_collection = database["config"]
-        await get_config()
+
         config = config_collection.find_one()
         data = pd.DataFrame(config["greenhouses"])
         data = data[data["published"] == True]
@@ -105,7 +105,7 @@ async def read_sensor_data():
                                                     val = struct.unpack(unpack_format, value[:buffer])[0]
                                                     if val == 0:
                                                         logging.info("Warnings disabled")
-                                                        webserver.button_disabled_pressed(greenhouse_id=int(id))
+                                                        button_disabled_pressed(greenhouse_id=int(id))
                                                     continue
                                                 val = struct.unpack(unpack_format, value[:buffer])[0] / scale_factor
 
@@ -138,6 +138,21 @@ async def read_sensor_data():
 
 # Start reading data from the sensor station
 # asyncio.run(read_sensor_data())
+
+async def check_ble_connection(data):
+    # check for every published
+    for entry in global_client:
+        for greenhouse in data["greenhouses"]:
+            id = greenhouse["id"]
+
+            if entry["name"] == ("SensorStation " + str(id)) and not greenhouse["published"]:
+                client = entry["client"]
+                await send_flag(entry["name"], 1, "ble_disconnect")
+                await asyncio.sleep(1)
+                # await client.disconnect()
+                global_client.remove(entry)
+                logging.info("BLE Connection disabled")
+                break
 
 if __name__ == "__main__":
     asyncio.run(read_sensor_data())
