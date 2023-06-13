@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="addGreenhouseDialog" persistent width="1400">
+    <v-dialog v-model="addGreenhouseDialog" persistent width="1400" scroll-strategy="none">
         <template v-slot:activator="{ props }">
             <v-btn color="primary" v-bind="props">Add Plant</v-btn>
         </template>
