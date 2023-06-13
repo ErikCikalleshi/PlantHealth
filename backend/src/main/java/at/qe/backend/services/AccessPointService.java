@@ -3,17 +3,13 @@ package at.qe.backend.services;
 import at.qe.backend.models.AccessPoint;
 import at.qe.backend.models.Greenhouse;
 import at.qe.backend.models.UserRole;
-import at.qe.backend.models.Userx;
-import at.qe.backend.models.dto.AccessPointDTO;
 import at.qe.backend.repositories.AccessPointRepository;
 import at.qe.backend.repositories.GreenhouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.Date;
 import java.util.List;
