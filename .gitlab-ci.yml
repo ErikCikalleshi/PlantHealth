@@ -23,7 +23,7 @@ stages: # List of stages for jobs, and their order of execution
 testDatabaseService:
  image:
   name: python:3.10
-  entrypoint: [ '/bin/sh', '-c' ]
+  entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
  stage: testDatabaseService
  script:
    - apk update && apk add --no-cache git curl libmcrypt-dev mysql-client
