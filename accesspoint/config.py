@@ -3,12 +3,8 @@ import requests
 from accesspoint import db
 from accesspoint.Settings import Settings
 from accesspoint.connect_arduino_service import check_ble_connection
-
-import threading
-
 import asyncio
-
-from accesspoint.log_config import AuditLogger
+from accesspoint.auditlog_config import AuditLogger
 
 logging = AuditLogger()
 
@@ -19,7 +15,11 @@ async def start_config_thread():
     global INTERVAL
     while True:
         try:
-            await get_settings_backend()  # Starts the read config task
+            status = await get_settings_backend()  # Starts the read config task
+            if status == 200:
+                logging.info("Config read successfully")
+            else:
+                logging.warning("Could not read config")
             await asyncio.sleep(INTERVAL)  # Pause for 10 seconds using asyncio.sleep
         except Exception as e:
             logging.error(f"An error occurred while reading config: {e}, restarting task...")

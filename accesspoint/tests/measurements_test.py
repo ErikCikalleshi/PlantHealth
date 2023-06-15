@@ -1,17 +1,11 @@
 import json
 import time
 import unittest
-import asyncio
-
 import pandas
-
 from accesspoint import db
 from accesspoint.Settings import Settings
-from accesspoint.config import get_settings_backend
-
 from unittest import IsolatedAsyncioTestCase
 from http import HTTPStatus
-
 from accesspoint.db import write_to_document_sensor
 from accesspoint.webserver import get_avg_measurements, send_post_request
 

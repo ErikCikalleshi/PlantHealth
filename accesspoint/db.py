@@ -1,12 +1,7 @@
-import asyncio
 import datetime
-import sys
-import time
-
 import pymongo
-
 from accesspoint.Settings import Settings
-from accesspoint.log_config import AuditLogger
+from accesspoint.auditlog_config import AuditLogger
 
 logging = AuditLogger()
 
@@ -43,10 +38,11 @@ async def insert_document(db, document):
         # create collection
         db.create_collection(settings.mongo_collection)
         return
-    date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    document["date"] = date
+    # TODO: see if this is necessary
+    # date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    # document["date"] = date
     collection.insert_one(document)
-    logging.info("Successfully written to database")
+    logging.info("Measurement written successfully into to database")
 
 
 async def write_to_document_sensor(value, sensor_type, greenhouse_id):
@@ -56,16 +52,19 @@ async def write_to_document_sensor(value, sensor_type, greenhouse_id):
         return
     config = await get_config(db)
     if config is None:
+        logging.error("Could not find config in database")
         return
+
     document = {
         "greenhouseID": greenhouse_id,
         "accesspointID": config["accessPointId"],
         "value": value,
         "sensorType": sensor_type,
     }
-    logging.info("Writing to database...")
+
+    logging.info("Writing measurement to database...")
     await insert_document(db, document)
-    logging.info("Successfully written to database")
+    logging.info("Successfully measurement written to database")
 
 
 # async def generate_random_data():

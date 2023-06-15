@@ -7,6 +7,7 @@ from accesspoint.config import get_settings_backend
 from unittest import IsolatedAsyncioTestCase
 from http import HTTPStatus
 
+
 class Test(IsolatedAsyncioTestCase):
 
     async def test_get_setting(self):

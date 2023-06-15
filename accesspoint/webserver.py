@@ -5,7 +5,7 @@ import json
 from accesspoint import db
 from accesspoint.Settings import Settings
 from accesspoint.control_services_arduino import send_flag
-from accesspoint.log_config import AuditLogger
+from accesspoint.auditlog_config import AuditLogger
 
 logging = AuditLogger()
 
@@ -15,6 +15,34 @@ import requests
 collection_deletion_event = asyncio.Event()
 
 INTERVAL = None
+
+
+async def handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenhouse, type_limit):
+    sensor_blink_mappings = {
+        "TEMPERATURE": 3,
+        "HUMIDITY_AIR": 4,
+        "AIR_PRESSURE": 5,
+        "AIR_QUALITY": 6,
+        "LIGHT": 1,
+        "HUMIDITY_DIRT": 2,
+    }
+
+    # check if seconds_timer_upper is not None
+    if type_limit in subset.columns and subset[type_limit].iloc[0] is not None:
+        # get thresholdMinutes from sensors_greenhouse
+        threshold_minutes = \
+            sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type][
+                "limitThresholdMinutes"].iloc[0]
+        # check if the time from the minutes of seconds_timer_upper is bigger than threshold_minutes
+        if (datetime.datetime.now() - datetime.datetime.strptime(
+                subset[type_limit].iloc[0],
+                "%Y-%m-%d %H:%M:%S")).total_seconds() / 60 > threshold_minutes:
+            await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type],
+                            "led_flag")
+            subset.loc[:, type_limit] = None
+    # add new column to df on the sensor_type based on the id with the time now
+    subset.loc[:, type_limit] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return subset
 
 
 async def get_avg_measurements(database):
@@ -57,62 +85,28 @@ async def get_avg_measurements(database):
             )
 
             limit_exceeded_by = 0
-            sensor_blink_mappings = {
-                "TEMPERATURE": 3,
-                "HUMIDITY_AIR": 4,
-                "AIR_PRESSURE": 5,
-                "AIR_QUALITY": 6,
-                "LIGHT": 1,
-                "HUMIDITY_DIRT": 2,
-            }
+
             if avg > limit[0]:
-                # check if seconds_timer_upper is not None
-                if "seconds_timer_upper" in subset.columns and subset["seconds_timer_upper"].iloc[0] is not None:
-                    # get thresholdMinutes from sensors_greenhouse
-                    threshold_minutes = \
-                        sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type][
-                            "limitThresholdMinutes"].iloc[0]
-                    # check if the time from the minutues of seconds_timer_upper is bigger than threshold_minutes
-                    if (datetime.datetime.now() - datetime.datetime.strptime(
-                            subset["seconds_timer_upper"].iloc[0],
-                            "%Y-%m-%d %H:%M:%S")).total_seconds() / 60 > threshold_minutes:
-                        await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type],
-                                        "led_flag")
-                        subset.loc[:, "seconds_timer_upper"] = None
-                # add new column to df on the sensor_type based on the id with the time now
-                subset.loc[:, "seconds_timer_upper"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                subset = await handle_limit_exceeded(subset, sensor_type, greenhouse, avg)
                 limit_exceeded_by = avg - limit[0]
                 logging.error("Upper Limit exceeded by: " + str(limit_exceeded_by))
                 logging.info(sensor_type + ": Upper Limit exceeded by: " + str(limit_exceeded_by))
+
             elif avg < limit[1]:
-                # check if seconds_timer_lower is not None
-                if "seconds_timer_lower" in subset.columns and subset["seconds_timer_lower"].iloc[0] is not None:
-                    # get thresholdMinutes from sensors_greenhouse
-                    threshold_minutes = \
-                        sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type][
-                            "limitThresholdMinutes"].iloc[0]
-                    # check if the time from the minutues of seconds_timer_lower is bigger than threshold_minutes
-                    if (datetime.datetime.now() - datetime.datetime.strptime(
-                            subset["seconds_timer_lower"].iloc[0],
-                            "%Y-%m-%d %H:%M:%S")).total_seconds() / 60 > threshold_minutes:
-                        await send_flag("SensorStation " + str(greenhouse), sensor_blink_mappings[sensor_type],
-                                        "led_flag")
-                        subset.loc[:, "seconds_timer_lower"] = None
-                # add new column to df on the sensor_type based on the id with the time now
-                subset.loc[:, "seconds_timer_lower"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                subset = await handle_limit_exceeded(subset, sensor_type, greenhouse, avg, "seconds_timer_lower")
                 limit_exceeded_by = limit[1] - avg
                 logging.error("Lower Limit exceeded by: " + str(limit_exceeded_by))
                 logging.info(sensor_type + ": Lower Limit exceeded by: " + str(limit_exceeded_by))
 
-            date = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+            date = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
             data = {"greenhouseID": int(subset["greenhouseID"].iloc[0]),
                     "accesspointUUID": int(subset["accesspointID"].iloc[0]),
                     "value": avg,
                     "sensorType": sensor_type,
                     "date": date,
                     "limitExceededBy": limit_exceeded_by,
-                    "upperLimit": 34.8,
-                    "lowerLimit": 25.8,
+                    "upperLimit": limit[0],
+                    "lowerLimit": limit[1],
                     }
 
             json_arrays.append(json.dumps(data))
@@ -175,7 +169,6 @@ async def send_measurements_task():
             await send_measurements()
             await asyncio.sleep(INTERVAL)
         except Exception as e:
-            print(e)
             logging.error(f"An error occurred while reading config: {e}, restarting the task...")
             await asyncio.sleep(INTERVAL)
 
