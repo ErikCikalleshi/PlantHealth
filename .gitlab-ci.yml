@@ -24,7 +24,7 @@ testDatabaseService:
  image: python:latest
  stage: testDatabaseService
  script:
-   - apt-get update && apt-get install -y git curl libmcrypt-dev default-mysql-client
+   - apk update && apk add --no-cache git curl libmcrypt-dev mysql-client
    - mysql --version
    - sleep 2
    - echo "DROP DATABASE IF EXISTS ${MYSQL_DATABASE};" | mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" "${MYSQL_DATABASE}"
