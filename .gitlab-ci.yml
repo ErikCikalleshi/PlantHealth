@@ -22,7 +22,7 @@ stages: # List of stages for jobs, and their order of execution
 
 testDatabaseService:
  image:
-  name: python:3.10-alpine
+  name: python:3.10
  stage: testDatabaseService
  script:
    - apk update && apk add --no-cache git curl libmcrypt-dev mysql-client
