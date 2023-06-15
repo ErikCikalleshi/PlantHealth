@@ -22,7 +22,7 @@ stages: # List of stages for jobs, and their order of execution
 
 testDatabaseService:
  image:
-  name: python:3.10
+  name: python:3.10-alpine
   entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
  stage: testDatabaseService
  script:
