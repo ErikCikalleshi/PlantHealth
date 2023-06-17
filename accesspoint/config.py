@@ -2,7 +2,7 @@ import requests
 
 from accesspoint import db
 from accesspoint.Settings import Settings
-from accesspoint.connect_arduino_service import check_ble_connection
+
 import asyncio
 from accesspoint.auditlog_config import AuditLogger
 
@@ -58,7 +58,7 @@ async def get_settings_backend() -> int:
 
     logging.info("Database updated and config inserted successfully")
     logging.info("api/setting/ API call successful")
-    await check_ble_connection(data)
+    #await check_ble_connection(data)
     return response.status_code
 
 

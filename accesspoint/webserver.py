@@ -18,6 +18,8 @@ INTERVAL = None
 
 
 async def handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenhouse, type_limit):
+    # deep copy of the subset
+    subset = subset.copy()
     sensor_blink_mappings = {
         "TEMPERATURE": 3,
         "HUMIDITY_AIR": 4,
@@ -41,6 +43,8 @@ async def handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenho
                             "led_flag")
             subset.loc[:, type_limit] = None
     # add new column to df on the sensor_type based on the id with the time now
+    await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type],
+                    "led_flag")
     subset.loc[:, type_limit] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return subset
 
@@ -87,7 +91,7 @@ async def get_avg_measurements(database):
             limit_exceeded_by = 0
 
             if avg > limit[0]:
-                subset = await handle_limit_exceeded(subset, sensor_type, greenhouse, avg)
+                subset = await handle_limit_exceeded(subset, sensor_type, greenhouse, avg, "seconds_timer_upper")
                 limit_exceeded_by = avg - limit[0]
                 logging.error("Upper Limit exceeded by: " + str(limit_exceeded_by))
                 logging.info(sensor_type + ": Upper Limit exceeded by: " + str(limit_exceeded_by))
