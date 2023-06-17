@@ -16,3 +16,6 @@ backend/src/main/resources/public/index.html
 /frontend/src/services/index.ts
 *.pyc
 /accesspoint/audit.log
+audit.log
+/accesspoint/venv
+/accesspoint/.venv
