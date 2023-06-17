@@ -27,7 +27,7 @@
                     <div class="flex justify-space-between flex-col w-full">
                         <div>
                             <img src="/src/assets/alert-remove-outline.svg" class="w-[50px] h-full bg-cover bg-center mr-[2px] mt-[-30px] rounded relative"
-                                 :style="{float: `right`, display: `${!greenhouse.displayIcon ? 'block' : 'none'}`}"/>
+                                 :style="{float: `right`, display: `${greenhouse.displayIcon ? 'block' : 'none'}`}"/>
                             <p class="text-[16px] text-primary font-primary">{{ greenhouse.accessPointName }}</p>
                             <h1 class="text-[20px] font-[600] font-primary">{{ greenhouse.name }}</h1>
                             <p class="text-[14px] text-gray-500 font-primary">{{ greenhouse.location }}</p>
@@ -68,10 +68,12 @@ export default defineComponent({
         headerComponent, footerComponent, mainContainer, PageHeading
     },
     data() {
+
         return {
             greenhouses: [] as IGreenhouse[],
             loading: false,
-            searchValue: ''
+            searchValue: '',
+            eventSource: new EventSource('http://localhost:9000/emitter2')
         }
     },
     methods: {
@@ -119,9 +121,8 @@ export default defineComponent({
                 }
             }
 
-            let eventSource = new EventSource('http://localhost:9000/emitter2');
-            eventSource.onmessage = (event) => {
-                // Check if event.data is an integer
+
+            this.eventSource.onmessage = (event) => {
                 const data = parseInt(event.data);
                 if (!isNaN(data)) {
                     // Show a warning icon for the corresponding greenhouse_id
@@ -150,6 +151,9 @@ export default defineComponent({
         });
         localStorage.setItem('displayIcons', JSON.stringify(storedDisplayIcons));
         console.log(JSON.parse(localStorage.getItem('displayIcons') || '{}'));
+
+        // deactivating the event source
+        this.eventSource.close();
     }
 })
 </script>
