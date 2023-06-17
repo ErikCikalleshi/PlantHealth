@@ -1,7 +1,7 @@
 import json
 import os
 
-from accesspoint.auditlog_config import AuditLogger
+from auditlog_config import AuditLogger
 
 logging = AuditLogger()
 

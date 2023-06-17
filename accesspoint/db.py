@@ -1,7 +1,7 @@
 import datetime
 import pymongo
-from accesspoint.Settings import Settings
-from accesspoint.auditlog_config import AuditLogger
+from Settings import Settings
+from auditlog_config import AuditLogger
 
 logging = AuditLogger()
 

@@ -4,10 +4,10 @@ from asyncio import tasks
 import pandas as pd
 from bleak import BleakClient, BleakScanner, BleakError
 
-from accesspoint import db
+import db
 
-from accesspoint.auditlog_config import AuditLogger
-from accesspoint.webserver import button_disabled_pressed
+from auditlog_config import AuditLogger
+from webserver import button_disabled_pressed
 
 logging = AuditLogger()
 INTERVAL = 5

@@ -1,11 +1,11 @@
 import requests
 
-from accesspoint import db
-from accesspoint.Settings import Settings
+import db
+from Settings import Settings
 
 import asyncio
-from accesspoint.auditlog_config import AuditLogger
-from accesspoint.control_services_arduino import check_ble_connection
+from auditlog_config import AuditLogger
+from control_services_arduino import check_ble_connection
 
 logging = AuditLogger()
 

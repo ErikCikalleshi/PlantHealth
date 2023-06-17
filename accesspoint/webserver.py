@@ -2,10 +2,10 @@ import asyncio
 import datetime
 import json
 
-from accesspoint import db
-from accesspoint.Settings import Settings
+import db
+from Settings import Settings
 
-from accesspoint.auditlog_config import AuditLogger
+from auditlog_config import AuditLogger
 
 logging = AuditLogger()
 
@@ -18,7 +18,7 @@ INTERVAL = None
 
 
 async def handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenhouse, type_limit):
-    from accesspoint.control_services_arduino import send_flag
+    from control_services_arduino import send_flag
     # deep copy of the subset
     subset = subset.copy()
     sensor_blink_mappings = {
@@ -40,12 +40,14 @@ async def handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenho
         if (datetime.datetime.now() - datetime.datetime.strptime(
                 subset[type_limit].iloc[0],
                 "%Y-%m-%d %H:%M:%S")).total_seconds() / 60 > threshold_minutes:
-            await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type],
-                            "led_flag")
+            if type_limit == "seconds_timer_upper":
+                await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type],
+                                "led_flag")
+            elif type_limit == "seconds_timer_lower":
+                await send_flag("SensorStation " + str(greenhouse), sensor_blink_mappings[sensor_type], "led_flag")
             subset.loc[:, type_limit] = None
-    # add new column to df on the sensor_type based on the id with the time now
-    await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type],
-                    "led_flag")
+
+ 
     subset.loc[:, type_limit] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return subset
 
