@@ -5,6 +5,7 @@ from accesspoint.Settings import Settings
 
 import asyncio
 from accesspoint.auditlog_config import AuditLogger
+from accesspoint.control_services_arduino import check_ble_connection
 
 logging = AuditLogger()
 
@@ -58,7 +59,7 @@ async def get_settings_backend() -> int:
 
     logging.info("Database updated and config inserted successfully")
     logging.info("api/setting/ API call successful")
-    #await check_ble_connection(data)
+    await check_ble_connection(data)
     return response.status_code
 
 

@@ -4,7 +4,7 @@ import json
 
 from accesspoint import db
 from accesspoint.Settings import Settings
-from accesspoint.control_services_arduino import send_flag
+
 from accesspoint.auditlog_config import AuditLogger
 
 logging = AuditLogger()
@@ -18,6 +18,7 @@ INTERVAL = None
 
 
 async def handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenhouse, type_limit):
+    from accesspoint.control_services_arduino import send_flag
     # deep copy of the subset
     subset = subset.copy()
     sensor_blink_mappings = {
@@ -123,12 +124,16 @@ async def send_post_request(data):
     settings = Settings()
     auth = settings.auth
     headers = {"Content-Type": "application/json"}
-    url = f"http://{settings.server_host}:{settings.server_port}/api/measurements"
-    response = requests.post(url, headers=headers, auth=auth, data=data)
+    try:
+        url = f"http://{settings.server_host}:{settings.server_port}/api/measurements"
+        response = requests.post(url, headers=headers, auth=auth, data=data)
+    except Exception as e:
+        logging.error("Could not send measurements to backend " + str(e))
+        return -1
+
     if response.status_code == 200:
         logging.info("Measurements sent successfully to backend")
-    else:
-        logging.warning("Could not send measurements to backend")
+
     return response.status_code
 
 
@@ -191,4 +196,4 @@ async def button_disabled_pressed(greenhouse_id: int):
 
 
 if __name__ == "__main__":
-    asyncio.run(send_measurements())
+    asyncio.run(button_disabled_pressed(2))

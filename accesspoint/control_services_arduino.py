@@ -1,4 +1,6 @@
-from accesspoint import connect_arduino_service
+import asyncio
+
+from connect_arduino_service import global_connections
 from accesspoint.auditlog_config import AuditLogger
 
 logging = AuditLogger()
@@ -15,7 +17,7 @@ async def send_flag(device_name, flag_value, operation):
 
     client = None
 
-    for entry in connect_arduino_service.global_connections:
+    for entry in global_connections:
         if entry["name"] == device_name:
             client = entry["client"]
             break
@@ -49,3 +51,17 @@ async def send_flag(device_name, flag_value, operation):
                     return
 
 
+async def check_ble_connection(data):
+    # check for every published
+    for entry in global_connections:
+        for greenhouse in data["greenhouses"]:
+            greenhouse_id = greenhouse["id"]
+
+            if entry["name"] == ("SensorStation " + str(greenhouse_id)) and not greenhouse["published"]:
+                connected_client = entry["client"]
+                await send_flag(entry["name"], 1, "ble_disconnect")
+                await asyncio.sleep(1)
+                await connected_client.disconnect()
+                global_connections.remove(entry)
+                logging.info("BLE Connection disabled")
+                break

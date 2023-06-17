@@ -5,7 +5,7 @@ import pandas as pd
 from bleak import BleakClient, BleakScanner, BleakError
 
 from accesspoint import db
-from accesspoint.control_services_arduino import send_flag
+
 from accesspoint.auditlog_config import AuditLogger
 from accesspoint.webserver import button_disabled_pressed
 
@@ -128,20 +128,7 @@ async def read_sensor_data():
         await asyncio.sleep(INTERVAL)
 
 
-async def check_ble_connection(data):
-    # check for every published
-    for entry in global_connections:
-        for greenhouse in data["greenhouses"]:
-            greenhouse_id = greenhouse["id"]
 
-            if entry["name"] == ("SensorStation " + str(greenhouse_id)) and not greenhouse["published"]:
-                connected_client = entry["client"]
-                await send_flag(entry["name"], 1, "ble_disconnect")
-                await asyncio.sleep(1)
-                await connected_client.disconnect()
-                global_connections.remove(entry)
-                logging.info("BLE Connection disabled")
-                break
 
 
 if __name__ == "__main__":
