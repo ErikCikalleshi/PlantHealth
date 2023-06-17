@@ -5,7 +5,7 @@ import json
 from accesspoint import db
 from accesspoint.Settings import Settings
 from accesspoint.control_services_arduino import send_flag
-from accesspoint.auditlog_config import AuditLogger
+from accesspoint.log_config import AuditLogger
 
 logging = AuditLogger()
 

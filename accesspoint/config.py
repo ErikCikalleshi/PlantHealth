@@ -4,7 +4,8 @@ from accesspoint import db
 from accesspoint.Settings import Settings
 
 import asyncio
-from accesspoint.auditlog_config import AuditLogger
+
+from accesspoint.log_config import AuditLogger
 
 logging = AuditLogger()
 
@@ -30,24 +31,24 @@ async def get_settings_backend() -> int:
     settings = Settings()
 
     url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{settings.access_point_id}"
-    
+
     try:
         response = requests.get(url, auth=settings.auth)
     except requests.exceptions.ConnectionError:
         logging.error("api/setting/ API call failed")
-        return response.status_code
+
 
     if response.status_code != 200:
         logging.error("api/setting/ API call failed")
         return response.status_code
-    
+
     logging.info("api/setting/ API call successful")
 
     data = response.json()
 
     # global INTERVAL
     # INTERVAL = data["transmissionIntervalSeconds"]
-    
+
     # write to db the config
     database = await db.connect_to_db()
 
@@ -58,7 +59,7 @@ async def get_settings_backend() -> int:
 
     logging.info("Database updated and config inserted successfully")
     logging.info("api/setting/ API call successful")
-    #await check_ble_connection(data)
+    # await check_ble_connection(data)
     return response.status_code
 
 

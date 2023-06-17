@@ -6,7 +6,8 @@ from bleak import BleakClient, BleakScanner, BleakError
 
 from accesspoint import db
 from accesspoint.control_services_arduino import send_flag
-from accesspoint.auditlog_config import AuditLogger
+from accesspoint.log_config import AuditLogger
+
 from accesspoint.webserver import button_disabled_pressed
 
 logging = AuditLogger()
