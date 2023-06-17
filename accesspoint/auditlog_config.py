@@ -35,21 +35,18 @@ class AuditLogger:
         return cls._instance
 
     def info(self, message):
-        print(message)
         frame = inspect.stack()[1]
         filename = os.path.relpath(frame.filename)
         lineno = frame.lineno
         self.logger.info(f"({filename}:{lineno}){message}")
 
     def warning(self, message):
-        print(message)
         frame = inspect.stack()[1]
         filename = os.path.relpath(frame.filename)
         lineno = frame.lineno
         self.logger.warning(f"({filename}:{lineno}){message}")
 
     def error(self, message):
-        print(message)
         frame = inspect.stack()[1]
         filename = os.path.relpath(frame.filename)
         lineno = frame.lineno

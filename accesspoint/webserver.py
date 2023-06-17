@@ -103,7 +103,8 @@ async def get_avg_measurements(database):
                 logging.error("Lower Limit exceeded by: " + str(limit_exceeded_by))
                 logging.info(sensor_type + ": Lower Limit exceeded by: " + str(limit_exceeded_by))
 
-            date = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+            date = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M")
+            print(date)
             data = {"greenhouseID": int(subset["greenhouseID"].iloc[0]),
                     "accesspointUUID": int(subset["accesspointID"].iloc[0]),
                     "value": avg,
@@ -184,14 +185,16 @@ async def send_measurements_task():
 
 async def button_disabled_pressed(greenhouse_id: int):
     settings = Settings()
-    url = f"http://{settings.server_host}:{settings.server_port}/api/disabled"
+    url = f"http://{settings.server_host}:{settings.server_port}/disabled"
     auth = settings.auth
     headers = {"Content-Type": "application/json"}
     payload = {"greenhouse": greenhouse_id}
     response = requests.post(url, headers=headers, auth=auth, json=payload)
     if response.status_code == 200:
+        print("Button disabled pressed successfully")
         logging.info("Button disabled pressed successfully")
     else:
+        print("Button disabled pressed pressed failed")
         logging.error("Button disabled pressed failed")
 
 

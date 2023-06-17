@@ -93,8 +93,11 @@ async def read_sensor_data():
                                                 buffer) in sensor_mappings.items():
                                             if sender.uuid == uuid:
                                                 if sensor_type == "LED":
+
                                                     val = struct.unpack(unpack_format, value[:buffer])[0]
-                                                    if val == 0:
+                                                    print(val)
+                                                    if val == b'\x00':
+
                                                         logging.info("Warnings disabled")
                                                         await button_disabled_pressed(
                                                             greenhouse_id=int(sensor_station_id))
