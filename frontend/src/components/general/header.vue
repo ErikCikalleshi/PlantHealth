@@ -6,7 +6,7 @@ import VDropdown from "@/components/general/v-dropdown.vue";
 import AuthService from "@/services/auth.service";
 import type IUser from "@/interfaces/user/IUser";
 import Dashboard_button from "@/components/general/dashboard_button.vue";
-
+import Custom_snackbar from "@/components/general/snackbar.vue";
 export default defineComponent({
     name: "HeaderView",
     props: {
@@ -39,6 +39,7 @@ export default defineComponent({
         }
     },
     components: {
+        Custom_snackbar,
         Dashboard_button,
         VDropdown,
         // eslint-disable-next-line vue/no-unused-components
@@ -64,7 +65,7 @@ export default defineComponent({
 </script>
 
 <template>
-
+    <custom_snackbar></custom_snackbar>
     <div :class="{ 'h-[300px]': !presentation }" class="header-view w-[100vw] font-primary">
         <div class="md:py-7 py-15 px-6 container mx-auto flex items-center justify-between text-white font-primary text-[16px]">
             <div class="flex logo">
