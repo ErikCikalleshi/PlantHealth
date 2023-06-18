@@ -1,7 +1,7 @@
 import asyncio
 
 from connect_arduino_service import global_connections
-from accesspoint.auditlog_config import AuditLogger
+from auditlog_config import AuditLogger
 
 logging = AuditLogger()
 

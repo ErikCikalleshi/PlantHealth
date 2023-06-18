@@ -4,10 +4,10 @@ from asyncio import tasks
 import pandas as pd
 from bleak import BleakClient, BleakScanner, BleakError
 
-from accesspoint import db
+import db
 
-from accesspoint.auditlog_config import AuditLogger
-from accesspoint.webserver import button_disabled_pressed
+from auditlog_config import AuditLogger
+from webserver import button_disabled_pressed
 
 logging = AuditLogger()
 INTERVAL = 5
@@ -93,8 +93,11 @@ async def read_sensor_data():
                                                 buffer) in sensor_mappings.items():
                                             if sender.uuid == uuid:
                                                 if sensor_type == "LED":
+
                                                     val = struct.unpack(unpack_format, value[:buffer])[0]
-                                                    if val == 0:
+                                                    print(val)
+                                                    if val == b'\x00':
+
                                                         logging.info("Warnings disabled")
                                                         await button_disabled_pressed(
                                                             greenhouse_id=int(sensor_station_id))

@@ -1,7 +1,7 @@
 import datetime
 import pymongo
-from accesspoint.Settings import Settings
-from accesspoint.auditlog_config import AuditLogger
+from Settings import Settings
+from auditlog_config import AuditLogger
 
 logging = AuditLogger()
 
@@ -39,8 +39,8 @@ async def insert_document(db, document):
         db.create_collection(settings.mongo_collection)
         return
     # TODO: see if this is necessary
-    # date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    # document["date"] = date
+    date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    document["date"] = date
     collection.insert_one(document)
     logging.info("Measurement written successfully into to database")
 
