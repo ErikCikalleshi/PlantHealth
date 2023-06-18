@@ -20,7 +20,6 @@ cursor.reset()
 cursor.execute("SELECT MAX(measurement_date) FROM measurement")
 result = cursor.fetchone()
 if result is not None:
-
     measurement_date = result[0]
     if measurement_date is None:
         measurement_date = datetime.datetime.now()
@@ -34,7 +33,7 @@ interval_seconds = 10
 max_change_percent = 10.0
 
 # Simulate accesspoint transmission interval
-accesspointtransmissionintervalSeconds = 300
+accesspointtransmissionintervalSeconds = 30
 
 previous_sensor_values = {}
 
@@ -116,8 +115,10 @@ while iteration < max_iteration:
             "accesspointUUID": access_point_uuid,
             "value": value,
             "sensorType": sensorType,
-            "date": new_measurement_date,
-            "limitExceededBy": limitExceededBy
+            "date": new_measurement_date, #datetime.datetime.now().isoformat(),
+            "limitExceededBy": limitExceededBy,
+            "upperLimit": limit_max,
+            "lowerLimit": limit_min
         }
         # await send_data(measurement_data)
 
@@ -132,5 +133,6 @@ while iteration < max_iteration:
     loop.run_until_complete(asyncio.gather(*tasks))
 
     print("Iteration: " + str(iteration) + " finished")
+    # time.sleep(30)
 
     iteration += 1

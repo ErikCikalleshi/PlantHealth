@@ -29,8 +29,8 @@ public class MeasurementDTO {
         this.measurementId = measurement.getId();
         this.date = measurement.getMeasurementDate();
         this.limitExceededBy =measurement.getLimitExceededBy();
-        this.upperLimit = measurement.getSensor().getLimitUpper();
-        this.lowerLimit = measurement.getSensor().getLimitLower();
+        this.upperLimit = measurement.getLimitUpper();
+        this.lowerLimit = measurement.getLimitLower();
     }
 
     private long measurementId;

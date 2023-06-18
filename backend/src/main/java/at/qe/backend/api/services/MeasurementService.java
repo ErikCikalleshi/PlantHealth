@@ -9,15 +9,12 @@ import at.qe.backend.models.Greenhouse;
 import at.qe.backend.models.Measurement;
 import at.qe.backend.models.Sensor;
 import at.qe.backend.repositories.MeasurementRepository;
-import at.qe.backend.services.AccessPointService;
 import at.qe.backend.services.GreenhouseService;
 import at.qe.backend.services.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * This Service is responsible for saving the Measurements provided by the AccessPoints
@@ -61,6 +58,8 @@ public class MeasurementService {
         measurement.setValue(measurementDTO.getValue());
         measurement.setSensor(sensor);
         measurement.setMeasurementDate(measurementDTO.getDate());
+        measurement.setLimitLower(measurementDTO.getLowerLimit());
+        measurement.setLimitUpper(measurementDTO.getUpperLimit());
         measurement.setLimitExceededBy(measurementDTO.getLimitExceededBy());
         if (measurement.getLimitExceededBy() != 0) {
             greenhouse.setLastLimitExceeded(new Date());
@@ -68,7 +67,6 @@ public class MeasurementService {
         }
         measurement = measurementRepository.save(measurement);
         sensor.addMeasurement(measurement);
-
         return new MeasurementDTO(measurement);
     }
 

@@ -30,4 +30,6 @@ public class Measurement implements Serializable {
     private Sensor sensor;
 
     private double LimitExceededBy;
+    private double LimitLower;
+    private double LimitUpper;
 }
