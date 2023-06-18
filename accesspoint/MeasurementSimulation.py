@@ -1,6 +1,7 @@
 # This script sends random measurements for all sensors in the database until the user quits it
 import time
 
+import json
 import aiohttp
 import mysql.connector
 import datetime
@@ -49,15 +50,21 @@ exceedLimitsSensor = random.sample(range(1, len(sensor_data)), 5)
 
 async def send_data(measurement_data, greenhouse_uuid):
     async with aiohttp.ClientSession() as session:
-        async with session.post("http://172.16.1.125:9000/api/measurements", auth=aiohttp.BasicAuth("admin", "passwd"),
+        async with session.post("http://172.20.10.2:9000/api/measurements", auth=aiohttp.BasicAuth("admin", "passwd"),
                                 json=measurement_data) as response:
             # print("Sending data: " + str(measurement_data))
             response_text = await response.text()
-            # print(response_text)
+
             if response.status != 200:
                 # Add the greenhouse to the offline list if the request fails (e.g. greenhouse/access point is disabled)
                 offlineGreenhouses.append(greenhouse_uuid)
-
+            else:
+                print("Measurement data: ", measurement_data)
+                original_data = json.loads(json.dumps(measurement_data))
+                response_data = json.loads(response_text)
+                print("Original date: " + original_data["date"])
+                print("Response date: " + response_data["date"])
+                print("-"*50)
 
 iteration = 0
 # Infinite loop to send data continuously
@@ -110,17 +117,24 @@ while iteration < max_iteration:
         new_measurement_date = (measurement_date + datetime.timedelta(
             seconds=accesspointtransmissionintervalSeconds * iteration)).isoformat()
         # Send the data to the API
+        # date= datetime.datetime.utcnow().isoformat()
+        date = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+        # print("date:", date)
         measurement_data = {
             "greenhouseID": greenhouse_id,
             "accesspointUUID": access_point_uuid,
             "value": value,
             "sensorType": sensorType,
-            "date": new_measurement_date, #datetime.datetime.now().isoformat(),
+            "date": date,
             "limitExceededBy": limitExceededBy,
             "upperLimit": limit_max,
             "lowerLimit": limit_min
         }
-        # await send_data(measurement_data)
+        # print("date:", date)
+        # print("Now ", datetime.datetime.now())
+        # print("ISO ", datetime.datetime.now().isoformat())
+        # print()
+        # send_data(measurement_data, row[6])
 
         tasks.append(asyncio.ensure_future(send_data(measurement_data, row[6])))
         time.sleep(0.01)
