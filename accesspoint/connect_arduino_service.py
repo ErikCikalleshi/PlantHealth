@@ -95,7 +95,7 @@ async def read_sensor_data():
                                                 if sensor_type == "LED":
 
                                                     val = struct.unpack(unpack_format, value[:buffer])[0]
-                                                    print(val)
+
                                                     if val == b'\x00':
 
                                                         logging.info("Warnings disabled")

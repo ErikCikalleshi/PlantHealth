@@ -53,8 +53,6 @@ async def handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenho
                                 "led_flag")
             elif type_limit == "seconds_timer_lower":
                 await send_flag("SensorStation " + str(greenhouse), sensor_blink_mappings[sensor_type], "led_flag")
-            subset.loc[:, type_limit] = None
-
 
     return subset
 
