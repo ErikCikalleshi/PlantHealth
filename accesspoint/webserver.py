@@ -51,9 +51,10 @@ async def handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenho
             if type_limit == "seconds_timer_upper":
                 await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type],
                                 "led_flag")
+
             elif type_limit == "seconds_timer_lower":
                 await send_flag("SensorStation " + str(greenhouse), sensor_blink_mappings[sensor_type], "led_flag")
-
+            sensor_exceeded_date.pop(sensor_type)
     return subset
 
 
@@ -102,17 +103,15 @@ async def get_avg_measurements(database):
                 subset = await handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenhouse,
                                                      "seconds_timer_upper")
                 limit_exceeded_by = avg - limit[0]
-                logging.error("Upper Limit exceeded by: " + str(limit_exceeded_by))
                 logging.info(sensor_type + ": Upper Limit exceeded by: " + str(limit_exceeded_by))
 
             elif avg < limit[1]:
                 subset = await handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenhouse,
                                                      "seconds_timer_lower")
                 limit_exceeded_by = limit[1] - avg
-                logging.error("Lower Limit exceeded by: " + str(limit_exceeded_by))
                 logging.info(sensor_type + ": Lower Limit exceeded by: " + str(limit_exceeded_by))
 
-            date = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M")
+            date = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
 
             data = {"greenhouseID": int(subset["greenhouseID"].iloc[0]),
                     "accesspointUUID": int(subset["accesspointID"].iloc[0]),
