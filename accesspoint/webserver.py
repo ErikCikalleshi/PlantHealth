@@ -51,11 +51,10 @@ async def handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenho
             if type_limit == "seconds_timer_upper":
                 await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type],
                                 "led_flag")
+
             elif type_limit == "seconds_timer_lower":
                 await send_flag("SensorStation " + str(greenhouse), sensor_blink_mappings[sensor_type], "led_flag")
-            subset.loc[:, type_limit] = None
-
-
+            sensor_exceeded_date.pop(sensor_type)
     return subset
 
 
