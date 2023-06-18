@@ -21,7 +21,7 @@ stages: # List of stages for jobs, and their order of execution
     - apk add --update maven
 
 testDatabaseService:
- image: python:latest
+ image: mysql:latest
  stage: testDatabaseService
  script:
    - apt-get update && apt-get install -y git curl libmcrypt-dev default-mysql-client
