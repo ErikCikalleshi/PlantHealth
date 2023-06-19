@@ -19,16 +19,21 @@
                 </div>
             </div>
             <div class="flex flex-wrap gap-3 ">
-                <div v-for="(greenhouse, index) in greenhousesList" :key="index" class="w-[360px] bg-white h-[200px] flex shadow rounded-[5px] p-[14px]">
-                   <div class="w-[200px] h-full bg-cover bg-center mr-[14px] rounded relative" :class="greenhouse.status.toLowerCase()"
+                <div v-for="(greenhouse, index) in greenhousesList" :key="index"
+                     class="w-[360px] bg-white h-[200px] flex shadow rounded-[5px] p-[14px]">
+                    <div class="w-[200px] h-full bg-cover bg-center mr-[14px] rounded relative"
+                         :class="greenhouse.status.toLowerCase()"
                          :style="{ background: `linear-gradient(337.44deg, ${greenhouse.status.toLowerCase() === 'offline' ? '#FF6161 0%, rgba(255, 97, 97, 0) 100%)' : (greenhouse.displayLimitExceeded ? '#D4790C 0%, rgba(240, 240, 15, 0) 100%)' : '#449A8B 0%, rgba(68, 154, 139, 0) 100%)')}, url('/src/assets/plant-pic-example.png')` }"></div>
                     <div class="flex justify-space-between flex-col w-full">
                         <div>
+                            <img src="/src/assets/alert-remove-outline.svg" class="w-[50px] h-full bg-cover bg-center mr-[2px] mt-[-30px] rounded relative"
+                                 :style="{float: `right`, display: `${greenhouse.displayIcon ? 'block' : 'none'}`}"/>
                             <p class="text-[16px] text-primary font-primary">{{ greenhouse.accessPointName }}</p>
                             <h1 class="text-[20px] font-[600] font-primary">{{ greenhouse.name }}</h1>
                             <p class="text-[14px] text-gray-500 font-primary">{{ greenhouse.location }}</p>
 
-                            <p class="font-secondary text-[14px]">{{ truncateString(greenhouse.description,48 )}}</p>
+
+                            <p class="font-secondary text-[14px]">{{ truncateString(greenhouse.description, 48) }}</p>
                         </div>
                         <div class="flex justify-start items-center">
                             <edit-greenhouse-dialog-form :greenhouseUUID="greenhouse.uuid"
@@ -63,10 +68,12 @@ export default defineComponent({
         headerComponent, footerComponent, mainContainer, PageHeading
     },
     data() {
+
         return {
             greenhouses: [] as IGreenhouse[],
             loading: false,
-            searchValue: ''
+            searchValue: '',
+            eventSource: new EventSource('http://localhost:9000/emitter2')
         }
     },
     methods: {
@@ -92,18 +99,61 @@ export default defineComponent({
             return this.greenhouses;
         }
     },
-    mounted() {
-        adminGreenhouseService.getAllGreenhousesForCurrentUser().then((response => {
+    mounted: async function() {
+        try {
+            const response = await adminGreenhouseService.getAllGreenhousesForCurrentUser();
             this.greenhouses = response.data;
-            this.greenhouses.forEach((greenhouse) => {
-                if (greenhouse.displayLimitExceeded){
-                    console.log("xd")
+            for (const greenhouse of this.greenhouses) {
+                if (greenhouse.displayLimitExceeded) {
+                    console.log("xd");
                 }
-                adminAccessPointService.getAccesPointByGreenhouseUuid(greenhouse.uuid).then((response) => {
-                    greenhouse.accessPointName = response.data.name;
-                })
-            })
-        }))
+                const accessPointResponse = await adminAccessPointService.getAccesPointByGreenhouseUuid(greenhouse.uuid);
+                greenhouse.accessPointName = accessPointResponse.data.name;
+            }
+
+            let storedDisplayIcons = JSON.parse(localStorage.getItem('displayIcons') || '{}');
+
+            // Loop through the greenhouses and set the displayIcon property
+            for (const greenhouse of this.greenhouses) {
+                if (storedDisplayIcons.hasOwnProperty(greenhouse.uuid)) {
+                    // Set the displayIcon value from localStorage
+                    greenhouse.displayIcon = storedDisplayIcons[greenhouse.uuid];
+                }
+            }
+
+
+            this.eventSource.onmessage = (event) => {
+                const data = parseInt(event.data);
+                if (!isNaN(data)) {
+                    // Show a warning icon for the corresponding greenhouse_id
+                    console.log(data);
+                    const selectedGreenhouse = this.greenhouses.find((greenhouse) => greenhouse.uuid === data);
+                    if (selectedGreenhouse) {
+                        selectedGreenhouse.displayIcon = true;
+
+                        // Update the stored displayIcon value in localStorage
+                        storedDisplayIcons[selectedGreenhouse.uuid] = true;
+                        localStorage.setItem('displayIcons', JSON.stringify(storedDisplayIcons));
+                        console.log(JSON.parse(localStorage.getItem('displayIcons') || '{}'));
+                    }
+                }
+            };
+
+
+        } catch (error) {
+            console.error(error);
+        }
+    },
+    beforeUnmount() {
+        let storedDisplayIcons: { [key: string]: boolean } = {};
+        this.greenhouses.forEach((greenhouse: IGreenhouse) => {
+            storedDisplayIcons[greenhouse.uuid] = greenhouse.displayIcon;
+        });
+        localStorage.setItem('displayIcons', JSON.stringify(storedDisplayIcons));
+        console.log(JSON.parse(localStorage.getItem('displayIcons') || '{}'));
+
+        // deactivating the event source
+        this.eventSource.close();
     }
 })
 </script>

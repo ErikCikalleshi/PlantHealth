@@ -1,60 +1,52 @@
 import asyncio
 import struct
 from asyncio import tasks
-import numpy as np
 import pandas as pd
 from bleak import BleakClient, BleakScanner, BleakError
 
 import db
-import webserver
-from config import get_config
-from log_config import AuditLogger
+
+from auditlog_config import AuditLogger
+from webserver import button_disabled_pressed
 
 logging = AuditLogger()
 INTERVAL = 5
 
 collection_deletion_event = asyncio.Event()
 global client
-global_client = []
+global_connections = []
 
 
 async def read_sensor_data():
     """
     Continuously reads data from sensor stations based on the latest configuration.
 
-    This function connects to sensor stations, starts data notifications, and continuously reads and handles incoming data.
-    It periodically checks the configuration document in the database for updates.
+    This function connects to sensor stations, starts data notifications, and continuously reads and handles incoming
+    data. It periodically checks the configuration document in the database for updates.
 
     """
     database = await db.connect_to_db()
 
-
     while True:
         # Retrieve the latest configuration from the database
         config_collection = database["config"]
-        await get_config()
+
         config = config_collection.find_one()
         data = pd.DataFrame(config["greenhouses"])
-        data = data[data["published"] == True]
+        data = data[data["published"]]
         data = data.assign(convention_name=lambda x: "SensorStation " + x["id"].astype(str))
-        # data.at[data.index[0], "convention_name"] = "SensorStation 69"
-        # data.at[data.index[0], "id"] = 69
 
         sensor_stations: list = data["convention_name"].unique()
         available_sensor_stations = []
         devices = await BleakScanner.discover(timeout=10.0, return_adv=True)
 
         for k, v in devices.items():
-            # if local_name == (one of the sensor stations):
             if v[1].local_name in sensor_stations:
                 available_sensor_stations.append((v[1].local_name, v[0]))
-                print("Found device with name {0}".format(v[1].local_name))
+                logging.info("Found device with name {0}".format(v[1].local_name))
 
-        print()
-        # TODO: make a name convention for the sensor stations
-        # sensor_stations = ["SensorStation 69"]
         for idx, (name, device) in enumerate(available_sensor_stations):
-            id = data[data["convention_name"] == name]["id"].iloc[0]
+            sensor_station_id = data[data["convention_name"] == name]["id"].iloc[0]
             logging.info("Looking for device with name {0}".format(name))
 
             if device is None:
@@ -63,16 +55,16 @@ async def read_sensor_data():
 
             logging.info("Found device with name {0}".format(name))
 
-            async def read_from_device(device, name):
+            async def read_from_device(device_ble, station_name):
                 while True:
                     try:
                         print("Trying to connect to device")
-                        async with BleakClient(device, timeout=10) as client:
+                        async with BleakClient(device_ble, timeout=10) as bleak_client:
 
-                            global_client.append({"client": client, "name": name})
-                            logging.info("Connected to device {0}".format(name))
+                            global_connections.append({"client": bleak_client, "name": station_name})
+                            logging.info("Connected to device {0}".format(station_name))
 
-                            for service in client.services:
+                            for service in bleak_client.services:
 
                                 for characteristic in service.characteristics:
 
@@ -82,7 +74,6 @@ async def read_sensor_data():
                                         continue
 
                                     async def notification_handler(sender, value):
-                                        from webserver import collection_deletion_event
                                         if collection_deletion_event.is_set():
                                             logging.warning(
                                                 "Collection deletion in progress. Skipping writing to the database.")
@@ -102,42 +93,47 @@ async def read_sensor_data():
                                                 buffer) in sensor_mappings.items():
                                             if sender.uuid == uuid:
                                                 if sensor_type == "LED":
+
                                                     val = struct.unpack(unpack_format, value[:buffer])[0]
-                                                    if val == 0:
+
+                                                    if val == b'\x00':
+
                                                         logging.info("Warnings disabled")
-                                                        webserver.button_disabled_pressed(greenhouse_id=int(id))
+                                                        await button_disabled_pressed(
+                                                            greenhouse_id=int(sensor_station_id))
                                                     continue
                                                 val = struct.unpack(unpack_format, value[:buffer])[0] / scale_factor
 
                                                 if sensor_type == "AIR_QUALITY":
                                                     val = 100 - val
-                                                await db.write_to_document_sensor(val, sensor_type, int(id))
+                                                logging.info("Received from SensorStation {0}: {1}".format(sensor_station_id, val))
+                                                await db.write_to_document_sensor(val, sensor_type,
+                                                                                  int(sensor_station_id))
                                                 logging.info("Wrote {0} to the database.".format(val))
                                                 break
 
                                     logging.info("Starting notifications for {0}".format(characteristic.uuid))
-                                    await client.start_notify(characteristic.uuid, notification_handler)
+                                    await bleak_client.start_notify(characteristic.uuid, notification_handler)
 
                             while True:
                                 await asyncio.sleep(1)
                     except BleakError:
                         # Handle disconnection here
-                        # Wait for a while before attempting to reconnect
                         logging.error(
-                            "Disconnected from device {0}. Attempting to reconnect in 5 seconds.".format(name))
+                            "Disconnected from device {0}. Attempting to reconnect in 5 seconds.".format(station_name))
                         await asyncio.sleep(5)
                         # Cancel and close the task
-                        # tasks.current_task().cancel()
+                        tasks.current_task().cancel()
 
             tasks.create_task(read_from_device(device, name))
             logging.info("Started reading data from device {0}".format(name))
 
-        logging.info("Finished reading data from all devices. Checking for updates in 30 seconds.")
-        await asyncio.sleep(INTERVAL)  # Wait for 30 seconds before checking again
+        logging.info("Finished reading data from all devices. Checking for updates ...")
+        await asyncio.sleep(INTERVAL)
 
 
-# Start reading data from the sensor station
-# asyncio.run(read_sensor_data())
+
+
 
 if __name__ == "__main__":
     asyncio.run(read_sensor_data())

@@ -1,7 +1,7 @@
 import asyncio
 from config import start_config_thread
 from connect_arduino_service import read_sensor_data
-from log_config import AuditLogger
+from auditlog_config import AuditLogger
 from webserver import send_measurements_task
 
 logging = AuditLogger()
