@@ -56,6 +56,14 @@ async def read_sensor_data():
             logging.info("Found device with name {0}".format(name))
 
             async def read_from_device(device_ble, station_name):
+                """
+                   Task for reading data from a specific sensor station device.
+
+                   Args:
+                       device_ble (str): BLE address of the device.
+                       station_name (str): Name of the sensor station.
+
+                """
                 while True:
                     try:
                         print("Trying to connect to device")
@@ -74,6 +82,13 @@ async def read_sensor_data():
                                         continue
 
                                     async def notification_handler(sender, value):
+                                        """
+                                           Handler for receiving notifications from a characteristic.
+
+                                           Args:
+                                               sender: The characteristic sender.
+                                               value: The received value.
+                                        """
                                         if collection_deletion_event.is_set():
                                             logging.warning(
                                                 "Collection deletion in progress. Skipping writing to the database.")
@@ -97,7 +112,6 @@ async def read_sensor_data():
                                                     val = struct.unpack(unpack_format, value[:buffer])[0]
 
                                                     if val == b'\x00':
-
                                                         logging.info("Warnings disabled")
                                                         await button_disabled_pressed(
                                                             greenhouse_id=int(sensor_station_id))
@@ -106,7 +120,9 @@ async def read_sensor_data():
 
                                                 if sensor_type == "AIR_QUALITY":
                                                     val = 100 - val
-                                                logging.info("Received from SensorStation {0}: {1}".format(sensor_station_id, val))
+                                                logging.info(
+                                                    "Received from SensorStation {0}: {1}".format(sensor_station_id,
+                                                                                                  val))
                                                 await db.write_to_document_sensor(val, sensor_type,
                                                                                   int(sensor_station_id))
                                                 logging.info("Wrote {0} to the database.".format(val))
@@ -130,9 +146,6 @@ async def read_sensor_data():
 
         logging.info("Finished reading data from all devices. Checking for updates ...")
         await asyncio.sleep(INTERVAL)
-
-
-
 
 
 if __name__ == "__main__":

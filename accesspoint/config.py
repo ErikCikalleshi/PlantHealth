@@ -28,6 +28,12 @@ async def start_config_thread():
 
 
 async def get_settings_backend() -> int:
+    """
+        Retrieves settings from a backend server and updates the local database with the received configuration.
+
+        Returns:
+            int: HTTP status code indicating the success or failure of the API call.
+    """
     settings = Settings()
 
     url = f"http://{settings.server_host}:{settings.server_port}/api/setting/{settings.access_point_id}"

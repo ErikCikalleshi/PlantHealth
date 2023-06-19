@@ -20,6 +20,23 @@ sensor_exceeded_date = {}
 
 
 async def handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenhouse, type_limit):
+    """
+     Handles the case when a sensor value exceeds the upper or lower limit.
+
+     This function handles the behavior when a sensor value exceeds the upper or lower limit for a given sensor type
+     and greenhouse. It performs the necessary actions such as sending flags to the SensorStation.
+
+     Args:
+         subset (DataFrame): Subset of measurements for a specific sensor type and greenhouse.
+         sensor_type (str): Type of the sensor.
+         greenhouse (int): ID of the greenhouse.
+         sensors_greenhouse (DataFrame): DataFrame containing sensor configurations for the greenhouse.
+         type_limit (str): Type of limit exceeded ("seconds_timer_upper" or "seconds_timer_lower").
+
+     Returns:
+         DataFrame: Updated subset of measurements after handling the limit exceeded case.
+
+     """
     from control_services_arduino import send_flag
     # deep copy of the subset
     subset = subset.copy()
@@ -57,6 +74,19 @@ async def handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenho
 
 
 async def get_avg_measurements(database):
+    """
+    Retrieves average measurements for each sensor type and greenhouse from the database.
+
+    This function retrieves average measurements for each sensor type and greenhouse from the specified database.
+    It calculates the average, checks for limit exceeded, and prepares the data for sending to the backend server.
+
+    Args:
+        database: The MongoDB database object.
+
+    Returns:
+        list: List of JSON-encoded measurement data.
+
+    """
     settings = Settings()
     if database is None:
         logging.error("Could not connect to the database")
@@ -128,6 +158,18 @@ async def get_avg_measurements(database):
 
 
 async def send_post_request(data):
+    """
+    Sends a POST request to the backend server to submit the measurements.
+
+    This function sends a POST request to the specified backend server to submit the measurements data.
+
+    Args:
+        data (str): JSON-encoded measurement data.
+
+    Returns:
+        int: HTTP status code of the response.
+
+    """
     settings = Settings()
     auth = settings.auth
     headers = {"Content-Type": "application/json"}
@@ -145,6 +187,16 @@ async def send_post_request(data):
 
 
 async def send_measurements() -> int:
+    """
+    Sends measurements data to the backend server.
+
+    This function retrieves average measurements, sends them to the backend server,
+    and deletes the collection of measurements from the database.
+
+    Returns:
+        int: HTTP status code of the response.
+
+    """
     settings = Settings()
 
     database = await db.connect_to_db()
@@ -190,6 +242,16 @@ async def send_measurements_task():
 
 
 async def button_disabled_pressed(greenhouse_id: int):
+    """
+    Sends a POST request to the backend server to indicate a button disabled press.
+
+    This function sends a POST request to the backend server to indicate that the button for disabling a greenhouse
+    has been pressed.
+
+    Args:
+        greenhouse_id (int): ID of the greenhouse.
+
+    """
     settings = Settings()
     url = f"http://{settings.server_host}:{settings.server_port}/disabled"
     auth = settings.auth

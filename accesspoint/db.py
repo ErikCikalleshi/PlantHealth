@@ -7,6 +7,16 @@ logging = AuditLogger()
 
 
 async def connect_to_db():
+    """
+     Connects to the MongoDB database using the settings provided.
+
+     This function establishes a connection to the MongoDB database using the host and port specified in the settings.
+     If the database or collection does not exist, it creates them.
+
+     Returns:
+         Database: The MongoDB database object.
+
+     """
     settings = Settings()
     client = pymongo.MongoClient(settings.mongo_host, settings.mongo_port)
     db = client[settings.mongo_database]
@@ -22,6 +32,18 @@ async def connect_to_db():
 
 
 async def get_config(db):
+    """
+    Retrieves the configuration document from the database.
+
+    This function retrieves the configuration document from the specified database's "config" collection.
+
+    Args:
+        db (Database): The MongoDB database object.
+
+    Returns:
+        dict: The configuration document.
+
+    """
     config_collection = db["config"]
     config = config_collection.find_one()
     if config is None:
@@ -31,6 +53,16 @@ async def get_config(db):
 
 
 async def insert_document(db, document):
+    """
+    Inserts a document into the MongoDB collection.
+
+    This function inserts the provided document into the specified MongoDB collection.
+
+    Args:
+        db (Database): The MongoDB database object.
+        document (dict): The document to be inserted.
+
+    """
     settings = Settings()
     collection = db[settings.mongo_collection]
     if collection is None:
@@ -46,6 +78,18 @@ async def insert_document(db, document):
 
 
 async def write_to_document_sensor(value, sensor_type, greenhouse_id):
+    """
+    Writes a measurement document to the database.
+
+    This function writes a measurement document to the MongoDB collection based on the provided value, sensor type,
+    and greenhouse ID. It retrieves the configuration from the database to include necessary information in the document.
+
+    Args:
+        value (float): The measured value.
+        sensor_type (str): The type of the sensor.
+        greenhouse_id (int): The ID of the greenhouse.
+
+    """
     db = await connect_to_db()
     if db is None:
         logging.error("Could not connect to database")

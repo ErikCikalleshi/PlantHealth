@@ -52,6 +52,17 @@ async def send_flag(device_name, flag_value, operation):
 
 
 async def check_ble_connection(data):
+    """
+    Checks the BLE connection status for each published sensor station.
+
+    This function iterates over the global connections and the provided data to check if any sensor station
+    has been marked as unpublished. If a sensor station is found to be unpublished, the function disconnects
+    the corresponding BLE client and removes it from the global connections list.
+
+    Args:
+        data (dict): The data containing the sensor station information.
+
+    """
     # check for every published
     for entry in global_connections:
         for greenhouse in data["greenhouses"]:
