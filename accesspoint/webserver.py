@@ -42,9 +42,7 @@ async def handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenho
             sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type][
                 "limitThresholdMinutes"].iloc[0]
         # check if the time from the minutes of seconds_timer_upper is bigger than threshold_minutes
-        print((datetime.datetime.now() - datetime.datetime.strptime(
-            sensor_exceeded_date[sensor_type],
-            "%Y-%m-%d %H:%M:%S")).total_seconds() / 60)
+       
         if (datetime.datetime.now() - datetime.datetime.strptime(
                 sensor_exceeded_date[sensor_type],
                 "%Y-%m-%d %H:%M:%S")).total_seconds() / 60 > threshold_minutes:
@@ -187,7 +185,7 @@ async def send_measurements_task():
             await send_measurements()
             await asyncio.sleep(INTERVAL)
         except Exception as e:
-            logging.error(f"An error occurred while reading config: {e}, restarting the task...")
+            logging.error(f"An error occurred while sending_measurements: {e}, restarting the task...")
             await asyncio.sleep(INTERVAL)
 
 

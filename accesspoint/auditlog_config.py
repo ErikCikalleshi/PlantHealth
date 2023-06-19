@@ -5,8 +5,8 @@ import inspect
 
 class AuditLogger:
     _instance = None
-
-    def __new__(cls, log_file='audit.log'):
+    
+    def __new__(cls, log_file='./audit.log'):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             # Set up the logger
@@ -14,7 +14,8 @@ class AuditLogger:
             cls._instance.logger.setLevel(logging.DEBUG)
 
             # Create a file handler
-            file_handler = logging.FileHandler(log_file)
+            log_file_path = os.path.abspath(log_file)
+            file_handler = logging.FileHandler(log_file_path)
             file_handler.setLevel(logging.DEBUG)
 
             # Create a console handler for warnings and errors
@@ -35,18 +36,21 @@ class AuditLogger:
         return cls._instance
 
     def info(self, message):
+        print(message)
         frame = inspect.stack()[1]
         filename = os.path.relpath(frame.filename)
         lineno = frame.lineno
         self.logger.info(f"({filename}:{lineno}){message}")
 
     def warning(self, message):
+        print(message)
         frame = inspect.stack()[1]
         filename = os.path.relpath(frame.filename)
         lineno = frame.lineno
         self.logger.warning(f"({filename}:{lineno}){message}")
 
     def error(self, message):
+        print(message)
         frame = inspect.stack()[1]
         filename = os.path.relpath(frame.filename)
         lineno = frame.lineno

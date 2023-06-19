@@ -1,8 +1,8 @@
 import unittest
 import asyncio
 
-from accesspoint.Settings import Settings
-from accesspoint.config import get_settings_backend
+from Settings import Settings
+from config import get_settings_backend
 
 from unittest import IsolatedAsyncioTestCase
 from http import HTTPStatus
