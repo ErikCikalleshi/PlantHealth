@@ -42,18 +42,17 @@ async def handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenho
             sensors_greenhouse[sensors_greenhouse["sensorType"] == sensor_type][
                 "limitThresholdMinutes"].iloc[0]
         # check if the time from the minutes of seconds_timer_upper is bigger than threshold_minutes
-        print((datetime.datetime.now() - datetime.datetime.strptime(
-            sensor_exceeded_date[sensor_type],
-            "%Y-%m-%d %H:%M:%S")).total_seconds() / 60)
+       
         if (datetime.datetime.now() - datetime.datetime.strptime(
                 sensor_exceeded_date[sensor_type],
                 "%Y-%m-%d %H:%M:%S")).total_seconds() / 60 > threshold_minutes:
             if type_limit == "seconds_timer_upper":
                 await send_flag("SensorStation " + str(greenhouse), 128 + sensor_blink_mappings[sensor_type],
                                 "led_flag")
+
             elif type_limit == "seconds_timer_lower":
                 await send_flag("SensorStation " + str(greenhouse), sensor_blink_mappings[sensor_type], "led_flag")
-
+            sensor_exceeded_date.pop(sensor_type)
     return subset
 
 
@@ -102,17 +101,15 @@ async def get_avg_measurements(database):
                 subset = await handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenhouse,
                                                      "seconds_timer_upper")
                 limit_exceeded_by = avg - limit[0]
-                logging.error("Upper Limit exceeded by: " + str(limit_exceeded_by))
                 logging.info(sensor_type + ": Upper Limit exceeded by: " + str(limit_exceeded_by))
 
             elif avg < limit[1]:
                 subset = await handle_limit_exceeded(subset, sensor_type, greenhouse, sensors_greenhouse,
                                                      "seconds_timer_lower")
                 limit_exceeded_by = limit[1] - avg
-                logging.error("Lower Limit exceeded by: " + str(limit_exceeded_by))
                 logging.info(sensor_type + ": Lower Limit exceeded by: " + str(limit_exceeded_by))
 
-            date = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M")
+            date = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
 
             data = {"greenhouseID": int(subset["greenhouseID"].iloc[0]),
                     "accesspointUUID": int(subset["accesspointID"].iloc[0]),
@@ -188,7 +185,7 @@ async def send_measurements_task():
             await send_measurements()
             await asyncio.sleep(INTERVAL)
         except Exception as e:
-            logging.error(f"An error occurred while reading config: {e}, restarting the task...")
+            logging.error(f"An error occurred while sending_measurements: {e}, restarting the task...")
             await asyncio.sleep(INTERVAL)
 
 

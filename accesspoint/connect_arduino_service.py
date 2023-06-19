@@ -106,6 +106,7 @@ async def read_sensor_data():
 
                                                 if sensor_type == "AIR_QUALITY":
                                                     val = 100 - val
+                                                logging.info("Received from SensorStation {0}: {1}".format(sensor_station_id, val))
                                                 await db.write_to_document_sensor(val, sensor_type,
                                                                                   int(sensor_station_id))
                                                 logging.info("Wrote {0} to the database.".format(val))
