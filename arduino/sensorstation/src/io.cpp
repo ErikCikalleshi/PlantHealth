@@ -3,6 +3,12 @@
 #include <Arduino.h>
 #include "global.h"
 
+// function declarations for functions that are not declared in the header as
+// they are not needed outside of this file
+void set_led(int color);
+void stop_blink_handler();
+void pairing_mode_handler();
+
 /**
   * setup function for the two buttons
   * 
@@ -12,22 +18,6 @@
 void button_setup() {
   attachInterrupt(digitalPinToInterrupt(WARNING_BUTTON), stop_blink_handler, WARNING_BUTTON_MODE);
   attachInterrupt(digitalPinToInterrupt(PAIRING_BUTTON), pairing_mode_handler, PAIRING_BUTTON_MODE);
-}
-
-void check_led_flag() {
-  if (ledFlagCharacteristic.written()) {
-    byte flag = ledFlagCharacteristic.value();
-    num_blinks = 127 & flag;
-    if (num_blinks == 0) {
-      color = GREEN;
-      blink_on = 0;
-      warning_on = 0;
-    } else {
-      color = flag >> 7;
-      blink_on = 1;
-      warning_on = 1;
-    }
-  }
 }
 
 void update_led() {

@@ -4,6 +4,14 @@
 #include <ArduinoBLE.h>
 #include <stdio.h>
 
+// function declarations for functions that are not declared in the header as
+// they are not needed outside of this file
+int get_ID();
+void BLE_connect_handler(BLEDevice central);
+void BLE_disconnect_handler(BLEDevice central);
+void clean_disconnect_handler(BLEDevice central, BLECharacteristic characteristic);
+void led_flag_handler(BLEDevice central, BLECharacteristic characteristic);
+
 /**
  * setup function for Bluetooth LE functionalities
  * 
@@ -62,6 +70,7 @@ void BLE_setup() {
 
   ledService.addCharacteristic(ledFlagCharacteristic);
   BLE.addService(ledService);
+  ledFlagCharacteristic.setEventHandler(BLEWritten, led_flag_handler);
 
   disconnectService.addCharacteristic(disconnectFlagCharacteristic);
   BLE.addService(disconnectService);
@@ -138,5 +147,19 @@ void clean_disconnect_handler(BLEDevice central, BLECharacteristic characteristi
     unclean_disconnect = 0;
     last_connected = "";
     disconnectFlagCharacteristic.writeValue(0x00);
+  }
+}
+
+void led_flag_handler(BLEDevice central, BLECharacteristic characteristic) {
+  byte flag = (byte) characteristic.value();
+  num_blinks = 127 & flag;
+  if (num_blinks == 0) {
+    color = GREEN;
+    blink_on = 0;
+    warning_on = 0;
+  } else {
+    color = flag >> 7;
+    blink_on = 1;
+    warning_on = 1;
   }
 }

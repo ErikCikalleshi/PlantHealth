@@ -6,6 +6,12 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME680.h>
 
+// function declarations for functions that are not declared in the header as
+// they are not needed outside of this file
+void read_light_sensor();
+void read_hygrometer();
+void read_bme();
+
 /**
  * setup function for Hygrometer, Phototransistor and BME688 Air Sensor
  * 
@@ -109,7 +115,7 @@ void write_sensor_data() {
     vocCharacteristic.writeValue(gas_resistance_value);
 
     Serial.println();
-    Serial.println("--------Data Sent To Accesspoint--------");
+    Serial.println("----Data Written To Characteristics-----");
 
     Serial.print("Light: ");
     Serial.println(light_value);

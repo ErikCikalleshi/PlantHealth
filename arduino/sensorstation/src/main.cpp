@@ -24,7 +24,6 @@ void loop() {
   BLE.poll();
   read_sensors();
   write_sensor_data();
-  check_led_flag();
   update_led();
   check_pairing_mode();
 }
