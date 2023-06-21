@@ -96,6 +96,9 @@ int get_ID() {
   return ID;
 }
 
+/**
+ * function that handles advertising and stops pairing mode if time has expired
+*/
 void check_pairing_mode() {
   if (pairing_mode && (current_millis - pairing_mode_start_millis >= BLE_PAIRING_TIME)) {
     pairing_mode = 0;
@@ -111,6 +114,9 @@ void check_pairing_mode() {
   }
 }
 
+/**
+ * handles new connections and is called whenever a new device connects.
+*/
 void BLE_connect_handler(BLEDevice central) {
   if (!pairing_mode && unclean_disconnect && (central.address() != last_connected)) {
     BLE.disconnect();
@@ -128,6 +134,9 @@ void BLE_connect_handler(BLEDevice central) {
   connect_sound();
 }
 
+/**
+ * handles disconnection, and is called automatically when a device is disconnected
+*/
 void BLE_disconnect_handler(BLEDevice central) {
   color = PURPLE;
   blink_on = 0;
@@ -141,6 +150,11 @@ void BLE_disconnect_handler(BLEDevice central) {
   }
 }
 
+/**
+ * handles the clean disconnection of devices, i.e. when they are disconnected
+ * over the WebApp. It is called when the corresponding characteristic is written
+ * to.
+*/
 void clean_disconnect_handler(BLEDevice central, BLECharacteristic characteristic) {
   if (*characteristic.value() == 1) {
     Serial.println("Clean disconnect.");
@@ -150,6 +164,10 @@ void clean_disconnect_handler(BLEDevice central, BLECharacteristic characteristi
   }
 }
 
+/**
+ * handles the different blink codes, when limits are exceeded. It is called
+ * when the ledFlagCharacteristic is written to.
+*/
 void led_flag_handler(BLEDevice central, BLECharacteristic characteristic) {
   byte flag = (byte) characteristic.value();
   num_blinks = 127 & flag;

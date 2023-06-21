@@ -20,6 +20,9 @@ void button_setup() {
   attachInterrupt(digitalPinToInterrupt(PAIRING_BUTTON), pairing_mode_handler, PAIRING_BUTTON_MODE);
 }
 
+/**
+ * function that checks current LED variable states, and changes it accordingly
+*/
 void update_led() {
   if (blink_on) {
     if (current_millis >= next_led_change_millis) {
@@ -44,6 +47,9 @@ void update_led() {
   }
 }
 
+/**
+ * function that sets LED to color given as argument
+*/
 void set_led(int color) {
   int red_val, green_val, blue_val;
   switch (color) {
@@ -88,6 +94,10 @@ void set_led(int color) {
   analogWrite(BLUE_LED, blue_val);
 }
 
+/**
+ * function that handles disabling of warnings. It is automatically called when
+ * the "disable warning" button is pressed.
+*/
 void stop_blink_handler() {
   if (warning_on) {
     blink_on = 0;
@@ -97,6 +107,10 @@ void stop_blink_handler() {
   }
 }
 
+/**
+ * funtion that starts pairing mode. It is called when the "pairing mode" button
+ * is pressed
+*/
 void pairing_mode_handler() {
   if (!connected) {
     pairing_mode = 1;

@@ -69,6 +69,10 @@ void read_hygrometer() {
   }
 }
 
+/**
+ * function that reads air sensor values, if the last time it has been read was
+ * more than BME_READING_INTERVAL milliseconds ago.
+*/
 void read_bme() {
   if (current_millis - previous_bme_reading_millis >= BME_READING_INTERVAL) {
     unsigned long endTime = bme.beginReading();
@@ -98,6 +102,11 @@ void read_bme() {
   }
 }
 
+/**
+ * function that calculates the average of the accumulated sensor readings and
+ * writes it to the corresponding characteristics, if the last time was more
+ * than SENDING_INTERVAL milliseconds ago.
+*/
 void write_sensor_data() {
   if (current_millis - previous_writing_millis >= SENDING_INTERVAL) {
     unsigned int light_value = light_readings / num_light_readings;
