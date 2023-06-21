@@ -22,7 +22,6 @@ public class ChartController {
 
     @GetMapping("charts/get-measurements-by-greenhouse-id-and-sensor-type/{greenhouseId}/{sensorType}")
     public List<MeasurementDTO> getMeasurements(@PathVariable String greenhouseId, @PathVariable String sensorType) {
-        System.out.println(greenhouseId + " " + sensorType);
         SensorType requestSensorType = SensorType.valueOf(sensorType);
         long greenhouseUUID = Long.parseLong(greenhouseId);
         List<Measurement> measurements = measurementService.getAllMeasurementsByGreenhouseUuidAndSensorType(greenhouseUUID, requestSensorType);
