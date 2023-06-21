@@ -94,13 +94,16 @@ while True:
             limitExceededBy = value - limit_min
 
         # Send the data to the API
+        date = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
         measurement_data = {
             "greenhouseID": greenhouse_id,
             "accesspointUUID": access_point_uuid,
             "value": value,
             "sensorType": sensorType,
-            "date": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z",
-            "limitExceededBy": limitExceededBy
+            "date": date,
+            "limitExceededBy": limitExceededBy,
+            "upperLimit": limit_max,
+            "lowerLimit": limit_min
         }
 
         if enable_asynchronous:
