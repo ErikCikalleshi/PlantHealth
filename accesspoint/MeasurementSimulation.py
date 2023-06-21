@@ -5,10 +5,14 @@ import datetime
 import random
 import time
 import asyncio
+import requests
 
 # Connect to the MySQL database
 db = mysql.connector.connect(host="localhost", user="springuser", passwd="passwd", db="db_planthealth")
 cursor = db.cursor()
+
+real_greenhouse_id = 16
+enable_asynchronous = False
 
 # Retrieve all the sensor data along with their respective greenhouse and access point information
 cursor.execute(
@@ -26,12 +30,14 @@ previous_sensor_values = {}
 # Select random greenhouses to be offline
 max_uuid_access_points = max(row[2] for row in sensor_data)
 max_uuid_greenhouse = max(row[6] for row in sensor_data)
-offlineAccessPoints = random.sample(range(1, max_uuid_access_points), 2)
+offlineAccessPoints = random.sample(range(2, max_uuid_access_points), 2)
 offlineGreenhouses = random.sample(range(1, max_uuid_greenhouse), 10)
+
+offlineGreenhouses.append(real_greenhouse_id)
 
 
 # Define an asynchronous function to send requests
-async def send_data(data, greenhouse_uuid):
+async def send_data_async(data, greenhouse_uuid):
     async with aiohttp.ClientSession() as session:
         async with session.post("http://localhost:9000/api/measurements", auth=aiohttp.BasicAuth("admin", "passwd"),
                                 json=data) as response:
@@ -39,6 +45,13 @@ async def send_data(data, greenhouse_uuid):
             if response.status != 200:
                 # Add the greenhouse to the offline list if the request fails (e.g. greenhouse/access point is disabled)
                 offlineGreenhouses.append(greenhouse_uuid)
+
+
+def send_data(data, greenhouse_uuid):
+    respone = requests.post("http://localhost:9000/api/measurements", auth=("admin", "passwd"), json=data)
+    if respone.status_code != 200:
+        # Add the greenhouse to the offline list if the request fails (e.g. greenhouse/access point is disabled)
+        offlineGreenhouses.append(greenhouse_uuid)
 
 
 # Infinite loop to send data continuously
@@ -81,18 +94,26 @@ while True:
             limitExceededBy = value - limit_min
 
         # Send the data to the API
+        date = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
         measurement_data = {
             "greenhouseID": greenhouse_id,
             "accesspointUUID": access_point_uuid,
             "value": value,
             "sensorType": sensorType,
-            "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-            "limitExceededBy": limitExceededBy
+            "date": date,
+            "limitExceededBy": limitExceededBy,
+            "upperLimit": limit_max,
+            "lowerLimit": limit_min
         }
-        tasks.append(asyncio.ensure_future(send_data(measurement_data, row[6])))
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(asyncio.gather(*tasks))
+        if enable_asynchronous:
+            tasks.append(asyncio.ensure_future(send_data_async(measurement_data, row[6])))
+        else:
+            send_data(measurement_data, row[6])
+
+    if enable_asynchronous:
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(asyncio.gather(*tasks))
 
     # Wait for the specified interval before sending the next set of data
     time.sleep(interval_seconds)

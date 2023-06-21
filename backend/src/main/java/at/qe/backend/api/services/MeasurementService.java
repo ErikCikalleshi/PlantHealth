@@ -14,9 +14,7 @@ import at.qe.backend.services.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * This Service is responsible for saving the Measurements provided by the AccessPoints
@@ -32,10 +30,11 @@ public class MeasurementService {
 
     /**
      * Try to assign a measurement to the corresponding sensor/greenhouse/accesspoint
+     *
      * @param measurementDTO the raw MeasurementDTO from the AccessPoint
      * @return a new MeasurementDTO with the ID that was saved in the database. If it could not be saved an exception is thrown.
      * @throws GreenhouseNotRegisteredException The greenhouse hasn't been added to the database yet and therefore is not valid
-     * @throws SensorNotFoundException The greenhouse doesn't have a sensor of provided type
+     * @throws SensorNotFoundException          The greenhouse doesn't have a sensor of provided type
      */
     public MeasurementDTO addMeasurement(MeasurementDTO measurementDTO) throws GreenhouseNotRegisteredException, SensorNotFoundException, AccessPointNotPublishedException, GreenhouseNotPublishedException {
         Greenhouse greenhouse = greenhouseService.loadGreenhouse(measurementDTO.getGreenhouseID(), measurementDTO.getAccesspointUUID());
@@ -43,10 +42,10 @@ public class MeasurementService {
             throw new GreenhouseNotRegisteredException();
         }
         greenhouseService.updateLastContact(greenhouse);
-        if (!greenhouse.getAccesspoint().isPublished()){
+        if (!greenhouse.getAccesspoint().isPublished()) {
             throw new AccessPointNotPublishedException();
         }
-        if (!greenhouse.isPublished()){
+        if (!greenhouse.isPublished()) {
             throw new GreenhouseNotPublishedException();
         }
         Sensor sensor = sensorService.loadSensor(greenhouse, measurementDTO.getSensorType());
@@ -59,7 +58,13 @@ public class MeasurementService {
         measurement.setValue(measurementDTO.getValue());
         measurement.setSensor(sensor);
         measurement.setMeasurementDate(measurementDTO.getDate());
+        measurement.setLimitLower(measurementDTO.getLowerLimit());
+        measurement.setLimitUpper(measurementDTO.getUpperLimit());
         measurement.setLimitExceededBy(measurementDTO.getLimitExceededBy());
+        if (measurement.getLimitExceededBy() != 0) {
+            greenhouse.setLastLimitExceeded(new Date());
+            sensor.setLastLimitExceeded(new Date());
+        }
         measurement = measurementRepository.save(measurement);
         sensor.addMeasurement(measurement);
         return new MeasurementDTO(measurement);

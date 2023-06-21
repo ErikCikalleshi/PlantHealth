@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="editGreenhouseDialog" persistent width="1400">
+    <v-dialog v-model="editGreenhouseDialog" persistent width="1400" scroll-strategy="none">
         <template v-slot:activator="{ props }">
             <v-btn variant="plain" icon="mdi-pencil-outline" v-bind="props" @click="loading=true; init()"/>
         </template>
@@ -131,6 +131,7 @@ export default defineComponent({
             await AdminGreenhouseService.getGreenhouse(this.greenhouseUUID).then((response) => {
                 if (response.status === 200) {
                     this.greenhouse = response.data;
+                    this.greenhouse.sensors.sort((a, b) => a.sensorType.localeCompare(b.sensorType));
 
                 }
             })

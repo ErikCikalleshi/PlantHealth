@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * This class represents the Measurement DataTransmissionObject that is returned to an AccessPoint after receiving a Measurement from it and successfully storing it in the database
@@ -27,10 +28,10 @@ public class MeasurementDTO {
         this.value = measurement.getValue();
         this.sensorType = measurement.getSensor().getSensorType();
         this.measurementId = measurement.getId();
-        this.date = measurement.getCreateDate();
+        this.date = measurement.getMeasurementDate();
         this.limitExceededBy =measurement.getLimitExceededBy();
-        this.upperLimit = measurement.getSensor().getLimitUpper();
-        this.lowerLimit = measurement.getSensor().getLimitLower();
+        this.upperLimit = measurement.getLimitUpper();
+        this.lowerLimit = measurement.getLimitLower();
     }
 
     private long measurementId;
@@ -38,11 +39,9 @@ public class MeasurementDTO {
     private long greenhouseID;
     private Double value;
     private SensorType sensorType;
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     private Date date;
-
     private double limitExceededBy;
     private double upperLimit;
     private double lowerLimit;
-
 }

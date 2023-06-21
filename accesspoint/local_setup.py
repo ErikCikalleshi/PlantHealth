@@ -60,6 +60,5 @@ def main():
     print("Configuration saved as settings.json")
 
 
-
 if __name__ == "__main__":
     main()
