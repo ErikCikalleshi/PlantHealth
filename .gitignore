@@ -16,6 +16,10 @@ backend/src/main/resources/public/index.html
 /frontend/src/services/index.ts
 *.pyc
 /accesspoint/audit.log
+arduino/sensorstation/src/old_main.cpp
+arduino/sensorstation/.vscode/arduino.json
+arduino/sensorstation/.vscode/extensions.json
+arduino/sensorstation/.vscode/settings.json
 audit.log
 /accesspoint/venv
 /accesspoint/.venv
