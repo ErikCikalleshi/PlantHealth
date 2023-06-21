@@ -1,5 +1,6 @@
 <template>
     <v-app>
+        <custom_snackbar></custom_snackbar>
         <header-component/>
         <main-container negative class="mb-10">
             <div>
@@ -27,6 +28,7 @@ import PageHeading from "@/components/general/PageHeading.vue";
 import {useStore as userStore} from "@/stores/user/user";
 import type IUser from "@/interfaces/user/IUser";
 import Dashboard_button from "@/components/general/dashboard_button.vue";
+import Custom_snackbar from "@/components/general/snackbar.vue";
 
 export default defineComponent({
     name: "Dashboard",
@@ -36,6 +38,7 @@ export default defineComponent({
         footerComponent,
         mainContainer,
         PageHeading,
+        Custom_snackbar,
     },
     data() {
         return {

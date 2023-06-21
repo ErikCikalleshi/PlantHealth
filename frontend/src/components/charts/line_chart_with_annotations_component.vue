@@ -150,9 +150,9 @@ export default defineComponent({
                 this.series[1].data = []; // Clear the existing data array
                 this.series[2].data = []; // Clear the existing data array
 
+                const user_time_offset = new Date().getTimezoneOffset() * 60 * 1000;
                 measurements.forEach(measurement => {
-
-                    let measurementDate: number = Number(new Date(measurement.date));
+                    let measurementDate:number = new Date(measurement.date).getTime()-user_time_offset;
                     let measurementValue: number = Number(measurement.value);
                     this.series[2].data.push({
                         x: measurementDate,

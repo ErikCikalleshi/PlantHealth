@@ -119,8 +119,7 @@ export default defineComponent({
                         :src="imgUrl"
                         alt="refresh browser"
                         referrerpolicy="no-referrer"
-                        width="350"
-                        height="350"
+                        style="min-width: 350px; max-width: 350px; min-height: 350px; max-height: 350px;"
                     />
                 </div>
             </div>

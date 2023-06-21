@@ -20,3 +20,6 @@ arduino/sensorstation/src/old_main.cpp
 arduino/sensorstation/.vscode/arduino.json
 arduino/sensorstation/.vscode/extensions.json
 arduino/sensorstation/.vscode/settings.json
+audit.log
+/accesspoint/venv
+/accesspoint/.venv
