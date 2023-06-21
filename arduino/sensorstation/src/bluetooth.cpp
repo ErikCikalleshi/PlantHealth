@@ -169,7 +169,7 @@ void clean_disconnect_handler(BLEDevice central, BLECharacteristic characteristi
  * when the ledFlagCharacteristic is written to.
 */
 void led_flag_handler(BLEDevice central, BLECharacteristic characteristic) {
-  byte flag = (byte) characteristic.value();
+  byte flag = ledFlagCharacteristic.value();
   num_blinks = 127 & flag;
   if (num_blinks == 0) {
     color = GREEN;
