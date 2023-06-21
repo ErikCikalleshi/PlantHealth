@@ -3,7 +3,7 @@ INSERT INTO  userx_user_role (userx_id, roles) VALUES (1, 'ADMIN');
 INSERT INTO  userx_user_role (userx_id, roles) VALUES (1, 'GARDENER');
 INSERT INTO  userx_user_role (userx_id, roles) VALUES (1, 'USER');
 
-INSERT INTO userx(username,create_date, create_user_username, email, enabled, first_name, last_name, password, phone) VALUES ('gardener1', NOW(),'admin', 'gärtner.gustav@planthealth.at', TRUE, 'Gärtner', 'Gustav','$2a$12$WTHPMXqdUKBZ7b6p7LZZ0.a2JknpnJbAkeGvBJ62.5T1czPebq6cW','');
+INSERT INTO userx(username,create_date, create_user_username, email, enabled, first_name, last_name, password, phone) VALUES ('gardener1', NOW(),'admin', 'gaertner.gustav@planthealth.at', TRUE, 'Gärtner', 'Gustav','$2a$12$WTHPMXqdUKBZ7b6p7LZZ0.a2JknpnJbAkeGvBJ62.5T1czPebq6cW','');
 INSERT INTO  userx_user_role (userx_id, roles) VALUES (2, 'GARDENER');
 INSERT INTO  userx_user_role (userx_id, roles) VALUES (2, 'USER');
 
@@ -36,7 +36,7 @@ INSERT INTO userx(username,create_date, create_user_username, email, enabled, fi
 INSERT INTO  userx_user_role (userx_id, roles) VALUES (10, 'USER');
 
 
-INSERT INTO access_point(name, location, description, create_user_username, create_date, transmission_interval_seconds, published, last_contact) VALUES ('Bibliothek EG', 'Campus Technik', 'Bei diesem Access Point handelt es sich um einen Prototypen der uns von der Univerrsität Innsbruck zur Verfügung gestellt wurde', 'admin', NOW(), 60, TRUE, NOW());
+INSERT INTO access_point(name, location, description, create_user_username, create_date, transmission_interval_seconds, published, last_contact) VALUES ('ICT EG', 'Campus Technik', 'Bei diesem Access Point handelt es sich um einen Prototypen der uns von der Univerrsität Innsbruck zur Verfügung gestellt wurde', 'admin', NOW(), 60, TRUE, NOW());
 INSERT INTO access_point(name, location, description, create_user_username, create_date, transmission_interval_seconds, published, last_contact) VALUES ('Access Point 2', 'Not Published Accesspoint', 'Dieser AccessPoint wurde noch nicht freigegeben', 'admin', NOW(), 60, FALSE, NOW());
 INSERT INTO access_point(name, location, description, create_user_username, create_date, transmission_interval_seconds, published, last_contact) VALUES ('Architektur EG', 'Campus Technik', 'Dieser Access Point befindet sich im Erdgeschoss des Architekturgebäudes und bietet eine zuverlässige Abdeckung in diesem Bereich.', 'admin', NOW(), 30, TRUE, NOW());
 INSERT INTO access_point(name, location, description, create_user_username, create_date, transmission_interval_seconds, published, last_contact) VALUES ('Architektur 2. Stock', 'Campus Technik', 'Dieser Access Point befindet sich im zweiten Stock des Architekturgebäudes und ermöglicht eine schnelle Übertragung von Daten in diesem Bereich.', 'admin', NOW(), 60, TRUE, NULL);
@@ -66,7 +66,7 @@ INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_u
 INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (13, 'Mint', 'Kitchen counter', 'Refreshing herb used in tea and cooking', 1, 'admin', NOW(), 4, TRUE);
 INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (14, 'Cactus', 'Sunny windowsill', 'Low-maintenance plant that stores water in its stem', 1, 'admin', NOW(), 5, TRUE);
 INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (15, 'Lavender', 'South-facing balcony', 'Fragrant purple flowers used for essential oils', 1, 'admin', NOW(), 6, TRUE);
-INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (16, 'Spider Plant', 'Hanging basket', 'Easy to care for indoor plant with long leaves', 1, 'admin', NOW(), 6, TRUE);
+INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (16, 'Super Awesome Plant', 'ICT Ausstellung', 'Plant to showcase actual measurement data', 1, 'admin', NOW(), 6, TRUE);
 INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (17, 'Snake Plant', 'Living room corner', 'Tall, upright plant with sword-like leaves', 1, 'admin', NOW(), 2, TRUE);
 INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (18, 'Peace Lily', 'Shaded corner', 'Leafy plant with white flowers that purifies the air', 1, 'admin', NOW(), 3, TRUE);
 INSERT INTO greenhouse(id_in_cluster, name, location, description, accesspoint_uuid, create_user_username, create_date, owner_id, published) VALUES (19, 'Begonia', 'Windowsill', 'Colorful flowers in shades of red, pink, and white', 1, 'admin', NOW(), 4, TRUE);

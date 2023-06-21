@@ -5,6 +5,7 @@ import datetime
 import random
 import time
 import asyncio
+import requests
 
 # Connect to the MySQL database
 db = mysql.connector.connect(host="localhost", user="springuser", passwd="passwd", db="db_planthealth")
@@ -47,13 +48,10 @@ async def send_data_async(data, greenhouse_uuid):
 
 
 def send_data(data, greenhouse_uuid):
-    with aiohttp.ClientSession() as session:
-        with session.post("http://localhost:9000/api/measurements", auth=aiohttp.BasicAuth("admin", "passwd"),
-                          json=data) as response:
-            response_text = response.text()
-            if response.status != 200:
-                # Add the greenhouse to the offline list if the request fails (e.g. greenhouse/access point is disabled)
-                offlineGreenhouses.append(greenhouse_uuid)
+    respone = requests.post("http://localhost:9000/api/measurements", auth=("admin", "passwd"), json=data)
+    if respone.status_code != 200:
+        # Add the greenhouse to the offline list if the request fails (e.g. greenhouse/access point is disabled)
+        offlineGreenhouses.append(greenhouse_uuid)
 
 
 # Infinite loop to send data continuously
@@ -101,7 +99,7 @@ while True:
             "accesspointUUID": access_point_uuid,
             "value": value,
             "sensorType": sensorType,
-            "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "date": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z",
             "limitExceededBy": limitExceededBy
         }
 
