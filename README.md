@@ -1,92 +1,78 @@
 # g2t4
 
 
-
 ## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### Prerequisites
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+##### WebApp
 
-## Add your files
+Node.js (Version 18) and npm are required to run the application. To install them, follow the instructions on the [Node.js website](https://nodejs.org/en/download/).
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+MySQL (Version 8) is required to run the application. To install it, follow the instructions on the [MySQL website](https://dev.mysql.com/downloads/installer/). Run the database/init_database.sql script to create the user for this application and grant it all rights on the database. Be sure that the username/password + database name in the script match the ones in the application.properties file.
+
+##### SensorStation
+
+The SensorStation is wired according to the circuit diagram, only the connections for the DIP switch are opposite to the circuit diagram. So the left most pin of the DIP switch is actually connected to D5 and the right most pin to D12, not vice versa as indicated in the circuit diagram.
+
+![Schaltplan_V3](https://git.uibk.ac.at/informatik/qe/swess23/group2/g2t4/-/raw/main/Schaltplan_V3.png)\
+_Circuit Diagram_
+
+Alternatively, you can change the PIN Assignments in the `Pin Definitions` section at the start of the main.cpp file to make the program work with a different wiring. To guarantee the working of the buttons, it is important that they are connected to Pins D2 and D3, because they are the only ones that support `attachInterrupt()` (according to the Arduino Documentation). If you have these buttons wired any other way than with a pullup resistor, you can also change the mode of the interrupt in the `Pin Definitions` section. Also, the SDA and SCL Pins of the BME688 always need to be connected to Pins A4 and A5 respectively. Apart from that you can change the wiring how you like, as long as connections on digital pins stay on digital pins, and the same for analog pins.
+
+To run the code on the Arduino, open the `arduino/sensorstation` directory as a PlatformIO project and compile/upload it from there. Alternatively if that doesn't work you can copy the files of the `arduino/sensorstation/src` directory into a new ArduinoIDE sketch, rename `main.cpp` to `<sketch name>.ino` and upload it using ArduinoIDE. (Make sure to install the required Libraries)
+
+##### Accesspoint
+
+First of all you need to have python installed. If you don't have it installed, you can download it from [here](https://www.python.org/downloads/). We are using MongoDB and the installation on the raspberry pi is not that trivial. Therefore we **recommend** to install MongoDB locally on your PC [here](https://www.mongodb.com/try/download/community). You can download MongoDB Compass from [here](https://www.mongodb.com/try/download/compass) and afterwards you can launch it. You can connect to your local MongoDB instance by providing the necessary connection details. By default, MongoDB runs on port 27017. If you decide to try it out on the raspberry pi, you can follow the instructions from [here](https://www.mongodb.com/developer/products/mongodb/mongodb-on-raspberry-pi/). Make sure that if you are planning to do it on the raspberry pi, you have installed a Ubuntu 20.04 -Raspberry Pi OS. If there are any problems with installing mongodb on the raspberry pi, you can visit [this page](https://www.donskytech.com/how-to-install-mongodb-on-raspberry-pi/).
+
+To install the python packages, you can execute installation_script.sh, if you are on linux. If you are on windows, you can execute the installation_windows.bat. If something goes wrong with the installation, you can visit the readme.md and follow the instructions there.
+
+Now we have to specifiy the settings for the accesspoint. This can be done by executing local_setup.py in the accesspoint directory. From there you can either perform a quick setup or a custom setup. The quick setup will ask you just for the IP-Address of the backend (Spring Application). The default port of the backend will be 9000. If you decide to perform the longer setup, than you will be asked to specify all the neccecary settings. The settings will be saved in a file called settings.json. If you want to change the settings, you can do it manually in the settings.json file.
+
+Now you should be ready to execute the main.py file.
+
+Note that the connection between the accesspoint and SensorStation could take longer. DO NOT FORGET TO TURN ON BLUETOOTH.
+
+### Starting the application
+
+##### WebApp
+
+Before you start you need to change some settings in the config for it to work on your system:
+
+backend/src/main/java/at/qe/backend/configs/WebMvcConfig.java\
+insert your IPv4 local address\
+`.allowedOriginPatterns("http://127.0.0.1:5173", "http://localhost:5173", "http://<your IPv4 local address>:5173")`
+
+frontend/src/services/index.ts\
+insert your IPv4 local address\
+`export const API_BASE_URL: string = 'http://<your IPv4 local address>:9000';`
+
+Run the backend application via mvn spring-boot:run in the backend folder. The application will be available at [http://localhost:9000](http://localhost:9000). (Port is defined in application.properties)
+
+To start the frontend application, navigate to the frontend folder and run the following commands:
 
 ```
-cd existing_repo
-git remote add origin https://git.uibk.ac.at/informatik/qe/swess23/group2/g2t4.git
-git branch -M main
-git push -uf origin main
+npm i
+npm run dev
 ```
 
-## Integrate with your tools
+It should show two options in the console Local and Network where you can access the webpage, keep this in mind for later because it is relevant for the image upload.
 
-- [ ] [Set up project integrations](https://git.uibk.ac.at/informatik/qe/swess23/group2/g2t4/-/settings/integrations)
+für weitere Infos: https://git.uibk.ac.at/informatik/qe/swess23/group2/g2t4/-/tree/feat/readme#plant-health-g2t4
 
-## Collaborate with your team
+##### SensorStation
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+Once the Arduino is connected to a power source, the program is running. It is best to press the little reset button on the board once at the beginning to reset the program and let the setup() function again. The SensorStation is ready when the startup sound plays and the LED is glowing pink. If you want to receive extra information about the 
 
-## Test and Deploy
+To be able to connect to the SensorStation via Bluetooth LE, you need to put it into Pairing Mode by pressing the corresponding button. Pairing Mode is activated when the LED blinks blue. When it successfully connects, a short sound is played and the LED turns green.
 
-Use the built-in continuous integration in GitLab.
+### Integrating new Accesspoints and Sensorstations
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+##### Accesspoint
 
-***
+To add a new Accesspoint to the system, you first need to create the Accesspoint in the WebApp. For that you need to be logged in as Admin, then you can go to the Access Points Page and press "add Access Point". There, type in the necessary Data, check the `Publish` checkbox and press save.Yyou can see that the WebApp has given it an ID. Now make sure to set the ID in the settings.json file on the Accesspoint to that shown on the WebApp. Now, when running the main.py script on the Accesspoint it connects to the Webserver, which is shown by the `Online` flag in the WebApp.
 
-# Editing this README
+##### Sensorstation
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+To add a new Sensorstation to the system, log in to the WebApp as Admin and click "add Sensorstation" on the page of the Accesspoint you want the Sensorstation to connect to. Type in the data, check the `Publish` checkbox and press save. Set the DIP switch on the Sensorstation to the ID the System has given it. Restart the Sensorstation by pressing the little button on the Arduino and start the Pairing Mode by pressing the Pairing Mode Button. If the Sensorstation is in reach of the Accesspoint, they should now connect. The LED on the Sensorstation should turn green, and a short sound is played. After a short time, the Measurements show up on the Webapp.
