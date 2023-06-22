@@ -59,8 +59,6 @@ npm run dev
 
 It should show two options in the console Local and Network where you can access the webpage, keep this in mind for later because it is relevant for the image upload.
 
-für weitere Infos: https://git.uibk.ac.at/informatik/qe/swess23/group2/g2t4/-/tree/feat/readme#plant-health-g2t4
-
 ##### SensorStation
 
 Once the Arduino is connected to a power source, the program is running. It is best to press the little reset button on the board once at the beginning to reset the program and let the setup() function again. The SensorStation is ready when the startup sound plays and the LED is glowing pink. If you want to receive extra information about the 
