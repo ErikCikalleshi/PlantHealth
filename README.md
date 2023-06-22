@@ -13,7 +13,7 @@ MySQL (Version 8) is required to run the application. To install it, follow the 
 
 ##### SensorStation
 
-The SensorStation is wired according to the circuit diagram, only the connections for the DIP switch are opposite to the circuit diagram. So the left most pin of the DIP switch is actually connected to D5 and the right most pin to D12, not vice versa as indicated in the [circuit diagram](https://git.uibk.ac.at/informatik/qe/swess23/group2/g2t4/-/raw/main/Schaltplan_V3.png).
+The SensorStation is wired according to the [circuit diagram](https://git.uibk.ac.at/informatik/qe/swess23/group2/g2t4/-/raw/main/Schaltplan_V3.png), only the connections for the DIP switch are opposite to the circuit diagram. So the left most pin of the DIP switch is actually connected to D5 and the right most pin to D12, not vice versa as indicated in the circuit diagram.
 
 Alternatively, you can change the PIN Assignments in the `Pin Definitions` section at the start of the main.cpp file to make the program work with a different wiring. To guarantee the working of the buttons, it is important that they are connected to Pins D2 and D3, because they are the only ones that support `attachInterrupt()` (according to the Arduino Documentation). If you have these buttons wired any other way than with a pullup resistor, you can also change the mode of the interrupt in the `Pin Definitions` section. Also, the SDA and SCL Pins of the BME688 always need to be connected to Pins A4 and A5 respectively. Apart from that you can change the wiring how you like, as long as connections on digital pins stay on digital pins, and the same for analog pins.
 
